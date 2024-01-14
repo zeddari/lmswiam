@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (surahs) {
+      <div>
+        <h2 data-cy="surahsDetailsHeading"><span jhiTranslate="lmswiamApp.surahs.detail.title">Surahs</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="lmswiamApp.surahs.id">Id</span></dt>
+          <dd>
+            <span>{{ surahs.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.surahs.number">Number</span></dt>
+          <dd>
+            <span>{{ surahs.number }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.surahs.nameAr">Name Ar</span></dt>
+          <dd>
+            <span>{{ surahs.nameAr }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.surahs.nameEn">Name En</span></dt>
+          <dd>
+            <span>{{ surahs.nameEn }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.surahs.nameEnTranslation">Name En Translation</span></dt>
+          <dd>
+            <span>{{ surahs.nameEnTranslation }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.surahs.type">Type</span></dt>
+          <dd>
+            <span>{{ surahs.type }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.surahs.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ surahs.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.surahs.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ surahs.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/surahs', surahs.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

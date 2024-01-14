@@ -1,0 +1,196 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-enrolement-heading" data-cy="EnrolementCreateUpdateHeading" jhiTranslate="lmswiamApp.enrolement.home.createOrEditLabel">
+        Create or edit a Enrolement
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.enrolement.ref" for="field_ref">Ref</label>
+          <input type="text" class="form-control" name="ref" id="field_ref" data-cy="ref" formControlName="ref" />
+          @if (editForm.get('ref')!.invalid && (editForm.get('ref')!.dirty || editForm.get('ref')!.touched)) {
+            <div>
+              @if (editForm.get('ref')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('ref')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
+                  >This field cannot be longer than 100 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.enrolement.enrolementType" for="field_enrolementType">Enrolement Type</label>
+          <select
+            class="form-control"
+            name="enrolementType"
+            formControlName="enrolementType"
+            id="field_enrolementType"
+            data-cy="enrolementType"
+          >
+            <option [ngValue]="null">{{ 'lmswiamApp.EnrolementType.null' | translate }}</option>
+            @for (enrolementType of enrolementTypeValues; track $index) {
+              <option [value]="enrolementType">{{ 'lmswiamApp.EnrolementType.' + enrolementType | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.enrolement.enrolmentStartTime" for="field_enrolmentStartTime"
+            >Enrolment Start Time</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_enrolmentStartTime"
+              data-cy="enrolmentStartTime"
+              type="datetime-local"
+              class="form-control"
+              name="enrolmentStartTime"
+              formControlName="enrolmentStartTime"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (
+            editForm.get('enrolmentStartTime')!.invalid &&
+            (editForm.get('enrolmentStartTime')!.dirty || editForm.get('enrolmentStartTime')!.touched)
+          ) {
+            <div>
+              @if (editForm.get('enrolmentStartTime')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('enrolmentStartTime')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >This field should be a date and time.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.enrolement.enrolemntEndTime" for="field_enrolemntEndTime"
+            >Enrolemnt End Time</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_enrolemntEndTime"
+              data-cy="enrolemntEndTime"
+              type="datetime-local"
+              class="form-control"
+              name="enrolemntEndTime"
+              formControlName="enrolemntEndTime"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (
+            editForm.get('enrolemntEndTime')!.invalid &&
+            (editForm.get('enrolemntEndTime')!.dirty || editForm.get('enrolemntEndTime')!.touched)
+          ) {
+            <div>
+              @if (editForm.get('enrolemntEndTime')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('enrolemntEndTime')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >This field should be a date and time.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.enrolement.isActive" for="field_isActive">Is Active</label>
+          <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
+          @if (editForm.get('isActive')!.invalid && (editForm.get('isActive')!.dirty || editForm.get('isActive')!.touched)) {
+            <div>
+              @if (editForm.get('isActive')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.enrolement.activatedAt" for="field_activatedAt">Activated At</label>
+          <div class="d-flex">
+            <input
+              id="field_activatedAt"
+              data-cy="activatedAt"
+              type="datetime-local"
+              class="form-control"
+              name="activatedAt"
+              formControlName="activatedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.enrolement.userCustom4" for="field_userCustom4">User Custom 4</label>
+          <select
+            class="form-control"
+            id="field_userCustom4"
+            data-cy="userCustom4"
+            name="userCustom4"
+            formControlName="userCustom4"
+            [compareWith]="compareUserCustom"
+          >
+            <option [ngValue]="null"></option>
+            @for (userCustomOption of userCustomsSharedCollection; track $index) {
+              <option [ngValue]="userCustomOption">{{ userCustomOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.enrolement.course" for="field_course">Course</label>
+          <select
+            class="form-control"
+            id="field_course"
+            data-cy="course"
+            name="course"
+            formControlName="course"
+            [compareWith]="compareCourse"
+          >
+            <option [ngValue]="null"></option>
+            @for (courseOption of coursesSharedCollection; track $index) {
+              <option [ngValue]="courseOption">{{ courseOption.titleAr }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

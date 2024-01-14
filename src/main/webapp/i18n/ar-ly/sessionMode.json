@@ -1,0 +1,10 @@
+{
+  "lmswiamApp": {
+    "SessionMode": {
+      "null": "",
+      "ONLINE": "ONLINE",
+      "ONSITE": "ONSITE",
+      "MIXED": "MIXED"
+    }
+  }
+}

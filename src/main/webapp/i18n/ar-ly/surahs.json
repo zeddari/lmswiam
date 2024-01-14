@@ -1,0 +1,31 @@
+{
+  "lmswiamApp": {
+    "surahs": {
+      "home": {
+        "title": "Surahs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Surahs",
+        "createOrEditLabel": "Create or edit a Surahs",
+        "search": "Search for Surahs",
+        "notFound": "No Surahs found"
+      },
+      "created": "A new Surahs is created with identifier {{ param }}",
+      "updated": "A Surahs is updated with identifier {{ param }}",
+      "deleted": "A Surahs is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Surahs {{ id }}?"
+      },
+      "detail": {
+        "title": "Surahs"
+      },
+      "id": "Id",
+      "number": "Number",
+      "nameAr": "Name Ar",
+      "nameEn": "Name En",
+      "nameEnTranslation": "Name En Translation",
+      "type": "Type",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    }
+  }
+}

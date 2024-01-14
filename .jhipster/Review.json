@@ -1,0 +1,43 @@
+{
+  "annotations": {
+    "changelogDate": "20240109175831"
+  },
+  "applications": "*",
+  "entityTableName": "review",
+  "fields": [
+    {
+      "fieldName": "body",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "rating",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "5",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "reviewDate",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Review",
+  "relationships": [
+    {
+      "otherEntityField": "titleAr",
+      "otherEntityName": "part",
+      "relationshipName": "part2",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "userCustom",
+      "relationshipName": "userCustom3",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}

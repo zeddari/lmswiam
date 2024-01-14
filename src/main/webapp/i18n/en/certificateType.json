@@ -1,0 +1,10 @@
+{
+  "lmswiamApp": {
+    "CertificateType": {
+      "null": "",
+      "HIFDH": "HIFDH",
+      "TAJWID": "TAJWID",
+      "IJAZA": "IJAZA"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "lmswiamApp": {
+    "PaymentMode": {
+      "null": "",
+      "CASH": "CASH",
+      "TRANSFER": "TRANSFER",
+      "CHECK": "CHECK",
+      "OTHER": "OTHER"
+    }
+  }
+}

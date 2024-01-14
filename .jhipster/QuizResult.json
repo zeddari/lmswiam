@@ -1,0 +1,35 @@
+{
+  "annotations": {
+    "changelogDate": "20240109180331"
+  },
+  "applications": "*",
+  "entityTableName": "quiz_result",
+  "fields": [
+    {
+      "fieldName": "result",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "submittedAT",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "QuizResult",
+  "relationships": [
+    {
+      "otherEntityName": "quiz",
+      "relationshipName": "quiz",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "firstName",
+      "otherEntityName": "userCustom",
+      "relationshipName": "userCustom2",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}

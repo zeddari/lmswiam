@@ -1,0 +1,125 @@
+{
+  "annotations": {
+    "changelogDate": "20240109181231"
+  },
+  "applications": "*",
+  "entityTableName": "progression",
+  "fields": [
+    {
+      "fieldName": "attendance",
+      "fieldType": "Attendance",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PRESENT,ABSENT,ABSENT_AUTHORIZED"
+    },
+    {
+      "fieldName": "justifRef",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lateArrival",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "earlyDeparture",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "progressionMode",
+      "fieldType": "ProgressionMode",
+      "fieldValues": "SLOW,INTERMEDIATE,FAST,VERYFAST"
+    },
+    {
+      "fieldName": "examType",
+      "fieldType": "ExamType",
+      "fieldValues": "NONE,OPTIONAL,MANDATORY"
+    },
+    {
+      "fieldName": "riwaya",
+      "fieldType": "Riwayats",
+      "fieldValues": "WARSHS_NARRATION_ON_THE_AUTHORITY_OF_NAFI_VIA_AL_SHATIBIYYAH,QALOUNS_NARRATION_ON_THE_AUTHORITY_OF_NAFI_ON_THE_AUTHORITY_OF_AL_SHATIBIYYAH,AL_BAZZIS_NARRATION_ON_THE_AUTHORITY_OF_IBN_KATHIR_VIA_AL_SHATIBIYYAH,QUNBULS_NARRATION_ON_THE_AUTHORITY_OF_IBN_KATHIR_VIA_AL_SHATIBIYYAH,AL_DURIS_NARRATION_ON_THE_AUTHORITY_OF_ABU_AMR_VIA_AL_SHATIBIYYAH,AL_SUSIS_NARRATION_ON_THE_AUTHORITY_OF_ABU_AMR_VIA_AL_SHATIBIYYAH,HISHAMS_NARRATION_ON_THE_AUTHORITY_OF_IBN_AMER_VIA_AL_SHATIBIYYAH,NARRATION_BY_IBN_DHAKWAN_ON_THE_AUTHORITY_OF_IBN_AAMER_VIA_AL_SHATIBIYYAH,SHUBAHS_NARRATION_ON_THE_AUTHORITY_OF_ASIM_THROUGH_SHATIBIYYAH,NARRATION_OF_HAFS_ON_THE_AUTHORITY_OF_ASIM_BY_AL_SHATIBIYYAH,KHALAFS_NARRATION_ON_THE_AUTHORITY_OF_HAMZA_VIA_AL_SHATIBIYYAH,KHALLADS_NARRATION_ON_THE_AUTHORITY_OF_HAMZA_VIA_SHATIBIYA,ABU_AL_HARITHS_NARRATION_ON_THE_AUTHORITY_OF_AL_KISAI_VIA_AL_SHATIBIYYAH,NARRATION_OF_HAFS_ON_THE_AUTHORITY_OF_AL_KASAI_VIA_AL_SHATIBIYYAH,READING_ABU_JAAFAR_FROM_DURRAH_ROAD,JACOBS_READING_FROM_THE_PATH_OF_DURRA,READ_BEHIND_THE_TENTH_OF_DURRAH_ROAD,WARSHS_NARRATION_ON_THE_AUTHORITY_OF_NAFI_THROUGH_TAYYIBAH,NARRATION_OF_HAFS_ON_THE_AUTHORITY_OF_ASIM_THROUGH_TAYBEH"
+    },
+    {
+      "fieldName": "fromSourate",
+      "fieldType": "Sourate",
+      "fieldValues": "FATIHA,BA9ARA,AL3IMRAN"
+    },
+    {
+      "fieldName": "toSourate",
+      "fieldType": "Sourate",
+      "fieldValues": "FATIHA,BA9ARA,AL3IMRAN"
+    },
+    {
+      "fieldName": "fromAyaNum",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "toAyaNum",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "fromAyaVerset",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "toAyaVerset",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "tilawaType",
+      "fieldType": "Tilawa",
+      "fieldValues": "HIFD,MORAJA3A,TILAWA"
+    },
+    {
+      "fieldName": "taskDone",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "tajweedScore",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "5",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "hifdScore",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "5",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "adaeScore",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "5",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "observation",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "name": "Progression",
+  "relationships": [
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "sessionInstance",
+      "relationshipName": "sessionInstance",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "firstName",
+      "otherEntityName": "userCustom",
+      "relationshipName": "student",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity SessionInstance.
+    -->
+    <changeSet id="20240109181131-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="session_instance_id"
+                                 baseTableName="rel_session_instance__links"
+                                 constraintName="fk_rel_session_instance__links__session_instance_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="session_instance"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="links_id"
+                                 baseTableName="rel_session_instance__links"
+                                 constraintName="fk_rel_session_instance__links__links_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="session_link"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="session1_id"
+                                 baseTableName="session_instance"
+                                 constraintName="fk_session_instance__session1_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="session"
+                                 />
+    </changeSet>
+</databaseChangeLog>

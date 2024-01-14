@@ -1,0 +1,11 @@
+id;quiz_type;quiz_title;quiz_description;deadline;is_active
+1;NONE;aha pomegranate;../fake-data/blob/hipster.txt;2024-01-09T00:46:20;false
+2;NONE;parody provided around;../fake-data/blob/hipster.txt;2024-01-08T20:04:31;true
+3;MANDATORY;and which;../fake-data/blob/hipster.txt;2024-01-09T11:56:20;true
+4;MANDATORY;now;../fake-data/blob/hipster.txt;2024-01-08T22:47:51;true
+5;NONE;instead;../fake-data/blob/hipster.txt;2024-01-08T18:17:59;false
+6;NONE;atop;../fake-data/blob/hipster.txt;2024-01-09T00:50:54;false
+7;MANDATORY;vastly;../fake-data/blob/hipster.txt;2024-01-09T08:27:04;false
+8;OPTIONAL;hint;../fake-data/blob/hipster.txt;2024-01-08T22:37:22;false
+9;MANDATORY;properly;../fake-data/blob/hipster.txt;2024-01-09T05:16:49;false
+10;NONE;gadzooks wit jumble;../fake-data/blob/hipster.txt;2024-01-09T03:42:10;false

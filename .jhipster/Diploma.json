@@ -1,0 +1,67 @@
+{
+  "annotations": {
+    "changelogDate": "20240109175331"
+  },
+  "applications": "*",
+  "entityTableName": "diploma",
+  "fields": [
+    {
+      "fieldName": "type",
+      "fieldType": "DiplomaType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PRIMARY,SECONDARY,BACCALAUREATE,LICENCE,MASTER,PHD,IJAZA"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "subject",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "detail",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "supervisor",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "grade",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "graduationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "school",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "attachment",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image",
+      "fieldValidateRules": ["maxbytes"],
+      "fieldValidateRulesMaxbytes": "1000000"
+    }
+  ],
+  "name": "Diploma",
+  "relationships": [
+    {
+      "otherEntityField": "firstName",
+      "otherEntityName": "userCustom",
+      "otherEntityRelationshipName": "diplomas",
+      "relationshipName": "userCustom7",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "lmswiamApp": {
+    "quizResult": {
+      "home": {
+        "title": "Quiz Results",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Quiz Result",
+        "createOrEditLabel": "Create or edit a Quiz Result",
+        "search": "Search for Quiz Result",
+        "notFound": "No Quiz Results found"
+      },
+      "created": "A new Quiz Result is created with identifier {{ param }}",
+      "updated": "A Quiz Result is updated with identifier {{ param }}",
+      "deleted": "A Quiz Result is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Quiz Result {{ id }}?"
+      },
+      "detail": {
+        "title": "Quiz Result"
+      },
+      "id": "ID",
+      "result": "Result",
+      "submittedAT": "Submitted AT",
+      "quiz": "Quiz",
+      "userCustom2": "User Custom 2"
+    }
+  }
+}

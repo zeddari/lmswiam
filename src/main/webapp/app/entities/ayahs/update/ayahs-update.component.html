@@ -1,0 +1,125 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-ayahs-heading" data-cy="AyahsCreateUpdateHeading" jhiTranslate="lmswiamApp.ayahs.home.createOrEditLabel">
+        Create or edit a Ayahs
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="lmswiamApp.ayahs.id" for="field_id">Id</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.number" for="field_number">Number</label>
+          <input type="number" class="form-control" name="number" id="field_number" data-cy="number" formControlName="number" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.textdesc" for="field_textdesc">Textdesc</label>
+          <input type="text" class="form-control" name="textdesc" id="field_textdesc" data-cy="textdesc" formControlName="textdesc" />
+          @if (editForm.get('textdesc')!.invalid && (editForm.get('textdesc')!.dirty || editForm.get('textdesc')!.touched)) {
+            <div>
+              @if (editForm.get('textdesc')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('textdesc')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
+                  >This field cannot be longer than 100 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.numberInSurah" for="field_numberInSurah">Number In Surah</label>
+          <input
+            type="number"
+            class="form-control"
+            name="numberInSurah"
+            id="field_numberInSurah"
+            data-cy="numberInSurah"
+            formControlName="numberInSurah"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.page" for="field_page">Page</label>
+          <input type="number" class="form-control" name="page" id="field_page" data-cy="page" formControlName="page" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.surahId" for="field_surahId">Surah Id</label>
+          <input type="number" class="form-control" name="surahId" id="field_surahId" data-cy="surahId" formControlName="surahId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.hizbId" for="field_hizbId">Hizb Id</label>
+          <input type="number" class="form-control" name="hizbId" id="field_hizbId" data-cy="hizbId" formControlName="hizbId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.juzId" for="field_juzId">Juz Id</label>
+          <input type="number" class="form-control" name="juzId" id="field_juzId" data-cy="juzId" formControlName="juzId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.sajda" for="field_sajda">Sajda</label>
+          <input type="checkbox" class="form-check" name="sajda" id="field_sajda" data-cy="sajda" formControlName="sajda" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.createdAt" for="field_createdAt">Created At</label>
+          <div class="d-flex">
+            <input
+              id="field_createdAt"
+              data-cy="createdAt"
+              type="datetime-local"
+              class="form-control"
+              name="createdAt"
+              formControlName="createdAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.updatedAt" for="field_updatedAt">Updated At</label>
+          <div class="d-flex">
+            <input
+              id="field_updatedAt"
+              data-cy="updatedAt"
+              type="datetime-local"
+              class="form-control"
+              name="updatedAt"
+              formControlName="updatedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

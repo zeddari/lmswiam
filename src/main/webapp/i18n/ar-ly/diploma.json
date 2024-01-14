@@ -1,0 +1,34 @@
+{
+  "lmswiamApp": {
+    "diploma": {
+      "home": {
+        "title": "Diplomas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Diploma",
+        "createOrEditLabel": "Create or edit a Diploma",
+        "search": "Search for Diploma",
+        "notFound": "No Diplomas found"
+      },
+      "created": "A new Diploma is created with identifier {{ param }}",
+      "updated": "A Diploma is updated with identifier {{ param }}",
+      "deleted": "A Diploma is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Diploma {{ id }}?"
+      },
+      "detail": {
+        "title": "Diploma"
+      },
+      "id": "ID",
+      "type": "Type",
+      "title": "Title",
+      "subject": "Subject",
+      "detail": "Detail",
+      "supervisor": "Supervisor",
+      "grade": "Grade",
+      "graduationDate": "Graduation Date",
+      "school": "School",
+      "attachment": "Attachment",
+      "userCustom7": "User Custom 7"
+    }
+  }
+}

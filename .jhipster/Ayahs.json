@@ -1,0 +1,57 @@
+{
+  "annotations": {
+    "changelogDate": "20240109181931"
+  },
+  "applications": "*",
+  "entityTableName": "ayahs",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "number",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "textdesc",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "numberInSurah",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "page",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "surahId",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "hizbId",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "juzId",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "sajda",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "ZonedDateTime"
+    }
+  ],
+  "name": "Ayahs",
+  "relationships": []
+}

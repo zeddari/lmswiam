@@ -1,0 +1,11 @@
+id;amount;payment_method;paied_by;proof;proof_content_type;paid_at;type;validity_start_time;validity_end_time;details
+1;27707.38;CASH;yuck pace;../fake-data/blob/hipster.png;image/png;2024-01-08T18:32:17;MONTHLY_FEES;2024-01-09T06:57:47;2024-01-09T11:57:15;../fake-data/blob/hipster.txt
+2;111.14;OTHER;before;../fake-data/blob/hipster.png;image/png;2024-01-09T02:13:21;ACTIVITY_FEES;2024-01-08T20:50:53;2024-01-09T17:56:39;../fake-data/blob/hipster.txt
+3;12485.72;TRANSFER;batter;../fake-data/blob/hipster.png;image/png;2024-01-09T11:01:21;MONTHLY_FEES;2024-01-09T01:39:07;2024-01-09T17:08:37;../fake-data/blob/hipster.txt
+4;11089.04;CHECK;till now shocking;../fake-data/blob/hipster.png;image/png;2024-01-09T11:40:43;REGISTER;2024-01-08T20:08:31;2024-01-09T17:56:18;../fake-data/blob/hipster.txt
+5;26219.15;CHECK;blah provided once;../fake-data/blob/hipster.png;image/png;2024-01-08T18:20:53;MONTHLY_FEES;2024-01-09T12:48:19;2024-01-09T05:17:16;../fake-data/blob/hipster.txt
+6;4740.54;TRANSFER;precipitate consequently yowza;../fake-data/blob/hipster.png;image/png;2024-01-09T08:38:01;MONTHLY_FEES;2024-01-09T16:25:32;2024-01-09T06:53:41;../fake-data/blob/hipster.txt
+7;31489.2;TRANSFER;lest now;../fake-data/blob/hipster.png;image/png;2024-01-08T20:30:55;MONTHLY_FEES;2024-01-09T09:36:19;2024-01-08T20:25:54;../fake-data/blob/hipster.txt
+8;16729.34;TRANSFER;bottle tuition;../fake-data/blob/hipster.png;image/png;2024-01-09T06:45:29;MONTHLY_FEES;2024-01-09T04:59:21;2024-01-09T09:58:18;../fake-data/blob/hipster.txt
+9;11250.42;TRANSFER;nimble;../fake-data/blob/hipster.png;image/png;2024-01-09T07:36:22;REGISTER;2024-01-09T15:15:32;2024-01-09T02:54:19;../fake-data/blob/hipster.txt
+10;22763.3;OTHER;untried pish;../fake-data/blob/hipster.png;image/png;2024-01-09T08:34:33;REGISTER;2024-01-08T21:40:39;2024-01-09T09:34:31;../fake-data/blob/hipster.txt

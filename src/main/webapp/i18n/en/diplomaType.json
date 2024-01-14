@@ -1,0 +1,14 @@
+{
+  "lmswiamApp": {
+    "DiplomaType": {
+      "null": "",
+      "PRIMARY": "PRIMARY",
+      "SECONDARY": "SECONDARY",
+      "BACCALAUREATE": "BACCALAUREATE",
+      "LICENCE": "LICENCE",
+      "MASTER": "MASTER",
+      "PHD": "PHD",
+      "IJAZA": "IJAZA"
+    }
+  }
+}

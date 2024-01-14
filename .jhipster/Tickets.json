@@ -1,0 +1,77 @@
+{
+  "annotations": {
+    "changelogDate": "20240109181331"
+  },
+  "applications": "*",
+  "entityTableName": "tickets",
+  "fields": [
+    {
+      "fieldName": "subject",
+      "fieldType": "TicketSubjects",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ABSENCE,LEAVE,CERTIFICATE,INFORMATION,OTHER"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "reference",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "justifDoc",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image",
+      "fieldValidateRules": ["maxbytes"],
+      "fieldValidateRulesMaxbytes": "1000000"
+    },
+    {
+      "fieldName": "dateTicket",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateProcess",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "processed",
+      "fieldType": "TicketStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PROCESSING,PROCESSED,PENDING"
+    },
+    {
+      "fieldName": "from",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "toDate",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "decisionDetail",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "name": "Tickets",
+  "relationships": [
+    {
+      "otherEntityField": "firstName",
+      "otherEntityName": "userCustom",
+      "relationshipName": "userCustom5",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}

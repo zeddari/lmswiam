@@ -1,0 +1,15 @@
+export enum DiplomaType {
+  PRIMARY = 'PRIMARY',
+
+  SECONDARY = 'SECONDARY',
+
+  BACCALAUREATE = 'BACCALAUREATE',
+
+  LICENCE = 'LICENCE',
+
+  MASTER = 'MASTER',
+
+  PHD = 'PHD',
+
+  IJAZA = 'IJAZA',
+}

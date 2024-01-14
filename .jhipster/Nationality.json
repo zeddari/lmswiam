@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "changelogDate": "20240109175031"
+  },
+  "applications": "*",
+  "entityTableName": "nationality",
+  "fields": [
+    {
+      "fieldName": "nameAr",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "nameLat",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    }
+  ],
+  "name": "Nationality",
+  "relationships": [
+    {
+      "otherEntityName": "userCustom",
+      "otherEntityRelationshipName": "nationality",
+      "relationshipName": "userCustom",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ]
+}

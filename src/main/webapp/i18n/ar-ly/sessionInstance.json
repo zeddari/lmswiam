@@ -1,0 +1,35 @@
+{
+  "lmswiamApp": {
+    "sessionInstance": {
+      "home": {
+        "title": "Session Instances",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Session Instance",
+        "createOrEditLabel": "Create or edit a Session Instance",
+        "search": "Search for Session Instance",
+        "notFound": "No Session Instances found"
+      },
+      "created": "A new Session Instance is created with identifier {{ param }}",
+      "updated": "A Session Instance is updated with identifier {{ param }}",
+      "deleted": "A Session Instance is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Session Instance {{ id }}?"
+      },
+      "detail": {
+        "title": "Session Instance"
+      },
+      "id": "ID",
+      "title": "Title",
+      "sessionDate": "Session Date",
+      "startTime": "Start Time",
+      "duration": "Duration",
+      "info": "Info",
+      "attendance": "Attendance",
+      "justifRef": "Justif Ref",
+      "isActive": "Is Active",
+      "progression": "Progression",
+      "links": "Links",
+      "session1": "Session 1"
+    }
+  }
+}

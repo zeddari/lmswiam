@@ -1,0 +1,75 @@
+{
+  "annotations": {
+    "changelogDate": "20240109181131"
+  },
+  "applications": "*",
+  "entityTableName": "session_instance",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "sessionDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "startTime",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "duration",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "info",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "attendance",
+      "fieldType": "Attendance",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PRESENT,ABSENT,ABSENT_AUTHORIZED"
+    },
+    {
+      "fieldName": "justifRef",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "SessionInstance",
+  "relationships": [
+    {
+      "otherEntityName": "progression",
+      "otherEntityRelationshipName": "sessionInstance",
+      "relationshipName": "progression",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "sessionLink",
+      "otherEntityRelationshipName": "sessions4",
+      "relationshipName": "links",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "session",
+      "relationshipName": "session1",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}

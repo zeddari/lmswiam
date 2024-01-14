@@ -1,0 +1,23 @@
+{
+  "annotations": {
+    "changelogDate": "20240109182131"
+  },
+  "applications": "*",
+  "entityTableName": "hizbs",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "ZonedDateTime"
+    }
+  ],
+  "name": "Hizbs",
+  "relationships": []
+}

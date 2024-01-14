@@ -1,0 +1,97 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (project) {
+      <div>
+        <h2 data-cy="projectDetailsHeading"><span jhiTranslate="lmswiamApp.project.detail.title">Project</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ project.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.titleAr">Title Ar</span></dt>
+          <dd>
+            <span>{{ project.titleAr }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.titleLat">Title Lat</span></dt>
+          <dd>
+            <span>{{ project.titleLat }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.description">Description</span></dt>
+          <dd>
+            <span>{{ project.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.goals">Goals</span></dt>
+          <dd>
+            <span>{{ project.goals }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.requirements">Requirements</span></dt>
+          <dd>
+            <span>{{ project.requirements }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.imageLink">Image Link</span></dt>
+          <dd>
+            @if (project.imageLink) {
+              <div>
+                <a (click)="openFile(project.imageLink, project.imageLinkContentType)">
+                  <img
+                    [src]="'data:' + project.imageLinkContentType + ';base64,' + project.imageLink"
+                    style="max-width: 100%"
+                    alt="project image"
+                  />
+                </a>
+                {{ project.imageLinkContentType }}, {{ byteSize(project.imageLink) }}
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.videoLink">Video Link</span></dt>
+          <dd>
+            <span>{{ project.videoLink }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.budget">Budget</span></dt>
+          <dd>
+            <span>{{ project.budget }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.isActive">Is Active</span></dt>
+          <dd>
+            <span>{{ project.isActive }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.activateAt">Activate At</span></dt>
+          <dd>
+            <span>{{ project.activateAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.startDate">Start Date</span></dt>
+          <dd>
+            <span>{{ project.startDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.endDate">End Date</span></dt>
+          <dd>
+            <span>{{ project.endDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.project.typeProject">Type Project</span></dt>
+          <dd>
+            @if (project.typeProject) {
+              <div>
+                <a [routerLink]="['/type-project', project.typeProject.id, 'view']">{{ project.typeProject.nameAr }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/project', project.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

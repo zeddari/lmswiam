@@ -1,0 +1,63 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (group) {
+      <div>
+        <h2 data-cy="groupDetailsHeading"><span jhiTranslate="lmswiamApp.group.detail.title">Group</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ group.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.group.groupType">Group Type</span></dt>
+          <dd>
+            <span jhiTranslate="{{ 'lmswiamApp.GroupType.' + group.groupType }}">{{ group.groupType }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.group.nameAr">Name Ar</span></dt>
+          <dd>
+            <span>{{ group.nameAr }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.group.nameLat">Name Lat</span></dt>
+          <dd>
+            <span>{{ group.nameLat }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.group.description">Description</span></dt>
+          <dd>
+            <span>{{ group.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.group.elements">Elements</span></dt>
+          <dd>
+            @for (elements of group.elements; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/user-custom', elements.id, 'view']">{{ elements.firstName }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.group.group1">Group 1</span></dt>
+          <dd>
+            @if (group.group1) {
+              <div>
+                <a [routerLink]="['/group', group.group1.id, 'view']">{{ group.group1.nameAr }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/group', group.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

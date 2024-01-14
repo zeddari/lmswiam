@@ -1,0 +1,10 @@
+{
+  "lmswiamApp": {
+    "TicketStatus": {
+      "null": "",
+      "PROCESSING": "PROCESSING",
+      "PROCESSED": "PROCESSED",
+      "PENDING": "PENDING"
+    }
+  }
+}

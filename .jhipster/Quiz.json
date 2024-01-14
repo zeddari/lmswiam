@@ -1,0 +1,68 @@
+{
+  "annotations": {
+    "changelogDate": "20240109180231"
+  },
+  "applications": "*",
+  "entityTableName": "quiz",
+  "fields": [
+    {
+      "fieldName": "quizType",
+      "fieldType": "ExamType",
+      "fieldValues": "NONE,OPTIONAL,MANDATORY"
+    },
+    {
+      "fieldName": "quizTitle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "quizDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "deadline",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Quiz",
+  "relationships": [
+    {
+      "otherEntityName": "quizResult",
+      "otherEntityRelationshipName": "quiz",
+      "relationshipName": "quizResult",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "group",
+      "otherEntityRelationshipName": "quiz",
+      "relationshipName": "groups",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "question",
+      "otherEntityName": "question",
+      "otherEntityRelationshipName": "quiz",
+      "relationshipName": "questions",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "titleAr",
+      "otherEntityName": "topic",
+      "relationshipName": "topic1",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}

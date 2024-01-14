@@ -1,0 +1,11 @@
+export enum TicketSubjects {
+  ABSENCE = 'ABSENCE',
+
+  LEAVE = 'LEAVE',
+
+  CERTIFICATE = 'CERTIFICATE',
+
+  INFORMATION = 'INFORMATION',
+
+  OTHER = 'OTHER',
+}

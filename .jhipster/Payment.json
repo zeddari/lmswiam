@@ -1,0 +1,91 @@
+{
+  "annotations": {
+    "changelogDate": "20240109181831"
+  },
+  "applications": "*",
+  "entityTableName": "payment",
+  "fields": [
+    {
+      "fieldName": "amount",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "paymentMethod",
+      "fieldType": "PaymentMode",
+      "fieldTypeDocumentation": "Sponsoring",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CASH,TRANSFER,CHECK,OTHER"
+    },
+    {
+      "fieldName": "paiedBy",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "proof",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image",
+      "fieldValidateRules": ["maxbytes"],
+      "fieldValidateRulesMaxbytes": "1000000"
+    },
+    {
+      "fieldName": "paidAt",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "PaymentType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "REGISTER,MONTHLY_FEES,ACTIVITY_FEES"
+    },
+    {
+      "fieldName": "validityStartTime",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "validityEndTime",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "details",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "name": "Payment",
+  "relationships": [
+    {
+      "otherEntityField": "ref",
+      "otherEntityName": "enrolement",
+      "relationshipName": "enrolment",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "ref",
+      "otherEntityName": "sponsoring",
+      "relationshipName": "sponsoring",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "session",
+      "relationshipName": "session",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "currency",
+      "relationshipName": "currency",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}

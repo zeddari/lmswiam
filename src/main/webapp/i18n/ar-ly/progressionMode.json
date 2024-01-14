@@ -1,0 +1,11 @@
+{
+  "lmswiamApp": {
+    "ProgressionMode": {
+      "null": "",
+      "SLOW": "SLOW",
+      "INTERMEDIATE": "INTERMEDIATE",
+      "FAST": "FAST",
+      "VERYFAST": "VERYFAST"
+    }
+  }
+}

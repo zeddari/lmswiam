@@ -1,0 +1,14 @@
+{
+  "lmswiamApp": {
+    "Role": {
+      "null": "",
+      "STUDENT": "STUDENT",
+      "INSTRUCTOR": "INSTRUCTOR",
+      "MANAGEMENT": "MANAGEMENT",
+      "SUPERVISOR": "SUPERVISOR",
+      "MANAGER": "MANAGER",
+      "SUPER_MANAGER": "SUPER_MANAGER",
+      "SPONSOR": "SPONSOR"
+    }
+  }
+}

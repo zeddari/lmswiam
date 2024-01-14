@@ -1,0 +1,30 @@
+{
+  "lmswiamApp": {
+    "ayahEdition": {
+      "home": {
+        "title": "Ayah Editions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Ayah Edition",
+        "createOrEditLabel": "Create or edit a Ayah Edition",
+        "search": "Search for Ayah Edition",
+        "notFound": "No Ayah Editions found"
+      },
+      "created": "A new Ayah Edition is created with identifier {{ param }}",
+      "updated": "A Ayah Edition is updated with identifier {{ param }}",
+      "deleted": "A Ayah Edition is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Ayah Edition {{ id }}?"
+      },
+      "detail": {
+        "title": "Ayah Edition"
+      },
+      "id": "Id",
+      "ayahId": "Ayah Id",
+      "editionId": "Edition Id",
+      "data": "Data",
+      "isAudio": "Is Audio",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    }
+  }
+}

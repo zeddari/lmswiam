@@ -1,0 +1,76 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (quiz) {
+      <div>
+        <h2 data-cy="quizDetailsHeading"><span jhiTranslate="lmswiamApp.quiz.detail.title">Quiz</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ quiz.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quiz.quizType">Quiz Type</span></dt>
+          <dd>
+            <span jhiTranslate="{{ 'lmswiamApp.ExamType.' + quiz.quizType }}">{{ quiz.quizType }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quiz.quizTitle">Quiz Title</span></dt>
+          <dd>
+            <span>{{ quiz.quizTitle }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quiz.quizDescription">Quiz Description</span></dt>
+          <dd>
+            <span>{{ quiz.quizDescription }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quiz.deadline">Deadline</span></dt>
+          <dd>
+            <span>{{ quiz.deadline | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quiz.isActive">Is Active</span></dt>
+          <dd>
+            <span>{{ quiz.isActive }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quiz.groups">Groups</span></dt>
+          <dd>
+            @for (groups of quiz.groups; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/group', groups.id, 'view']">{{ groups.nameAr }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quiz.questions">Questions</span></dt>
+          <dd>
+            @for (questions of quiz.questions; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/question', questions.id, 'view']">{{ questions.question }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quiz.topic1">Topic 1</span></dt>
+          <dd>
+            @if (quiz.topic1) {
+              <div>
+                <a [routerLink]="['/topic', quiz.topic1.id, 'view']">{{ quiz.topic1.titleAr }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/quiz', quiz.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

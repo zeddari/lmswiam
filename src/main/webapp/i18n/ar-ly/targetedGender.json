@@ -1,0 +1,10 @@
+{
+  "lmswiamApp": {
+    "TargetedGender": {
+      "null": "",
+      "MEN": "MEN",
+      "WOMEN": "WOMEN",
+      "MIXED": "MIXED"
+    }
+  }
+}

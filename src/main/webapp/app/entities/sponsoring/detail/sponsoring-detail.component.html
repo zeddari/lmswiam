@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (sponsoring) {
+      <div>
+        <h2 data-cy="sponsoringDetailsHeading"><span jhiTranslate="lmswiamApp.sponsoring.detail.title">Sponsoring</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ sponsoring.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sponsoring.ref">Ref</span></dt>
+          <dd>
+            <span>{{ sponsoring.ref }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sponsoring.message">Message</span></dt>
+          <dd>
+            <span>{{ sponsoring.message }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sponsoring.amount">Amount</span></dt>
+          <dd>
+            <span>{{ sponsoring.amount }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sponsoring.startDate">Start Date</span></dt>
+          <dd>
+            <span>{{ sponsoring.startDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sponsoring.endDate">End Date</span></dt>
+          <dd>
+            <span>{{ sponsoring.endDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sponsoring.isAlways">Is Always</span></dt>
+          <dd>
+            <span>{{ sponsoring.isAlways }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sponsoring.sponsor">Sponsor</span></dt>
+          <dd>
+            @if (sponsoring.sponsor) {
+              <div>
+                <a [routerLink]="['/user-custom', sponsoring.sponsor.id, 'view']">{{ sponsoring.sponsor.firstName }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sponsoring.project">Project</span></dt>
+          <dd>
+            @if (sponsoring.project) {
+              <div>
+                <a [routerLink]="['/project', sponsoring.project.id, 'view']">{{ sponsoring.project.titleAr }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sponsoring.currency">Currency</span></dt>
+          <dd>
+            @if (sponsoring.currency) {
+              <div>
+                <a [routerLink]="['/currency', sponsoring.currency.id, 'view']">{{ sponsoring.currency.nameAr }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/sponsoring', sponsoring.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

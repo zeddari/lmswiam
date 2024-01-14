@@ -1,0 +1,9 @@
+export enum GroupType {
+  EMPTY = 'EMPTY',
+
+  STUDENT = 'STUDENT',
+
+  PROFESSOR = 'PROFESSOR',
+
+  SUPERVISOR = 'SUPERVISOR',
+}

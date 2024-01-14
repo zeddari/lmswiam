@@ -1,0 +1,23 @@
+{
+  "annotations": {
+    "changelogDate": "20240109182231"
+  },
+  "applications": "*",
+  "entityTableName": "juzs",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "ZonedDateTime"
+    }
+  ],
+  "name": "Juzs",
+  "relationships": []
+}

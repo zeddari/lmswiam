@@ -3,11 +3,81 @@
 <div>
   <router-outlet name="navbar"></router-outlet>
 </div>
-
-<div class="container-fluid">
-  <div class="card jh-card">
-    <router-outlet></router-outlet>
+<div class="container-fluid bg-color" style="padding-top: 20px; padding-right: 30px; height: 100vh">
+  <div class="db-main order1">
+    <div class="sidebar col-md-6 col-lg-10 p-0 bg-white bd-toc rounded-5">
+      <div class="offcanvas-md offcanvas-end bg-white" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="sidebarMenuLabel">Company name</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="يغلق"></button>
+        </div>
+        <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+          <a href="/" class="d-flex align-items-center pt-3 pb-5 mb-3 mb-md-0 m-md-auto link-body-emphasis text-decoration-none">
+            <img src="./content/custom/img/al-wiam-association.svg" width="168" height="105" />
+          </a>
+          <ul class="nav flex-column">
+            <li class="nav-item p-2">
+              <a class="nav-link d-flex align-items-center gap-3 fs-5 text-color" aria-current="page" href="/departement">
+                <img src="./content/custom/img/fi-sr-layout-fluid.svg" width="20px" height="20px" />
+                لوحة المراقبة
+              </a>
+            </li>
+            <li class="nav-item p-2">
+              <a class="nav-link d-flex align-items-center gap-3 fs-5 text-color" href="#">
+                <img src="./content/custom/img/fi-sr-book-alt.svg" width="20px" height="20px" />
+                دوراتي
+              </a>
+            </li>
+            <li class="nav-item p-2">
+              <a class="nav-link d-flex align-items-center active gap-3 fs-5 text-color" href="#">
+                <img src="./content/custom/img/fi-sr-book.svg" width="20px" height="20px" />
+                الدروس
+              </a>
+            </li>
+            <li class="nav-item p-2">
+              <a class="nav-link d-flex align-items-center gap-3 fs-5 text-color" href="#">
+                <img src="./content/custom/img/fi-sr-calendar.svg" width="20px" height="20px" />
+                جدول الأعمال
+              </a>
+            </li>
+            <li class="nav-item p-2">
+              <a class="nav-link d-flex align-items-center gap-3 fs-5 text-color" href="#">
+                <img src="./content/custom/img/fi-sr-play-alt.svg" width="20px" height="20px" />
+                مكتبة
+              </a>
+            </li>
+          </ul>
+          <ul class="nav flex-column mb-auto">
+            <li class="nav-item p-2">
+              <a class="nav-link d-flex align-items-center gap-3 fs-5 text-color" href="#">
+                <img src="./content/custom/img/fi-sr-settings.svg" width="20px" height="20px" />
+                إعدادات
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- End Sidebar -->
+    <div class="db-header row justify-content-between ps-lg-2">
+      <div class="col-lg-6">
+        <div class="input-group mb-3">
+          <span class="input-group-text bg-mustard-green border-0 p-3" id="basic-addon1"
+            ><img src="./content/custom/img/fi-sr-search.svg" width="16px "
+          /></span>
+          <input type="text" class="form-control border-0 p-2" placeholder="بحث" aria-label="بحث" aria-describedby="basic-addon1" />
+        </div>
+      </div>
+      <div class="col-lg-2 row">
+        <div class="col-lg-5"><img src="./content/custom/img/notif.svg" width="46px" height="46px" style="cursor: pointer" /></div>
+        <div class="col-lg-5"><img src="./content/custom/img/profile.svg" width="46px" height="46px" style="cursor: pointer" /></div>
+      </div>
+    </div>
+    <div class="card jh-card">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-
+</div>
+<div class="container-fluid">
   <jhi-footer></jhi-footer>
 </div>

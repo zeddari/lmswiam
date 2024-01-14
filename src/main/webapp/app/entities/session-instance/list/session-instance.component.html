@@ -1,0 +1,209 @@
+<div>
+  <h2 id="page-heading" data-cy="SessionInstanceHeading">
+    <span jhiTranslate="lmswiamApp.sessionInstance.home.title">Session Instances</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="lmswiamApp.sessionInstance.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-session-instance"
+        [routerLink]="['/session-instance/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down" jhiTranslate="lmswiamApp.sessionInstance.home.createLabel">Create a new Session Instance</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch" jhiTranslate="lmswiamApp.sessionInstance.home.search"
+          >Search for Session Instance</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="{{ 'lmswiamApp.sessionInstance.home.search' | translate }}"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  @if (sessionInstances?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="lmswiamApp.sessionInstance.home.notFound">No Session Instances found</span>
+    </div>
+  }
+
+  @if (sessionInstances && sessionInstances.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="title">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.sessionInstance.title">Title</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="sessionDate">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.sessionInstance.sessionDate">Session Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="startTime">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.sessionInstance.startTime">Start Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="duration">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.sessionInstance.duration">Duration</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="info">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.sessionInstance.info">Info</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="attendance">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.sessionInstance.attendance">Attendance</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="justifRef">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.sessionInstance.justifRef">Justif Ref</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isActive">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.sessionInstance.isActive">Is Active</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="links.title">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.sessionInstance.links">Links</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="session1.title">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.sessionInstance.session1">Session 1</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sessionInstance of sessionInstances; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/session-instance', sessionInstance.id, 'view']">{{ sessionInstance.id }}</a>
+              </td>
+              <td>{{ sessionInstance.title }}</td>
+              <td>{{ sessionInstance.sessionDate | formatMediumDate }}</td>
+              <td>{{ sessionInstance.startTime | formatMediumDatetime }}</td>
+              <td>{{ sessionInstance.duration }}</td>
+              <td>{{ sessionInstance.info }}</td>
+              <td jhiTranslate="{{ 'lmswiamApp.Attendance.' + sessionInstance.attendance }}">{{ sessionInstance.attendance }}</td>
+              <td>{{ sessionInstance.justifRef }}</td>
+              <td>{{ sessionInstance.isActive }}</td>
+              <td>
+                @for (links of sessionInstance.links; track $index; let last = $last) {
+                  <span>
+                    <a class="form-control-static" [routerLink]="['/session-link', links.id, 'view']">{{ links.title }}</a
+                    >{{ last ? '' : ', ' }}
+                  </span>
+                }
+              </td>
+              <td>
+                @if (sessionInstance.session1) {
+                  <div>
+                    <a [routerLink]="['/session', sessionInstance.session1.id, 'view']">{{ sessionInstance.session1.title }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/session-instance', sessionInstance.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/session-instance', sessionInstance.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(sessionInstance)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -1,0 +1,183 @@
+{
+  "annotations": {
+    "changelogDate": "20240109181031"
+  },
+  "applications": "*",
+  "entityTableName": "session",
+  "fields": [
+    {
+      "fieldName": "sessionMode",
+      "fieldType": "SessionMode",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ONLINE,ONSITE,MIXED"
+    },
+    {
+      "fieldName": "sessionType",
+      "fieldType": "SessionType",
+      "fieldTypeDocumentation": "Sessions",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "HALAQA,LECTURE,TRAINING"
+    },
+    {
+      "fieldName": "sessionJoinMode",
+      "fieldType": "SessionJoinMode",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "DIRECT,AUTHORIZED"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "periodStartDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "periodeEndDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "sessionStartTime",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sessionEndTime",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sessionSize",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "100",
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "targetedGender",
+      "fieldType": "TargetedGender",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "MEN,WOMEN,MIXED"
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "Double",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "thumbnail",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image",
+      "fieldValidateRules": ["maxbytes"],
+      "fieldValidateRulesMaxbytes": "1000000"
+    },
+    {
+      "fieldName": "monday",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "tuesday",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "wednesday",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "thursday",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "friday",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "saturday",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "sunday",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "isPeriodic",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isMinorAllowed",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Session",
+  "relationships": [
+    {
+      "otherEntityName": "sessionInstance",
+      "otherEntityRelationshipName": "session1",
+      "relationshipName": "sessionInstance",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "payment",
+      "otherEntityRelationshipName": "session",
+      "relationshipName": "payment",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "classroom",
+      "otherEntityRelationshipName": "sessions6",
+      "relationshipName": "classrooms",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "group",
+      "otherEntityRelationshipName": "sessions5",
+      "relationshipName": "groups",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "firstName",
+      "otherEntityName": "userCustom",
+      "otherEntityRelationshipName": "sessions2",
+      "relationshipName": "professors",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "firstName",
+      "otherEntityName": "userCustom",
+      "otherEntityRelationshipName": "sessions3",
+      "relationshipName": "employees",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "sessionLink",
+      "otherEntityRelationshipName": "sessions7",
+      "relationshipName": "links",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ]
+}

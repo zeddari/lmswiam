@@ -1,0 +1,133 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-question-heading" data-cy="QuestionCreateUpdateHeading" jhiTranslate="lmswiamApp.question.home.createOrEditLabel">
+        Create or edit a Question
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.question" for="field_question">Question</label>
+          <textarea class="form-control" name="question" id="field_question" data-cy="question" formControlName="question"></textarea>
+          @if (editForm.get('question')!.invalid && (editForm.get('question')!.dirty || editForm.get('question')!.touched)) {
+            <div>
+              @if (editForm.get('question')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.details" for="field_details">Details</label>
+          <textarea class="form-control" name="details" id="field_details" data-cy="details" formControlName="details"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.a1" for="field_a1">A 1</label>
+          <textarea class="form-control" name="a1" id="field_a1" data-cy="a1" formControlName="a1"></textarea>
+          @if (editForm.get('a1')!.invalid && (editForm.get('a1')!.dirty || editForm.get('a1')!.touched)) {
+            <div>
+              @if (editForm.get('a1')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.a1v" for="field_a1v">A 1 V</label>
+          <input type="checkbox" class="form-check" name="a1v" id="field_a1v" data-cy="a1v" formControlName="a1v" />
+          @if (editForm.get('a1v')!.invalid && (editForm.get('a1v')!.dirty || editForm.get('a1v')!.touched)) {
+            <div>
+              @if (editForm.get('a1v')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.a2" for="field_a2">A 2</label>
+          <textarea class="form-control" name="a2" id="field_a2" data-cy="a2" formControlName="a2"></textarea>
+          @if (editForm.get('a2')!.invalid && (editForm.get('a2')!.dirty || editForm.get('a2')!.touched)) {
+            <div>
+              @if (editForm.get('a2')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.a2v" for="field_a2v">A 2 V</label>
+          <input type="checkbox" class="form-check" name="a2v" id="field_a2v" data-cy="a2v" formControlName="a2v" />
+          @if (editForm.get('a2v')!.invalid && (editForm.get('a2v')!.dirty || editForm.get('a2v')!.touched)) {
+            <div>
+              @if (editForm.get('a2v')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.a3" for="field_a3">A 3</label>
+          <textarea class="form-control" name="a3" id="field_a3" data-cy="a3" formControlName="a3"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.a3v" for="field_a3v">A 3 V</label>
+          <input type="checkbox" class="form-check" name="a3v" id="field_a3v" data-cy="a3v" formControlName="a3v" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.a4" for="field_a4">A 4</label>
+          <textarea class="form-control" name="a4" id="field_a4" data-cy="a4" formControlName="a4"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.a4v" for="field_a4v">A 4 V</label>
+          <input type="checkbox" class="form-check" name="a4v" id="field_a4v" data-cy="a4v" formControlName="a4v" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.question.isActive" for="field_isActive">Is Active</label>
+          <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
+          @if (editForm.get('isActive')!.invalid && (editForm.get('isActive')!.dirty || editForm.get('isActive')!.touched)) {
+            <div>
+              @if (editForm.get('isActive')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

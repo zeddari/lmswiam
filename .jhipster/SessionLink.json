@@ -1,0 +1,50 @@
+{
+  "annotations": {
+    "changelogDate": "20240109180931"
+  },
+  "applications": "*",
+  "entityTableName": "session_link",
+  "fields": [
+    {
+      "fieldName": "provider",
+      "fieldType": "SessionProvider",
+      "fieldValues": "ZOOM,TEAMS,FACEBOOK,INSTAGRAM,TELEGRAM,WAHTSAPP"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "link",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    }
+  ],
+  "name": "SessionLink",
+  "relationships": [
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "sessionInstance",
+      "otherEntityRelationshipName": "links",
+      "relationshipName": "sessions4",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "session",
+      "otherEntityRelationshipName": "links",
+      "relationshipName": "sessions7",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ]
+}

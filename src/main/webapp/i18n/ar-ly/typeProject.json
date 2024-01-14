@@ -1,0 +1,27 @@
+{
+  "lmswiamApp": {
+    "typeProject": {
+      "home": {
+        "title": "Type Projects",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Type Project",
+        "createOrEditLabel": "Create or edit a Type Project",
+        "search": "Search for Type Project",
+        "notFound": "No Type Projects found"
+      },
+      "created": "A new Type Project is created with identifier {{ param }}",
+      "updated": "A Type Project is updated with identifier {{ param }}",
+      "deleted": "A Type Project is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Type Project {{ id }}?"
+      },
+      "detail": {
+        "title": "Type Project"
+      },
+      "id": "ID",
+      "nameAr": "Name Ar",
+      "nameLat": "Name Lat",
+      "project": "Project"
+    }
+  }
+}

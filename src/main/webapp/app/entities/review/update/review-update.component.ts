@@ -1,0 +1,137 @@
+import { Component, OnInit } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { IPart } from 'app/entities/part/part.model';
+import { PartService } from 'app/entities/part/service/part.service';
+import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
+import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
+import { ReviewService } from '../service/review.service';
+import { IReview } from '../review.model';
+import { ReviewFormService, ReviewFormGroup } from './review-form.service';
+
+@Component({
+  standalone: true,
+  selector: 'jhi-review-update',
+  templateUrl: './review-update.component.html',
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+})
+export class ReviewUpdateComponent implements OnInit {
+  isSaving = false;
+  review: IReview | null = null;
+
+  partsSharedCollection: IPart[] = [];
+  userCustomsSharedCollection: IUserCustom[] = [];
+
+  editForm: ReviewFormGroup = this.reviewFormService.createReviewFormGroup();
+
+  constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
+    protected reviewService: ReviewService,
+    protected reviewFormService: ReviewFormService,
+    protected partService: PartService,
+    protected userCustomService: UserCustomService,
+    protected activatedRoute: ActivatedRoute,
+  ) {}
+
+  comparePart = (o1: IPart | null, o2: IPart | null): boolean => this.partService.comparePart(o1, o2);
+
+  compareUserCustom = (o1: IUserCustom | null, o2: IUserCustom | null): boolean => this.userCustomService.compareUserCustom(o1, o2);
+
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ review }) => {
+      this.review = review;
+      if (review) {
+        this.updateForm(review);
+      }
+
+      this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('lmswiamApp.error', { ...err, key: 'error.file.' + err.key })),
+    });
+  }
+
+  previousState(): void {
+    window.history.back();
+  }
+
+  save(): void {
+    this.isSaving = true;
+    const review = this.reviewFormService.getReview(this.editForm);
+    if (review.id !== null) {
+      this.subscribeToSaveResponse(this.reviewService.update(review));
+    } else {
+      this.subscribeToSaveResponse(this.reviewService.create(review));
+    }
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IReview>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
+  }
+
+  protected onSaveSuccess(): void {
+    this.previousState();
+  }
+
+  protected onSaveError(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalize(): void {
+    this.isSaving = false;
+  }
+
+  protected updateForm(review: IReview): void {
+    this.review = review;
+    this.reviewFormService.resetForm(this.editForm, review);
+
+    this.partsSharedCollection = this.partService.addPartToCollectionIfMissing<IPart>(this.partsSharedCollection, review.part2);
+    this.userCustomsSharedCollection = this.userCustomService.addUserCustomToCollectionIfMissing<IUserCustom>(
+      this.userCustomsSharedCollection,
+      review.userCustom3,
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.partService
+      .query()
+      .pipe(map((res: HttpResponse<IPart[]>) => res.body ?? []))
+      .pipe(map((parts: IPart[]) => this.partService.addPartToCollectionIfMissing<IPart>(parts, this.review?.part2)))
+      .subscribe((parts: IPart[]) => (this.partsSharedCollection = parts));
+
+    this.userCustomService
+      .query()
+      .pipe(map((res: HttpResponse<IUserCustom[]>) => res.body ?? []))
+      .pipe(
+        map((userCustoms: IUserCustom[]) =>
+          this.userCustomService.addUserCustomToCollectionIfMissing<IUserCustom>(userCustoms, this.review?.userCustom3),
+        ),
+      )
+      .subscribe((userCustoms: IUserCustom[]) => (this.userCustomsSharedCollection = userCustoms));
+  }
+}

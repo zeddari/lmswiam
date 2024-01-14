@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (hizbs) {
+      <div>
+        <h2 data-cy="hizbsDetailsHeading"><span jhiTranslate="lmswiamApp.hizbs.detail.title">Hizbs</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="lmswiamApp.hizbs.id">Id</span></dt>
+          <dd>
+            <span>{{ hizbs.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.hizbs.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ hizbs.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.hizbs.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ hizbs.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/hizbs', hizbs.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

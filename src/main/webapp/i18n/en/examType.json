@@ -1,0 +1,10 @@
+{
+  "lmswiamApp": {
+    "ExamType": {
+      "null": "",
+      "NONE": "NONE",
+      "OPTIONAL": "OPTIONAL",
+      "MANDATORY": "MANDATORY"
+    }
+  }
+}

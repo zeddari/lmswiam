@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity UserCustom.
+    -->
+    <changeSet id="20240109175431-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_custom"
+                                 constraintName="fk_user_custom__user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="user_custom_id"
+                                 baseTableName="rel_user_custom__diplomas"
+                                 constraintName="fk_rel_user_custom__diplomas__user_custom_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_custom"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="diplomas_id"
+                                 baseTableName="rel_user_custom__diplomas"
+                                 constraintName="fk_rel_user_custom__diplomas__diplomas_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="diploma"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="user_custom_id"
+                                 baseTableName="rel_user_custom__languages"
+                                 constraintName="fk_rel_user_custom__languages__user_custom_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_custom"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="languages_id"
+                                 baseTableName="rel_user_custom__languages"
+                                 constraintName="fk_rel_user_custom__languages__languages_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="language"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="country_id"
+                                 baseTableName="user_custom"
+                                 constraintName="fk_user_custom__country_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="country"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="nationality_id"
+                                 baseTableName="user_custom"
+                                 constraintName="fk_user_custom__nationality_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="nationality"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="job_id"
+                                 baseTableName="user_custom"
+                                 constraintName="fk_user_custom__job_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="departement2_id"
+                                 baseTableName="user_custom"
+                                 constraintName="fk_user_custom__departement2_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="departement"
+                                 />
+    </changeSet>
+</databaseChangeLog>

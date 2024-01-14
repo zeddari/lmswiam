@@ -1,0 +1,38 @@
+{
+  "annotations": {
+    "changelogDate": "20240109175131"
+  },
+  "applications": "*",
+  "entityTableName": "language",
+  "fields": [
+    {
+      "fieldName": "nameAr",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "nameLat",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "10"
+    }
+  ],
+  "name": "Language",
+  "relationships": [
+    {
+      "otherEntityField": "firstName",
+      "otherEntityName": "userCustom",
+      "otherEntityRelationshipName": "languages",
+      "relationshipName": "userCustom8",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ]
+}

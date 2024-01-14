@@ -1,0 +1,359 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-progression-heading"
+        data-cy="ProgressionCreateUpdateHeading"
+        jhiTranslate="lmswiamApp.progression.home.createOrEditLabel"
+      >
+        Create or edit a Progression
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.attendance" for="field_attendance">Attendance</label>
+          <select class="form-control" name="attendance" formControlName="attendance" id="field_attendance" data-cy="attendance">
+            <option [ngValue]="null">{{ 'lmswiamApp.Attendance.null' | translate }}</option>
+            @for (attendance of attendanceValues; track $index) {
+              <option [value]="attendance">{{ 'lmswiamApp.Attendance.' + attendance | translate }}</option>
+            }
+          </select>
+          @if (editForm.get('attendance')!.invalid && (editForm.get('attendance')!.dirty || editForm.get('attendance')!.touched)) {
+            <div>
+              @if (editForm.get('attendance')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.justifRef" for="field_justifRef">Justif Ref</label>
+          <input type="text" class="form-control" name="justifRef" id="field_justifRef" data-cy="justifRef" formControlName="justifRef" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.lateArrival" for="field_lateArrival">Late Arrival</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="lateArrival"
+            id="field_lateArrival"
+            data-cy="lateArrival"
+            formControlName="lateArrival"
+          />
+          @if (editForm.get('lateArrival')!.invalid && (editForm.get('lateArrival')!.dirty || editForm.get('lateArrival')!.touched)) {
+            <div>
+              @if (editForm.get('lateArrival')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.earlyDeparture" for="field_earlyDeparture">Early Departure</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="earlyDeparture"
+            id="field_earlyDeparture"
+            data-cy="earlyDeparture"
+            formControlName="earlyDeparture"
+          />
+          @if (
+            editForm.get('earlyDeparture')!.invalid && (editForm.get('earlyDeparture')!.dirty || editForm.get('earlyDeparture')!.touched)
+          ) {
+            <div>
+              @if (editForm.get('earlyDeparture')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.progressionMode" for="field_progressionMode"
+            >Progression Mode</label
+          >
+          <select
+            class="form-control"
+            name="progressionMode"
+            formControlName="progressionMode"
+            id="field_progressionMode"
+            data-cy="progressionMode"
+          >
+            <option [ngValue]="null">{{ 'lmswiamApp.ProgressionMode.null' | translate }}</option>
+            @for (progressionMode of progressionModeValues; track $index) {
+              <option [value]="progressionMode">{{ 'lmswiamApp.ProgressionMode.' + progressionMode | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.examType" for="field_examType">Exam Type</label>
+          <select class="form-control" name="examType" formControlName="examType" id="field_examType" data-cy="examType">
+            <option [ngValue]="null">{{ 'lmswiamApp.ExamType.null' | translate }}</option>
+            @for (examType of examTypeValues; track $index) {
+              <option [value]="examType">{{ 'lmswiamApp.ExamType.' + examType | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.riwaya" for="field_riwaya">Riwaya</label>
+          <select class="form-control" name="riwaya" formControlName="riwaya" id="field_riwaya" data-cy="riwaya">
+            <option [ngValue]="null">{{ 'lmswiamApp.Riwayats.null' | translate }}</option>
+            @for (riwayats of riwayatsValues; track $index) {
+              <option [value]="riwayats">{{ 'lmswiamApp.Riwayats.' + riwayats | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.fromSourate" for="field_fromSourate">From Sourate</label>
+          <select class="form-control" name="fromSourate" formControlName="fromSourate" id="field_fromSourate" data-cy="fromSourate">
+            <option [ngValue]="null">{{ 'lmswiamApp.Sourate.null' | translate }}</option>
+            @for (sourate of sourateValues; track $index) {
+              <option [value]="sourate">{{ 'lmswiamApp.Sourate.' + sourate | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.toSourate" for="field_toSourate">To Sourate</label>
+          <select class="form-control" name="toSourate" formControlName="toSourate" id="field_toSourate" data-cy="toSourate">
+            <option [ngValue]="null">{{ 'lmswiamApp.Sourate.null' | translate }}</option>
+            @for (sourate of sourateValues; track $index) {
+              <option [value]="sourate">{{ 'lmswiamApp.Sourate.' + sourate | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.fromAyaNum" for="field_fromAyaNum">From Aya Num</label>
+          <input
+            type="number"
+            class="form-control"
+            name="fromAyaNum"
+            id="field_fromAyaNum"
+            data-cy="fromAyaNum"
+            formControlName="fromAyaNum"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.toAyaNum" for="field_toAyaNum">To Aya Num</label>
+          <input type="number" class="form-control" name="toAyaNum" id="field_toAyaNum" data-cy="toAyaNum" formControlName="toAyaNum" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.fromAyaVerset" for="field_fromAyaVerset">From Aya Verset</label>
+          <textarea
+            class="form-control"
+            name="fromAyaVerset"
+            id="field_fromAyaVerset"
+            data-cy="fromAyaVerset"
+            formControlName="fromAyaVerset"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.toAyaVerset" for="field_toAyaVerset">To Aya Verset</label>
+          <textarea
+            class="form-control"
+            name="toAyaVerset"
+            id="field_toAyaVerset"
+            data-cy="toAyaVerset"
+            formControlName="toAyaVerset"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.tilawaType" for="field_tilawaType">Tilawa Type</label>
+          <select class="form-control" name="tilawaType" formControlName="tilawaType" id="field_tilawaType" data-cy="tilawaType">
+            <option [ngValue]="null">{{ 'lmswiamApp.Tilawa.null' | translate }}</option>
+            @for (tilawa of tilawaValues; track $index) {
+              <option [value]="tilawa">{{ 'lmswiamApp.Tilawa.' + tilawa | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.taskDone" for="field_taskDone">Task Done</label>
+          <input type="checkbox" class="form-check" name="taskDone" id="field_taskDone" data-cy="taskDone" formControlName="taskDone" />
+          @if (editForm.get('taskDone')!.invalid && (editForm.get('taskDone')!.dirty || editForm.get('taskDone')!.touched)) {
+            <div>
+              @if (editForm.get('taskDone')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.tajweedScore" for="field_tajweedScore">Tajweed Score</label>
+          <input
+            type="number"
+            class="form-control"
+            name="tajweedScore"
+            id="field_tajweedScore"
+            data-cy="tajweedScore"
+            formControlName="tajweedScore"
+          />
+          @if (editForm.get('tajweedScore')!.invalid && (editForm.get('tajweedScore')!.dirty || editForm.get('tajweedScore')!.touched)) {
+            <div>
+              @if (editForm.get('tajweedScore')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('tajweedScore')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 1 }"
+                  >This field should be at least 1.</small
+                >
+              }
+              @if (editForm.get('tajweedScore')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: 5 }"
+                  >This field cannot be more than 5.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('tajweedScore')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.hifdScore" for="field_hifdScore">Hifd Score</label>
+          <input type="number" class="form-control" name="hifdScore" id="field_hifdScore" data-cy="hifdScore" formControlName="hifdScore" />
+          @if (editForm.get('hifdScore')!.invalid && (editForm.get('hifdScore')!.dirty || editForm.get('hifdScore')!.touched)) {
+            <div>
+              @if (editForm.get('hifdScore')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('hifdScore')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 1 }"
+                  >This field should be at least 1.</small
+                >
+              }
+              @if (editForm.get('hifdScore')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: 5 }"
+                  >This field cannot be more than 5.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('hifdScore')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.adaeScore" for="field_adaeScore">Adae Score</label>
+          <input type="number" class="form-control" name="adaeScore" id="field_adaeScore" data-cy="adaeScore" formControlName="adaeScore" />
+          @if (editForm.get('adaeScore')!.invalid && (editForm.get('adaeScore')!.dirty || editForm.get('adaeScore')!.touched)) {
+            <div>
+              @if (editForm.get('adaeScore')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('adaeScore')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 1 }"
+                  >This field should be at least 1.</small
+                >
+              }
+              @if (editForm.get('adaeScore')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: 5 }"
+                  >This field cannot be more than 5.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('adaeScore')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.observation" for="field_observation">Observation</label>
+          <textarea
+            class="form-control"
+            name="observation"
+            id="field_observation"
+            data-cy="observation"
+            formControlName="observation"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.sessionInstance" for="field_sessionInstance"
+            >Session Instance</label
+          >
+          <select
+            class="form-control"
+            id="field_sessionInstance"
+            data-cy="sessionInstance"
+            name="sessionInstance"
+            formControlName="sessionInstance"
+            [compareWith]="compareSessionInstance"
+          >
+            <option [ngValue]="null"></option>
+            @for (sessionInstanceOption of sessionInstancesSharedCollection; track $index) {
+              <option [ngValue]="sessionInstanceOption">{{ sessionInstanceOption.title }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.progression.student" for="field_student">Student</label>
+          <select
+            class="form-control"
+            id="field_student"
+            data-cy="student"
+            name="student"
+            formControlName="student"
+            [compareWith]="compareUserCustom"
+          >
+            <option [ngValue]="null"></option>
+            @for (userCustomOption of userCustomsSharedCollection; track $index) {
+              <option [ngValue]="userCustomOption">{{ userCustomOption.firstName }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

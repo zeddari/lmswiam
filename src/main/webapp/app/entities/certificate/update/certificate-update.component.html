@@ -1,0 +1,182 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-certificate-heading"
+        data-cy="CertificateCreateUpdateHeading"
+        jhiTranslate="lmswiamApp.certificate.home.createOrEditLabel"
+      >
+        Create or edit a Certificate
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.certificate.certificateType" for="field_certificateType"
+            >Certificate Type</label
+          >
+          <select
+            class="form-control"
+            name="certificateType"
+            formControlName="certificateType"
+            id="field_certificateType"
+            data-cy="certificateType"
+          >
+            <option [ngValue]="null">{{ 'lmswiamApp.CertificateType.null' | translate }}</option>
+            @for (certificateType of certificateTypeValues; track $index) {
+              <option [value]="certificateType">{{ 'lmswiamApp.CertificateType.' + certificateType | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.certificate.title" for="field_title">Title</label>
+          <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
+          @if (editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)) {
+            <div>
+              @if (editForm.get('title')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('title')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
+                  >This field cannot be longer than 100 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.certificate.riwaya" for="field_riwaya">Riwaya</label>
+          <select class="form-control" name="riwaya" formControlName="riwaya" id="field_riwaya" data-cy="riwaya">
+            <option [ngValue]="null">{{ 'lmswiamApp.Riwayats.null' | translate }}</option>
+            @for (riwayats of riwayatsValues; track $index) {
+              <option [value]="riwayats">{{ 'lmswiamApp.Riwayats.' + riwayats | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.certificate.miqdar" for="field_miqdar">Miqdar</label>
+          <input type="number" class="form-control" name="miqdar" id="field_miqdar" data-cy="miqdar" formControlName="miqdar" />
+          @if (editForm.get('miqdar')!.invalid && (editForm.get('miqdar')!.dirty || editForm.get('miqdar')!.touched)) {
+            <div>
+              @if (editForm.get('miqdar')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('miqdar')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 1 }"
+                  >This field should be at least 1.</small
+                >
+              }
+              @if (editForm.get('miqdar')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: 60 }"
+                  >This field cannot be more than 60.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('miqdar')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.certificate.observation" for="field_observation">Observation</label>
+          <textarea
+            class="form-control"
+            name="observation"
+            id="field_observation"
+            data-cy="observation"
+            formControlName="observation"
+          ></textarea>
+          @if (editForm.get('observation')!.invalid && (editForm.get('observation')!.dirty || editForm.get('observation')!.touched)) {
+            <div>
+              @if (editForm.get('observation')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.certificate.userCustom6" for="field_userCustom6">User Custom 6</label>
+          <select
+            class="form-control"
+            id="field_userCustom6"
+            data-cy="userCustom6"
+            name="userCustom6"
+            formControlName="userCustom6"
+            [compareWith]="compareUserCustom"
+          >
+            <option [ngValue]="null"></option>
+            @for (userCustomOption of userCustomsSharedCollection; track $index) {
+              <option [ngValue]="userCustomOption">{{ userCustomOption.firstName }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.certificate.comitte" for="field_comitte">Comitte</label>
+          <select
+            class="form-control"
+            id="field_comitte"
+            data-cy="comitte"
+            name="comitte"
+            formControlName="comitte"
+            [compareWith]="compareGroup"
+          >
+            <option [ngValue]="null"></option>
+            @for (groupOption of groupsSharedCollection; track $index) {
+              <option [ngValue]="groupOption">{{ groupOption.nameAr }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.certificate.topic4" for="field_topic4">Topic 4</label>
+          <select
+            class="form-control"
+            id="field_topic4"
+            data-cy="topic4"
+            name="topic4"
+            formControlName="topic4"
+            [compareWith]="compareTopic"
+          >
+            <option [ngValue]="null"></option>
+            @for (topicOption of topicsSharedCollection; track $index) {
+              <option [ngValue]="topicOption">{{ topicOption.titleAr }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

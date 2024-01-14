@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity Group.
+    -->
+    <changeSet id="20240109180831-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="jhi_group_id"
+                                 baseTableName="rel_jhi_group__elements"
+                                 constraintName="fk_rel_jhi_group__elements__jhi_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_group"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="elements_id"
+                                 baseTableName="rel_jhi_group__elements"
+                                 constraintName="fk_rel_jhi_group__elements__elements_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_custom"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="group1_id"
+                                 baseTableName="jhi_group"
+                                 constraintName="fk_jhi_group__group1_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_group"
+                                 />
+    </changeSet>
+</databaseChangeLog>

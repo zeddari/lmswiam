@@ -1,0 +1,41 @@
+{
+  "annotations": {
+    "changelogDate": "20240109182031"
+  },
+  "applications": "*",
+  "entityTableName": "ayah_edition",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "ayahId",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "editionId",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "data",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "isAudio",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "ZonedDateTime"
+    }
+  ],
+  "name": "AyahEdition",
+  "relationships": []
+}

@@ -1,0 +1,36 @@
+{
+  "lmswiamApp": {
+    "tickets": {
+      "home": {
+        "title": "Tickets",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Tickets",
+        "createOrEditLabel": "Create or edit a Tickets",
+        "search": "Search for Tickets",
+        "notFound": "No Tickets found"
+      },
+      "created": "A new Tickets is created with identifier {{ param }}",
+      "updated": "A Tickets is updated with identifier {{ param }}",
+      "deleted": "A Tickets is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Tickets {{ id }}?"
+      },
+      "detail": {
+        "title": "Tickets"
+      },
+      "id": "ID",
+      "subject": "Subject",
+      "title": "Title",
+      "reference": "Reference",
+      "description": "Description",
+      "justifDoc": "Justif Doc",
+      "dateTicket": "Date Ticket",
+      "dateProcess": "Date Process",
+      "processed": "Processed",
+      "from": "From",
+      "toDate": "To Date",
+      "decisionDetail": "Decision Detail",
+      "userCustom5": "User Custom 5"
+    }
+  }
+}

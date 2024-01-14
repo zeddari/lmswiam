@@ -1,0 +1,11 @@
+{
+  "lmswiamApp": {
+    "GroupType": {
+      "null": "",
+      "EMPTY": "EMPTY",
+      "STUDENT": "STUDENT",
+      "PROFESSOR": "PROFESSOR",
+      "SUPERVISOR": "SUPERVISOR"
+    }
+  }
+}

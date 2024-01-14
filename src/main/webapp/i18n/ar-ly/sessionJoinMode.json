@@ -1,0 +1,9 @@
+{
+  "lmswiamApp": {
+    "SessionJoinMode": {
+      "null": "",
+      "DIRECT": "DIRECT",
+      "AUTHORIZED": "AUTHORIZED"
+    }
+  }
+}

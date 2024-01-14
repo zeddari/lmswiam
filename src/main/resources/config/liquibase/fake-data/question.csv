@@ -1,0 +1,11 @@
+id;question;details;a_1;a_1_v;a_2;a_2_v;a_3;a_3_v;a_4;a_4_v;is_active
+1;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;false;false
+2;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;true;false
+3;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;false;true
+4;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;true;false
+5;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;false;false
+6;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;true;false
+7;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;false;true
+8;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;true;false
+9;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;false;false
+10;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;true;../fake-data/blob/hipster.txt;false;../fake-data/blob/hipster.txt;true;true

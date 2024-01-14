@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity Quiz.
+    -->
+    <changeSet id="20240109180231-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="quiz_id"
+                                 baseTableName="rel_quiz__groups"
+                                 constraintName="fk_rel_quiz__groups__quiz_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="quiz"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="groups_id"
+                                 baseTableName="rel_quiz__groups"
+                                 constraintName="fk_rel_quiz__groups__groups_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_group"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="quiz_id"
+                                 baseTableName="rel_quiz__questions"
+                                 constraintName="fk_rel_quiz__questions__quiz_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="quiz"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="questions_id"
+                                 baseTableName="rel_quiz__questions"
+                                 constraintName="fk_rel_quiz__questions__questions_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="question"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="topic1_id"
+                                 baseTableName="quiz"
+                                 constraintName="fk_quiz__topic1_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="topic"
+                                 />
+    </changeSet>
+</databaseChangeLog>

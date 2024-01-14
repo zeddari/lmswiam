@@ -1,0 +1,63 @@
+{
+  "annotations": {
+    "changelogDate": "20240109175931"
+  },
+  "applications": "*",
+  "entityTableName": "enrolement",
+  "fields": [
+    {
+      "fieldName": "ref",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "enrolementType",
+      "fieldType": "EnrolementType",
+      "fieldValues": "ONELIFE,MONTHLY,HALFYEARLY,YEARLY"
+    },
+    {
+      "fieldName": "enrolmentStartTime",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "enrolemntEndTime",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "activatedAt",
+      "fieldType": "ZonedDateTime"
+    }
+  ],
+  "name": "Enrolement",
+  "relationships": [
+    {
+      "otherEntityName": "payment",
+      "otherEntityRelationshipName": "enrolment",
+      "relationshipName": "payment",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "userCustom",
+      "otherEntityRelationshipName": "enrolement",
+      "relationshipName": "userCustom4",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "titleAr",
+      "otherEntityName": "course",
+      "relationshipName": "course",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}

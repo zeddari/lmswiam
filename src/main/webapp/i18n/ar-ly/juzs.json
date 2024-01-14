@@ -1,0 +1,26 @@
+{
+  "lmswiamApp": {
+    "juzs": {
+      "home": {
+        "title": "Juzs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Juzs",
+        "createOrEditLabel": "Create or edit a Juzs",
+        "search": "Search for Juzs",
+        "notFound": "No Juzs found"
+      },
+      "created": "A new Juzs is created with identifier {{ param }}",
+      "updated": "A Juzs is updated with identifier {{ param }}",
+      "deleted": "A Juzs is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Juzs {{ id }}?"
+      },
+      "detail": {
+        "title": "Juzs"
+      },
+      "id": "Id",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    }
+  }
+}

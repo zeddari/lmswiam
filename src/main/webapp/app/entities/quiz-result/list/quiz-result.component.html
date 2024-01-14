@@ -1,0 +1,146 @@
+<div>
+  <h2 id="page-heading" data-cy="QuizResultHeading">
+    <span jhiTranslate="lmswiamApp.quizResult.home.title">Quiz Results</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="lmswiamApp.quizResult.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-quiz-result"
+        [routerLink]="['/quiz-result/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down" jhiTranslate="lmswiamApp.quizResult.home.createLabel">Create a new Quiz Result</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch" jhiTranslate="lmswiamApp.quizResult.home.search">Search for Quiz Result</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="{{ 'lmswiamApp.quizResult.home.search' | translate }}"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  @if (quizResults?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="lmswiamApp.quizResult.home.notFound">No Quiz Results found</span>
+    </div>
+  }
+
+  @if (quizResults && quizResults.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="result">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.quizResult.result">Result</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="submittedAT">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.quizResult.submittedAT">Submitted AT</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="quiz.id">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.quizResult.quiz">Quiz</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="userCustom2.firstName">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.quizResult.userCustom2">User Custom 2</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (quizResult of quizResults; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/quiz-result', quizResult.id, 'view']">{{ quizResult.id }}</a>
+              </td>
+              <td>{{ quizResult.result }}</td>
+              <td>{{ quizResult.submittedAT | formatMediumDatetime }}</td>
+              <td>
+                @if (quizResult.quiz) {
+                  <div>
+                    <a [routerLink]="['/quiz', quizResult.quiz.id, 'view']">{{ quizResult.quiz.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (quizResult.userCustom2) {
+                  <div>
+                    <a [routerLink]="['/user-custom', quizResult.userCustom2.id, 'view']">{{ quizResult.userCustom2.firstName }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/quiz-result', quizResult.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/quiz-result', quizResult.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(quizResult)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

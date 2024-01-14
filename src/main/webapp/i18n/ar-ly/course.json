@@ -1,0 +1,43 @@
+{
+  "lmswiamApp": {
+    "course": {
+      "home": {
+        "title": "Courses",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Course",
+        "createOrEditLabel": "Create or edit a Course",
+        "search": "Search for Course",
+        "notFound": "No Courses found"
+      },
+      "created": "A new Course is created with identifier {{ param }}",
+      "updated": "A Course is updated with identifier {{ param }}",
+      "deleted": "A Course is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Course {{ id }}?"
+      },
+      "detail": {
+        "title": "Course"
+      },
+      "id": "ID",
+      "level": "Level",
+      "titleAr": "Title Ar",
+      "titleLat": "Title Lat",
+      "description": "Description",
+      "subTitles": "Sub Titles",
+      "requirements": "Requirements",
+      "options": "Options",
+      "duration": "Duration",
+      "imageLink": "Image Link",
+      "videoLink": "Video Link",
+      "price": "Price",
+      "isActive": "Is Active",
+      "activateAt": "Activate At",
+      "isConfirmed": "Is Confirmed",
+      "confirmedAt": "Confirmed At",
+      "part": "Part",
+      "enrolement": "Enrolement",
+      "professors": "Professors",
+      "topic3": "Topic 3"
+    }
+  }
+}

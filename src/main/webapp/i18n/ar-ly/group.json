@@ -1,0 +1,34 @@
+{
+  "lmswiamApp": {
+    "group": {
+      "home": {
+        "title": "Groups",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Group",
+        "createOrEditLabel": "Create or edit a Group",
+        "search": "Search for Group",
+        "notFound": "No Groups found"
+      },
+      "created": "A new Group is created with identifier {{ param }}",
+      "updated": "A Group is updated with identifier {{ param }}",
+      "deleted": "A Group is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Group {{ id }}?"
+      },
+      "detail": {
+        "title": "Group"
+      },
+      "id": "ID",
+      "groupType": "Group Type",
+      "nameAr": "Name Ar",
+      "nameLat": "Name Lat",
+      "description": "Description",
+      "certificate": "Certificate",
+      "group": "Group",
+      "elements": "Elements",
+      "group1": "Group 1",
+      "quiz": "Quiz",
+      "sessions5": "Sessions 5"
+    }
+  }
+}

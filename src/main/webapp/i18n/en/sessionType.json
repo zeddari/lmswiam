@@ -1,0 +1,10 @@
+{
+  "lmswiamApp": {
+    "SessionType": {
+      "null": "",
+      "HALAQA": "HALAQA",
+      "LECTURE": "LECTURE",
+      "TRAINING": "TRAINING"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "lmswiamApp": {
+    "EnrolementType": {
+      "null": "",
+      "ONELIFE": "ONELIFE",
+      "MONTHLY": "MONTHLY",
+      "HALFYEARLY": "HALFYEARLY",
+      "YEARLY": "YEARLY"
+    }
+  }
+}

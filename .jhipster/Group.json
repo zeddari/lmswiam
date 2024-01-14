@@ -1,0 +1,80 @@
+{
+  "annotations": {
+    "changelogDate": "20240109180831"
+  },
+  "applications": "*",
+  "entityTableName": "jhi_group",
+  "fields": [
+    {
+      "fieldName": "groupType",
+      "fieldType": "GroupType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EMPTY,STUDENT,PROFESSOR,SUPERVISOR"
+    },
+    {
+      "fieldName": "nameAr",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "nameLat",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "name": "Group",
+  "relationships": [
+    {
+      "otherEntityName": "certificate",
+      "otherEntityRelationshipName": "comitte",
+      "relationshipName": "certificate",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "group",
+      "otherEntityRelationshipName": "group1",
+      "relationshipName": "group",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "firstName",
+      "otherEntityName": "userCustom",
+      "otherEntityRelationshipName": "groups",
+      "relationshipName": "elements",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "group",
+      "relationshipName": "group1",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "quizTitle",
+      "otherEntityName": "quiz",
+      "otherEntityRelationshipName": "groups",
+      "relationshipName": "quiz",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "session",
+      "otherEntityRelationshipName": "groups",
+      "relationshipName": "sessions5",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ]
+}

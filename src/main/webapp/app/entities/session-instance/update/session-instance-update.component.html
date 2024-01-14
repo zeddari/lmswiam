@@ -1,0 +1,202 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-session-instance-heading"
+        data-cy="SessionInstanceCreateUpdateHeading"
+        jhiTranslate="lmswiamApp.sessionInstance.home.createOrEditLabel"
+      >
+        Create or edit a Session Instance
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sessionInstance.title" for="field_title">Title</label>
+          <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
+          @if (editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)) {
+            <div>
+              @if (editForm.get('title')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('title')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
+                  >This field cannot be longer than 100 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sessionInstance.sessionDate" for="field_sessionDate">Session Date</label>
+          <div class="input-group">
+            <input
+              id="field_sessionDate"
+              data-cy="sessionDate"
+              type="text"
+              class="form-control"
+              name="sessionDate"
+              ngbDatepicker
+              #sessionDateDp="ngbDatepicker"
+              formControlName="sessionDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="sessionDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (editForm.get('sessionDate')!.invalid && (editForm.get('sessionDate')!.dirty || editForm.get('sessionDate')!.touched)) {
+            <div>
+              @if (editForm.get('sessionDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sessionInstance.startTime" for="field_startTime">Start Time</label>
+          <div class="d-flex">
+            <input
+              id="field_startTime"
+              data-cy="startTime"
+              type="datetime-local"
+              class="form-control"
+              name="startTime"
+              formControlName="startTime"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (editForm.get('startTime')!.invalid && (editForm.get('startTime')!.dirty || editForm.get('startTime')!.touched)) {
+            <div>
+              @if (editForm.get('startTime')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('startTime')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >This field should be a date and time.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sessionInstance.duration" for="field_duration">Duration</label>
+          <input type="number" class="form-control" name="duration" id="field_duration" data-cy="duration" formControlName="duration" />
+          @if (editForm.get('duration')!.invalid && (editForm.get('duration')!.dirty || editForm.get('duration')!.touched)) {
+            <div>
+              @if (editForm.get('duration')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('duration')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sessionInstance.info" for="field_info">Info</label>
+          <textarea class="form-control" name="info" id="field_info" data-cy="info" formControlName="info"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sessionInstance.attendance" for="field_attendance">Attendance</label>
+          <select class="form-control" name="attendance" formControlName="attendance" id="field_attendance" data-cy="attendance">
+            <option [ngValue]="null">{{ 'lmswiamApp.Attendance.null' | translate }}</option>
+            @for (attendance of attendanceValues; track $index) {
+              <option [value]="attendance">{{ 'lmswiamApp.Attendance.' + attendance | translate }}</option>
+            }
+          </select>
+          @if (editForm.get('attendance')!.invalid && (editForm.get('attendance')!.dirty || editForm.get('attendance')!.touched)) {
+            <div>
+              @if (editForm.get('attendance')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sessionInstance.justifRef" for="field_justifRef">Justif Ref</label>
+          <input type="text" class="form-control" name="justifRef" id="field_justifRef" data-cy="justifRef" formControlName="justifRef" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sessionInstance.isActive" for="field_isActive">Is Active</label>
+          <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
+          @if (editForm.get('isActive')!.invalid && (editForm.get('isActive')!.dirty || editForm.get('isActive')!.touched)) {
+            <div>
+              @if (editForm.get('isActive')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label jhiTranslate="lmswiamApp.sessionInstance.links" for="field_links">Links</label>
+          <select
+            class="form-control"
+            id="field_links"
+            data-cy="links"
+            multiple
+            name="links"
+            formControlName="links"
+            [compareWith]="compareSessionLink"
+          >
+            @for (sessionLinkOption of sessionLinksSharedCollection; track $index) {
+              <option [ngValue]="sessionLinkOption">{{ sessionLinkOption.title }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sessionInstance.session1" for="field_session1">Session 1</label>
+          <select
+            class="form-control"
+            id="field_session1"
+            data-cy="session1"
+            name="session1"
+            formControlName="session1"
+            [compareWith]="compareSession"
+          >
+            <option [ngValue]="null"></option>
+            @for (sessionOption of sessionsSharedCollection; track $index) {
+              <option [ngValue]="sessionOption">{{ sessionOption.title }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

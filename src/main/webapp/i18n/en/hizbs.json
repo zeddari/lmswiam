@@ -1,0 +1,26 @@
+{
+  "lmswiamApp": {
+    "hizbs": {
+      "home": {
+        "title": "Hizbs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Hizbs",
+        "createOrEditLabel": "Create or edit a Hizbs",
+        "search": "Search for Hizbs",
+        "notFound": "No Hizbs found"
+      },
+      "created": "A new Hizbs is created with identifier {{ param }}",
+      "updated": "A Hizbs is updated with identifier {{ param }}",
+      "deleted": "A Hizbs is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Hizbs {{ id }}?"
+      },
+      "detail": {
+        "title": "Hizbs"
+      },
+      "id": "Id",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    }
+  }
+}

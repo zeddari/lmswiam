@@ -1,0 +1,187 @@
+<div>
+  <h2 id="page-heading" data-cy="CertificateHeading">
+    <span jhiTranslate="lmswiamApp.certificate.home.title">Certificates</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="lmswiamApp.certificate.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-certificate"
+        [routerLink]="['/certificate/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down" jhiTranslate="lmswiamApp.certificate.home.createLabel">Create a new Certificate</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch" jhiTranslate="lmswiamApp.certificate.home.search">Search for Certificate</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="{{ 'lmswiamApp.certificate.home.search' | translate }}"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  @if (certificates?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="lmswiamApp.certificate.home.notFound">No Certificates found</span>
+    </div>
+  }
+
+  @if (certificates && certificates.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="certificateType">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.certificate.certificateType">Certificate Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="title">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.certificate.title">Title</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="riwaya">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.certificate.riwaya">Riwaya</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="miqdar">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.certificate.miqdar">Miqdar</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="observation">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.certificate.observation">Observation</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="userCustom6.firstName">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.certificate.userCustom6">User Custom 6</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="comitte.nameAr">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.certificate.comitte">Comitte</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="topic4.titleAr">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.certificate.topic4">Topic 4</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (certificate of certificates; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/certificate', certificate.id, 'view']">{{ certificate.id }}</a>
+              </td>
+              <td jhiTranslate="{{ 'lmswiamApp.CertificateType.' + certificate.certificateType }}">{{ certificate.certificateType }}</td>
+              <td>{{ certificate.title }}</td>
+              <td jhiTranslate="{{ 'lmswiamApp.Riwayats.' + certificate.riwaya }}">{{ certificate.riwaya }}</td>
+              <td>{{ certificate.miqdar }}</td>
+              <td>{{ certificate.observation }}</td>
+              <td>
+                @if (certificate.userCustom6) {
+                  <div>
+                    <a [routerLink]="['/user-custom', certificate.userCustom6.id, 'view']">{{ certificate.userCustom6.firstName }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (certificate.comitte) {
+                  <div>
+                    <a [routerLink]="['/group', certificate.comitte.id, 'view']">{{ certificate.comitte.nameAr }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (certificate.topic4) {
+                  <div>
+                    <a [routerLink]="['/topic', certificate.topic4.id, 'view']">{{ certificate.topic4.titleAr }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/certificate', certificate.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/certificate', certificate.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(certificate)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

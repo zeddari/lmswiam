@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (quizResult) {
+      <div>
+        <h2 data-cy="quizResultDetailsHeading"><span jhiTranslate="lmswiamApp.quizResult.detail.title">Quiz Result</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ quizResult.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quizResult.result">Result</span></dt>
+          <dd>
+            <span>{{ quizResult.result }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quizResult.submittedAT">Submitted AT</span></dt>
+          <dd>
+            <span>{{ quizResult.submittedAT | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quizResult.quiz">Quiz</span></dt>
+          <dd>
+            @if (quizResult.quiz) {
+              <div>
+                <a [routerLink]="['/quiz', quizResult.quiz.id, 'view']">{{ quizResult.quiz.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quizResult.userCustom2">User Custom 2</span></dt>
+          <dd>
+            @if (quizResult.userCustom2) {
+              <div>
+                <a [routerLink]="['/user-custom', quizResult.userCustom2.id, 'view']">{{ quizResult.userCustom2.firstName }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/quiz-result', quizResult.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
