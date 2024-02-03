@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ITypeProject } from 'app/entities/type-project/type-project.model';
 import { TypeProjectService } from 'app/entities/type-project/service/type-project.service';
 import { ProjectService } from '../service/project.service';
@@ -26,6 +28,7 @@ export class ProjectUpdateComponent implements OnInit {
   isSaving = false;
   project: IProject | null = null;
 
+  sitesSharedCollection: ISite[] = [];
   typeProjectsSharedCollection: ITypeProject[] = [];
 
   editForm: ProjectFormGroup = this.projectFormService.createProjectFormGroup();
@@ -35,10 +38,13 @@ export class ProjectUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected projectService: ProjectService,
     protected projectFormService: ProjectFormService,
+    protected siteService: SiteService,
     protected typeProjectService: TypeProjectService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
   ) {}
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareTypeProject = (o1: ITypeProject | null, o2: ITypeProject | null): boolean => this.typeProjectService.compareTypeProject(o1, o2);
 
@@ -115,6 +121,7 @@ export class ProjectUpdateComponent implements OnInit {
     this.project = project;
     this.projectFormService.resetForm(this.editForm, project);
 
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, project.site12);
     this.typeProjectsSharedCollection = this.typeProjectService.addTypeProjectToCollectionIfMissing<ITypeProject>(
       this.typeProjectsSharedCollection,
       project.typeProject,
@@ -122,6 +129,12 @@ export class ProjectUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.project?.site12)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
+
     this.typeProjectService
       .query()
       .pipe(map((res: HttpResponse<ITypeProject[]>) => res.body ?? []))

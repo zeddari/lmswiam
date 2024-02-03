@@ -27,14 +27,14 @@ public interface TicketsRepository extends JpaRepository<Tickets, Long> {
     }
 
     @Query(
-        value = "select tickets from Tickets tickets left join fetch tickets.userCustom5",
+        value = "select tickets from Tickets tickets left join fetch tickets.site18 left join fetch tickets.userCustom5",
         countQuery = "select count(tickets) from Tickets tickets"
     )
     Page<Tickets> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select tickets from Tickets tickets left join fetch tickets.userCustom5")
+    @Query("select tickets from Tickets tickets left join fetch tickets.site18 left join fetch tickets.userCustom5")
     List<Tickets> findAllWithToOneRelationships();
 
-    @Query("select tickets from Tickets tickets left join fetch tickets.userCustom5 where tickets.id =:id")
+    @Query("select tickets from Tickets tickets left join fetch tickets.site18 left join fetch tickets.userCustom5 where tickets.id =:id")
     Optional<Tickets> findOneWithToOneRelationships(@Param("id") Long id);
 }

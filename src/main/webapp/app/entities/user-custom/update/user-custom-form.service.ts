@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type UserCustomFormGroupInput = IUserCustom | PartialWithRequiredKeyOf<NewUserCustom>;
 
-type UserCustomFormDefaults = Pick<NewUserCustom, 'id' | 'diplomas' | 'languages'>;
+type UserCustomFormDefaults = Pick<NewUserCustom, 'id' | 'diplomas' | 'languages' | 'groups' | 'courses' | 'sessions2s' | 'sessions3s'>;
 
 type UserCustomFormGroupContent = {
   id: FormControl<IUserCustom['id'] | NewUserCustom['id']>;
@@ -39,10 +39,15 @@ type UserCustomFormGroupContent = {
   user: FormControl<IUserCustom['user']>;
   diplomas: FormControl<IUserCustom['diplomas']>;
   languages: FormControl<IUserCustom['languages']>;
+  site13: FormControl<IUserCustom['site13']>;
   country: FormControl<IUserCustom['country']>;
   nationality: FormControl<IUserCustom['nationality']>;
   job: FormControl<IUserCustom['job']>;
   departement2: FormControl<IUserCustom['departement2']>;
+  groups: FormControl<IUserCustom['groups']>;
+  courses: FormControl<IUserCustom['courses']>;
+  sessions2s: FormControl<IUserCustom['sessions2s']>;
+  sessions3s: FormControl<IUserCustom['sessions3s']>;
 };
 
 export type UserCustomFormGroup = FormGroup<UserCustomFormGroupContent>;
@@ -103,10 +108,15 @@ export class UserCustomFormService {
       user: new FormControl(userCustomRawValue.user),
       diplomas: new FormControl(userCustomRawValue.diplomas ?? []),
       languages: new FormControl(userCustomRawValue.languages ?? []),
+      site13: new FormControl(userCustomRawValue.site13),
       country: new FormControl(userCustomRawValue.country),
       nationality: new FormControl(userCustomRawValue.nationality),
       job: new FormControl(userCustomRawValue.job),
       departement2: new FormControl(userCustomRawValue.departement2),
+      groups: new FormControl(userCustomRawValue.groups ?? []),
+      courses: new FormControl(userCustomRawValue.courses ?? []),
+      sessions2s: new FormControl(userCustomRawValue.sessions2s ?? []),
+      sessions3s: new FormControl(userCustomRawValue.sessions3s ?? []),
     });
   }
 
@@ -129,6 +139,10 @@ export class UserCustomFormService {
       id: null,
       diplomas: [],
       languages: [],
+      groups: [],
+      courses: [],
+      sessions2s: [],
+      sessions3s: [],
     };
   }
 }

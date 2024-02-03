@@ -12,6 +12,8 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { ISessionLink } from 'app/entities/session-link/session-link.model';
 import { SessionLinkService } from 'app/entities/session-link/service/session-link.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ISession } from 'app/entities/session/session.model';
 import { SessionService } from 'app/entities/session/service/session.service';
 import { Attendance } from 'app/entities/enumerations/attendance.model';
@@ -31,6 +33,7 @@ export class SessionInstanceUpdateComponent implements OnInit {
   attendanceValues = Object.keys(Attendance);
 
   sessionLinksSharedCollection: ISessionLink[] = [];
+  sitesSharedCollection: ISite[] = [];
   sessionsSharedCollection: ISession[] = [];
 
   editForm: SessionInstanceFormGroup = this.sessionInstanceFormService.createSessionInstanceFormGroup();
@@ -41,11 +44,14 @@ export class SessionInstanceUpdateComponent implements OnInit {
     protected sessionInstanceService: SessionInstanceService,
     protected sessionInstanceFormService: SessionInstanceFormService,
     protected sessionLinkService: SessionLinkService,
+    protected siteService: SiteService,
     protected sessionService: SessionService,
     protected activatedRoute: ActivatedRoute,
   ) {}
 
   compareSessionLink = (o1: ISessionLink | null, o2: ISessionLink | null): boolean => this.sessionLinkService.compareSessionLink(o1, o2);
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareSession = (o1: ISession | null, o2: ISession | null): boolean => this.sessionService.compareSession(o1, o2);
 
@@ -116,6 +122,7 @@ export class SessionInstanceUpdateComponent implements OnInit {
       this.sessionLinksSharedCollection,
       ...(sessionInstance.links ?? []),
     );
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, sessionInstance.site16);
     this.sessionsSharedCollection = this.sessionService.addSessionToCollectionIfMissing<ISession>(
       this.sessionsSharedCollection,
       sessionInstance.session1,
@@ -132,6 +139,12 @@ export class SessionInstanceUpdateComponent implements OnInit {
         ),
       )
       .subscribe((sessionLinks: ISessionLink[]) => (this.sessionLinksSharedCollection = sessionLinks));
+
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.sessionInstance?.site16)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
 
     this.sessionService
       .query()

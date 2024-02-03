@@ -27,14 +27,16 @@ public interface QuizResultRepository extends JpaRepository<QuizResult, Long> {
     }
 
     @Query(
-        value = "select quizResult from QuizResult quizResult left join fetch quizResult.userCustom2",
+        value = "select quizResult from QuizResult quizResult left join fetch quizResult.site8 left join fetch quizResult.userCustom2",
         countQuery = "select count(quizResult) from QuizResult quizResult"
     )
     Page<QuizResult> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select quizResult from QuizResult quizResult left join fetch quizResult.userCustom2")
+    @Query("select quizResult from QuizResult quizResult left join fetch quizResult.site8 left join fetch quizResult.userCustom2")
     List<QuizResult> findAllWithToOneRelationships();
 
-    @Query("select quizResult from QuizResult quizResult left join fetch quizResult.userCustom2 where quizResult.id =:id")
+    @Query(
+        "select quizResult from QuizResult quizResult left join fetch quizResult.site8 left join fetch quizResult.userCustom2 where quizResult.id =:id"
+    )
     Optional<QuizResult> findOneWithToOneRelationships(@Param("id") Long id);
 }

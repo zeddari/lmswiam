@@ -18,6 +18,8 @@ import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
 import { ISessionLink } from 'app/entities/session-link/session-link.model';
 import { SessionLinkService } from 'app/entities/session-link/service/session-link.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { SessionMode } from 'app/entities/enumerations/session-mode.model';
 import { SessionType } from 'app/entities/enumerations/session-type.model';
 import { SessionJoinMode } from 'app/entities/enumerations/session-join-mode.model';
@@ -44,6 +46,7 @@ export class SessionUpdateComponent implements OnInit {
   groupsSharedCollection: IGroup[] = [];
   userCustomsSharedCollection: IUserCustom[] = [];
   sessionLinksSharedCollection: ISessionLink[] = [];
+  sitesSharedCollection: ISite[] = [];
 
   editForm: SessionFormGroup = this.sessionFormService.createSessionFormGroup();
 
@@ -56,6 +59,7 @@ export class SessionUpdateComponent implements OnInit {
     protected groupService: GroupService,
     protected userCustomService: UserCustomService,
     protected sessionLinkService: SessionLinkService,
+    protected siteService: SiteService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
   ) {}
@@ -67,6 +71,8 @@ export class SessionUpdateComponent implements OnInit {
   compareUserCustom = (o1: IUserCustom | null, o2: IUserCustom | null): boolean => this.userCustomService.compareUserCustom(o1, o2);
 
   compareSessionLink = (o1: ISessionLink | null, o2: ISessionLink | null): boolean => this.sessionLinkService.compareSessionLink(o1, o2);
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ session }) => {
@@ -158,6 +164,7 @@ export class SessionUpdateComponent implements OnInit {
       this.sessionLinksSharedCollection,
       ...(session.links ?? []),
     );
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, session.site14);
   }
 
   protected loadRelationshipsOptions(): void {
@@ -200,5 +207,11 @@ export class SessionUpdateComponent implements OnInit {
         ),
       )
       .subscribe((sessionLinks: ISessionLink[]) => (this.sessionLinksSharedCollection = sessionLinks));
+
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.session?.site14)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
   }
 }

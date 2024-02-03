@@ -3,6 +3,7 @@
     "changelogDate": "20240109180531"
   },
   "applications": "*",
+  "changelogDate": "20240109180531",
   "entityTableName": "site",
   "fields": [
     {
@@ -33,6 +34,146 @@
       "otherEntityName": "classroom",
       "otherEntityRelationshipName": "site",
       "relationshipName": "classroom",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "course",
+      "otherEntityRelationshipName": "site1",
+      "relationshipName": "course",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "part",
+      "otherEntityRelationshipName": "site2",
+      "relationshipName": "part",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "review",
+      "otherEntityRelationshipName": "site3",
+      "relationshipName": "review",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "enrolement",
+      "otherEntityRelationshipName": "site4",
+      "relationshipName": "enrolement",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "question",
+      "otherEntityRelationshipName": "site5",
+      "relationshipName": "question",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "answer",
+      "otherEntityRelationshipName": "site6",
+      "relationshipName": "answer",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "quiz",
+      "otherEntityRelationshipName": "site7",
+      "relationshipName": "quiz",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "quizResult",
+      "otherEntityRelationshipName": "site8",
+      "relationshipName": "quizResult",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "payment",
+      "otherEntityRelationshipName": "site9",
+      "relationshipName": "payment",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "sponsoring",
+      "otherEntityRelationshipName": "site10",
+      "relationshipName": "sponsoring",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "group",
+      "otherEntityRelationshipName": "site11",
+      "relationshipName": "group",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "project",
+      "otherEntityRelationshipName": "site12",
+      "relationshipName": "project",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "userCustom",
+      "otherEntityRelationshipName": "site13",
+      "relationshipName": "userCustom",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "session",
+      "otherEntityRelationshipName": "site14",
+      "relationshipName": "session",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "sessionLink",
+      "otherEntityRelationshipName": "site15",
+      "relationshipName": "sessionLink",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "sessionInstance",
+      "otherEntityRelationshipName": "site16",
+      "relationshipName": "sessionInstance",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "progression",
+      "otherEntityRelationshipName": "site17",
+      "relationshipName": "progression",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "tickets",
+      "otherEntityRelationshipName": "site18",
+      "relationshipName": "tickets",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "certificate",
+      "otherEntityRelationshipName": "site19",
+      "relationshipName": "certificate",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "diploma",
+      "otherEntityRelationshipName": "site20",
+      "relationshipName": "diploma",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
     },

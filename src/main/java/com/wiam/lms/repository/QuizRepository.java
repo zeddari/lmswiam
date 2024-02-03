@@ -29,12 +29,15 @@ public interface QuizRepository extends QuizRepositoryWithBagRelationships, JpaR
         return this.fetchBagRelationships(this.findAllWithToOneRelationships(pageable));
     }
 
-    @Query(value = "select quiz from Quiz quiz left join fetch quiz.topic1", countQuery = "select count(quiz) from Quiz quiz")
+    @Query(
+        value = "select quiz from Quiz quiz left join fetch quiz.site7 left join fetch quiz.topic1",
+        countQuery = "select count(quiz) from Quiz quiz"
+    )
     Page<Quiz> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select quiz from Quiz quiz left join fetch quiz.topic1")
+    @Query("select quiz from Quiz quiz left join fetch quiz.site7 left join fetch quiz.topic1")
     List<Quiz> findAllWithToOneRelationships();
 
-    @Query("select quiz from Quiz quiz left join fetch quiz.topic1 where quiz.id =:id")
+    @Query("select quiz from Quiz quiz left join fetch quiz.site7 left join fetch quiz.topic1 where quiz.id =:id")
     Optional<Quiz> findOneWithToOneRelationships(@Param("id") Long id);
 }

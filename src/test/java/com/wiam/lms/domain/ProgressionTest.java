@@ -2,6 +2,7 @@ package com.wiam.lms.domain;
 
 import static com.wiam.lms.domain.ProgressionTestSamples.*;
 import static com.wiam.lms.domain.SessionInstanceTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,6 +23,18 @@ class ProgressionTest {
 
         progression2 = getProgressionSample2();
         assertThat(progression1).isNotEqualTo(progression2);
+    }
+
+    @Test
+    void site17Test() throws Exception {
+        Progression progression = getProgressionRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        progression.setSite17(siteBack);
+        assertThat(progression.getSite17()).isEqualTo(siteBack);
+
+        progression.site17(null);
+        assertThat(progression.getSite17()).isNull();
     }
 
     @Test

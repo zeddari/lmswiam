@@ -1,6 +1,7 @@
 package com.wiam.lms.domain;
 
 import static com.wiam.lms.domain.DiplomaTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +24,18 @@ class DiplomaTest {
 
         diploma2 = getDiplomaSample2();
         assertThat(diploma1).isNotEqualTo(diploma2);
+    }
+
+    @Test
+    void site20Test() throws Exception {
+        Diploma diploma = getDiplomaRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        diploma.setSite20(siteBack);
+        assertThat(diploma.getSite20()).isEqualTo(siteBack);
+
+        diploma.site20(null);
+        assertThat(diploma.getSite20()).isNull();
     }
 
     @Test

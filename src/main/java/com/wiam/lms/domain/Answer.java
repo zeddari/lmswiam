@@ -48,7 +48,37 @@ public class Answer implements Serializable {
     private Boolean result;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "answers", "quizzes" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site6;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "answers", "site5", "quizzes" }, allowSetters = true)
     private Question question;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -65,6 +95,7 @@ public class Answer implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -156,6 +187,19 @@ public class Answer implements Serializable {
 
     public void setResult(Boolean result) {
         this.result = result;
+    }
+
+    public Site getSite6() {
+        return this.site6;
+    }
+
+    public void setSite6(Site site) {
+        this.site6 = site;
+    }
+
+    public Answer site6(Site site) {
+        this.setSite6(site);
+        return this;
     }
 
     public Question getQuestion() {

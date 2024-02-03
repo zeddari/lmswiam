@@ -1,3 +1,4 @@
+import { ISite } from 'app/entities/site/site.model';
 import { ISessionInstance } from 'app/entities/session-instance/session-instance.model';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { Attendance } from 'app/entities/enumerations/attendance.model';
@@ -28,8 +29,9 @@ export interface IProgression {
   hifdScore?: number | null;
   adaeScore?: number | null;
   observation?: string | null;
-  sessionInstance?: ISessionInstance | null;
-  student?: IUserCustom | null;
+  site17?: Pick<ISite, 'id' | 'nameAr'> | null;
+  sessionInstance?: Pick<ISessionInstance, 'id' | 'title'> | null;
+  student?: Pick<IUserCustom, 'id' | 'firstName'> | null;
 }
 
 export type NewProgression = Omit<IProgression, 'id'> & { id: null };

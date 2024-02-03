@@ -2,6 +2,7 @@ package com.wiam.lms.domain;
 
 import static com.wiam.lms.domain.AnswerTestSamples.*;
 import static com.wiam.lms.domain.QuestionTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,6 +23,18 @@ class AnswerTest {
 
         answer2 = getAnswerSample2();
         assertThat(answer1).isNotEqualTo(answer2);
+    }
+
+    @Test
+    void site6Test() throws Exception {
+        Answer answer = getAnswerRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        answer.setSite6(siteBack);
+        assertThat(answer.getSite6()).isEqualTo(siteBack);
+
+        answer.site6(null);
+        assertThat(answer.getSite6()).isNull();
     }
 
     @Test

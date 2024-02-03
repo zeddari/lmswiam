@@ -3,6 +3,7 @@
     "changelogDate": "20240109180231"
   },
   "applications": "*",
+  "changelogDate": "20240109180231",
   "entityTableName": "quiz",
   "fields": [
     {
@@ -56,6 +57,13 @@
       "relationshipName": "questions",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site7",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "titleAr",

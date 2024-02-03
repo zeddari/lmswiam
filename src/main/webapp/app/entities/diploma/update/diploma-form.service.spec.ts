@@ -29,6 +29,8 @@ describe('Diploma Form Service', () => {
             graduationDate: expect.any(Object),
             school: expect.any(Object),
             attachment: expect.any(Object),
+            site20: expect.any(Object),
+            userCustom7s: expect.any(Object),
           }),
         );
       });
@@ -48,6 +50,8 @@ describe('Diploma Form Service', () => {
             graduationDate: expect.any(Object),
             school: expect.any(Object),
             attachment: expect.any(Object),
+            site20: expect.any(Object),
+            userCustom7s: expect.any(Object),
           }),
         );
       });

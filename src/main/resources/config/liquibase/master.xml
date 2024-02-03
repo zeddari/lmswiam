@@ -70,6 +70,9 @@
     <include file="config/liquibase/changelog/20240109181531_added_entity_constraints_Project.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240109181631_added_entity_constraints_Sponsoring.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240109181831_added_entity_constraints_Payment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240109175331_added_entity_constraints_Diploma.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240109180031_added_entity_constraints_Question.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240109180931_added_entity_constraints_SessionLink.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

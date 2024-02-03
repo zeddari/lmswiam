@@ -134,6 +134,7 @@ export class SessionLinkComponent implements OnInit {
   protected queryBackend(predicate?: string, ascending?: boolean, currentSearch?: string): Observable<EntityArrayResponseType> {
     this.isLoading = true;
     const queryObject: any = {
+      eagerload: true,
       query: currentSearch,
       sort: this.getSortQueryParam(predicate, ascending),
     };

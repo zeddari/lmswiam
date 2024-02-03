@@ -50,10 +50,10 @@ describe('Classroom Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call Site query and add missing value', () => {
       const classroom: IClassroom = { id: 456 };
-      const site: ISite = { id: 758 };
+      const site: ISite = { id: 1296 };
       classroom.site = site;
 
-      const siteCollection: ISite[] = [{ id: 9845 }];
+      const siteCollection: ISite[] = [{ id: 20460 }];
       jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
       const additionalSites = [site];
       const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
@@ -72,7 +72,7 @@ describe('Classroom Management Update Component', () => {
 
     it('Should update editForm', () => {
       const classroom: IClassroom = { id: 456 };
-      const site: ISite = { id: 1580 };
+      const site: ISite = { id: 29006 };
       classroom.site = site;
 
       activatedRoute.data = of({ classroom });

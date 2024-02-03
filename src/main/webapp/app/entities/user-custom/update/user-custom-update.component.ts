@@ -16,6 +16,8 @@ import { IDiploma } from 'app/entities/diploma/diploma.model';
 import { DiplomaService } from 'app/entities/diploma/service/diploma.service';
 import { ILanguage } from 'app/entities/language/language.model';
 import { LanguageService } from 'app/entities/language/service/language.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ICountry } from 'app/entities/country/country.model';
 import { CountryService } from 'app/entities/country/service/country.service';
 import { INationality } from 'app/entities/nationality/nationality.model';
@@ -47,6 +49,7 @@ export class UserCustomUpdateComponent implements OnInit {
   usersSharedCollection: IUser[] = [];
   diplomasSharedCollection: IDiploma[] = [];
   languagesSharedCollection: ILanguage[] = [];
+  sitesSharedCollection: ISite[] = [];
   countriesSharedCollection: ICountry[] = [];
   nationalitiesSharedCollection: INationality[] = [];
   jobsSharedCollection: IJob[] = [];
@@ -62,6 +65,7 @@ export class UserCustomUpdateComponent implements OnInit {
     protected userService: UserService,
     protected diplomaService: DiplomaService,
     protected languageService: LanguageService,
+    protected siteService: SiteService,
     protected countryService: CountryService,
     protected nationalityService: NationalityService,
     protected jobService: JobService,
@@ -75,6 +79,8 @@ export class UserCustomUpdateComponent implements OnInit {
   compareDiploma = (o1: IDiploma | null, o2: IDiploma | null): boolean => this.diplomaService.compareDiploma(o1, o2);
 
   compareLanguage = (o1: ILanguage | null, o2: ILanguage | null): boolean => this.languageService.compareLanguage(o1, o2);
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareCountry = (o1: ICountry | null, o2: ICountry | null): boolean => this.countryService.compareCountry(o1, o2);
 
@@ -166,6 +172,7 @@ export class UserCustomUpdateComponent implements OnInit {
       this.languagesSharedCollection,
       ...(userCustom.languages ?? []),
     );
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, userCustom.site13);
     this.countriesSharedCollection = this.countryService.addCountryToCollectionIfMissing<ICountry>(
       this.countriesSharedCollection,
       userCustom.country,
@@ -207,6 +214,12 @@ export class UserCustomUpdateComponent implements OnInit {
         ),
       )
       .subscribe((languages: ILanguage[]) => (this.languagesSharedCollection = languages));
+
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.userCustom?.site13)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
 
     this.countryService
       .query()

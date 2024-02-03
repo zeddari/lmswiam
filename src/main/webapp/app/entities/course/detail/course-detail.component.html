@@ -1,118 +1,116 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    @if (course) {
-      <div>
-        <h2 data-cy="courseDetailsHeading"><span jhiTranslate="lmswiamApp.course.detail.title">Course</span></h2>
+    <div *ngIf="course">
+      <h2 data-cy="courseDetailsHeading"><span jhiTranslate="lmswiamApp.course.detail.title">Course</span></h2>
 
-        <hr />
+      <hr />
 
-        <jhi-alert-error></jhi-alert-error>
+      <jhi-alert-error></jhi-alert-error>
 
-        <jhi-alert></jhi-alert>
+      <jhi-alert></jhi-alert>
 
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="global.field.id">ID</span></dt>
-          <dd>
-            <span>{{ course.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.level">Level</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.Level.' + course.level }}">{{ course.level }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.titleAr">Title Ar</span></dt>
-          <dd>
-            <span>{{ course.titleAr }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.titleLat">Title Lat</span></dt>
-          <dd>
-            <span>{{ course.titleLat }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.description">Description</span></dt>
-          <dd>
-            <span>{{ course.description }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.subTitles">Sub Titles</span></dt>
-          <dd>
-            <span>{{ course.subTitles }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.requirements">Requirements</span></dt>
-          <dd>
-            <span>{{ course.requirements }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.options">Options</span></dt>
-          <dd>
-            <span>{{ course.options }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.duration">Duration</span></dt>
-          <dd>
-            <span>{{ course.duration }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.imageLink">Image Link</span></dt>
-          <dd>
-            @if (course.imageLink) {
-              <div>
-                <a (click)="openFile(course.imageLink, course.imageLinkContentType)">
-                  <img
-                    [src]="'data:' + course.imageLinkContentType + ';base64,' + course.imageLink"
-                    style="max-width: 100%"
-                    alt="course image"
-                  />
-                </a>
-                {{ course.imageLinkContentType }}, {{ byteSize(course.imageLink) }}
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.videoLink">Video Link</span></dt>
-          <dd>
-            <span>{{ course.videoLink }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.price">Price</span></dt>
-          <dd>
-            <span>{{ course.price }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.isActive">Is Active</span></dt>
-          <dd>
-            <span>{{ course.isActive }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.activateAt">Activate At</span></dt>
-          <dd>
-            <span>{{ course.activateAt | formatMediumDatetime }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.isConfirmed">Is Confirmed</span></dt>
-          <dd>
-            <span>{{ course.isConfirmed }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.confirmedAt">Confirmed At</span></dt>
-          <dd>
-            <span>{{ course.confirmedAt | formatMediumDatetime }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.professors">Professors</span></dt>
-          <dd>
-            @for (professors of course.professors; track $index; let last = $last) {
-              <span>
-                <a [routerLink]="['/user-custom', professors.id, 'view']">{{ professors.firstName }}</a
-                >{{ last ? '' : ', ' }}
-              </span>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.course.topic3">Topic 3</span></dt>
-          <dd>
-            @if (course.topic3) {
-              <div>
-                <a [routerLink]="['/topic', course.topic3.id, 'view']">{{ course.topic3.titleAr }}</a>
-              </div>
-            }
-          </dd>
-        </dl>
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ course.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.level">Level</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.Level.' + course.level }}">{{ course.level }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.titleAr">Title Ar</span></dt>
+        <dd>
+          <span>{{ course.titleAr }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.titleLat">Title Lat</span></dt>
+        <dd>
+          <span>{{ course.titleLat }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.description">Description</span></dt>
+        <dd>
+          <span>{{ course.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.subTitles">Sub Titles</span></dt>
+        <dd>
+          <span>{{ course.subTitles }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.requirements">Requirements</span></dt>
+        <dd>
+          <span>{{ course.requirements }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.options">Options</span></dt>
+        <dd>
+          <span>{{ course.options }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.duration">Duration</span></dt>
+        <dd>
+          <span>{{ course.duration }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.imageLink">Image Link</span></dt>
+        <dd>
+          <div *ngIf="course.imageLink">
+            <a (click)="openFile(course.imageLink, course.imageLinkContentType)">
+              <img
+                [src]="'data:' + course.imageLinkContentType + ';base64,' + course.imageLink"
+                style="max-width: 100%"
+                alt="course image"
+              />
+            </a>
+            {{ course.imageLinkContentType }}, {{ byteSize(course.imageLink) }}
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.videoLink">Video Link</span></dt>
+        <dd>
+          <span>{{ course.videoLink }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.price">Price</span></dt>
+        <dd>
+          <span>{{ course.price }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.isActive">Is Active</span></dt>
+        <dd>
+          <span>{{ course.isActive }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.activateAt">Activate At</span></dt>
+        <dd>
+          <span>{{ course.activateAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.isConfirmed">Is Confirmed</span></dt>
+        <dd>
+          <span>{{ course.isConfirmed }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.confirmedAt">Confirmed At</span></dt>
+        <dd>
+          <span>{{ course.confirmedAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.professors">Professors</span></dt>
+        <dd>
+          <span *ngFor="let professors of course.professors; let last = last">
+            <a [routerLink]="['/user-custom', professors.id, 'view']">{{ professors.firstName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.site1">Site 1</span></dt>
+        <dd>
+          <div *ngIf="course.site1">
+            <a [routerLink]="['/site', course.site1.id, 'view']">{{ course.site1.nameAr }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.course.topic3">Topic 3</span></dt>
+        <dd>
+          <div *ngIf="course.topic3">
+            <a [routerLink]="['/topic', course.topic3.id, 'view']">{{ course.topic3.titleAr }}</a>
+          </div>
+        </dd>
+      </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
 
-        <button type="button" [routerLink]="['/course', course.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
-      </div>
-    }
+      <button type="button" [routerLink]="['/course', course.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
   </div>
 </div>

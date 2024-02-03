@@ -2,6 +2,7 @@ package com.wiam.lms.domain;
 
 import static com.wiam.lms.domain.CertificateTestSamples.*;
 import static com.wiam.lms.domain.GroupTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.TopicTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +24,18 @@ class CertificateTest {
 
         certificate2 = getCertificateSample2();
         assertThat(certificate1).isNotEqualTo(certificate2);
+    }
+
+    @Test
+    void site19Test() throws Exception {
+        Certificate certificate = getCertificateRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        certificate.setSite19(siteBack);
+        assertThat(certificate.getSite19()).isEqualTo(siteBack);
+
+        certificate.site19(null);
+        assertThat(certificate.getSite19()).isNull();
     }
 
     @Test

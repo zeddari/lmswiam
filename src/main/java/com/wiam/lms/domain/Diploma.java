@@ -74,6 +74,36 @@ public class Diploma implements Serializable {
     @Column(name = "attachment_content_type")
     private String attachmentContentType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site20;
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "diplomas")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
@@ -90,6 +120,7 @@ public class Diploma implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -246,6 +277,19 @@ public class Diploma implements Serializable {
 
     public void setAttachmentContentType(String attachmentContentType) {
         this.attachmentContentType = attachmentContentType;
+    }
+
+    public Site getSite20() {
+        return this.site20;
+    }
+
+    public void setSite20(Site site) {
+        this.site20 = site;
+    }
+
+    public Diploma site20(Site site) {
+        this.setSite20(site);
+        return this;
     }
 
     public Set<UserCustom> getUserCustom7s() {

@@ -51,7 +51,7 @@ class AnswerSearchRepositoryInternalImpl implements AnswerSearchRepositoryIntern
 
     @Override
     public void index(Answer entity) {
-        repository.findById(entity.getId()).ifPresent(elasticsearchTemplate::save);
+        repository.findOneWithEagerRelationships(entity.getId()).ifPresent(elasticsearchTemplate::save);
     }
 
     @Override

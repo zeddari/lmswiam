@@ -20,8 +20,8 @@
             <column name="edition_id" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="data" type="varchar(100)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_ayah_edition__data" />
+            <column name="data" type="${clobType}">
+                <constraints nullable="false" />
             </column>
             <column name="is_audio" type="boolean">
                 <constraints nullable="true" />
@@ -57,7 +57,7 @@
             <column name="id" type="numeric"/>
             <column name="ayah_id" type="numeric"/>
             <column name="edition_id" type="numeric"/>
-            <column name="data" type="string"/>
+            <column name="data" type="clob"/>
             <column name="is_audio" type="boolean"/>
             <column name="created_at" type="date"/>
             <column name="updated_at" type="date"/>

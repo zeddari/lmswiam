@@ -77,6 +77,7 @@ public class Course implements Serializable {
     @Column(name = "image_link_content_type")
     private String imageLinkContentType;
 
+    @Lob
     @Column(name = "video_link")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String videoLink;
@@ -102,13 +103,13 @@ public class Course implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "parts", "reviews", "course", "part1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "parts", "reviews", "site2", "course", "part1" }, allowSetters = true)
     private Set<Part> parts = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "payments", "userCustom4", "course" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payments", "site4", "userCustom4", "course" }, allowSetters = true)
     private Set<Enrolement> enrolements = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -131,6 +132,7 @@ public class Course implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -143,6 +145,36 @@ public class Course implements Serializable {
         allowSetters = true
     )
     private Set<UserCustom> professors = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site1;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "certificates", "quizzes", "topics", "courses", "topic2" }, allowSetters = true)
@@ -453,6 +485,19 @@ public class Course implements Serializable {
 
     public Course removeProfessors(UserCustom userCustom) {
         this.professors.remove(userCustom);
+        return this;
+    }
+
+    public Site getSite1() {
+        return this.site1;
+    }
+
+    public void setSite1(Site site) {
+        this.site1 = site;
+    }
+
+    public Course site1(Site site) {
+        this.setSite1(site);
         return this;
     }
 

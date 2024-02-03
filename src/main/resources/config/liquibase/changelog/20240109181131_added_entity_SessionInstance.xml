@@ -38,6 +38,9 @@
             <column name="is_active" type="boolean">
                 <constraints nullable="false" />
             </column>
+            <column name="site16_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="session1_id" type="bigint">
                 <constraints nullable="true" />
             </column>

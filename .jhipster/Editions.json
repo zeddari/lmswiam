@@ -3,6 +3,7 @@
     "changelogDate": "20240109182431"
   },
   "applications": "*",
+  "changelogDate": "20240109182431",
   "entityTableName": "editions",
   "fields": [
     {

@@ -44,14 +44,40 @@ public class Classroom implements Serializable {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "classrooms", "city" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
     private Site site;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "classrooms")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(
-        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links" },
+        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links", "site14" },
         allowSetters = true
     )
     private Set<Session> sessions6s = new HashSet<>();

@@ -43,6 +43,13 @@
                                  referencedTableName="language"
                                  />
 
+        <addForeignKeyConstraint baseColumnNames="site13_id"
+                                 baseTableName="user_custom"
+                                 constraintName="fk_user_custom__site13_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="site"
+                                 />
+
         <addForeignKeyConstraint baseColumnNames="country_id"
                                  baseTableName="user_custom"
                                  constraintName="fk_user_custom__country_id"

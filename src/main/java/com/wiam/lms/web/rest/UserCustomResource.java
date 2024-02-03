@@ -209,9 +209,7 @@ public class UserCustomResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userCustoms in body.
      */
     @GetMapping("")
-    public List<UserCustom> getAllUserCustoms(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
-    ) {
+    public List<UserCustom> getAllUserCustoms(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all UserCustoms");
         if (eagerload) {
             return userCustomRepository.findAllWithEagerRelationships();
@@ -227,7 +225,7 @@ public class UserCustomResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the userCustom, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<UserCustom> getUserCustom(@PathVariable("id") Long id) {
+    public ResponseEntity<UserCustom> getUserCustom(@PathVariable Long id) {
         log.debug("REST request to get UserCustom : {}", id);
         Optional<UserCustom> userCustom = userCustomRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(userCustom);
@@ -240,7 +238,7 @@ public class UserCustomResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserCustom(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteUserCustom(@PathVariable Long id) {
         log.debug("REST request to delete UserCustom : {}", id);
         userCustomRepository.deleteById(id);
         userCustomSearchRepository.deleteFromIndexById(id);
@@ -258,7 +256,7 @@ public class UserCustomResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<UserCustom> searchUserCustoms(@RequestParam("query") String query) {
+    public List<UserCustom> searchUserCustoms(@RequestParam String query) {
         log.debug("REST request to search UserCustoms for query {}", query);
         try {
             return StreamSupport.stream(userCustomSearchRepository.search(query).spliterator(), false).toList();

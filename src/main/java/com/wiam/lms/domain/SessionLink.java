@@ -48,17 +48,47 @@ public class SessionLink implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String link;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site15;
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "links")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "progressions", "links", "session1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "progressions", "links", "site16", "session1" }, allowSetters = true)
     private Set<SessionInstance> sessions4s = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "links")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(
-        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links" },
+        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links", "site14" },
         allowSetters = true
     )
     private Set<Session> sessions7s = new HashSet<>();
@@ -128,6 +158,19 @@ public class SessionLink implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public Site getSite15() {
+        return this.site15;
+    }
+
+    public void setSite15(Site site) {
+        this.site15 = site;
+    }
+
+    public SessionLink site15(Site site) {
+        this.setSite15(site);
+        return this;
     }
 
     public Set<SessionInstance> getSessions4s() {

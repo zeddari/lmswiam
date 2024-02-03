@@ -71,7 +71,7 @@ public class SessionInstance implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sessionInstance")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "sessionInstance", "student" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site17", "sessionInstance", "student" }, allowSetters = true)
     private Set<Progression> progressions = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -81,12 +81,42 @@ public class SessionInstance implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "links_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "sessions4s", "sessions7s" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site15", "sessions4s", "sessions7s" }, allowSetters = true)
     private Set<SessionLink> links = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links" },
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site16;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links", "site14" },
         allowSetters = true
     )
     private Session session1;
@@ -261,6 +291,19 @@ public class SessionInstance implements Serializable {
 
     public SessionInstance removeLinks(SessionLink sessionLink) {
         this.links.remove(sessionLink);
+        return this;
+    }
+
+    public Site getSite16() {
+        return this.site16;
+    }
+
+    public void setSite16(Site site) {
+        this.site16 = site;
+    }
+
+    public SessionInstance site16(Site site) {
+        this.setSite16(site);
         return this;
     }
 

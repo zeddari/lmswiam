@@ -212,9 +212,7 @@ public class ProgressionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of progressions in body.
      */
     @GetMapping("")
-    public List<Progression> getAllProgressions(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
-    ) {
+    public List<Progression> getAllProgressions(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Progressions");
         if (eagerload) {
             return progressionRepository.findAllWithEagerRelationships();
@@ -230,7 +228,7 @@ public class ProgressionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the progression, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Progression> getProgression(@PathVariable("id") Long id) {
+    public ResponseEntity<Progression> getProgression(@PathVariable Long id) {
         log.debug("REST request to get Progression : {}", id);
         Optional<Progression> progression = progressionRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(progression);
@@ -243,7 +241,7 @@ public class ProgressionResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProgression(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteProgression(@PathVariable Long id) {
         log.debug("REST request to delete Progression : {}", id);
         progressionRepository.deleteById(id);
         progressionSearchRepository.deleteFromIndexById(id);
@@ -261,7 +259,7 @@ public class ProgressionResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Progression> searchProgressions(@RequestParam("query") String query) {
+    public List<Progression> searchProgressions(@RequestParam String query) {
         log.debug("REST request to search Progressions for query {}", query);
         try {
             return StreamSupport.stream(progressionSearchRepository.search(query).spliterator(), false).toList();

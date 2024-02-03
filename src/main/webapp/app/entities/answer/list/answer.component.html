@@ -41,130 +41,123 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (answers?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.answer.home.notFound">No Answers found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="answers?.length === 0">
+    <span jhiTranslate="lmswiamApp.answer.home.notFound">No Answers found</span>
+  </div>
 
-  @if (answers && answers.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="answers && answers.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="a1v">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.answer.a1v">A 1 V</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="a2v">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.answer.a2v">A 2 V</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="a3v">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.answer.a3v">A 3 V</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="a4v">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.answer.a4v">A 4 V</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="result">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.answer.result">Result</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site6.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.answer.site6">Site 6</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="question.id">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.answer.question">Question</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="userCustom1.id">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.answer.userCustom1">User Custom 1</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let answer of answers; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/answer', answer.id, 'view']">{{ answer.id }}</a>
+          </td>
+          <td>{{ answer.a1v }}</td>
+          <td>{{ answer.a2v }}</td>
+          <td>{{ answer.a3v }}</td>
+          <td>{{ answer.a4v }}</td>
+          <td>{{ answer.result }}</td>
+          <td>
+            <div *ngIf="answer.site6">
+              <a [routerLink]="['/site', answer.site6.id, 'view']">{{ answer.site6.nameAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="answer.question">
+              <a [routerLink]="['/question', answer.question.id, 'view']">{{ answer.question.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="answer.userCustom1">
+              <a [routerLink]="['/user-custom', answer.userCustom1.id, 'view']">{{ answer.userCustom1.id }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/answer', answer.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="a1v">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.answer.a1v">A 1 V</span>
+              <a [routerLink]="['/answer', answer.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="a2v">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.answer.a2v">A 2 V</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="a3v">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.answer.a3v">A 3 V</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="a4v">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.answer.a4v">A 4 V</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="result">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.answer.result">Result</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="question.id">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.answer.question">Question</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="userCustom1.id">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.answer.userCustom1">User Custom 1</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (answer of answers; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/answer', answer.id, 'view']">{{ answer.id }}</a>
-              </td>
-              <td>{{ answer.a1v }}</td>
-              <td>{{ answer.a2v }}</td>
-              <td>{{ answer.a3v }}</td>
-              <td>{{ answer.a4v }}</td>
-              <td>{{ answer.result }}</td>
-              <td>
-                @if (answer.question) {
-                  <div>
-                    <a [routerLink]="['/question', answer.question.id, 'view']">{{ answer.question.id }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (answer.userCustom1) {
-                  <div>
-                    <a [routerLink]="['/user-custom', answer.userCustom1.id, 'view']">{{ answer.userCustom1.id }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/answer', answer.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/answer', answer.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(answer)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(answer)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -84,6 +84,36 @@ public class Tickets implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
         value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site18;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
             "user",
             "certificates",
             "answers",
@@ -95,6 +125,7 @@ public class Tickets implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -277,6 +308,19 @@ public class Tickets implements Serializable {
 
     public void setDecisionDetail(String decisionDetail) {
         this.decisionDetail = decisionDetail;
+    }
+
+    public Site getSite18() {
+        return this.site18;
+    }
+
+    public void setSite18(Site site) {
+        this.site18 = site;
+    }
+
+    public Tickets site18(Site site) {
+        this.setSite18(site);
+        return this;
     }
 
     public UserCustom getUserCustom5() {

@@ -8,29 +8,22 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.quizResult.result" for="field_result">Result</label>
           <input type="number" class="form-control" name="result" id="field_result" data-cy="result" formControlName="result" />
-          @if (editForm.get('result')!.invalid && (editForm.get('result')!.dirty || editForm.get('result')!.touched)) {
-            <div>
-              @if (editForm.get('result')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('result')?.errors?.number"
-                jhiTranslate="entity.validation.number"
-                >This field should be a number.</small
-              >
-            </div>
-          }
+          <div *ngIf="editForm.get('result')!.invalid && (editForm.get('result')!.dirty || editForm.get('result')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('result')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small class="form-text text-danger" [hidden]="!editForm.get('result')?.errors?.number" jhiTranslate="entity.validation.number"
+              >This field should be a number.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -46,28 +39,35 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-          @if (editForm.get('submittedAT')!.invalid && (editForm.get('submittedAT')!.dirty || editForm.get('submittedAT')!.touched)) {
-            <div>
-              @if (editForm.get('submittedAT')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('submittedAT')?.errors?.datetimelocal"
-                jhiTranslate="entity.validation.datetimelocal"
-                >This field should be a date and time.</small
-              >
-            </div>
-          }
+          <div *ngIf="editForm.get('submittedAT')!.invalid && (editForm.get('submittedAT')!.dirty || editForm.get('submittedAT')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('submittedAT')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('submittedAT')?.errors?.datetimelocal"
+              jhiTranslate="entity.validation.datetimelocal"
+              >This field should be a date and time.</small
+            >
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.quizResult.site8" for="field_site8">Site 8</label>
+          <select class="form-control" id="field_site8" data-cy="site8" name="site8" formControlName="site8" [compareWith]="compareSite">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
+          </select>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.quizResult.quiz" for="field_quiz">Quiz</label>
           <select class="form-control" id="field_quiz" data-cy="quiz" name="quiz" formControlName="quiz" [compareWith]="compareQuiz">
             <option [ngValue]="null"></option>
-            @for (quizOption of quizzesSharedCollection; track $index) {
-              <option [ngValue]="quizOption">{{ quizOption.id }}</option>
-            }
+            <option [ngValue]="quizOption" *ngFor="let quizOption of quizzesSharedCollection">{{ quizOption.id }}</option>
           </select>
         </div>
 
@@ -82,9 +82,9 @@
             [compareWith]="compareUserCustom"
           >
             <option [ngValue]="null"></option>
-            @for (userCustomOption of userCustomsSharedCollection; track $index) {
-              <option [ngValue]="userCustomOption">{{ userCustomOption.firstName }}</option>
-            }
+            <option [ngValue]="userCustomOption" *ngFor="let userCustomOption of userCustomsSharedCollection">
+              {{ userCustomOption.firstName }}
+            </option>
           </select>
         </div>
       </div>

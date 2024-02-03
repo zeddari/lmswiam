@@ -38,6 +38,7 @@ type QuizFormGroupContent = {
   isActive: FormControl<QuizFormRawValue['isActive']>;
   groups: FormControl<QuizFormRawValue['groups']>;
   questions: FormControl<QuizFormRawValue['questions']>;
+  site7: FormControl<QuizFormRawValue['site7']>;
   topic1: FormControl<QuizFormRawValue['topic1']>;
 };
 
@@ -71,6 +72,7 @@ export class QuizFormService {
       }),
       groups: new FormControl(quizRawValue.groups ?? []),
       questions: new FormControl(quizRawValue.questions ?? []),
+      site7: new FormControl(quizRawValue.site7),
       topic1: new FormControl(quizRawValue.topic1),
     });
   }

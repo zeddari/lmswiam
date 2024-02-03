@@ -188,7 +188,7 @@ public class EditionsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the editions, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Editions> getEditions(@PathVariable("id") Integer id) {
+    public ResponseEntity<Editions> getEditions(@PathVariable Integer id) {
         log.debug("REST request to get Editions : {}", id);
         Optional<Editions> editions = editionsRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(editions);
@@ -201,7 +201,7 @@ public class EditionsResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEditions(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteEditions(@PathVariable Integer id) {
         log.debug("REST request to delete Editions : {}", id);
         editionsRepository.deleteById(id);
         editionsSearchRepository.deleteFromIndexById(id);
@@ -219,7 +219,7 @@ public class EditionsResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Editions> searchEditions(@RequestParam("query") String query) {
+    public List<Editions> searchEditions(@RequestParam String query) {
         log.debug("REST request to search Editions for query {}", query);
         try {
             return StreamSupport.stream(editionsSearchRepository.search(query).spliterator(), false).toList();

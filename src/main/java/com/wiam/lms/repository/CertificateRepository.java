@@ -27,18 +27,18 @@ public interface CertificateRepository extends JpaRepository<Certificate, Long> 
     }
 
     @Query(
-        value = "select certificate from Certificate certificate left join fetch certificate.userCustom6 left join fetch certificate.comitte left join fetch certificate.topic4",
+        value = "select certificate from Certificate certificate left join fetch certificate.site19 left join fetch certificate.userCustom6 left join fetch certificate.comitte left join fetch certificate.topic4",
         countQuery = "select count(certificate) from Certificate certificate"
     )
     Page<Certificate> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select certificate from Certificate certificate left join fetch certificate.userCustom6 left join fetch certificate.comitte left join fetch certificate.topic4"
+        "select certificate from Certificate certificate left join fetch certificate.site19 left join fetch certificate.userCustom6 left join fetch certificate.comitte left join fetch certificate.topic4"
     )
     List<Certificate> findAllWithToOneRelationships();
 
     @Query(
-        "select certificate from Certificate certificate left join fetch certificate.userCustom6 left join fetch certificate.comitte left join fetch certificate.topic4 where certificate.id =:id"
+        "select certificate from Certificate certificate left join fetch certificate.site19 left join fetch certificate.userCustom6 left join fetch certificate.comitte left join fetch certificate.topic4 where certificate.id =:id"
     )
     Optional<Certificate> findOneWithToOneRelationships(@Param("id") Long id);
 }

@@ -183,9 +183,7 @@ public class SessionInstanceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sessionInstances in body.
      */
     @GetMapping("")
-    public List<SessionInstance> getAllSessionInstances(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
-    ) {
+    public List<SessionInstance> getAllSessionInstances(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all SessionInstances");
         if (eagerload) {
             return sessionInstanceRepository.findAllWithEagerRelationships();
@@ -201,7 +199,7 @@ public class SessionInstanceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sessionInstance, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<SessionInstance> getSessionInstance(@PathVariable("id") Long id) {
+    public ResponseEntity<SessionInstance> getSessionInstance(@PathVariable Long id) {
         log.debug("REST request to get SessionInstance : {}", id);
         Optional<SessionInstance> sessionInstance = sessionInstanceRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(sessionInstance);
@@ -214,7 +212,7 @@ public class SessionInstanceResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSessionInstance(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteSessionInstance(@PathVariable Long id) {
         log.debug("REST request to delete SessionInstance : {}", id);
         sessionInstanceRepository.deleteById(id);
         sessionInstanceSearchRepository.deleteFromIndexById(id);
@@ -232,7 +230,7 @@ public class SessionInstanceResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<SessionInstance> searchSessionInstances(@RequestParam("query") String query) {
+    public List<SessionInstance> searchSessionInstances(@RequestParam String query) {
         log.debug("REST request to search SessionInstances for query {}", query);
         try {
             return StreamSupport.stream(sessionInstanceSearchRepository.search(query).spliterator(), false).toList();

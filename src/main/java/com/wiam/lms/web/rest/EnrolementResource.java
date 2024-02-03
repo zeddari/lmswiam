@@ -173,9 +173,7 @@ public class EnrolementResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of enrolements in body.
      */
     @GetMapping("")
-    public List<Enrolement> getAllEnrolements(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
-    ) {
+    public List<Enrolement> getAllEnrolements(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Enrolements");
         if (eagerload) {
             return enrolementRepository.findAllWithEagerRelationships();
@@ -191,7 +189,7 @@ public class EnrolementResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the enrolement, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Enrolement> getEnrolement(@PathVariable("id") Long id) {
+    public ResponseEntity<Enrolement> getEnrolement(@PathVariable Long id) {
         log.debug("REST request to get Enrolement : {}", id);
         Optional<Enrolement> enrolement = enrolementRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(enrolement);
@@ -204,7 +202,7 @@ public class EnrolementResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEnrolement(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteEnrolement(@PathVariable Long id) {
         log.debug("REST request to delete Enrolement : {}", id);
         enrolementRepository.deleteById(id);
         enrolementSearchRepository.deleteFromIndexById(id);
@@ -222,7 +220,7 @@ public class EnrolementResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Enrolement> searchEnrolements(@RequestParam("query") String query) {
+    public List<Enrolement> searchEnrolements(@RequestParam String query) {
         log.debug("REST request to search Enrolements for query {}", query);
         try {
             return StreamSupport.stream(enrolementSearchRepository.search(query).spliterator(), false).toList();

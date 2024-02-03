@@ -3,6 +3,7 @@
     "changelogDate": "20240109175131"
   },
   "applications": "*",
+  "changelogDate": "20240109175131",
   "entityTableName": "language",
   "fields": [
     {

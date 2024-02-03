@@ -34,7 +34,37 @@ public class QuizResult implements Serializable {
     private ZonedDateTime submittedAT;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "quizResults", "groups", "questions", "topic1" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site8;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "quizResults", "groups", "questions", "site7", "topic1" }, allowSetters = true)
     private Quiz quiz;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -51,6 +81,7 @@ public class QuizResult implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -103,6 +134,19 @@ public class QuizResult implements Serializable {
 
     public void setSubmittedAT(ZonedDateTime submittedAT) {
         this.submittedAT = submittedAT;
+    }
+
+    public Site getSite8() {
+        return this.site8;
+    }
+
+    public void setSite8(Site site) {
+        this.site8 = site;
+    }
+
+    public QuizResult site8(Site site) {
+        this.setSite8(site);
+        return this;
     }
 
     public Quiz getQuiz() {

@@ -46,13 +46,13 @@ public class Topic implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "topic4")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "userCustom6", "comitte", "topic4" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site19", "userCustom6", "comitte", "topic4" }, allowSetters = true)
     private Set<Certificate> certificates = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "topic1")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "quizResults", "groups", "questions", "topic1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "quizResults", "groups", "questions", "site7", "topic1" }, allowSetters = true)
     private Set<Quiz> quizzes = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "topic2")
@@ -64,7 +64,7 @@ public class Topic implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "topic3")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "parts", "enrolements", "professors", "topic3" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "parts", "enrolements", "professors", "site1", "topic3" }, allowSetters = true)
     private Set<Course> courses = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

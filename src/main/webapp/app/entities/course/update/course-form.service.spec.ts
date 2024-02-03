@@ -36,6 +36,7 @@ describe('Course Form Service', () => {
             isConfirmed: expect.any(Object),
             confirmedAt: expect.any(Object),
             professors: expect.any(Object),
+            site1: expect.any(Object),
             topic3: expect.any(Object),
           }),
         );
@@ -63,6 +64,7 @@ describe('Course Form Service', () => {
             isConfirmed: expect.any(Object),
             confirmedAt: expect.any(Object),
             professors: expect.any(Object),
+            site1: expect.any(Object),
             topic3: expect.any(Object),
           }),
         );

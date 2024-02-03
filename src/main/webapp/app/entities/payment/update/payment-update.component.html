@@ -8,34 +8,29 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.payment.amount" for="field_amount">Amount</label>
           <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
-          @if (editForm.get('amount')!.invalid && (editForm.get('amount')!.dirty || editForm.get('amount')!.touched)) {
-            <div>
-              @if (editForm.get('amount')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('amount')?.errors?.min) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }"
-                  >This field should be at least 0.</small
-                >
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('amount')?.errors?.number"
-                jhiTranslate="entity.validation.number"
-                >This field should be a number.</small
-              >
-            </div>
-          }
+          <div *ngIf="editForm.get('amount')!.invalid && (editForm.get('amount')!.dirty || editForm.get('amount')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('amount')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('amount')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+              >This field should be at least 0.</small
+            >
+            <small class="form-text text-danger" [hidden]="!editForm.get('amount')?.errors?.number" jhiTranslate="entity.validation.number"
+              >This field should be a number.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -48,53 +43,53 @@
             data-cy="paymentMethod"
           >
             <option [ngValue]="null">{{ 'lmswiamApp.PaymentMode.null' | translate }}</option>
-            @for (paymentMode of paymentModeValues; track $index) {
-              <option [value]="paymentMode">{{ 'lmswiamApp.PaymentMode.' + paymentMode | translate }}</option>
-            }
+            <option *ngFor="let paymentMode of paymentModeValues" [value]="paymentMode">
+              {{ 'lmswiamApp.PaymentMode.' + paymentMode | translate }}
+            </option>
           </select>
-          @if (editForm.get('paymentMethod')!.invalid && (editForm.get('paymentMethod')!.dirty || editForm.get('paymentMethod')!.touched)) {
-            <div>
-              @if (editForm.get('paymentMethod')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div
+            *ngIf="
+              editForm.get('paymentMethod')!.invalid && (editForm.get('paymentMethod')!.dirty || editForm.get('paymentMethod')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('paymentMethod')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.payment.paiedBy" for="field_paiedBy">Paied By</label>
           <input type="text" class="form-control" name="paiedBy" id="field_paiedBy" data-cy="paiedBy" formControlName="paiedBy" />
-          @if (editForm.get('paiedBy')!.invalid && (editForm.get('paiedBy')!.dirty || editForm.get('paiedBy')!.touched)) {
-            <div>
-              @if (editForm.get('paiedBy')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('paiedBy')!.invalid && (editForm.get('paiedBy')!.dirty || editForm.get('paiedBy')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('paiedBy')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.payment.proof" for="field_proof">Proof</label>
           <div>
-            @if (editForm.get('proof')!.value) {
-              <img
-                [src]="'data:' + editForm.get('proofContentType')!.value + ';base64,' + editForm.get('proof')!.value"
-                style="max-height: 100px"
-                alt="payment image"
-              />
-            }
-            @if (editForm.get('proof')!.value) {
-              <div class="form-text text-danger clearfix">
-                <span class="pull-start">{{ editForm.get('proofContentType')!.value }}, {{ byteSize(editForm.get('proof')!.value!) }}</span>
-                <button
-                  type="button"
-                  (click)="clearInputImage('proof', 'proofContentType', 'file_proof')"
-                  class="btn btn-secondary btn-xs pull-end"
-                >
-                  <fa-icon icon="times"></fa-icon>
-                </button>
-              </div>
-            }
+            <img
+              [src]="'data:' + editForm.get('proofContentType')!.value + ';base64,' + editForm.get('proof')!.value"
+              style="max-height: 100px"
+              *ngIf="editForm.get('proof')!.value"
+              alt="payment image"
+            />
+            <div *ngIf="editForm.get('proof')!.value" class="form-text text-danger clearfix">
+              <span class="pull-start">{{ editForm.get('proofContentType')!.value }}, {{ byteSize(editForm.get('proof')!.value!) }}</span>
+              <button
+                type="button"
+                (click)="clearInputImage('proof', 'proofContentType', 'file_proof')"
+                class="btn btn-secondary btn-xs pull-end"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
             <input
               type="file"
               id="file_proof"
@@ -112,9 +107,7 @@
             id="field_proofContentType"
             formControlName="proofContentType"
           />
-          @if (editForm.get('proof')!.invalid && (editForm.get('proof')!.dirty || editForm.get('proof')!.touched)) {
-            <div></div>
-          }
+          <div *ngIf="editForm.get('proof')!.invalid && (editForm.get('proof')!.dirty || editForm.get('proof')!.touched)"></div>
         </div>
 
         <div class="mb-3">
@@ -130,36 +123,32 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-          @if (editForm.get('paidAt')!.invalid && (editForm.get('paidAt')!.dirty || editForm.get('paidAt')!.touched)) {
-            <div>
-              @if (editForm.get('paidAt')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('paidAt')?.errors?.datetimelocal"
-                jhiTranslate="entity.validation.datetimelocal"
-                >This field should be a date and time.</small
-              >
-            </div>
-          }
+          <div *ngIf="editForm.get('paidAt')!.invalid && (editForm.get('paidAt')!.dirty || editForm.get('paidAt')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('paidAt')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('paidAt')?.errors?.datetimelocal"
+              jhiTranslate="entity.validation.datetimelocal"
+              >This field should be a date and time.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.payment.type" for="field_type">Type</label>
           <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
             <option [ngValue]="null">{{ 'lmswiamApp.PaymentType.null' | translate }}</option>
-            @for (paymentType of paymentTypeValues; track $index) {
-              <option [value]="paymentType">{{ 'lmswiamApp.PaymentType.' + paymentType | translate }}</option>
-            }
+            <option *ngFor="let paymentType of paymentTypeValues" [value]="paymentType">
+              {{ 'lmswiamApp.PaymentType.' + paymentType | translate }}
+            </option>
           </select>
-          @if (editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)) {
-            <div>
-              @if (editForm.get('type')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('type')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -177,22 +166,25 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-          @if (
-            editForm.get('validityStartTime')!.invalid &&
-            (editForm.get('validityStartTime')!.dirty || editForm.get('validityStartTime')!.touched)
-          ) {
-            <div>
-              @if (editForm.get('validityStartTime')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('validityStartTime')?.errors?.datetimelocal"
-                jhiTranslate="entity.validation.datetimelocal"
-                >This field should be a date and time.</small
-              >
-            </div>
-          }
+          <div
+            *ngIf="
+              editForm.get('validityStartTime')!.invalid &&
+              (editForm.get('validityStartTime')!.dirty || editForm.get('validityStartTime')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('validityStartTime')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('validityStartTime')?.errors?.datetimelocal"
+              jhiTranslate="entity.validation.datetimelocal"
+              >This field should be a date and time.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -208,26 +200,38 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-          @if (
-            editForm.get('validityEndTime')!.invalid && (editForm.get('validityEndTime')!.dirty || editForm.get('validityEndTime')!.touched)
-          ) {
-            <div>
-              @if (editForm.get('validityEndTime')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('validityEndTime')?.errors?.datetimelocal"
-                jhiTranslate="entity.validation.datetimelocal"
-                >This field should be a date and time.</small
-              >
-            </div>
-          }
+          <div
+            *ngIf="
+              editForm.get('validityEndTime')!.invalid &&
+              (editForm.get('validityEndTime')!.dirty || editForm.get('validityEndTime')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('validityEndTime')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('validityEndTime')?.errors?.datetimelocal"
+              jhiTranslate="entity.validation.datetimelocal"
+              >This field should be a date and time.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.payment.details" for="field_details">Details</label>
           <textarea class="form-control" name="details" id="field_details" data-cy="details" formControlName="details"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.payment.site9" for="field_site9">Site 9</label>
+          <select class="form-control" id="field_site9" data-cy="site9" name="site9" formControlName="site9" [compareWith]="compareSite">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
+          </select>
         </div>
 
         <div class="mb-3">
@@ -241,9 +245,9 @@
             [compareWith]="compareEnrolement"
           >
             <option [ngValue]="null"></option>
-            @for (enrolementOption of enrolementsSharedCollection; track $index) {
-              <option [ngValue]="enrolementOption">{{ enrolementOption.ref }}</option>
-            }
+            <option [ngValue]="enrolementOption" *ngFor="let enrolementOption of enrolementsSharedCollection">
+              {{ enrolementOption.ref }}
+            </option>
           </select>
         </div>
 
@@ -258,9 +262,9 @@
             [compareWith]="compareSponsoring"
           >
             <option [ngValue]="null"></option>
-            @for (sponsoringOption of sponsoringsSharedCollection; track $index) {
-              <option [ngValue]="sponsoringOption">{{ sponsoringOption.ref }}</option>
-            }
+            <option [ngValue]="sponsoringOption" *ngFor="let sponsoringOption of sponsoringsSharedCollection">
+              {{ sponsoringOption.ref }}
+            </option>
           </select>
         </div>
 
@@ -275,9 +279,7 @@
             [compareWith]="compareSession"
           >
             <option [ngValue]="null"></option>
-            @for (sessionOption of sessionsSharedCollection; track $index) {
-              <option [ngValue]="sessionOption">{{ sessionOption.title }}</option>
-            }
+            <option [ngValue]="sessionOption" *ngFor="let sessionOption of sessionsSharedCollection">{{ sessionOption.title }}</option>
           </select>
         </div>
 
@@ -292,9 +294,9 @@
             [compareWith]="compareCurrency"
           >
             <option [ngValue]="null"></option>
-            @for (currencyOption of currenciesSharedCollection; track $index) {
-              <option [ngValue]="currencyOption">{{ currencyOption.nameAr }}</option>
-            }
+            <option [ngValue]="currencyOption" *ngFor="let currencyOption of currenciesSharedCollection">
+              {{ currencyOption.nameAr }}
+            </option>
           </select>
         </div>
       </div>

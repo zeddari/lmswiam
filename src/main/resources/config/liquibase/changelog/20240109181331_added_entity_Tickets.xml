@@ -50,6 +50,9 @@
             <column name="decision_detail" type="${clobType}">
                 <constraints nullable="true" />
             </column>
+            <column name="site18_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="user_custom5_id" type="bigint">
                 <constraints nullable="true" />
             </column>

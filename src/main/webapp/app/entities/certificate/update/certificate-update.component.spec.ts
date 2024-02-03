@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
 import { IGroup } from 'app/entities/group/group.model';
@@ -24,6 +26,7 @@ describe('Certificate Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let certificateFormService: CertificateFormService;
   let certificateService: CertificateService;
+  let siteService: SiteService;
   let userCustomService: UserCustomService;
   let groupService: GroupService;
   let topicService: TopicService;
@@ -48,6 +51,7 @@ describe('Certificate Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     certificateFormService = TestBed.inject(CertificateFormService);
     certificateService = TestBed.inject(CertificateService);
+    siteService = TestBed.inject(SiteService);
     userCustomService = TestBed.inject(UserCustomService);
     groupService = TestBed.inject(GroupService);
     topicService = TestBed.inject(TopicService);
@@ -56,6 +60,28 @@ describe('Certificate Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
+    it('Should call Site query and add missing value', () => {
+      const certificate: ICertificate = { id: 456 };
+      const site19: ISite = { id: 23747 };
+      certificate.site19 = site19;
+
+      const siteCollection: ISite[] = [{ id: 4709 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site19];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ certificate });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call UserCustom query and add missing value', () => {
       const certificate: ICertificate = { id: 456 };
       const userCustom6: IUserCustom = { id: 5143 };
@@ -124,6 +150,8 @@ describe('Certificate Management Update Component', () => {
 
     it('Should update editForm', () => {
       const certificate: ICertificate = { id: 456 };
+      const site19: ISite = { id: 786 };
+      certificate.site19 = site19;
       const userCustom6: IUserCustom = { id: 29505 };
       certificate.userCustom6 = userCustom6;
       const comitte: IGroup = { id: 27596 };
@@ -134,6 +162,7 @@ describe('Certificate Management Update Component', () => {
       activatedRoute.data = of({ certificate });
       comp.ngOnInit();
 
+      expect(comp.sitesSharedCollection).toContain(site19);
       expect(comp.userCustomsSharedCollection).toContain(userCustom6);
       expect(comp.groupsSharedCollection).toContain(comitte);
       expect(comp.topicsSharedCollection).toContain(topic4);
@@ -210,6 +239,16 @@ describe('Certificate Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareUserCustom', () => {
       it('Should forward to userCustomService', () => {
         const entity = { id: 123 };

@@ -8,12 +8,10 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="lmswiamApp.ayahs.id" for="field_id">Id</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="lmswiamApp.ayahs.id" for="field_id">Id</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.ayahs.number" for="field_number">Number</label>
@@ -22,19 +20,15 @@
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.ayahs.textdesc" for="field_textdesc">Textdesc</label>
-          <input type="text" class="form-control" name="textdesc" id="field_textdesc" data-cy="textdesc" formControlName="textdesc" />
-          @if (editForm.get('textdesc')!.invalid && (editForm.get('textdesc')!.dirty || editForm.get('textdesc')!.touched)) {
-            <div>
-              @if (editForm.get('textdesc')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('textdesc')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <textarea class="form-control" name="textdesc" id="field_textdesc" data-cy="textdesc" formControlName="textdesc"></textarea>
+          <div *ngIf="editForm.get('textdesc')!.invalid && (editForm.get('textdesc')!.dirty || editForm.get('textdesc')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('textdesc')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">

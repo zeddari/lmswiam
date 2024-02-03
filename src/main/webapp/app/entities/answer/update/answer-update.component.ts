@@ -7,6 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IQuestion } from 'app/entities/question/question.model';
 import { QuestionService } from 'app/entities/question/service/question.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
@@ -25,6 +27,7 @@ export class AnswerUpdateComponent implements OnInit {
   isSaving = false;
   answer: IAnswer | null = null;
 
+  sitesSharedCollection: ISite[] = [];
   questionsSharedCollection: IQuestion[] = [];
   userCustomsSharedCollection: IUserCustom[] = [];
 
@@ -33,10 +36,13 @@ export class AnswerUpdateComponent implements OnInit {
   constructor(
     protected answerService: AnswerService,
     protected answerFormService: AnswerFormService,
+    protected siteService: SiteService,
     protected questionService: QuestionService,
     protected userCustomService: UserCustomService,
     protected activatedRoute: ActivatedRoute,
   ) {}
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareQuestion = (o1: IQuestion | null, o2: IQuestion | null): boolean => this.questionService.compareQuestion(o1, o2);
 
@@ -90,6 +96,7 @@ export class AnswerUpdateComponent implements OnInit {
     this.answer = answer;
     this.answerFormService.resetForm(this.editForm, answer);
 
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, answer.site6);
     this.questionsSharedCollection = this.questionService.addQuestionToCollectionIfMissing<IQuestion>(
       this.questionsSharedCollection,
       answer.question,
@@ -101,6 +108,12 @@ export class AnswerUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.answer?.site6)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
+
     this.questionService
       .query()
       .pipe(map((res: HttpResponse<IQuestion[]>) => res.body ?? []))

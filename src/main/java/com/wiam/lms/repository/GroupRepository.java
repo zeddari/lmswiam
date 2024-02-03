@@ -30,14 +30,14 @@ public interface GroupRepository extends GroupRepositoryWithBagRelationships, Jp
     }
 
     @Query(
-        value = "select jhiGroup from Group jhiGroup left join fetch jhiGroup.group1",
+        value = "select jhiGroup from Group jhiGroup left join fetch jhiGroup.site11 left join fetch jhiGroup.group1",
         countQuery = "select count(jhiGroup) from Group jhiGroup"
     )
     Page<Group> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select jhiGroup from Group jhiGroup left join fetch jhiGroup.group1")
+    @Query("select jhiGroup from Group jhiGroup left join fetch jhiGroup.site11 left join fetch jhiGroup.group1")
     List<Group> findAllWithToOneRelationships();
 
-    @Query("select jhiGroup from Group jhiGroup left join fetch jhiGroup.group1 where jhiGroup.id =:id")
+    @Query("select jhiGroup from Group jhiGroup left join fetch jhiGroup.site11 left join fetch jhiGroup.group1 where jhiGroup.id =:id")
     Optional<Group> findOneWithToOneRelationships(@Param("id") Long id);
 }

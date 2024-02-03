@@ -7,8 +7,11 @@ import { finalize } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IAyahs } from '../ayahs.model';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { AyahsService } from '../service/ayahs.service';
+import { IAyahs } from '../ayahs.model';
 import { AyahsFormService, AyahsFormGroup } from './ayahs-form.service';
 
 @Component({
@@ -24,6 +27,8 @@ export class AyahsUpdateComponent implements OnInit {
   editForm: AyahsFormGroup = this.ayahsFormService.createAyahsFormGroup();
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected ayahsService: AyahsService,
     protected ayahsFormService: AyahsFormService,
     protected activatedRoute: ActivatedRoute,
@@ -35,6 +40,21 @@ export class AyahsUpdateComponent implements OnInit {
       if (ayahs) {
         this.updateForm(ayahs);
       }
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('lmswiamApp.error', { ...err, key: 'error.file.' + err.key })),
     });
   }
 

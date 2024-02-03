@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
 import { IProject } from 'app/entities/project/project.model';
@@ -24,6 +26,7 @@ describe('Sponsoring Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let sponsoringFormService: SponsoringFormService;
   let sponsoringService: SponsoringService;
+  let siteService: SiteService;
   let userCustomService: UserCustomService;
   let projectService: ProjectService;
   let currencyService: CurrencyService;
@@ -48,6 +51,7 @@ describe('Sponsoring Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     sponsoringFormService = TestBed.inject(SponsoringFormService);
     sponsoringService = TestBed.inject(SponsoringService);
+    siteService = TestBed.inject(SiteService);
     userCustomService = TestBed.inject(UserCustomService);
     projectService = TestBed.inject(ProjectService);
     currencyService = TestBed.inject(CurrencyService);
@@ -56,6 +60,28 @@ describe('Sponsoring Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
+    it('Should call Site query and add missing value', () => {
+      const sponsoring: ISponsoring = { id: 456 };
+      const site10: ISite = { id: 8018 };
+      sponsoring.site10 = site10;
+
+      const siteCollection: ISite[] = [{ id: 27638 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site10];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ sponsoring });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call UserCustom query and add missing value', () => {
       const sponsoring: ISponsoring = { id: 456 };
       const sponsor: IUserCustom = { id: 17635 };
@@ -80,10 +106,10 @@ describe('Sponsoring Management Update Component', () => {
 
     it('Should call Project query and add missing value', () => {
       const sponsoring: ISponsoring = { id: 456 };
-      const project: IProject = { id: 23755 };
+      const project: IProject = { id: 16525 };
       sponsoring.project = project;
 
-      const projectCollection: IProject[] = [{ id: 27430 }];
+      const projectCollection: IProject[] = [{ id: 21669 }];
       jest.spyOn(projectService, 'query').mockReturnValue(of(new HttpResponse({ body: projectCollection })));
       const additionalProjects = [project];
       const expectedCollection: IProject[] = [...additionalProjects, ...projectCollection];
@@ -124,9 +150,11 @@ describe('Sponsoring Management Update Component', () => {
 
     it('Should update editForm', () => {
       const sponsoring: ISponsoring = { id: 456 };
+      const site10: ISite = { id: 6611 };
+      sponsoring.site10 = site10;
       const sponsor: IUserCustom = { id: 23430 };
       sponsoring.sponsor = sponsor;
-      const project: IProject = { id: 16878 };
+      const project: IProject = { id: 4223 };
       sponsoring.project = project;
       const currency: ICurrency = { id: 24991 };
       sponsoring.currency = currency;
@@ -134,6 +162,7 @@ describe('Sponsoring Management Update Component', () => {
       activatedRoute.data = of({ sponsoring });
       comp.ngOnInit();
 
+      expect(comp.sitesSharedCollection).toContain(site10);
       expect(comp.userCustomsSharedCollection).toContain(sponsor);
       expect(comp.projectsSharedCollection).toContain(project);
       expect(comp.currenciesSharedCollection).toContain(currency);
@@ -210,6 +239,16 @@ describe('Sponsoring Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareUserCustom', () => {
       it('Should forward to userCustomService', () => {
         const entity = { id: 123 };

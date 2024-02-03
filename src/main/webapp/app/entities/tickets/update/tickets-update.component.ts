@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
 import { TicketSubjects } from 'app/entities/enumerations/ticket-subjects.model';
@@ -30,6 +32,7 @@ export class TicketsUpdateComponent implements OnInit {
   ticketSubjectsValues = Object.keys(TicketSubjects);
   ticketStatusValues = Object.keys(TicketStatus);
 
+  sitesSharedCollection: ISite[] = [];
   userCustomsSharedCollection: IUserCustom[] = [];
 
   editForm: TicketsFormGroup = this.ticketsFormService.createTicketsFormGroup();
@@ -39,10 +42,13 @@ export class TicketsUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected ticketsService: TicketsService,
     protected ticketsFormService: TicketsFormService,
+    protected siteService: SiteService,
     protected userCustomService: UserCustomService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
   ) {}
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareUserCustom = (o1: IUserCustom | null, o2: IUserCustom | null): boolean => this.userCustomService.compareUserCustom(o1, o2);
 
@@ -119,6 +125,7 @@ export class TicketsUpdateComponent implements OnInit {
     this.tickets = tickets;
     this.ticketsFormService.resetForm(this.editForm, tickets);
 
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, tickets.site18);
     this.userCustomsSharedCollection = this.userCustomService.addUserCustomToCollectionIfMissing<IUserCustom>(
       this.userCustomsSharedCollection,
       tickets.userCustom5,
@@ -126,6 +133,12 @@ export class TicketsUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.tickets?.site18)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
+
     this.userCustomService
       .query()
       .pipe(map((res: HttpResponse<IUserCustom[]>) => res.body ?? []))

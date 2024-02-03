@@ -29,6 +29,9 @@
             <column name="observation" type="${clobType}">
                 <constraints nullable="false" />
             </column>
+            <column name="site19_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="user_custom6_id" type="bigint">
                 <constraints nullable="true" />
             </column>

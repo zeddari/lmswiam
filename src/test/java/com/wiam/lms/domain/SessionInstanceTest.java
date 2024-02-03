@@ -4,6 +4,7 @@ import static com.wiam.lms.domain.ProgressionTestSamples.*;
 import static com.wiam.lms.domain.SessionInstanceTestSamples.*;
 import static com.wiam.lms.domain.SessionLinkTestSamples.*;
 import static com.wiam.lms.domain.SessionTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.wiam.lms.web.rest.TestUtil;
@@ -65,6 +66,18 @@ class SessionInstanceTest {
 
         sessionInstance.setLinks(new HashSet<>());
         assertThat(sessionInstance.getLinks()).doesNotContain(sessionLinkBack);
+    }
+
+    @Test
+    void site16Test() throws Exception {
+        SessionInstance sessionInstance = getSessionInstanceRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        sessionInstance.setSite16(siteBack);
+        assertThat(sessionInstance.getSite16()).isEqualTo(siteBack);
+
+        sessionInstance.site16(null);
+        assertThat(sessionInstance.getSite16()).isNull();
     }
 
     @Test

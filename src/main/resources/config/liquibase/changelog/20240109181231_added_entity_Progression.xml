@@ -71,6 +71,9 @@
             <column name="observation" type="${clobType}">
                 <constraints nullable="true" />
             </column>
+            <column name="site17_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="session_instance_id" type="bigint">
                 <constraints nullable="true" />
             </column>

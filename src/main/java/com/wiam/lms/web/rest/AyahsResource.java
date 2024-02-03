@@ -196,7 +196,7 @@ public class AyahsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the ayahs, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Ayahs> getAyahs(@PathVariable("id") Integer id) {
+    public ResponseEntity<Ayahs> getAyahs(@PathVariable Integer id) {
         log.debug("REST request to get Ayahs : {}", id);
         Optional<Ayahs> ayahs = ayahsRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(ayahs);
@@ -209,7 +209,7 @@ public class AyahsResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAyahs(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteAyahs(@PathVariable Integer id) {
         log.debug("REST request to delete Ayahs : {}", id);
         ayahsRepository.deleteById(id);
         ayahsSearchRepository.deleteFromIndexById(id);
@@ -227,7 +227,7 @@ public class AyahsResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Ayahs> searchAyahs(@RequestParam("query") String query) {
+    public List<Ayahs> searchAyahs(@RequestParam String query) {
         log.debug("REST request to search Ayahs for query {}", query);
         try {
             return StreamSupport.stream(ayahsSearchRepository.search(query).spliterator(), false).toList();

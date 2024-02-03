@@ -34,6 +34,7 @@ type ReviewFormGroupContent = {
   body: FormControl<ReviewFormRawValue['body']>;
   rating: FormControl<ReviewFormRawValue['rating']>;
   reviewDate: FormControl<ReviewFormRawValue['reviewDate']>;
+  site3: FormControl<ReviewFormRawValue['site3']>;
   part2: FormControl<ReviewFormRawValue['part2']>;
   userCustom3: FormControl<ReviewFormRawValue['userCustom3']>;
 };
@@ -64,6 +65,7 @@ export class ReviewFormService {
       reviewDate: new FormControl(reviewRawValue.reviewDate, {
         validators: [Validators.required],
       }),
+      site3: new FormControl(reviewRawValue.site3),
       part2: new FormControl(reviewRawValue.part2),
       userCustom3: new FormControl(reviewRawValue.userCustom3),
     });

@@ -3,6 +3,7 @@ package com.wiam.lms.domain;
 import static com.wiam.lms.domain.AnswerTestSamples.*;
 import static com.wiam.lms.domain.QuestionTestSamples.*;
 import static com.wiam.lms.domain.QuizTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.wiam.lms.web.rest.TestUtil;
@@ -46,6 +47,18 @@ class QuestionTest {
         question.setAnswers(new HashSet<>());
         assertThat(question.getAnswers()).doesNotContain(answerBack);
         assertThat(answerBack.getQuestion()).isNull();
+    }
+
+    @Test
+    void site5Test() throws Exception {
+        Question question = getQuestionRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        question.setSite5(siteBack);
+        assertThat(question.getSite5()).isEqualTo(siteBack);
+
+        question.site5(null);
+        assertThat(question.getSite5()).isNull();
     }
 
     @Test

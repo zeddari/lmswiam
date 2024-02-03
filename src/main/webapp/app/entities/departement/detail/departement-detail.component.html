@@ -1,50 +1,46 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    @if (departement) {
-      <div>
-        <h2 data-cy="departementDetailsHeading"><span jhiTranslate="lmswiamApp.departement.detail.title">Departement</span></h2>
+    <div *ngIf="departement">
+      <h2 data-cy="departementDetailsHeading"><span jhiTranslate="lmswiamApp.departement.detail.title">Departement</span></h2>
 
-        <hr />
+      <hr />
 
-        <jhi-alert-error></jhi-alert-error>
+      <jhi-alert-error></jhi-alert-error>
 
-        <jhi-alert></jhi-alert>
+      <jhi-alert></jhi-alert>
 
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="global.field.id">ID</span></dt>
-          <dd>
-            <span>{{ departement.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.departement.nameAr">Name Ar</span></dt>
-          <dd>
-            <span>{{ departement.nameAr }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.departement.nameLat">Name Lat</span></dt>
-          <dd>
-            <span>{{ departement.nameLat }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.departement.description">Description</span></dt>
-          <dd>
-            <span>{{ departement.description }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.departement.departement1">Departement 1</span></dt>
-          <dd>
-            @if (departement.departement1) {
-              <div>
-                <a [routerLink]="['/departement', departement.departement1.id, 'view']">{{ departement.departement1.nameAr }}</a>
-              </div>
-            }
-          </dd>
-        </dl>
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ departement.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.departement.nameAr">Name Ar</span></dt>
+        <dd>
+          <span>{{ departement.nameAr }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.departement.nameLat">Name Lat</span></dt>
+        <dd>
+          <span>{{ departement.nameLat }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.departement.description">Description</span></dt>
+        <dd>
+          <span>{{ departement.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.departement.departement1">Departement 1</span></dt>
+        <dd>
+          <div *ngIf="departement.departement1">
+            <a [routerLink]="['/departement', departement.departement1.id, 'view']">{{ departement.departement1.nameAr }}</a>
+          </div>
+        </dd>
+      </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
 
-        <button type="button" [routerLink]="['/departement', departement.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
-      </div>
-    }
+      <button type="button" [routerLink]="['/departement', departement.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
   </div>
 </div>

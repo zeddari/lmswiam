@@ -56,8 +56,38 @@ public class Sponsoring implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sponsoring")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "enrolment", "sponsoring", "session", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site9", "enrolment", "sponsoring", "session", "currency" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site10;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
@@ -73,6 +103,7 @@ public class Sponsoring implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -87,7 +118,7 @@ public class Sponsoring implements Serializable {
     private UserCustom sponsor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "sponsorings", "typeProject" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "sponsorings", "site12", "typeProject" }, allowSetters = true)
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -215,6 +246,19 @@ public class Sponsoring implements Serializable {
     public Sponsoring removePayment(Payment payment) {
         this.payments.remove(payment);
         payment.setSponsoring(null);
+        return this;
+    }
+
+    public Site getSite10() {
+        return this.site10;
+    }
+
+    public void setSite10(Site site) {
+        this.site10 = site;
+    }
+
+    public Sponsoring site10(Site site) {
+        this.setSite10(site);
         return this;
     }
 

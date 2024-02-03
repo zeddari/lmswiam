@@ -27,18 +27,18 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     }
 
     @Query(
-        value = "select progression from Progression progression left join fetch progression.sessionInstance left join fetch progression.student",
+        value = "select progression from Progression progression left join fetch progression.site17 left join fetch progression.sessionInstance left join fetch progression.student",
         countQuery = "select count(progression) from Progression progression"
     )
     Page<Progression> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select progression from Progression progression left join fetch progression.sessionInstance left join fetch progression.student"
+        "select progression from Progression progression left join fetch progression.site17 left join fetch progression.sessionInstance left join fetch progression.student"
     )
     List<Progression> findAllWithToOneRelationships();
 
     @Query(
-        "select progression from Progression progression left join fetch progression.sessionInstance left join fetch progression.student where progression.id =:id"
+        "select progression from Progression progression left join fetch progression.site17 left join fetch progression.sessionInstance left join fetch progression.student where progression.id =:id"
     )
     Optional<Progression> findOneWithToOneRelationships(@Param("id") Long id);
 }

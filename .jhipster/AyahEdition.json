@@ -3,6 +3,7 @@
     "changelogDate": "20240109182031"
   },
   "applications": "*",
+  "changelogDate": "20240109182031",
   "entityTableName": "ayah_edition",
   "fields": [
     {
@@ -19,9 +20,9 @@
     },
     {
       "fieldName": "data",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "unique", "maxlength"],
-      "fieldValidateRulesMaxlength": "100"
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "isAudio",

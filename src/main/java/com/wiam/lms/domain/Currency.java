@@ -47,13 +47,13 @@ public class Currency implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "currency")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "payments", "sponsor", "project", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payments", "site10", "sponsor", "project", "currency" }, allowSetters = true)
     private Set<Sponsoring> sponsorings = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "currency")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "enrolment", "sponsoring", "session", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site9", "enrolment", "sponsoring", "session", "currency" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

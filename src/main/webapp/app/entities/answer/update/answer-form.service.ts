@@ -23,6 +23,7 @@ type AnswerFormGroupContent = {
   a3v: FormControl<IAnswer['a3v']>;
   a4v: FormControl<IAnswer['a4v']>;
   result: FormControl<IAnswer['result']>;
+  site6: FormControl<IAnswer['site6']>;
   question: FormControl<IAnswer['question']>;
   userCustom1: FormControl<IAnswer['userCustom1']>;
 };
@@ -55,6 +56,7 @@ export class AnswerFormService {
       result: new FormControl(answerRawValue.result, {
         validators: [Validators.required],
       }),
+      site6: new FormControl(answerRawValue.site6),
       question: new FormControl(answerRawValue.question),
       userCustom1: new FormControl(answerRawValue.userCustom1),
     });

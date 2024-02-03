@@ -3,6 +3,7 @@ package com.wiam.lms.domain;
 import static com.wiam.lms.domain.CourseTestSamples.*;
 import static com.wiam.lms.domain.EnrolementTestSamples.*;
 import static com.wiam.lms.domain.PartTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.TopicTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -88,6 +89,18 @@ class CourseTest {
 
         course.setProfessors(new HashSet<>());
         assertThat(course.getProfessors()).doesNotContain(userCustomBack);
+    }
+
+    @Test
+    void site1Test() throws Exception {
+        Course course = getCourseRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        course.setSite1(siteBack);
+        assertThat(course.getSite1()).isEqualTo(siteBack);
+
+        course.site1(null);
+        assertThat(course.getSite1()).isNull();
     }
 
     @Test

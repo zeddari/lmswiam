@@ -81,6 +81,7 @@ type SessionFormGroupContent = {
   professors: FormControl<SessionFormRawValue['professors']>;
   employees: FormControl<SessionFormRawValue['employees']>;
   links: FormControl<SessionFormRawValue['links']>;
+  site14: FormControl<SessionFormRawValue['site14']>;
 };
 
 export type SessionFormGroup = FormGroup<SessionFormGroupContent>;
@@ -153,6 +154,7 @@ export class SessionFormService {
       professors: new FormControl(sessionRawValue.professors ?? []),
       employees: new FormControl(sessionRawValue.employees ?? []),
       links: new FormControl(sessionRawValue.links ?? []),
+      site14: new FormControl(sessionRawValue.site14),
     });
   }
 

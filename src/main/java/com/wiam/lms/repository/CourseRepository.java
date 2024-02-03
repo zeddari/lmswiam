@@ -29,12 +29,15 @@ public interface CourseRepository extends CourseRepositoryWithBagRelationships, 
         return this.fetchBagRelationships(this.findAllWithToOneRelationships(pageable));
     }
 
-    @Query(value = "select course from Course course left join fetch course.topic3", countQuery = "select count(course) from Course course")
+    @Query(
+        value = "select course from Course course left join fetch course.site1 left join fetch course.topic3",
+        countQuery = "select count(course) from Course course"
+    )
     Page<Course> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select course from Course course left join fetch course.topic3")
+    @Query("select course from Course course left join fetch course.site1 left join fetch course.topic3")
     List<Course> findAllWithToOneRelationships();
 
-    @Query("select course from Course course left join fetch course.topic3 where course.id =:id")
+    @Query("select course from Course course left join fetch course.site1 left join fetch course.topic3 where course.id =:id")
     Optional<Course> findOneWithToOneRelationships(@Param("id") Long id);
 }

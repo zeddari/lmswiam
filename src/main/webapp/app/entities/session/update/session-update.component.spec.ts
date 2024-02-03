@@ -14,6 +14,8 @@ import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
 import { ISessionLink } from 'app/entities/session-link/session-link.model';
 import { SessionLinkService } from 'app/entities/session-link/service/session-link.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ISession } from '../session.model';
 import { SessionService } from '../service/session.service';
 import { SessionFormService } from './session-form.service';
@@ -30,6 +32,7 @@ describe('Session Management Update Component', () => {
   let groupService: GroupService;
   let userCustomService: UserCustomService;
   let sessionLinkService: SessionLinkService;
+  let siteService: SiteService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -55,6 +58,7 @@ describe('Session Management Update Component', () => {
     groupService = TestBed.inject(GroupService);
     userCustomService = TestBed.inject(UserCustomService);
     sessionLinkService = TestBed.inject(SessionLinkService);
+    siteService = TestBed.inject(SiteService);
 
     comp = fixture.componentInstance;
   });
@@ -150,6 +154,28 @@ describe('Session Management Update Component', () => {
       expect(comp.sessionLinksSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Site query and add missing value', () => {
+      const session: ISession = { id: 456 };
+      const site14: ISite = { id: 11173 };
+      session.site14 = site14;
+
+      const siteCollection: ISite[] = [{ id: 28560 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site14];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ session });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const session: ISession = { id: 456 };
       const classrooms: IClassroom = { id: 27849 };
@@ -162,6 +188,8 @@ describe('Session Management Update Component', () => {
       session.employees = [employees];
       const links: ISessionLink = { id: 21015 };
       session.links = [links];
+      const site14: ISite = { id: 2015 };
+      session.site14 = site14;
 
       activatedRoute.data = of({ session });
       comp.ngOnInit();
@@ -171,6 +199,7 @@ describe('Session Management Update Component', () => {
       expect(comp.userCustomsSharedCollection).toContain(professors);
       expect(comp.userCustomsSharedCollection).toContain(employees);
       expect(comp.sessionLinksSharedCollection).toContain(links);
+      expect(comp.sitesSharedCollection).toContain(site14);
       expect(comp.session).toEqual(session);
     });
   });
@@ -281,6 +310,16 @@ describe('Session Management Update Component', () => {
         jest.spyOn(sessionLinkService, 'compareSessionLink');
         comp.compareSessionLink(entity, entity2);
         expect(sessionLinkService.compareSessionLink).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

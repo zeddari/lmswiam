@@ -1,4 +1,5 @@
 import dayjs from 'dayjs/esm';
+import { ISite } from 'app/entities/site/site.model';
 import { IEnrolement } from 'app/entities/enrolement/enrolement.model';
 import { ISponsoring } from 'app/entities/sponsoring/sponsoring.model';
 import { ISession } from 'app/entities/session/session.model';
@@ -18,10 +19,11 @@ export interface IPayment {
   validityStartTime?: dayjs.Dayjs | null;
   validityEndTime?: dayjs.Dayjs | null;
   details?: string | null;
-  enrolment?: IEnrolement | null;
-  sponsoring?: ISponsoring | null;
-  session?: ISession | null;
-  currency?: ICurrency | null;
+  site9?: Pick<ISite, 'id' | 'nameAr'> | null;
+  enrolment?: Pick<IEnrolement, 'id' | 'ref'> | null;
+  sponsoring?: Pick<ISponsoring, 'id' | 'ref'> | null;
+  session?: Pick<ISession, 'id' | 'title'> | null;
+  currency?: Pick<ICurrency, 'id' | 'nameAr'> | null;
 }
 
 export type NewPayment = Omit<IPayment, 'id'> & { id: null };

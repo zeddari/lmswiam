@@ -20,7 +20,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -41,6 +40,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link PaymentResource} REST controller.
@@ -366,7 +366,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentMethod").value(hasItem(DEFAULT_PAYMENT_METHOD.toString())))
             .andExpect(jsonPath("$.[*].paiedBy").value(hasItem(DEFAULT_PAIED_BY)))
             .andExpect(jsonPath("$.[*].proofContentType").value(hasItem(DEFAULT_PROOF_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].proof").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_PROOF))))
+            .andExpect(jsonPath("$.[*].proof").value(hasItem(Base64Utils.encodeToString(DEFAULT_PROOF))))
             .andExpect(jsonPath("$.[*].paidAt").value(hasItem(sameInstant(DEFAULT_PAID_AT))))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].validityStartTime").value(hasItem(sameInstant(DEFAULT_VALIDITY_START_TIME))))
@@ -407,7 +407,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.paymentMethod").value(DEFAULT_PAYMENT_METHOD.toString()))
             .andExpect(jsonPath("$.paiedBy").value(DEFAULT_PAIED_BY))
             .andExpect(jsonPath("$.proofContentType").value(DEFAULT_PROOF_CONTENT_TYPE))
-            .andExpect(jsonPath("$.proof").value(Base64.getEncoder().encodeToString(DEFAULT_PROOF)))
+            .andExpect(jsonPath("$.proof").value(Base64Utils.encodeToString(DEFAULT_PROOF)))
             .andExpect(jsonPath("$.paidAt").value(sameInstant(DEFAULT_PAID_AT)))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.validityStartTime").value(sameInstant(DEFAULT_VALIDITY_START_TIME)))
@@ -752,7 +752,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentMethod").value(hasItem(DEFAULT_PAYMENT_METHOD.toString())))
             .andExpect(jsonPath("$.[*].paiedBy").value(hasItem(DEFAULT_PAIED_BY)))
             .andExpect(jsonPath("$.[*].proofContentType").value(hasItem(DEFAULT_PROOF_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].proof").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_PROOF))))
+            .andExpect(jsonPath("$.[*].proof").value(hasItem(Base64Utils.encodeToString(DEFAULT_PROOF))))
             .andExpect(jsonPath("$.[*].paidAt").value(hasItem(sameInstant(DEFAULT_PAID_AT))))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].validityStartTime").value(hasItem(sameInstant(DEFAULT_VALIDITY_START_TIME))))

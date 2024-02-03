@@ -29,6 +29,7 @@ describe('SessionInstance Form Service', () => {
             justifRef: expect.any(Object),
             isActive: expect.any(Object),
             links: expect.any(Object),
+            site16: expect.any(Object),
             session1: expect.any(Object),
           }),
         );
@@ -49,6 +50,7 @@ describe('SessionInstance Form Service', () => {
             justifRef: expect.any(Object),
             isActive: expect.any(Object),
             links: expect.any(Object),
+            site16: expect.any(Object),
             session1: expect.any(Object),
           }),
         );

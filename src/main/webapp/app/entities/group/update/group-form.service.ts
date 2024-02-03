@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type GroupFormGroupInput = IGroup | PartialWithRequiredKeyOf<NewGroup>;
 
-type GroupFormDefaults = Pick<NewGroup, 'id' | 'elements'>;
+type GroupFormDefaults = Pick<NewGroup, 'id' | 'elements' | 'quizzes' | 'sessions5s'>;
 
 type GroupFormGroupContent = {
   id: FormControl<IGroup['id'] | NewGroup['id']>;
@@ -23,7 +23,10 @@ type GroupFormGroupContent = {
   nameLat: FormControl<IGroup['nameLat']>;
   description: FormControl<IGroup['description']>;
   elements: FormControl<IGroup['elements']>;
+  site11: FormControl<IGroup['site11']>;
   group1: FormControl<IGroup['group1']>;
+  quizzes: FormControl<IGroup['quizzes']>;
+  sessions5s: FormControl<IGroup['sessions5s']>;
 };
 
 export type GroupFormGroup = FormGroup<GroupFormGroupContent>;
@@ -54,7 +57,10 @@ export class GroupFormService {
       }),
       description: new FormControl(groupRawValue.description),
       elements: new FormControl(groupRawValue.elements ?? []),
+      site11: new FormControl(groupRawValue.site11),
       group1: new FormControl(groupRawValue.group1),
+      quizzes: new FormControl(groupRawValue.quizzes ?? []),
+      sessions5s: new FormControl(groupRawValue.sessions5s ?? []),
     });
   }
 
@@ -76,6 +82,8 @@ export class GroupFormService {
     return {
       id: null,
       elements: [],
+      quizzes: [],
+      sessions5s: [],
     };
   }
 }

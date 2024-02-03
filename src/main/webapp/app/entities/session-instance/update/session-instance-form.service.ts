@@ -40,6 +40,7 @@ type SessionInstanceFormGroupContent = {
   justifRef: FormControl<SessionInstanceFormRawValue['justifRef']>;
   isActive: FormControl<SessionInstanceFormRawValue['isActive']>;
   links: FormControl<SessionInstanceFormRawValue['links']>;
+  site16: FormControl<SessionInstanceFormRawValue['site16']>;
   session1: FormControl<SessionInstanceFormRawValue['session1']>;
 };
 
@@ -81,6 +82,7 @@ export class SessionInstanceFormService {
         validators: [Validators.required],
       }),
       links: new FormControl(sessionInstanceRawValue.links ?? []),
+      site16: new FormControl(sessionInstanceRawValue.site16),
       session1: new FormControl(sessionInstanceRawValue.session1),
     });
   }

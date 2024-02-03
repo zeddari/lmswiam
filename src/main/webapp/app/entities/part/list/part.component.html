@@ -41,154 +41,135 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (parts?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.part.home.notFound">No Parts found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="parts?.length === 0">
+    <span jhiTranslate="lmswiamApp.part.home.notFound">No Parts found</span>
+  </div>
 
-  @if (parts && parts.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="parts && parts.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="titleAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.part.titleAr">Title Ar</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="titleLat">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.part.titleLat">Title Lat</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.part.description">Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="duration">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.part.duration">Duration</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="imageLink">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.part.imageLink">Image Link</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="videoLink">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.part.videoLink">Video Link</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site2.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.part.site2">Site 2</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="course.titleAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.part.course">Course</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="part1.titleAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.part.part1">Part 1</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let part of parts; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/part', part.id, 'view']">{{ part.id }}</a>
+          </td>
+          <td>{{ part.titleAr }}</td>
+          <td>{{ part.titleLat }}</td>
+          <td>{{ part.description }}</td>
+          <td>{{ part.duration }}</td>
+          <td>
+            <a *ngIf="part.imageLink" (click)="openFile(part.imageLink, part.imageLinkContentType)">
+              <img [src]="'data:' + part.imageLinkContentType + ';base64,' + part.imageLink" style="max-height: 30px" alt="part image" />
+            </a>
+            <span *ngIf="part.imageLink">{{ part.imageLinkContentType }}, {{ byteSize(part.imageLink) }}</span>
+          </td>
+          <td>{{ part.videoLink }}</td>
+          <td>
+            <div *ngIf="part.site2">
+              <a [routerLink]="['/site', part.site2.id, 'view']">{{ part.site2.nameAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="part.course">
+              <a [routerLink]="['/course', part.course.id, 'view']">{{ part.course.titleAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="part.part1">
+              <a [routerLink]="['/part', part.part1.id, 'view']">{{ part.part1.titleAr }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/part', part.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="titleAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.part.titleAr">Title Ar</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="titleLat">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.part.titleLat">Title Lat</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="description">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.part.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="duration">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.part.duration">Duration</span>
+              <a [routerLink]="['/part', part.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="imageLink">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.part.imageLink">Image Link</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="videoLink">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.part.videoLink">Video Link</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="course.titleAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.part.course">Course</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="part1.titleAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.part.part1">Part 1</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (part of parts; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/part', part.id, 'view']">{{ part.id }}</a>
-              </td>
-              <td>{{ part.titleAr }}</td>
-              <td>{{ part.titleLat }}</td>
-              <td>{{ part.description }}</td>
-              <td>{{ part.duration }}</td>
-              <td>
-                @if (part.imageLink) {
-                  <a (click)="openFile(part.imageLink, part.imageLinkContentType)">
-                    <img
-                      [src]="'data:' + part.imageLinkContentType + ';base64,' + part.imageLink"
-                      style="max-height: 30px"
-                      alt="part image"
-                    />
-                  </a>
-                  <span>{{ part.imageLinkContentType }}, {{ byteSize(part.imageLink) }}</span>
-                }
-              </td>
-              <td>{{ part.videoLink }}</td>
-              <td>
-                @if (part.course) {
-                  <div>
-                    <a [routerLink]="['/course', part.course.id, 'view']">{{ part.course.titleAr }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (part.part1) {
-                  <div>
-                    <a [routerLink]="['/part', part.part1.id, 'view']">{{ part.part1.titleAr }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/part', part.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/part', part.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(part)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(part)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

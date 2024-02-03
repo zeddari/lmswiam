@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IPart } from 'app/entities/part/part.model';
 import { PartService } from 'app/entities/part/service/part.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
@@ -22,6 +24,7 @@ describe('Review Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let reviewFormService: ReviewFormService;
   let reviewService: ReviewService;
+  let siteService: SiteService;
   let partService: PartService;
   let userCustomService: UserCustomService;
 
@@ -45,6 +48,7 @@ describe('Review Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     reviewFormService = TestBed.inject(ReviewFormService);
     reviewService = TestBed.inject(ReviewService);
+    siteService = TestBed.inject(SiteService);
     partService = TestBed.inject(PartService);
     userCustomService = TestBed.inject(UserCustomService);
 
@@ -52,12 +56,34 @@ describe('Review Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
+    it('Should call Site query and add missing value', () => {
+      const review: IReview = { id: 456 };
+      const site3: ISite = { id: 16625 };
+      review.site3 = site3;
+
+      const siteCollection: ISite[] = [{ id: 29656 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site3];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ review });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call Part query and add missing value', () => {
       const review: IReview = { id: 456 };
-      const part2: IPart = { id: 21954 };
+      const part2: IPart = { id: 30052 };
       review.part2 = part2;
 
-      const partCollection: IPart[] = [{ id: 15965 }];
+      const partCollection: IPart[] = [{ id: 32449 }];
       jest.spyOn(partService, 'query').mockReturnValue(of(new HttpResponse({ body: partCollection })));
       const additionalParts = [part2];
       const expectedCollection: IPart[] = [...additionalParts, ...partCollection];
@@ -98,7 +124,9 @@ describe('Review Management Update Component', () => {
 
     it('Should update editForm', () => {
       const review: IReview = { id: 456 };
-      const part2: IPart = { id: 3812 };
+      const site3: ISite = { id: 9678 };
+      review.site3 = site3;
+      const part2: IPart = { id: 9139 };
       review.part2 = part2;
       const userCustom3: IUserCustom = { id: 31470 };
       review.userCustom3 = userCustom3;
@@ -106,6 +134,7 @@ describe('Review Management Update Component', () => {
       activatedRoute.data = of({ review });
       comp.ngOnInit();
 
+      expect(comp.sitesSharedCollection).toContain(site3);
       expect(comp.partsSharedCollection).toContain(part2);
       expect(comp.userCustomsSharedCollection).toContain(userCustom3);
       expect(comp.review).toEqual(review);
@@ -181,6 +210,16 @@ describe('Review Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('comparePart', () => {
       it('Should forward to partService', () => {
         const entity = { id: 123 };

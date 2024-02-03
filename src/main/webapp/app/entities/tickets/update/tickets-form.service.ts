@@ -46,6 +46,7 @@ type TicketsFormGroupContent = {
   from: FormControl<TicketsFormRawValue['from']>;
   toDate: FormControl<TicketsFormRawValue['toDate']>;
   decisionDetail: FormControl<TicketsFormRawValue['decisionDetail']>;
+  site18: FormControl<TicketsFormRawValue['site18']>;
   userCustom5: FormControl<TicketsFormRawValue['userCustom5']>;
 };
 
@@ -88,6 +89,7 @@ export class TicketsFormService {
       from: new FormControl(ticketsRawValue.from),
       toDate: new FormControl(ticketsRawValue.toDate),
       decisionDetail: new FormControl(ticketsRawValue.decisionDetail),
+      site18: new FormControl(ticketsRawValue.site18),
       userCustom5: new FormControl(ticketsRawValue.userCustom5),
     });
   }

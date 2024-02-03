@@ -63,7 +63,7 @@ export class AyahsFormService {
       ),
       number: new FormControl(ayahsRawValue.number),
       textdesc: new FormControl(ayahsRawValue.textdesc, {
-        validators: [Validators.required, Validators.maxLength(100)],
+        validators: [Validators.required],
       }),
       numberInSurah: new FormControl(ayahsRawValue.numberInSurah),
       page: new FormControl(ayahsRawValue.page),

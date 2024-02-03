@@ -91,7 +91,7 @@ entity Course {
     options TextBlob /*What's Included*/
 	duration Integer /*In hours*/
     imageLink ImageBlob maxbytes(IMAGE_MAX_SIZE)
-    videoLink String /*video preview*/
+    videoLink TextBlob /*video preview*/
     price Double min(0)/* 0 if free */
     isActive Boolean
     activateAt ZonedDateTime
@@ -104,7 +104,7 @@ entity Part {
     description TextBlob
     duration Integer /*In minutes*/
     imageLink ImageBlob maxbytes(IMAGE_MAX_SIZE)
-    videoLink String /*content video*/
+    videoLink TextBlob /*content video*/
 }
 entity Review {
     body TextBlob required
@@ -339,7 +339,7 @@ entity Project {
     goals TextBlob
     requirements TextBlob
     imageLink ImageBlob maxbytes(IMAGE_MAX_SIZE)
-    videoLink String
+    videoLink TextBlob
     budget Double required min(0)
     isActive Boolean
     activateAt ZonedDateTime
@@ -376,7 +376,7 @@ entity Payment {
 entity Ayahs {
   id Integer
   number Integer
-  textdesc String required unique maxlength(TITLE_MAX_LENGTH)
+  textdesc TextBlob required
   numberInSurah Integer
   page Integer
   surahId Integer
@@ -392,7 +392,7 @@ entity AyahEdition {
   id Integer
   ayahId Integer
   editionId Integer
-  data String required unique maxlength(TITLE_MAX_LENGTH)
+  data TextBlob required
   isAudio Boolean
   createdAt ZonedDateTime
   updatedAt ZonedDateTime
@@ -441,6 +441,29 @@ relationship OneToOne{
 	UserCustom{user(login)} to User with builtInEntity
 }
 relationship OneToMany{
+ Site to Classroom{site(nameAr)}
+ 
+ Site to Course{site1(nameAr)}
+ Site to Part{site2(nameAr)}
+ Site to Review{site3(nameAr)}
+ Site to Enrolement{site4(nameAr)}
+ Site to Question{site5(nameAr)}
+ Site to Answer{site6(nameAr)}
+ Site to Quiz{site7(nameAr)}
+ Site to QuizResult{site8(nameAr)}
+ Site to Payment{site9(nameAr)}
+ Site to Sponsoring{site10(nameAr)}
+ Site to Group{site11(nameAr)}
+ Site to Project{site12(nameAr)}
+ Site to UserCustom{site13(nameAr)}
+ Site to Session{site14(nameAr)}
+ Site to SessionLink{site15(nameAr)}
+ Site to SessionInstance{site16(nameAr)}
+ Site to Progression{site17(nameAr)}
+ Site to Tickets{site18(nameAr)}
+ Site to Certificate{site19(nameAr)}
+ Site to Diploma{site20(nameAr)}
+/****/
  UserCustom to Certificate{userCustom6(firstName)}
  Group to Certificate{comitte(nameAr)}
  Topic to Certificate{topic4(titleAr)}
@@ -465,7 +488,7 @@ relationship OneToMany{
  Part to Part{part1(titleAr)}
  Part to Review{part2(titleAr)}
  UserCustom to Review{userCustom3}
- UserCustom{enrolement} to Enrolement{userCustom4}
+ UserCustom{enrolement} to Enrolement{userCustom4(firstName)}
  Course to Enrolement{course(titleAr)}
 
  Enrolement to Payment{enrolment(ref)}
@@ -481,7 +504,7 @@ relationship OneToMany{
  UserCustom to Tickets{userCustom5(firstName)}
 
  City to Site{city(nameAr)}
- Site to Classroom{site(nameAr)}
+
 
  UserCustom to Sponsoring{sponsor(firstName)}
  TypeProject to Project{typeProject(nameAr)}

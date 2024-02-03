@@ -12,6 +12,7 @@ import com.wiam.lms.domain.Question;
 import com.wiam.lms.repository.QuestionRepository;
 import com.wiam.lms.repository.search.QuestionSearchRepository;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -21,8 +22,13 @@ import org.assertj.core.util.IterableUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link QuestionResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class QuestionResourceIT {
@@ -78,6 +85,9 @@ class QuestionResourceIT {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Mock
+    private QuestionRepository questionRepositoryMock;
 
     @Autowired
     private QuestionSearchRepository questionSearchRepository;
@@ -282,6 +292,23 @@ class QuestionResourceIT {
             .andExpect(jsonPath("$.[*].a4").value(hasItem(DEFAULT_A_4.toString())))
             .andExpect(jsonPath("$.[*].a4v").value(hasItem(DEFAULT_A_4_V.booleanValue())))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllQuestionsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(questionRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restQuestionMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(questionRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllQuestionsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(questionRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restQuestionMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+        verify(questionRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
     @Test

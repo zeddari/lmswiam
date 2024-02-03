@@ -12,38 +12,36 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.sessionLink.provider" for="field_provider">Provider</label>
           <select class="form-control" name="provider" formControlName="provider" id="field_provider" data-cy="provider">
             <option [ngValue]="null">{{ 'lmswiamApp.SessionProvider.null' | translate }}</option>
-            @for (sessionProvider of sessionProviderValues; track $index) {
-              <option [value]="sessionProvider">{{ 'lmswiamApp.SessionProvider.' + sessionProvider | translate }}</option>
-            }
+            <option *ngFor="let sessionProvider of sessionProviderValues" [value]="sessionProvider">
+              {{ 'lmswiamApp.SessionProvider.' + sessionProvider | translate }}
+            </option>
           </select>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.sessionLink.title" for="field_title">Title</label>
           <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
-          @if (editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)) {
-            <div>
-              @if (editForm.get('title')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('title')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('title')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('title')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+              >This field cannot be longer than 100 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -60,15 +58,30 @@
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.sessionLink.link" for="field_link">Link</label>
           <input type="text" class="form-control" name="link" id="field_link" data-cy="link" formControlName="link" />
-          @if (editForm.get('link')!.invalid && (editForm.get('link')!.dirty || editForm.get('link')!.touched)) {
-            <div>
-              @if (editForm.get('link')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 500 }"
-                  >This field cannot be longer than 500 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('link')!.invalid && (editForm.get('link')!.dirty || editForm.get('link')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('link')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 500 }"
+              >This field cannot be longer than 500 characters.</small
+            >
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sessionLink.site15" for="field_site15">Site 15</label>
+          <select
+            class="form-control"
+            id="field_site15"
+            data-cy="site15"
+            name="site15"
+            formControlName="site15"
+            [compareWith]="compareSite"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
+          </select>
         </div>
       </div>
 

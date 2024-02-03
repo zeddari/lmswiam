@@ -58,8 +58,38 @@ public class Enrolement implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "enrolment")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "enrolment", "sponsoring", "session", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site9", "enrolment", "sponsoring", "session", "currency" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site4;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
@@ -75,6 +105,7 @@ public class Enrolement implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -89,7 +120,7 @@ public class Enrolement implements Serializable {
     private UserCustom userCustom4;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "parts", "enrolements", "professors", "topic3" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "parts", "enrolements", "professors", "site1", "topic3" }, allowSetters = true)
     private Course course;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -213,6 +244,19 @@ public class Enrolement implements Serializable {
     public Enrolement removePayment(Payment payment) {
         this.payments.remove(payment);
         payment.setEnrolment(null);
+        return this;
+    }
+
+    public Site getSite4() {
+        return this.site4;
+    }
+
+    public void setSite4(Site site) {
+        this.site4 = site;
+    }
+
+    public Enrolement site4(Site site) {
+        this.setSite4(site);
         return this;
     }
 

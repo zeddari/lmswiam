@@ -185,7 +185,7 @@ public class PaymentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of payments in body.
      */
     @GetMapping("")
-    public List<Payment> getAllPayments(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
+    public List<Payment> getAllPayments(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Payments");
         if (eagerload) {
             return paymentRepository.findAllWithEagerRelationships();
@@ -201,7 +201,7 @@ public class PaymentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the payment, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Payment> getPayment(@PathVariable("id") Long id) {
+    public ResponseEntity<Payment> getPayment(@PathVariable Long id) {
         log.debug("REST request to get Payment : {}", id);
         Optional<Payment> payment = paymentRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(payment);
@@ -214,7 +214,7 @@ public class PaymentResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePayment(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
         log.debug("REST request to delete Payment : {}", id);
         paymentRepository.deleteById(id);
         paymentSearchRepository.deleteFromIndexById(id);
@@ -232,7 +232,7 @@ public class PaymentResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Payment> searchPayments(@RequestParam("query") String query) {
+    public List<Payment> searchPayments(@RequestParam String query) {
         log.debug("REST request to search Payments for query {}", query);
         try {
             return StreamSupport.stream(paymentSearchRepository.search(query).spliterator(), false).toList();

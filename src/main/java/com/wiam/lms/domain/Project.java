@@ -62,6 +62,7 @@ public class Project implements Serializable {
     @Column(name = "image_link_content_type")
     private String imageLinkContentType;
 
+    @Lob
     @Column(name = "video_link")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String videoLink;
@@ -87,8 +88,38 @@ public class Project implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "payments", "sponsor", "project", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payments", "site10", "sponsor", "project", "currency" }, allowSetters = true)
     private Set<Sponsoring> sponsorings = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site12;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "projects" }, allowSetters = true)
@@ -306,6 +337,19 @@ public class Project implements Serializable {
     public Project removeSponsoring(Sponsoring sponsoring) {
         this.sponsorings.remove(sponsoring);
         sponsoring.setProject(null);
+        return this;
+    }
+
+    public Site getSite12() {
+        return this.site12;
+    }
+
+    public void setSite12(Site site) {
+        this.site12 = site;
+    }
+
+    public Project site12(Site site) {
+        this.setSite12(site);
         return this;
     }
 

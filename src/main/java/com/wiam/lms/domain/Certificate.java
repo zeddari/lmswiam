@@ -57,6 +57,36 @@ public class Certificate implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
         value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site19;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
             "user",
             "certificates",
             "answers",
@@ -68,6 +98,7 @@ public class Certificate implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -82,7 +113,10 @@ public class Certificate implements Serializable {
     private UserCustom userCustom6;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "certificates", "groups", "elements", "group1", "quizzes", "sessions5s" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "certificates", "groups", "elements", "site11", "group1", "quizzes", "sessions5s" },
+        allowSetters = true
+    )
     private Group comitte;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -167,6 +201,19 @@ public class Certificate implements Serializable {
 
     public void setObservation(String observation) {
         this.observation = observation;
+    }
+
+    public Site getSite19() {
+        return this.site19;
+    }
+
+    public void setSite19(Site site) {
+        this.site19 = site;
+    }
+
+    public Certificate site19(Site site) {
+        this.setSite19(site);
+        return this;
     }
 
     public UserCustom getUserCustom6() {

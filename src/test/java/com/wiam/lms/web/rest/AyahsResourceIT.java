@@ -200,26 +200,6 @@ class AyahsResourceIT {
 
     @Test
     @Transactional
-    void checkTextdescIsRequired() throws Exception {
-        int databaseSizeBeforeTest = ayahsRepository.findAll().size();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(ayahsSearchRepository.findAll());
-        // set the field null
-        ayahs.setTextdesc(null);
-
-        // Create the Ayahs, which fails.
-
-        restAyahsMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(ayahs)))
-            .andExpect(status().isBadRequest());
-
-        List<Ayahs> ayahsList = ayahsRepository.findAll();
-        assertThat(ayahsList).hasSize(databaseSizeBeforeTest);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(ayahsSearchRepository.findAll());
-        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
-    }
-
-    @Test
-    @Transactional
     void getAllAyahs() throws Exception {
         // Initialize the database
         ayahsRepository.saveAndFlush(ayahs);
@@ -231,7 +211,7 @@ class AyahsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ayahs.getId().intValue())))
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
-            .andExpect(jsonPath("$.[*].textdesc").value(hasItem(DEFAULT_TEXTDESC)))
+            .andExpect(jsonPath("$.[*].textdesc").value(hasItem(DEFAULT_TEXTDESC.toString())))
             .andExpect(jsonPath("$.[*].numberInSurah").value(hasItem(DEFAULT_NUMBER_IN_SURAH)))
             .andExpect(jsonPath("$.[*].page").value(hasItem(DEFAULT_PAGE)))
             .andExpect(jsonPath("$.[*].surahId").value(hasItem(DEFAULT_SURAH_ID)))
@@ -255,7 +235,7 @@ class AyahsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(ayahs.getId().intValue()))
             .andExpect(jsonPath("$.number").value(DEFAULT_NUMBER))
-            .andExpect(jsonPath("$.textdesc").value(DEFAULT_TEXTDESC))
+            .andExpect(jsonPath("$.textdesc").value(DEFAULT_TEXTDESC.toString()))
             .andExpect(jsonPath("$.numberInSurah").value(DEFAULT_NUMBER_IN_SURAH))
             .andExpect(jsonPath("$.page").value(DEFAULT_PAGE))
             .andExpect(jsonPath("$.surahId").value(DEFAULT_SURAH_ID))
@@ -600,7 +580,7 @@ class AyahsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ayahs.getId().intValue())))
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
-            .andExpect(jsonPath("$.[*].textdesc").value(hasItem(DEFAULT_TEXTDESC)))
+            .andExpect(jsonPath("$.[*].textdesc").value(hasItem(DEFAULT_TEXTDESC.toString())))
             .andExpect(jsonPath("$.[*].numberInSurah").value(hasItem(DEFAULT_NUMBER_IN_SURAH)))
             .andExpect(jsonPath("$.[*].page").value(hasItem(DEFAULT_PAGE)))
             .andExpect(jsonPath("$.[*].surahId").value(hasItem(DEFAULT_SURAH_ID)))

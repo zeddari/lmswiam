@@ -32,6 +32,7 @@ describe('Project Form Service', () => {
             activateAt: expect.any(Object),
             startDate: expect.any(Object),
             endDate: expect.any(Object),
+            site12: expect.any(Object),
             typeProject: expect.any(Object),
           }),
         );
@@ -55,6 +56,7 @@ describe('Project Form Service', () => {
             activateAt: expect.any(Object),
             startDate: expect.any(Object),
             endDate: expect.any(Object),
+            site12: expect.any(Object),
             typeProject: expect.any(Object),
           }),
         );

@@ -191,7 +191,7 @@ public class TicketsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tickets in body.
      */
     @GetMapping("")
-    public List<Tickets> getAllTickets(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
+    public List<Tickets> getAllTickets(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Tickets");
         if (eagerload) {
             return ticketsRepository.findAllWithEagerRelationships();
@@ -207,7 +207,7 @@ public class TicketsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the tickets, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Tickets> getTickets(@PathVariable("id") Long id) {
+    public ResponseEntity<Tickets> getTickets(@PathVariable Long id) {
         log.debug("REST request to get Tickets : {}", id);
         Optional<Tickets> tickets = ticketsRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(tickets);
@@ -220,7 +220,7 @@ public class TicketsResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTickets(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteTickets(@PathVariable Long id) {
         log.debug("REST request to delete Tickets : {}", id);
         ticketsRepository.deleteById(id);
         ticketsSearchRepository.deleteFromIndexById(id);
@@ -238,7 +238,7 @@ public class TicketsResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Tickets> searchTickets(@RequestParam("query") String query) {
+    public List<Tickets> searchTickets(@RequestParam String query) {
         log.debug("REST request to search Tickets for query {}", query);
         try {
             return StreamSupport.stream(ticketsSearchRepository.search(query).spliterator(), false).toList();

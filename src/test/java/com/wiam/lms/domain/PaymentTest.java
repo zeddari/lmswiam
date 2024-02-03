@@ -4,6 +4,7 @@ import static com.wiam.lms.domain.CurrencyTestSamples.*;
 import static com.wiam.lms.domain.EnrolementTestSamples.*;
 import static com.wiam.lms.domain.PaymentTestSamples.*;
 import static com.wiam.lms.domain.SessionTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.SponsoringTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,6 +25,18 @@ class PaymentTest {
 
         payment2 = getPaymentSample2();
         assertThat(payment1).isNotEqualTo(payment2);
+    }
+
+    @Test
+    void site9Test() throws Exception {
+        Payment payment = getPaymentRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        payment.setSite9(siteBack);
+        assertThat(payment.getSite9()).isEqualTo(siteBack);
+
+        payment.site9(null);
+        assertThat(payment.getSite9()).isNull();
     }
 
     @Test

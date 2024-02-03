@@ -32,7 +32,10 @@
             <column name="image_link_content_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="video_link" type="varchar(255)">
+            <column name="video_link" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="site2_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="course_id" type="bigint">
@@ -68,7 +71,7 @@
             <column name="duration" type="numeric"/>
             <column name="image_link" type="blob"/>
             <column name="image_link_content_type" type="string"/>
-            <column name="video_link" type="string"/>
+            <column name="video_link" type="clob"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

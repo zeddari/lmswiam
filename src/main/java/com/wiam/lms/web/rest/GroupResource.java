@@ -165,7 +165,7 @@ public class GroupResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of groups in body.
      */
     @GetMapping("")
-    public List<Group> getAllGroups(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
+    public List<Group> getAllGroups(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Groups");
         if (eagerload) {
             return groupRepository.findAllWithEagerRelationships();
@@ -181,7 +181,7 @@ public class GroupResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the group, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Group> getGroup(@PathVariable("id") Long id) {
+    public ResponseEntity<Group> getGroup(@PathVariable Long id) {
         log.debug("REST request to get Group : {}", id);
         Optional<Group> group = groupRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(group);
@@ -194,7 +194,7 @@ public class GroupResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGroup(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteGroup(@PathVariable Long id) {
         log.debug("REST request to delete Group : {}", id);
         groupRepository.deleteById(id);
         groupSearchRepository.deleteFromIndexById(id);
@@ -212,7 +212,7 @@ public class GroupResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Group> searchGroups(@RequestParam("query") String query) {
+    public List<Group> searchGroups(@RequestParam String query) {
         log.debug("REST request to search Groups for query {}", query);
         try {
             return StreamSupport.stream(groupSearchRepository.search(query).spliterator(), false).toList();

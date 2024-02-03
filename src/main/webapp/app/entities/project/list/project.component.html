@@ -41,191 +41,170 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (projects?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.project.home.notFound">No Projects found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="projects?.length === 0">
+    <span jhiTranslate="lmswiamApp.project.home.notFound">No Projects found</span>
+  </div>
 
-  @if (projects && projects.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="projects && projects.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="titleAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.titleAr">Title Ar</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="titleLat">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.titleLat">Title Lat</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.description">Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="goals">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.goals">Goals</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="requirements">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.requirements">Requirements</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="imageLink">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.imageLink">Image Link</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="videoLink">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.videoLink">Video Link</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="budget">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.budget">Budget</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isActive">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.isActive">Is Active</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="activateAt">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.activateAt">Activate At</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="startDate">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.startDate">Start Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="endDate">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.endDate">End Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site12.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.site12">Site 12</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="typeProject.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.project.typeProject">Type Project</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let project of projects; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/project', project.id, 'view']">{{ project.id }}</a>
+          </td>
+          <td>{{ project.titleAr }}</td>
+          <td>{{ project.titleLat }}</td>
+          <td>{{ project.description }}</td>
+          <td>{{ project.goals }}</td>
+          <td>{{ project.requirements }}</td>
+          <td>
+            <a *ngIf="project.imageLink" (click)="openFile(project.imageLink, project.imageLinkContentType)">
+              <img
+                [src]="'data:' + project.imageLinkContentType + ';base64,' + project.imageLink"
+                style="max-height: 30px"
+                alt="project image"
+              />
+            </a>
+            <span *ngIf="project.imageLink">{{ project.imageLinkContentType }}, {{ byteSize(project.imageLink) }}</span>
+          </td>
+          <td>{{ project.videoLink }}</td>
+          <td>{{ project.budget }}</td>
+          <td>{{ project.isActive }}</td>
+          <td>{{ project.activateAt | formatMediumDatetime }}</td>
+          <td>{{ project.startDate | formatMediumDate }}</td>
+          <td>{{ project.endDate | formatMediumDate }}</td>
+          <td>
+            <div *ngIf="project.site12">
+              <a [routerLink]="['/site', project.site12.id, 'view']">{{ project.site12.nameAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="project.typeProject">
+              <a [routerLink]="['/type-project', project.typeProject.id, 'view']">{{ project.typeProject.nameAr }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/project', project.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="titleAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.titleAr">Title Ar</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="titleLat">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.titleLat">Title Lat</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="description">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="goals">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.goals">Goals</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="requirements">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.requirements">Requirements</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="imageLink">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.imageLink">Image Link</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="videoLink">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.videoLink">Video Link</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="budget">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.budget">Budget</span>
+              <a [routerLink]="['/project', project.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="isActive">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.isActive">Is Active</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="activateAt">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.activateAt">Activate At</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="startDate">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.startDate">Start Date</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="endDate">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.endDate">End Date</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="typeProject.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.project.typeProject">Type Project</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (project of projects; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/project', project.id, 'view']">{{ project.id }}</a>
-              </td>
-              <td>{{ project.titleAr }}</td>
-              <td>{{ project.titleLat }}</td>
-              <td>{{ project.description }}</td>
-              <td>{{ project.goals }}</td>
-              <td>{{ project.requirements }}</td>
-              <td>
-                @if (project.imageLink) {
-                  <a (click)="openFile(project.imageLink, project.imageLinkContentType)">
-                    <img
-                      [src]="'data:' + project.imageLinkContentType + ';base64,' + project.imageLink"
-                      style="max-height: 30px"
-                      alt="project image"
-                    />
-                  </a>
-                  <span>{{ project.imageLinkContentType }}, {{ byteSize(project.imageLink) }}</span>
-                }
-              </td>
-              <td>{{ project.videoLink }}</td>
-              <td>{{ project.budget }}</td>
-              <td>{{ project.isActive }}</td>
-              <td>{{ project.activateAt | formatMediumDatetime }}</td>
-              <td>{{ project.startDate | formatMediumDate }}</td>
-              <td>{{ project.endDate | formatMediumDate }}</td>
-              <td>
-                @if (project.typeProject) {
-                  <div>
-                    <a [routerLink]="['/type-project', project.typeProject.id, 'view']">{{ project.typeProject.nameAr }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/project', project.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/project', project.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(project)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(project)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

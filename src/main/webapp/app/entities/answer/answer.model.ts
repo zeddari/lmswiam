@@ -1,3 +1,4 @@
+import { ISite } from 'app/entities/site/site.model';
 import { IQuestion } from 'app/entities/question/question.model';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 
@@ -8,8 +9,9 @@ export interface IAnswer {
   a3v?: boolean | null;
   a4v?: boolean | null;
   result?: boolean | null;
-  question?: IQuestion | null;
-  userCustom1?: IUserCustom | null;
+  site6?: Pick<ISite, 'id' | 'nameAr'> | null;
+  question?: Pick<IQuestion, 'id'> | null;
+  userCustom1?: Pick<IUserCustom, 'id'> | null;
 }
 
 export type NewAnswer = Omit<IAnswer, 'id'> & { id: null };

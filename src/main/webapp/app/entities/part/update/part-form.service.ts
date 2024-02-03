@@ -25,6 +25,7 @@ type PartFormGroupContent = {
   imageLink: FormControl<IPart['imageLink']>;
   imageLinkContentType: FormControl<IPart['imageLinkContentType']>;
   videoLink: FormControl<IPart['videoLink']>;
+  site2: FormControl<IPart['site2']>;
   course: FormControl<IPart['course']>;
   part1: FormControl<IPart['part1']>;
 };
@@ -57,6 +58,7 @@ export class PartFormService {
       imageLink: new FormControl(partRawValue.imageLink),
       imageLinkContentType: new FormControl(partRawValue.imageLinkContentType),
       videoLink: new FormControl(partRawValue.videoLink),
+      site2: new FormControl(partRawValue.site2),
       course: new FormControl(partRawValue.course),
       part1: new FormControl(partRawValue.part1),
     });

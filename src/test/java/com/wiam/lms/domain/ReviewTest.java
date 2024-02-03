@@ -2,6 +2,7 @@ package com.wiam.lms.domain;
 
 import static com.wiam.lms.domain.PartTestSamples.*;
 import static com.wiam.lms.domain.ReviewTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,6 +23,18 @@ class ReviewTest {
 
         review2 = getReviewSample2();
         assertThat(review1).isNotEqualTo(review2);
+    }
+
+    @Test
+    void site3Test() throws Exception {
+        Review review = getReviewRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        review.setSite3(siteBack);
+        assertThat(review.getSite3()).isEqualTo(siteBack);
+
+        review.site3(null);
+        assertThat(review.getSite3()).isNull();
     }
 
     @Test

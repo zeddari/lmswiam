@@ -6,10 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ICourse } from 'app/entities/course/course.model';
 import { CourseService } from 'app/entities/course/service/course.service';
-import { PartService } from '../service/part.service';
 import { IPart } from '../part.model';
+import { PartService } from '../service/part.service';
 import { PartFormService } from './part-form.service';
 
 import { PartUpdateComponent } from './part-update.component';
@@ -20,6 +22,7 @@ describe('Part Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let partFormService: PartFormService;
   let partService: PartService;
+  let siteService: SiteService;
   let courseService: CourseService;
 
   beforeEach(() => {
@@ -42,6 +45,7 @@ describe('Part Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     partFormService = TestBed.inject(PartFormService);
     partService = TestBed.inject(PartService);
+    siteService = TestBed.inject(SiteService);
     courseService = TestBed.inject(CourseService);
 
     comp = fixture.componentInstance;
@@ -50,10 +54,10 @@ describe('Part Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call Part query and add missing value', () => {
       const part: IPart = { id: 456 };
-      const part1: IPart = { id: 7652 };
+      const part1: IPart = { id: 13971 };
       part.part1 = part1;
 
-      const partCollection: IPart[] = [{ id: 28346 }];
+      const partCollection: IPart[] = [{ id: 29616 }];
       jest.spyOn(partService, 'query').mockReturnValue(of(new HttpResponse({ body: partCollection })));
       const additionalParts = [part1];
       const expectedCollection: IPart[] = [...additionalParts, ...partCollection];
@@ -70,12 +74,34 @@ describe('Part Management Update Component', () => {
       expect(comp.partsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Site query and add missing value', () => {
+      const part: IPart = { id: 456 };
+      const site2: ISite = { id: 12204 };
+      part.site2 = site2;
+
+      const siteCollection: ISite[] = [{ id: 19307 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site2];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ part });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call Course query and add missing value', () => {
       const part: IPart = { id: 456 };
-      const course: ICourse = { id: 12186 };
+      const course: ICourse = { id: 6560 };
       part.course = course;
 
-      const courseCollection: ICourse[] = [{ id: 15710 }];
+      const courseCollection: ICourse[] = [{ id: 1712 }];
       jest.spyOn(courseService, 'query').mockReturnValue(of(new HttpResponse({ body: courseCollection })));
       const additionalCourses = [course];
       const expectedCollection: ICourse[] = [...additionalCourses, ...courseCollection];
@@ -94,15 +120,18 @@ describe('Part Management Update Component', () => {
 
     it('Should update editForm', () => {
       const part: IPart = { id: 456 };
-      const part1: IPart = { id: 23928 };
+      const part1: IPart = { id: 30221 };
       part.part1 = part1;
-      const course: ICourse = { id: 22652 };
+      const site2: ISite = { id: 218 };
+      part.site2 = site2;
+      const course: ICourse = { id: 4141 };
       part.course = course;
 
       activatedRoute.data = of({ part });
       comp.ngOnInit();
 
       expect(comp.partsSharedCollection).toContain(part1);
+      expect(comp.sitesSharedCollection).toContain(site2);
       expect(comp.coursesSharedCollection).toContain(course);
       expect(comp.part).toEqual(part);
     });
@@ -184,6 +213,16 @@ describe('Part Management Update Component', () => {
         jest.spyOn(partService, 'comparePart');
         comp.comparePart(entity, entity2);
         expect(partService.comparePart).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
       });
     });
 

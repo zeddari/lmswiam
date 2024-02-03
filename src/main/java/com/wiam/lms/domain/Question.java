@@ -82,13 +82,43 @@ public class Question implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "question", "userCustom1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site6", "question", "userCustom1" }, allowSetters = true)
     private Set<Answer> answers = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site5;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "questions")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "quizResults", "groups", "questions", "topic1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "quizResults", "groups", "questions", "site7", "topic1" }, allowSetters = true)
     private Set<Quiz> quizzes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -277,6 +307,19 @@ public class Question implements Serializable {
     public Question removeAnswer(Answer answer) {
         this.answers.remove(answer);
         answer.setQuestion(null);
+        return this;
+    }
+
+    public Site getSite5() {
+        return this.site5;
+    }
+
+    public void setSite5(Site site) {
+        this.site5 = site;
+    }
+
+    public Question site5(Site site) {
+        this.setSite5(site);
         return this;
     }
 

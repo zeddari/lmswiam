@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { DiplomaService } from '../service/diploma.service';
 import { IDiploma } from '../diploma.model';
 import { DiplomaFormService } from './diploma-form.service';
@@ -18,6 +20,7 @@ describe('Diploma Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let diplomaFormService: DiplomaFormService;
   let diplomaService: DiplomaService;
+  let siteService: SiteService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,17 +42,43 @@ describe('Diploma Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     diplomaFormService = TestBed.inject(DiplomaFormService);
     diplomaService = TestBed.inject(DiplomaService);
+    siteService = TestBed.inject(SiteService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should update editForm', () => {
+    it('Should call Site query and add missing value', () => {
       const diploma: IDiploma = { id: 456 };
+      const site20: ISite = { id: 2071 };
+      diploma.site20 = site20;
+
+      const siteCollection: ISite[] = [{ id: 3445 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site20];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ diploma });
       comp.ngOnInit();
 
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should update editForm', () => {
+      const diploma: IDiploma = { id: 456 };
+      const site20: ISite = { id: 22179 };
+      diploma.site20 = site20;
+
+      activatedRoute.data = of({ diploma });
+      comp.ngOnInit();
+
+      expect(comp.sitesSharedCollection).toContain(site20);
       expect(comp.diploma).toEqual(diploma);
     });
   });
@@ -119,6 +148,18 @@ describe('Diploma Management Update Component', () => {
       expect(diplomaService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
     });
   });
 });

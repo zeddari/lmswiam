@@ -166,7 +166,7 @@ public class JuzsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the juzs, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Juzs> getJuzs(@PathVariable("id") Integer id) {
+    public ResponseEntity<Juzs> getJuzs(@PathVariable Integer id) {
         log.debug("REST request to get Juzs : {}", id);
         Optional<Juzs> juzs = juzsRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(juzs);
@@ -179,7 +179,7 @@ public class JuzsResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteJuzs(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteJuzs(@PathVariable Integer id) {
         log.debug("REST request to delete Juzs : {}", id);
         juzsRepository.deleteById(id);
         juzsSearchRepository.deleteFromIndexById(id);
@@ -197,7 +197,7 @@ public class JuzsResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Juzs> searchJuzs(@RequestParam("query") String query) {
+    public List<Juzs> searchJuzs(@RequestParam String query) {
         log.debug("REST request to search Juzs for query {}", query);
         try {
             return StreamSupport.stream(juzsSearchRepository.search(query).spliterator(), false).toList();

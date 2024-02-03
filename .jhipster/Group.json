@@ -3,6 +3,7 @@
     "changelogDate": "20240109180831"
   },
   "applications": "*",
+  "changelogDate": "20240109180831",
   "entityTableName": "jhi_group",
   "fields": [
     {
@@ -52,6 +53,13 @@
       "relationshipName": "elements",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site11",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "nameAr",

@@ -1,5 +1,6 @@
 package com.wiam.lms.domain;
 
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.TicketsTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +22,18 @@ class TicketsTest {
 
         tickets2 = getTicketsSample2();
         assertThat(tickets1).isNotEqualTo(tickets2);
+    }
+
+    @Test
+    void site18Test() throws Exception {
+        Tickets tickets = getTicketsRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        tickets.setSite18(siteBack);
+        assertThat(tickets.getSite18()).isEqualTo(siteBack);
+
+        tickets.site18(null);
+        assertThat(tickets.getSite18()).isNull();
     }
 
     @Test

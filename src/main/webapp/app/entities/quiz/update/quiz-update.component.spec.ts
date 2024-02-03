@@ -10,6 +10,8 @@ import { IGroup } from 'app/entities/group/group.model';
 import { GroupService } from 'app/entities/group/service/group.service';
 import { IQuestion } from 'app/entities/question/question.model';
 import { QuestionService } from 'app/entities/question/service/question.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ITopic } from 'app/entities/topic/topic.model';
 import { TopicService } from 'app/entities/topic/service/topic.service';
 import { IQuiz } from '../quiz.model';
@@ -26,6 +28,7 @@ describe('Quiz Management Update Component', () => {
   let quizService: QuizService;
   let groupService: GroupService;
   let questionService: QuestionService;
+  let siteService: SiteService;
   let topicService: TopicService;
 
   beforeEach(() => {
@@ -50,6 +53,7 @@ describe('Quiz Management Update Component', () => {
     quizService = TestBed.inject(QuizService);
     groupService = TestBed.inject(GroupService);
     questionService = TestBed.inject(QuestionService);
+    siteService = TestBed.inject(SiteService);
     topicService = TestBed.inject(TopicService);
 
     comp = fixture.componentInstance;
@@ -100,6 +104,28 @@ describe('Quiz Management Update Component', () => {
       expect(comp.questionsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Site query and add missing value', () => {
+      const quiz: IQuiz = { id: 456 };
+      const site7: ISite = { id: 17229 };
+      quiz.site7 = site7;
+
+      const siteCollection: ISite[] = [{ id: 1161 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site7];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ quiz });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call Topic query and add missing value', () => {
       const quiz: IQuiz = { id: 456 };
       const topic1: ITopic = { id: 31219 };
@@ -128,6 +154,8 @@ describe('Quiz Management Update Component', () => {
       quiz.groups = [groups];
       const questions: IQuestion = { id: 11472 };
       quiz.questions = [questions];
+      const site7: ISite = { id: 29833 };
+      quiz.site7 = site7;
       const topic1: ITopic = { id: 27914 };
       quiz.topic1 = topic1;
 
@@ -136,6 +164,7 @@ describe('Quiz Management Update Component', () => {
 
       expect(comp.groupsSharedCollection).toContain(groups);
       expect(comp.questionsSharedCollection).toContain(questions);
+      expect(comp.sitesSharedCollection).toContain(site7);
       expect(comp.topicsSharedCollection).toContain(topic1);
       expect(comp.quiz).toEqual(quiz);
     });
@@ -227,6 +256,16 @@ describe('Quiz Management Update Component', () => {
         jest.spyOn(questionService, 'compareQuestion');
         comp.compareQuestion(entity, entity2);
         expect(questionService.compareQuestion).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
       });
     });
 

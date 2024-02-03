@@ -3,6 +3,7 @@
     "changelogDate": "20240109175331"
   },
   "applications": "*",
+  "changelogDate": "20240109175331",
   "entityTableName": "diploma",
   "fields": [
     {
@@ -55,6 +56,13 @@
   ],
   "name": "Diploma",
   "relationships": [
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site20",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
     {
       "otherEntityField": "firstName",
       "otherEntityName": "userCustom",
