@@ -130,7 +130,37 @@ public class Progression implements Serializable {
     private String observation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "progressions", "links", "session1" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site17;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "progressions", "links", "site16", "session1" }, allowSetters = true)
     private SessionInstance sessionInstance;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -147,6 +177,7 @@ public class Progression implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -420,6 +451,19 @@ public class Progression implements Serializable {
 
     public void setObservation(String observation) {
         this.observation = observation;
+    }
+
+    public Site getSite17() {
+        return this.site17;
+    }
+
+    public void setSite17(Site site) {
+        this.site17 = site;
+    }
+
+    public Progression site17(Site site) {
+        this.setSite17(site);
+        return this;
     }
 
     public SessionInstance getSessionInstance() {

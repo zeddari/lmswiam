@@ -4,35 +4,35 @@ import { IAyahs, NewAyahs } from './ayahs.model';
 
 export const sampleWithRequiredData: IAyahs = {
   id: 4609,
-  textdesc: 'rat crushing',
+  textdesc: '../fake-data/blob/hipster.txt',
 };
 
 export const sampleWithPartialData: IAyahs = {
-  id: 14165,
-  number: 5764,
-  textdesc: 'quizzically solidify',
-  surahId: 22276,
-  juzId: 20729,
+  id: 19123,
+  number: 28942,
+  textdesc: '../fake-data/blob/hipster.txt',
+  numberInSurah: 20542,
+  hizbId: 31527,
   sajda: false,
-  updatedAt: dayjs('2024-01-09T15:01'),
+  updatedAt: dayjs('2024-01-09T14:31'),
 };
 
 export const sampleWithFullData: IAyahs = {
-  id: 27312,
-  number: 9096,
-  textdesc: 'klutzy notable rebellion',
-  numberInSurah: 19563,
-  page: 16504,
-  surahId: 24764,
-  hizbId: 21922,
-  juzId: 27056,
+  id: 1778,
+  number: 22404,
+  textdesc: '../fake-data/blob/hipster.txt',
+  numberInSurah: 20894,
+  page: 33,
+  surahId: 29494,
+  hizbId: 14590,
+  juzId: 7260,
   sajda: false,
-  createdAt: dayjs('2024-01-09T11:05'),
-  updatedAt: dayjs('2024-01-09T11:09'),
+  createdAt: dayjs('2024-01-09T08:48'),
+  updatedAt: dayjs('2024-01-09T07:56'),
 };
 
 export const sampleWithNewData: NewAyahs = {
-  textdesc: 'parliament drink meh',
+  textdesc: '../fake-data/blob/hipster.txt',
   id: null,
 };
 

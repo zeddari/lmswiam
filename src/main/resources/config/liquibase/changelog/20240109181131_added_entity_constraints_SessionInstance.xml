@@ -22,6 +22,13 @@
                                  referencedTableName="session_link"
                                  />
 
+        <addForeignKeyConstraint baseColumnNames="site16_id"
+                                 baseTableName="session_instance"
+                                 constraintName="fk_session_instance__site16_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="site"
+                                 />
+
         <addForeignKeyConstraint baseColumnNames="session1_id"
                                  baseTableName="session_instance"
                                  constraintName="fk_session_instance__session1_id"

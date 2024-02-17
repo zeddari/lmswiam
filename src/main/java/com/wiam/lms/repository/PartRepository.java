@@ -27,14 +27,16 @@ public interface PartRepository extends JpaRepository<Part, Long> {
     }
 
     @Query(
-        value = "select part from Part part left join fetch part.course left join fetch part.part1",
+        value = "select part from Part part left join fetch part.site2 left join fetch part.course left join fetch part.part1",
         countQuery = "select count(part) from Part part"
     )
     Page<Part> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select part from Part part left join fetch part.course left join fetch part.part1")
+    @Query("select part from Part part left join fetch part.site2 left join fetch part.course left join fetch part.part1")
     List<Part> findAllWithToOneRelationships();
 
-    @Query("select part from Part part left join fetch part.course left join fetch part.part1 where part.id =:id")
+    @Query(
+        "select part from Part part left join fetch part.site2 left join fetch part.course left join fetch part.part1 where part.id =:id"
+    )
     Optional<Part> findOneWithToOneRelationships(@Param("id") Long id);
 }

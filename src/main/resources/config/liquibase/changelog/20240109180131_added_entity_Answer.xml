@@ -29,6 +29,9 @@
             <column name="result" type="boolean">
                 <constraints nullable="false" />
             </column>
+            <column name="site6_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="question_id" type="bigint">
                 <constraints nullable="true" />
             </column>

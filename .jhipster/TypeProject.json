@@ -3,6 +3,7 @@
     "changelogDate": "20240109181431"
   },
   "applications": "*",
+  "changelogDate": "20240109181431",
   "entityTableName": "type_project",
   "fields": [
     {

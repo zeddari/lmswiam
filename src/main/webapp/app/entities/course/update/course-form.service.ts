@@ -49,6 +49,7 @@ type CourseFormGroupContent = {
   isConfirmed: FormControl<CourseFormRawValue['isConfirmed']>;
   confirmedAt: FormControl<CourseFormRawValue['confirmedAt']>;
   professors: FormControl<CourseFormRawValue['professors']>;
+  site1: FormControl<CourseFormRawValue['site1']>;
   topic3: FormControl<CourseFormRawValue['topic3']>;
 };
 
@@ -94,6 +95,7 @@ export class CourseFormService {
       isConfirmed: new FormControl(courseRawValue.isConfirmed),
       confirmedAt: new FormControl(courseRawValue.confirmedAt),
       professors: new FormControl(courseRawValue.professors ?? []),
+      site1: new FormControl(courseRawValue.site1),
       topic3: new FormControl(courseRawValue.topic3),
     });
   }

@@ -24,6 +24,7 @@ type SponsoringFormGroupContent = {
   startDate: FormControl<ISponsoring['startDate']>;
   endDate: FormControl<ISponsoring['endDate']>;
   isAlways: FormControl<ISponsoring['isAlways']>;
+  site10: FormControl<ISponsoring['site10']>;
   sponsor: FormControl<ISponsoring['sponsor']>;
   project: FormControl<ISponsoring['project']>;
   currency: FormControl<ISponsoring['currency']>;
@@ -56,6 +57,7 @@ export class SponsoringFormService {
       startDate: new FormControl(sponsoringRawValue.startDate),
       endDate: new FormControl(sponsoringRawValue.endDate),
       isAlways: new FormControl(sponsoringRawValue.isAlways),
+      site10: new FormControl(sponsoringRawValue.site10),
       sponsor: new FormControl(sponsoringRawValue.sponsor),
       project: new FormControl(sponsoringRawValue.project),
       currency: new FormControl(sponsoringRawValue.currency),

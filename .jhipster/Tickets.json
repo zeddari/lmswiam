@@ -3,6 +3,7 @@
     "changelogDate": "20240109181331"
   },
   "applications": "*",
+  "changelogDate": "20240109181331",
   "entityTableName": "tickets",
   "fields": [
     {
@@ -66,6 +67,13 @@
   ],
   "name": "Tickets",
   "relationships": [
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site18",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
     {
       "otherEntityField": "firstName",
       "otherEntityName": "userCustom",

@@ -8,8 +8,10 @@ import { of, Subject, from } from 'rxjs';
 
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
-import { GroupService } from '../service/group.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IGroup } from '../group.model';
+import { GroupService } from '../service/group.service';
 import { GroupFormService } from './group-form.service';
 
 import { GroupUpdateComponent } from './group-update.component';
@@ -21,6 +23,7 @@ describe('Group Management Update Component', () => {
   let groupFormService: GroupFormService;
   let groupService: GroupService;
   let userCustomService: UserCustomService;
+  let siteService: SiteService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,6 +46,7 @@ describe('Group Management Update Component', () => {
     groupFormService = TestBed.inject(GroupFormService);
     groupService = TestBed.inject(GroupService);
     userCustomService = TestBed.inject(UserCustomService);
+    siteService = TestBed.inject(SiteService);
 
     comp = fixture.componentInstance;
   });
@@ -92,18 +96,43 @@ describe('Group Management Update Component', () => {
       expect(comp.userCustomsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Site query and add missing value', () => {
+      const group: IGroup = { id: 456 };
+      const site11: ISite = { id: 3153 };
+      group.site11 = site11;
+
+      const siteCollection: ISite[] = [{ id: 963 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site11];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ group });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const group: IGroup = { id: 456 };
       const group1: IGroup = { id: 761 };
       group.group1 = group1;
       const elements: IUserCustom = { id: 15692 };
       group.elements = [elements];
+      const site11: ISite = { id: 6891 };
+      group.site11 = site11;
 
       activatedRoute.data = of({ group });
       comp.ngOnInit();
 
       expect(comp.groupsSharedCollection).toContain(group1);
       expect(comp.userCustomsSharedCollection).toContain(elements);
+      expect(comp.sitesSharedCollection).toContain(site11);
       expect(comp.group).toEqual(group);
     });
   });
@@ -194,6 +223,16 @@ describe('Group Management Update Component', () => {
         jest.spyOn(userCustomService, 'compareUserCustom');
         comp.compareUserCustom(entity, entity2);
         expect(userCustomService.compareUserCustom).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

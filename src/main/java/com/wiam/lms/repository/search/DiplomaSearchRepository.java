@@ -51,7 +51,7 @@ class DiplomaSearchRepositoryInternalImpl implements DiplomaSearchRepositoryInte
 
     @Override
     public void index(Diploma entity) {
-        repository.findById(entity.getId()).ifPresent(elasticsearchTemplate::save);
+        repository.findOneWithEagerRelationships(entity.getId()).ifPresent(elasticsearchTemplate::save);
     }
 
     @Override

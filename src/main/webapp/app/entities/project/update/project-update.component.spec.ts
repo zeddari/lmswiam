@@ -6,10 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ITypeProject } from 'app/entities/type-project/type-project.model';
 import { TypeProjectService } from 'app/entities/type-project/service/type-project.service';
-import { ProjectService } from '../service/project.service';
 import { IProject } from '../project.model';
+import { ProjectService } from '../service/project.service';
 import { ProjectFormService } from './project-form.service';
 
 import { ProjectUpdateComponent } from './project-update.component';
@@ -20,6 +22,7 @@ describe('Project Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let projectFormService: ProjectFormService;
   let projectService: ProjectService;
+  let siteService: SiteService;
   let typeProjectService: TypeProjectService;
 
   beforeEach(() => {
@@ -42,12 +45,35 @@ describe('Project Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     projectFormService = TestBed.inject(ProjectFormService);
     projectService = TestBed.inject(ProjectService);
+    siteService = TestBed.inject(SiteService);
     typeProjectService = TestBed.inject(TypeProjectService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
+    it('Should call Site query and add missing value', () => {
+      const project: IProject = { id: 456 };
+      const site12: ISite = { id: 11384 };
+      project.site12 = site12;
+
+      const siteCollection: ISite[] = [{ id: 31911 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site12];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ project });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call TypeProject query and add missing value', () => {
       const project: IProject = { id: 456 };
       const typeProject: ITypeProject = { id: 20683 };
@@ -72,12 +98,15 @@ describe('Project Management Update Component', () => {
 
     it('Should update editForm', () => {
       const project: IProject = { id: 456 };
+      const site12: ISite = { id: 12930 };
+      project.site12 = site12;
       const typeProject: ITypeProject = { id: 26469 };
       project.typeProject = typeProject;
 
       activatedRoute.data = of({ project });
       comp.ngOnInit();
 
+      expect(comp.sitesSharedCollection).toContain(site12);
       expect(comp.typeProjectsSharedCollection).toContain(typeProject);
       expect(comp.project).toEqual(project);
     });
@@ -152,6 +181,16 @@ describe('Project Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareTypeProject', () => {
       it('Should forward to typeProjectService', () => {
         const entity = { id: 123 };

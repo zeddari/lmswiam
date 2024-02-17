@@ -41,127 +41,117 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (groups?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.group.home.notFound">No Groups found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="groups?.length === 0">
+    <span jhiTranslate="lmswiamApp.group.home.notFound">No Groups found</span>
+  </div>
 
-  @if (groups && groups.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="groups && groups.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="groupType">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.group.groupType">Group Type</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.group.nameAr">Name Ar</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nameLat">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.group.nameLat">Name Lat</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.group.description">Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="elements.firstName">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.group.elements">Elements</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site11.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.group.site11">Site 11</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="group1.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.group.group1">Group 1</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let group of groups; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/group', group.id, 'view']">{{ group.id }}</a>
+          </td>
+          <td jhiTranslate="{{ 'lmswiamApp.GroupType.' + group.groupType }}">{{ group.groupType }}</td>
+          <td>{{ group.nameAr }}</td>
+          <td>{{ group.nameLat }}</td>
+          <td>{{ group.description }}</td>
+          <td>
+            <span *ngFor="let elements of group.elements; let last = last">
+              <a class="form-control-static" [routerLink]="['/user-custom', elements.id, 'view']">{{ elements.firstName }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <div *ngIf="group.site11">
+              <a [routerLink]="['/site', group.site11.id, 'view']">{{ group.site11.nameAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="group.group1">
+              <a [routerLink]="['/group', group.group1.id, 'view']">{{ group.group1.nameAr }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/group', group.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="groupType">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.group.groupType">Group Type</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.group.nameAr">Name Ar</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="nameLat">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.group.nameLat">Name Lat</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="description">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.group.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="elements.firstName">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.group.elements">Elements</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="group1.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.group.group1">Group 1</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (group of groups; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/group', group.id, 'view']">{{ group.id }}</a>
-              </td>
-              <td jhiTranslate="{{ 'lmswiamApp.GroupType.' + group.groupType }}">{{ group.groupType }}</td>
-              <td>{{ group.nameAr }}</td>
-              <td>{{ group.nameLat }}</td>
-              <td>{{ group.description }}</td>
-              <td>
-                @for (elements of group.elements; track $index; let last = $last) {
-                  <span>
-                    <a class="form-control-static" [routerLink]="['/user-custom', elements.id, 'view']">{{ elements.firstName }}</a
-                    >{{ last ? '' : ', ' }}
-                  </span>
-                }
-              </td>
-              <td>
-                @if (group.group1) {
-                  <div>
-                    <a [routerLink]="['/group', group.group1.id, 'view']">{{ group.group1.nameAr }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/group', group.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
+              <a [routerLink]="['/group', group.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                  <a [routerLink]="['/group', group.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(group)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(group)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

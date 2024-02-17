@@ -54,6 +54,7 @@ public class Part implements Serializable {
     @Column(name = "image_link_content_type")
     private String imageLinkContentType;
 
+    @Lob
     @Column(name = "video_link")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String videoLink;
@@ -61,21 +62,51 @@ public class Part implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "part1")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "parts", "reviews", "course", "part1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "parts", "reviews", "site2", "course", "part1" }, allowSetters = true)
     private Set<Part> parts = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "part2")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "part2", "userCustom3" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site3", "part2", "userCustom3" }, allowSetters = true)
     private Set<Review> reviews = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "parts", "enrolements", "professors", "topic3" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site2;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "parts", "enrolements", "professors", "site1", "topic3" }, allowSetters = true)
     private Course course;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "parts", "reviews", "course", "part1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "parts", "reviews", "site2", "course", "part1" }, allowSetters = true)
     private Part part1;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -243,6 +274,19 @@ public class Part implements Serializable {
     public Part removeReview(Review review) {
         this.reviews.remove(review);
         review.setPart2(null);
+        return this;
+    }
+
+    public Site getSite2() {
+        return this.site2;
+    }
+
+    public void setSite2(Site site) {
+        this.site2 = site;
+    }
+
+    public Part site2(Site site) {
+        this.setSite2(site);
         return this;
     }
 

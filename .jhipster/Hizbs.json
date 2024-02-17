@@ -3,6 +3,7 @@
     "changelogDate": "20240109182131"
   },
   "applications": "*",
+  "changelogDate": "20240109182131",
   "entityTableName": "hizbs",
   "fields": [
     {

@@ -43,6 +43,7 @@ type PaymentFormGroupContent = {
   validityStartTime: FormControl<PaymentFormRawValue['validityStartTime']>;
   validityEndTime: FormControl<PaymentFormRawValue['validityEndTime']>;
   details: FormControl<PaymentFormRawValue['details']>;
+  site9: FormControl<PaymentFormRawValue['site9']>;
   enrolment: FormControl<PaymentFormRawValue['enrolment']>;
   sponsoring: FormControl<PaymentFormRawValue['sponsoring']>;
   session: FormControl<PaymentFormRawValue['session']>;
@@ -90,6 +91,7 @@ export class PaymentFormService {
         validators: [Validators.required],
       }),
       details: new FormControl(paymentRawValue.details),
+      site9: new FormControl(paymentRawValue.site9),
       enrolment: new FormControl(paymentRawValue.enrolment),
       sponsoring: new FormControl(paymentRawValue.sponsoring),
       session: new FormControl(paymentRawValue.session),

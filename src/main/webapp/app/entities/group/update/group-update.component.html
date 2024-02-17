@@ -8,62 +8,61 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.group.groupType" for="field_groupType">Group Type</label>
           <select class="form-control" name="groupType" formControlName="groupType" id="field_groupType" data-cy="groupType">
             <option [ngValue]="null">{{ 'lmswiamApp.GroupType.null' | translate }}</option>
-            @for (groupType of groupTypeValues; track $index) {
-              <option [value]="groupType">{{ 'lmswiamApp.GroupType.' + groupType | translate }}</option>
-            }
+            <option *ngFor="let groupType of groupTypeValues" [value]="groupType">
+              {{ 'lmswiamApp.GroupType.' + groupType | translate }}
+            </option>
           </select>
-          @if (editForm.get('groupType')!.invalid && (editForm.get('groupType')!.dirty || editForm.get('groupType')!.touched)) {
-            <div>
-              @if (editForm.get('groupType')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('groupType')!.invalid && (editForm.get('groupType')!.dirty || editForm.get('groupType')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('groupType')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.group.nameAr" for="field_nameAr">Name Ar</label>
           <input type="text" class="form-control" name="nameAr" id="field_nameAr" data-cy="nameAr" formControlName="nameAr" />
-          @if (editForm.get('nameAr')!.invalid && (editForm.get('nameAr')!.dirty || editForm.get('nameAr')!.touched)) {
-            <div>
-              @if (editForm.get('nameAr')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('nameAr')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('nameAr')!.invalid && (editForm.get('nameAr')!.dirty || editForm.get('nameAr')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('nameAr')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nameAr')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+              >This field cannot be longer than 100 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.group.nameLat" for="field_nameLat">Name Lat</label>
           <input type="text" class="form-control" name="nameLat" id="field_nameLat" data-cy="nameLat" formControlName="nameLat" />
-          @if (editForm.get('nameLat')!.invalid && (editForm.get('nameLat')!.dirty || editForm.get('nameLat')!.touched)) {
-            <div>
-              @if (editForm.get('nameLat')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('nameLat')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('nameLat')!.invalid && (editForm.get('nameLat')!.dirty || editForm.get('nameLat')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('nameLat')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nameLat')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+              >This field cannot be longer than 100 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -88,9 +87,24 @@
             formControlName="elements"
             [compareWith]="compareUserCustom"
           >
-            @for (userCustomOption of userCustomsSharedCollection; track $index) {
-              <option [ngValue]="userCustomOption">{{ userCustomOption.firstName }}</option>
-            }
+            <option [ngValue]="userCustomOption" *ngFor="let userCustomOption of userCustomsSharedCollection">
+              {{ userCustomOption.firstName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.group.site11" for="field_site11">Site 11</label>
+          <select
+            class="form-control"
+            id="field_site11"
+            data-cy="site11"
+            name="site11"
+            formControlName="site11"
+            [compareWith]="compareSite"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
           </select>
         </div>
 
@@ -105,9 +119,7 @@
             [compareWith]="compareGroup"
           >
             <option [ngValue]="null"></option>
-            @for (groupOption of groupsSharedCollection; track $index) {
-              <option [ngValue]="groupOption">{{ groupOption.nameAr }}</option>
-            }
+            <option [ngValue]="groupOption" *ngFor="let groupOption of groupsSharedCollection">{{ groupOption.nameAr }}</option>
           </select>
         </div>
       </div>

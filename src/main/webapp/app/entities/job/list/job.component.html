@@ -41,91 +41,76 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (jobs?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.job.home.notFound">No Jobs found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="jobs?.length === 0">
+    <span jhiTranslate="lmswiamApp.job.home.notFound">No Jobs found</span>
+  </div>
 
-  @if (jobs && jobs.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="jobs && jobs.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="titleAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.job.titleAr">Title Ar</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="titleLat">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.job.titleLat">Title Lat</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.job.description">Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let job of jobs; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/job', job.id, 'view']">{{ job.id }}</a>
+          </td>
+          <td>{{ job.titleAr }}</td>
+          <td>{{ job.titleLat }}</td>
+          <td>{{ job.description }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/job', job.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="titleAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.job.titleAr">Title Ar</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="titleLat">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.job.titleLat">Title Lat</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="description">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.job.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (job of jobs; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/job', job.id, 'view']">{{ job.id }}</a>
-              </td>
-              <td>{{ job.titleAr }}</td>
-              <td>{{ job.titleLat }}</td>
-              <td>{{ job.description }}</td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/job', job.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
+              <a [routerLink]="['/job', job.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                  <a [routerLink]="['/job', job.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(job)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(job)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

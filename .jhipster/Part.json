@@ -3,6 +3,7 @@
     "changelogDate": "20240109175731"
   },
   "applications": "*",
+  "changelogDate": "20240109175731",
   "entityTableName": "part",
   "fields": [
     {
@@ -35,7 +36,8 @@
     },
     {
       "fieldName": "videoLink",
-      "fieldType": "String"
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
     }
   ],
   "name": "Part",
@@ -53,6 +55,13 @@
       "relationshipName": "review",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site2",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "titleAr",

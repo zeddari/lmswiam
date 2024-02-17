@@ -32,9 +32,8 @@ public class AyahEdition implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer editionId;
 
-    @NotNull
-    @Size(max = 100)
-    @Column(name = "data", length = 100, nullable = false, unique = true)
+    @Lob
+    @Column(name = "data", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String data;
 

@@ -164,7 +164,7 @@ public class ClassroomResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of classrooms in body.
      */
     @GetMapping("")
-    public List<Classroom> getAllClassrooms(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
+    public List<Classroom> getAllClassrooms(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Classrooms");
         if (eagerload) {
             return classroomRepository.findAllWithEagerRelationships();
@@ -180,7 +180,7 @@ public class ClassroomResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the classroom, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Classroom> getClassroom(@PathVariable("id") Long id) {
+    public ResponseEntity<Classroom> getClassroom(@PathVariable Long id) {
         log.debug("REST request to get Classroom : {}", id);
         Optional<Classroom> classroom = classroomRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(classroom);
@@ -193,7 +193,7 @@ public class ClassroomResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClassroom(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteClassroom(@PathVariable Long id) {
         log.debug("REST request to delete Classroom : {}", id);
         classroomRepository.deleteById(id);
         classroomSearchRepository.deleteFromIndexById(id);
@@ -211,7 +211,7 @@ public class ClassroomResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Classroom> searchClassrooms(@RequestParam("query") String query) {
+    public List<Classroom> searchClassrooms(@RequestParam String query) {
         log.debug("REST request to search Classrooms for query {}", query);
         try {
             return StreamSupport.stream(classroomSearchRepository.search(query).spliterator(), false).toList();

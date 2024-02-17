@@ -24,6 +24,9 @@ describe('SessionLink Form Service', () => {
             title: expect.any(Object),
             description: expect.any(Object),
             link: expect.any(Object),
+            site15: expect.any(Object),
+            sessions4s: expect.any(Object),
+            sessions7s: expect.any(Object),
           }),
         );
       });
@@ -38,6 +41,9 @@ describe('SessionLink Form Service', () => {
             title: expect.any(Object),
             description: expect.any(Object),
             link: expect.any(Object),
+            site15: expect.any(Object),
+            sessions4s: expect.any(Object),
+            sessions7s: expect.any(Object),
           }),
         );
       });

@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
 import { ICourse } from 'app/entities/course/course.model';
@@ -22,6 +24,7 @@ describe('Enrolement Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let enrolementFormService: EnrolementFormService;
   let enrolementService: EnrolementService;
+  let siteService: SiteService;
   let userCustomService: UserCustomService;
   let courseService: CourseService;
 
@@ -45,6 +48,7 @@ describe('Enrolement Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     enrolementFormService = TestBed.inject(EnrolementFormService);
     enrolementService = TestBed.inject(EnrolementService);
+    siteService = TestBed.inject(SiteService);
     userCustomService = TestBed.inject(UserCustomService);
     courseService = TestBed.inject(CourseService);
 
@@ -52,6 +56,28 @@ describe('Enrolement Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
+    it('Should call Site query and add missing value', () => {
+      const enrolement: IEnrolement = { id: 456 };
+      const site4: ISite = { id: 26113 };
+      enrolement.site4 = site4;
+
+      const siteCollection: ISite[] = [{ id: 8474 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site4];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ enrolement });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call UserCustom query and add missing value', () => {
       const enrolement: IEnrolement = { id: 456 };
       const userCustom4: IUserCustom = { id: 23279 };
@@ -76,10 +102,10 @@ describe('Enrolement Management Update Component', () => {
 
     it('Should call Course query and add missing value', () => {
       const enrolement: IEnrolement = { id: 456 };
-      const course: ICourse = { id: 1777 };
+      const course: ICourse = { id: 23406 };
       enrolement.course = course;
 
-      const courseCollection: ICourse[] = [{ id: 19089 }];
+      const courseCollection: ICourse[] = [{ id: 27224 }];
       jest.spyOn(courseService, 'query').mockReturnValue(of(new HttpResponse({ body: courseCollection })));
       const additionalCourses = [course];
       const expectedCollection: ICourse[] = [...additionalCourses, ...courseCollection];
@@ -98,14 +124,17 @@ describe('Enrolement Management Update Component', () => {
 
     it('Should update editForm', () => {
       const enrolement: IEnrolement = { id: 456 };
+      const site4: ISite = { id: 31378 };
+      enrolement.site4 = site4;
       const userCustom4: IUserCustom = { id: 13744 };
       enrolement.userCustom4 = userCustom4;
-      const course: ICourse = { id: 103 };
+      const course: ICourse = { id: 9732 };
       enrolement.course = course;
 
       activatedRoute.data = of({ enrolement });
       comp.ngOnInit();
 
+      expect(comp.sitesSharedCollection).toContain(site4);
       expect(comp.userCustomsSharedCollection).toContain(userCustom4);
       expect(comp.coursesSharedCollection).toContain(course);
       expect(comp.enrolement).toEqual(enrolement);
@@ -181,6 +210,16 @@ describe('Enrolement Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareUserCustom', () => {
       it('Should forward to userCustomService', () => {
         const entity = { id: 123 };

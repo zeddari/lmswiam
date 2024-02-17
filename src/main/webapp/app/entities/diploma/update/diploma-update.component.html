@@ -8,45 +8,41 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.diploma.type" for="field_type">Type</label>
           <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
             <option [ngValue]="null">{{ 'lmswiamApp.DiplomaType.null' | translate }}</option>
-            @for (diplomaType of diplomaTypeValues; track $index) {
-              <option [value]="diplomaType">{{ 'lmswiamApp.DiplomaType.' + diplomaType | translate }}</option>
-            }
+            <option *ngFor="let diplomaType of diplomaTypeValues" [value]="diplomaType">
+              {{ 'lmswiamApp.DiplomaType.' + diplomaType | translate }}
+            </option>
           </select>
-          @if (editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)) {
-            <div>
-              @if (editForm.get('type')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('type')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.diploma.title" for="field_title">Title</label>
           <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
-          @if (editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)) {
-            <div>
-              @if (editForm.get('title')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('title')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('title')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('title')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+              >This field cannot be longer than 100 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -102,27 +98,24 @@
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.diploma.attachment" for="field_attachment">Attachment</label>
           <div>
-            @if (editForm.get('attachment')!.value) {
-              <img
-                [src]="'data:' + editForm.get('attachmentContentType')!.value + ';base64,' + editForm.get('attachment')!.value"
-                style="max-height: 100px"
-                alt="diploma image"
-              />
-            }
-            @if (editForm.get('attachment')!.value) {
-              <div class="form-text text-danger clearfix">
-                <span class="pull-start"
-                  >{{ editForm.get('attachmentContentType')!.value }}, {{ byteSize(editForm.get('attachment')!.value!) }}</span
-                >
-                <button
-                  type="button"
-                  (click)="clearInputImage('attachment', 'attachmentContentType', 'file_attachment')"
-                  class="btn btn-secondary btn-xs pull-end"
-                >
-                  <fa-icon icon="times"></fa-icon>
-                </button>
-              </div>
-            }
+            <img
+              [src]="'data:' + editForm.get('attachmentContentType')!.value + ';base64,' + editForm.get('attachment')!.value"
+              style="max-height: 100px"
+              *ngIf="editForm.get('attachment')!.value"
+              alt="diploma image"
+            />
+            <div *ngIf="editForm.get('attachment')!.value" class="form-text text-danger clearfix">
+              <span class="pull-start"
+                >{{ editForm.get('attachmentContentType')!.value }}, {{ byteSize(editForm.get('attachment')!.value!) }}</span
+              >
+              <button
+                type="button"
+                (click)="clearInputImage('attachment', 'attachmentContentType', 'file_attachment')"
+                class="btn btn-secondary btn-xs pull-end"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
             <input
               type="file"
               id="file_attachment"
@@ -147,9 +140,24 @@
             id="field_attachmentContentType"
             formControlName="attachmentContentType"
           />
-          @if (editForm.get('attachment')!.invalid && (editForm.get('attachment')!.dirty || editForm.get('attachment')!.touched)) {
-            <div></div>
-          }
+          <div
+            *ngIf="editForm.get('attachment')!.invalid && (editForm.get('attachment')!.dirty || editForm.get('attachment')!.touched)"
+          ></div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.diploma.site20" for="field_site20">Site 20</label>
+          <select
+            class="form-control"
+            id="field_site20"
+            data-cy="site20"
+            name="site20"
+            formControlName="site20"
+            [compareWith]="compareSite"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
+          </select>
         </div>
       </div>
 

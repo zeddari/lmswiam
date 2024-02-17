@@ -12,6 +12,8 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { GroupType } from 'app/entities/enumerations/group-type.model';
 import { GroupService } from '../service/group.service';
 import { IGroup } from '../group.model';
@@ -30,6 +32,7 @@ export class GroupUpdateComponent implements OnInit {
 
   groupsSharedCollection: IGroup[] = [];
   userCustomsSharedCollection: IUserCustom[] = [];
+  sitesSharedCollection: ISite[] = [];
 
   editForm: GroupFormGroup = this.groupFormService.createGroupFormGroup();
 
@@ -39,12 +42,15 @@ export class GroupUpdateComponent implements OnInit {
     protected groupService: GroupService,
     protected groupFormService: GroupFormService,
     protected userCustomService: UserCustomService,
+    protected siteService: SiteService,
     protected activatedRoute: ActivatedRoute,
   ) {}
 
   compareGroup = (o1: IGroup | null, o2: IGroup | null): boolean => this.groupService.compareGroup(o1, o2);
 
   compareUserCustom = (o1: IUserCustom | null, o2: IUserCustom | null): boolean => this.userCustomService.compareUserCustom(o1, o2);
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ group }) => {
@@ -114,6 +120,7 @@ export class GroupUpdateComponent implements OnInit {
       this.userCustomsSharedCollection,
       ...(group.elements ?? []),
     );
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, group.site11);
   }
 
   protected loadRelationshipsOptions(): void {
@@ -132,5 +139,11 @@ export class GroupUpdateComponent implements OnInit {
         ),
       )
       .subscribe((userCustoms: IUserCustom[]) => (this.userCustomsSharedCollection = userCustoms));
+
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.group?.site11)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
   }
 }

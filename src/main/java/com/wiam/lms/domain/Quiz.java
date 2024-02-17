@@ -56,13 +56,16 @@ public class Quiz implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "quiz")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "quiz", "userCustom2" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site8", "quiz", "userCustom2" }, allowSetters = true)
     private Set<QuizResult> quizResults = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "rel_quiz__groups", joinColumns = @JoinColumn(name = "quiz_id"), inverseJoinColumns = @JoinColumn(name = "groups_id"))
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "certificates", "groups", "elements", "group1", "quizzes", "sessions5s" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "certificates", "groups", "elements", "site11", "group1", "quizzes", "sessions5s" },
+        allowSetters = true
+    )
     private Set<Group> groups = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -72,8 +75,38 @@ public class Quiz implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "questions_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "answers", "quizzes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "answers", "site5", "quizzes" }, allowSetters = true)
     private Set<Question> questions = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site7;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "certificates", "quizzes", "topics", "courses", "topic2" }, allowSetters = true)
@@ -233,6 +266,19 @@ public class Quiz implements Serializable {
 
     public Quiz removeQuestions(Question question) {
         this.questions.remove(question);
+        return this;
+    }
+
+    public Site getSite7() {
+        return this.site7;
+    }
+
+    public void setSite7(Site site) {
+        this.site7 = site;
+    }
+
+    public Quiz site7(Site site) {
+        this.setSite7(site);
         return this;
     }
 

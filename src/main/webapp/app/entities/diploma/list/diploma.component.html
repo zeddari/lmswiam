@@ -41,155 +41,138 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (diplomas?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.diploma.home.notFound">No Diplomas found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="diplomas?.length === 0">
+    <span jhiTranslate="lmswiamApp.diploma.home.notFound">No Diplomas found</span>
+  </div>
 
-  @if (diplomas && diplomas.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="diplomas && diplomas.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="type">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.diploma.type">Type</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="title">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.diploma.title">Title</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="subject">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.diploma.subject">Subject</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="detail">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.diploma.detail">Detail</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="supervisor">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.diploma.supervisor">Supervisor</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="grade">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.diploma.grade">Grade</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="graduationDate">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.diploma.graduationDate">Graduation Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="school">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.diploma.school">School</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="attachment">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.diploma.attachment">Attachment</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site20.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.diploma.site20">Site 20</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let diploma of diplomas; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/diploma', diploma.id, 'view']">{{ diploma.id }}</a>
+          </td>
+          <td jhiTranslate="{{ 'lmswiamApp.DiplomaType.' + diploma.type }}">{{ diploma.type }}</td>
+          <td>{{ diploma.title }}</td>
+          <td>{{ diploma.subject }}</td>
+          <td>{{ diploma.detail }}</td>
+          <td>{{ diploma.supervisor }}</td>
+          <td>{{ diploma.grade }}</td>
+          <td>{{ diploma.graduationDate | formatMediumDate }}</td>
+          <td>{{ diploma.school }}</td>
+          <td>
+            <a *ngIf="diploma.attachment" (click)="openFile(diploma.attachment, diploma.attachmentContentType)">
+              <img
+                [src]="'data:' + diploma.attachmentContentType + ';base64,' + diploma.attachment"
+                style="max-height: 30px"
+                alt="diploma image"
+              />
+            </a>
+            <span *ngIf="diploma.attachment">{{ diploma.attachmentContentType }}, {{ byteSize(diploma.attachment) }}</span>
+          </td>
+          <td>
+            <div *ngIf="diploma.site20">
+              <a [routerLink]="['/site', diploma.site20.id, 'view']">{{ diploma.site20.nameAr }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/diploma', diploma.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="type">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.diploma.type">Type</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="title">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.diploma.title">Title</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="subject">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.diploma.subject">Subject</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="detail">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.diploma.detail">Detail</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="supervisor">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.diploma.supervisor">Supervisor</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="grade">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.diploma.grade">Grade</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="graduationDate">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.diploma.graduationDate">Graduation Date</span>
+              <a [routerLink]="['/diploma', diploma.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="school">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.diploma.school">School</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="attachment">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.diploma.attachment">Attachment</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (diploma of diplomas; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/diploma', diploma.id, 'view']">{{ diploma.id }}</a>
-              </td>
-              <td jhiTranslate="{{ 'lmswiamApp.DiplomaType.' + diploma.type }}">{{ diploma.type }}</td>
-              <td>{{ diploma.title }}</td>
-              <td>{{ diploma.subject }}</td>
-              <td>{{ diploma.detail }}</td>
-              <td>{{ diploma.supervisor }}</td>
-              <td>{{ diploma.grade }}</td>
-              <td>{{ diploma.graduationDate | formatMediumDate }}</td>
-              <td>{{ diploma.school }}</td>
-              <td>
-                @if (diploma.attachment) {
-                  <a (click)="openFile(diploma.attachment, diploma.attachmentContentType)">
-                    <img
-                      [src]="'data:' + diploma.attachmentContentType + ';base64,' + diploma.attachment"
-                      style="max-height: 30px"
-                      alt="diploma image"
-                    />
-                  </a>
-                  <span>{{ diploma.attachmentContentType }}, {{ byteSize(diploma.attachment) }}</span>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/diploma', diploma.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/diploma', diploma.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(diploma)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(diploma)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

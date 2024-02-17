@@ -7,6 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
 import { ICourse } from 'app/entities/course/course.model';
@@ -27,6 +29,7 @@ export class EnrolementUpdateComponent implements OnInit {
   enrolement: IEnrolement | null = null;
   enrolementTypeValues = Object.keys(EnrolementType);
 
+  sitesSharedCollection: ISite[] = [];
   userCustomsSharedCollection: IUserCustom[] = [];
   coursesSharedCollection: ICourse[] = [];
 
@@ -35,10 +38,13 @@ export class EnrolementUpdateComponent implements OnInit {
   constructor(
     protected enrolementService: EnrolementService,
     protected enrolementFormService: EnrolementFormService,
+    protected siteService: SiteService,
     protected userCustomService: UserCustomService,
     protected courseService: CourseService,
     protected activatedRoute: ActivatedRoute,
   ) {}
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareUserCustom = (o1: IUserCustom | null, o2: IUserCustom | null): boolean => this.userCustomService.compareUserCustom(o1, o2);
 
@@ -92,6 +98,7 @@ export class EnrolementUpdateComponent implements OnInit {
     this.enrolement = enrolement;
     this.enrolementFormService.resetForm(this.editForm, enrolement);
 
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, enrolement.site4);
     this.userCustomsSharedCollection = this.userCustomService.addUserCustomToCollectionIfMissing<IUserCustom>(
       this.userCustomsSharedCollection,
       enrolement.userCustom4,
@@ -103,6 +110,12 @@ export class EnrolementUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.enrolement?.site4)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
+
     this.userCustomService
       .query()
       .pipe(map((res: HttpResponse<IUserCustom[]>) => res.body ?? []))

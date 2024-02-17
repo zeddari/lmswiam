@@ -4,28 +4,29 @@ import { IAyahEdition, NewAyahEdition } from './ayah-edition.model';
 
 export const sampleWithRequiredData: IAyahEdition = {
   id: 22851,
-  data: 'brief majestic',
+  data: '../fake-data/blob/hipster.txt',
 };
 
 export const sampleWithPartialData: IAyahEdition = {
-  id: 12930,
-  editionId: 1120,
-  data: 'sleuth but',
-  createdAt: dayjs('2024-01-09T13:18'),
+  id: 17101,
+  ayahId: 19805,
+  data: '../fake-data/blob/hipster.txt',
+  isAudio: true,
+  updatedAt: dayjs('2024-01-09T01:43'),
 };
 
 export const sampleWithFullData: IAyahEdition = {
-  id: 21848,
-  ayahId: 30770,
-  editionId: 7218,
-  data: 'blah',
+  id: 32626,
+  ayahId: 14853,
+  editionId: 30714,
+  data: '../fake-data/blob/hipster.txt',
   isAudio: false,
-  createdAt: dayjs('2024-01-09T13:08'),
-  updatedAt: dayjs('2024-01-08T21:58'),
+  createdAt: dayjs('2024-01-09T04:42'),
+  updatedAt: dayjs('2024-01-09T06:02'),
 };
 
 export const sampleWithNewData: NewAyahEdition = {
-  data: 'convert competent boo',
+  data: '../fake-data/blob/hipster.txt',
   id: null,
 };
 

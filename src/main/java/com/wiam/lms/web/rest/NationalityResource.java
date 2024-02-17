@@ -172,7 +172,7 @@ public class NationalityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the nationality, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Nationality> getNationality(@PathVariable("id") Long id) {
+    public ResponseEntity<Nationality> getNationality(@PathVariable Long id) {
         log.debug("REST request to get Nationality : {}", id);
         Optional<Nationality> nationality = nationalityRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(nationality);
@@ -185,7 +185,7 @@ public class NationalityResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNationality(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteNationality(@PathVariable Long id) {
         log.debug("REST request to delete Nationality : {}", id);
         nationalityRepository.deleteById(id);
         nationalitySearchRepository.deleteFromIndexById(id);
@@ -203,7 +203,7 @@ public class NationalityResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Nationality> searchNationalities(@RequestParam("query") String query) {
+    public List<Nationality> searchNationalities(@RequestParam String query) {
         log.debug("REST request to search Nationalities for query {}", query);
         try {
             return StreamSupport.stream(nationalitySearchRepository.search(query).spliterator(), false).toList();

@@ -3,6 +3,7 @@
     "changelogDate": "20240109175931"
   },
   "applications": "*",
+  "changelogDate": "20240109175931",
   "entityTableName": "enrolement",
   "fields": [
     {
@@ -46,6 +47,14 @@
       "relationshipType": "one-to-many"
     },
     {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site4",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "firstName",
       "otherEntityName": "userCustom",
       "otherEntityRelationshipName": "enrolement",
       "relationshipName": "userCustom4",

@@ -3,6 +3,7 @@ package com.wiam.lms.domain;
 import static com.wiam.lms.domain.SessionInstanceTestSamples.*;
 import static com.wiam.lms.domain.SessionLinkTestSamples.*;
 import static com.wiam.lms.domain.SessionTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.wiam.lms.web.rest.TestUtil;
@@ -24,6 +25,18 @@ class SessionLinkTest {
 
         sessionLink2 = getSessionLinkSample2();
         assertThat(sessionLink1).isNotEqualTo(sessionLink2);
+    }
+
+    @Test
+    void site15Test() throws Exception {
+        SessionLink sessionLink = getSessionLinkRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        sessionLink.setSite15(siteBack);
+        assertThat(sessionLink.getSite15()).isEqualTo(siteBack);
+
+        sessionLink.site15(null);
+        assertThat(sessionLink.getSite15()).isNull();
     }
 
     @Test

@@ -41,7 +41,37 @@ public class Review implements Serializable {
     private ZonedDateTime reviewDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "parts", "reviews", "course", "part1" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site3;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "parts", "reviews", "site2", "course", "part1" }, allowSetters = true)
     private Part part2;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -58,6 +88,7 @@ public class Review implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -123,6 +154,19 @@ public class Review implements Serializable {
 
     public void setReviewDate(ZonedDateTime reviewDate) {
         this.reviewDate = reviewDate;
+    }
+
+    public Site getSite3() {
+        return this.site3;
+    }
+
+    public void setSite3(Site site) {
+        this.site3 = site;
+    }
+
+    public Review site3(Site site) {
+        this.setSite3(site);
+        return this;
     }
 
     public Part getPart2() {

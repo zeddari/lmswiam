@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { DiplomaType } from 'app/entities/enumerations/diploma-type.model';
 import { DiplomaService } from '../service/diploma.service';
 import { IDiploma } from '../diploma.model';
@@ -26,6 +28,8 @@ export class DiplomaUpdateComponent implements OnInit {
   diploma: IDiploma | null = null;
   diplomaTypeValues = Object.keys(DiplomaType);
 
+  sitesSharedCollection: ISite[] = [];
+
   editForm: DiplomaFormGroup = this.diplomaFormService.createDiplomaFormGroup();
 
   constructor(
@@ -33,9 +37,12 @@ export class DiplomaUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected diplomaService: DiplomaService,
     protected diplomaFormService: DiplomaFormService,
+    protected siteService: SiteService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
   ) {}
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ diploma }) => {
@@ -43,6 +50,8 @@ export class DiplomaUpdateComponent implements OnInit {
       if (diploma) {
         this.updateForm(diploma);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -107,5 +116,15 @@ export class DiplomaUpdateComponent implements OnInit {
   protected updateForm(diploma: IDiploma): void {
     this.diploma = diploma;
     this.diplomaFormService.resetForm(this.editForm, diploma);
+
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, diploma.site20);
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.diploma?.site20)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
   }
 }

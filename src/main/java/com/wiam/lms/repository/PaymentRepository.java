@@ -27,18 +27,18 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     }
 
     @Query(
-        value = "select payment from Payment payment left join fetch payment.enrolment left join fetch payment.sponsoring left join fetch payment.session left join fetch payment.currency",
+        value = "select payment from Payment payment left join fetch payment.site9 left join fetch payment.enrolment left join fetch payment.sponsoring left join fetch payment.session left join fetch payment.currency",
         countQuery = "select count(payment) from Payment payment"
     )
     Page<Payment> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select payment from Payment payment left join fetch payment.enrolment left join fetch payment.sponsoring left join fetch payment.session left join fetch payment.currency"
+        "select payment from Payment payment left join fetch payment.site9 left join fetch payment.enrolment left join fetch payment.sponsoring left join fetch payment.session left join fetch payment.currency"
     )
     List<Payment> findAllWithToOneRelationships();
 
     @Query(
-        "select payment from Payment payment left join fetch payment.enrolment left join fetch payment.sponsoring left join fetch payment.session left join fetch payment.currency where payment.id =:id"
+        "select payment from Payment payment left join fetch payment.site9 left join fetch payment.enrolment left join fetch payment.sponsoring left join fetch payment.session left join fetch payment.currency where payment.id =:id"
     )
     Optional<Payment> findOneWithToOneRelationships(@Param("id") Long id);
 }

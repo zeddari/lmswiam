@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
 import { IGroup } from 'app/entities/group/group.model';
@@ -34,6 +36,7 @@ export class CertificateUpdateComponent implements OnInit {
   certificateTypeValues = Object.keys(CertificateType);
   riwayatsValues = Object.keys(Riwayats);
 
+  sitesSharedCollection: ISite[] = [];
   userCustomsSharedCollection: IUserCustom[] = [];
   groupsSharedCollection: IGroup[] = [];
   topicsSharedCollection: ITopic[] = [];
@@ -45,11 +48,14 @@ export class CertificateUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected certificateService: CertificateService,
     protected certificateFormService: CertificateFormService,
+    protected siteService: SiteService,
     protected userCustomService: UserCustomService,
     protected groupService: GroupService,
     protected topicService: TopicService,
     protected activatedRoute: ActivatedRoute,
   ) {}
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareUserCustom = (o1: IUserCustom | null, o2: IUserCustom | null): boolean => this.userCustomService.compareUserCustom(o1, o2);
 
@@ -120,6 +126,7 @@ export class CertificateUpdateComponent implements OnInit {
     this.certificate = certificate;
     this.certificateFormService.resetForm(this.editForm, certificate);
 
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, certificate.site19);
     this.userCustomsSharedCollection = this.userCustomService.addUserCustomToCollectionIfMissing<IUserCustom>(
       this.userCustomsSharedCollection,
       certificate.userCustom6,
@@ -129,6 +136,12 @@ export class CertificateUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.certificate?.site19)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
+
     this.userCustomService
       .query()
       .pipe(map((res: HttpResponse<IUserCustom[]>) => res.body ?? []))

@@ -41,104 +41,87 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (classrooms?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.classroom.home.notFound">No Classrooms found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="classrooms?.length === 0">
+    <span jhiTranslate="lmswiamApp.classroom.home.notFound">No Classrooms found</span>
+  </div>
 
-  @if (classrooms && classrooms.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="classrooms && classrooms.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.classroom.nameAr">Name Ar</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nameLat">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.classroom.nameLat">Name Lat</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.classroom.description">Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.classroom.site">Site</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let classroom of classrooms; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/classroom', classroom.id, 'view']">{{ classroom.id }}</a>
+          </td>
+          <td>{{ classroom.nameAr }}</td>
+          <td>{{ classroom.nameLat }}</td>
+          <td>{{ classroom.description }}</td>
+          <td>
+            <div *ngIf="classroom.site">
+              <a [routerLink]="['/site', classroom.site.id, 'view']">{{ classroom.site.nameAr }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/classroom', classroom.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.classroom.nameAr">Name Ar</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="nameLat">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.classroom.nameLat">Name Lat</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="description">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.classroom.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="site.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.classroom.site">Site</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (classroom of classrooms; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/classroom', classroom.id, 'view']">{{ classroom.id }}</a>
-              </td>
-              <td>{{ classroom.nameAr }}</td>
-              <td>{{ classroom.nameLat }}</td>
-              <td>{{ classroom.description }}</td>
-              <td>
-                @if (classroom.site) {
-                  <div>
-                    <a [routerLink]="['/site', classroom.site.id, 'view']">{{ classroom.site.nameAr }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/classroom', classroom.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
+              <a [routerLink]="['/classroom', classroom.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                  <a [routerLink]="['/classroom', classroom.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(classroom)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(classroom)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

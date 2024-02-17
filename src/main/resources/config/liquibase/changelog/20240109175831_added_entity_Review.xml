@@ -23,6 +23,9 @@
             <column name="review_date" type="${datetimeType}">
                 <constraints nullable="false" />
             </column>
+            <column name="site3_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="part2_id" type="bigint">
                 <constraints nullable="true" />
             </column>

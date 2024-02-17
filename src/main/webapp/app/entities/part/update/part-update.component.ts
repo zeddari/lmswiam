@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ICourse } from 'app/entities/course/course.model';
 import { CourseService } from 'app/entities/course/service/course.service';
 import { PartService } from '../service/part.service';
@@ -27,6 +29,7 @@ export class PartUpdateComponent implements OnInit {
   part: IPart | null = null;
 
   partsSharedCollection: IPart[] = [];
+  sitesSharedCollection: ISite[] = [];
   coursesSharedCollection: ICourse[] = [];
 
   editForm: PartFormGroup = this.partFormService.createPartFormGroup();
@@ -36,12 +39,15 @@ export class PartUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected partService: PartService,
     protected partFormService: PartFormService,
+    protected siteService: SiteService,
     protected courseService: CourseService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
   ) {}
 
   comparePart = (o1: IPart | null, o2: IPart | null): boolean => this.partService.comparePart(o1, o2);
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareCourse = (o1: ICourse | null, o2: ICourse | null): boolean => this.courseService.compareCourse(o1, o2);
 
@@ -119,6 +125,7 @@ export class PartUpdateComponent implements OnInit {
     this.partFormService.resetForm(this.editForm, part);
 
     this.partsSharedCollection = this.partService.addPartToCollectionIfMissing<IPart>(this.partsSharedCollection, part.part1);
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, part.site2);
     this.coursesSharedCollection = this.courseService.addCourseToCollectionIfMissing<ICourse>(this.coursesSharedCollection, part.course);
   }
 
@@ -128,6 +135,12 @@ export class PartUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPart[]>) => res.body ?? []))
       .pipe(map((parts: IPart[]) => this.partService.addPartToCollectionIfMissing<IPart>(parts, this.part?.part1)))
       .subscribe((parts: IPart[]) => (this.partsSharedCollection = parts));
+
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.part?.site2)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
 
     this.courseService
       .query()

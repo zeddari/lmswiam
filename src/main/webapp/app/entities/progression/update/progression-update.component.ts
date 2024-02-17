@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ISessionInstance } from 'app/entities/session-instance/session-instance.model';
 import { SessionInstanceService } from 'app/entities/session-instance/service/session-instance.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
@@ -40,6 +42,7 @@ export class ProgressionUpdateComponent implements OnInit {
   sourateValues = Object.keys(Sourate);
   tilawaValues = Object.keys(Tilawa);
 
+  sitesSharedCollection: ISite[] = [];
   sessionInstancesSharedCollection: ISessionInstance[] = [];
   userCustomsSharedCollection: IUserCustom[] = [];
 
@@ -50,10 +53,13 @@ export class ProgressionUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected progressionService: ProgressionService,
     protected progressionFormService: ProgressionFormService,
+    protected siteService: SiteService,
     protected sessionInstanceService: SessionInstanceService,
     protected userCustomService: UserCustomService,
     protected activatedRoute: ActivatedRoute,
   ) {}
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareSessionInstance = (o1: ISessionInstance | null, o2: ISessionInstance | null): boolean =>
     this.sessionInstanceService.compareSessionInstance(o1, o2);
@@ -123,6 +129,7 @@ export class ProgressionUpdateComponent implements OnInit {
     this.progression = progression;
     this.progressionFormService.resetForm(this.editForm, progression);
 
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, progression.site17);
     this.sessionInstancesSharedCollection = this.sessionInstanceService.addSessionInstanceToCollectionIfMissing<ISessionInstance>(
       this.sessionInstancesSharedCollection,
       progression.sessionInstance,
@@ -134,6 +141,12 @@ export class ProgressionUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.progression?.site17)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
+
     this.sessionInstanceService
       .query()
       .pipe(map((res: HttpResponse<ISessionInstance[]>) => res.body ?? []))

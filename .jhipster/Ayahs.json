@@ -3,6 +3,7 @@
     "changelogDate": "20240109181931"
   },
   "applications": "*",
+  "changelogDate": "20240109181931",
   "entityTableName": "ayahs",
   "fields": [
     {
@@ -15,9 +16,9 @@
     },
     {
       "fieldName": "textdesc",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "unique", "maxlength"],
-      "fieldValidateRulesMaxlength": "100"
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "numberInSurah",

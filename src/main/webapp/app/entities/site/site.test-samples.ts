@@ -1,29 +1,28 @@
 import { ISite, NewSite } from './site.model';
 
 export const sampleWithRequiredData: ISite = {
-  id: 2071,
-  nameAr: 'decent',
-  nameLat: 'dislodge moody',
+  id: 22911,
+  nameAr: 'mortally mochi',
+  nameLat: 'cavernous',
 };
 
 export const sampleWithPartialData: ISite = {
-  id: 29833,
-  nameAr: 'or mortally',
-  nameLat: 'anenst cavernous',
-  localisation: 'uh-huh ha including',
+  id: 4488,
+  nameAr: 'lob detrain',
+  nameLat: 'pfft intently',
 };
 
 export const sampleWithFullData: ISite = {
-  id: 10790,
-  nameAr: 'duh',
-  nameLat: 'aw',
+  id: 14992,
+  nameAr: 'mortally',
+  nameLat: 'micronutrient conspirator',
   description: '../fake-data/blob/hipster.txt',
-  localisation: 'forecast',
+  localisation: 'badly gracefully',
 };
 
 export const sampleWithNewData: NewSite = {
-  nameAr: 'nestling',
-  nameLat: 'because if',
+  nameAr: 'geez',
+  nameLat: 'thankfully vivaciously',
   id: null,
 };
 

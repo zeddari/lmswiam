@@ -17,8 +17,8 @@
             <column name="number" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="textdesc" type="varchar(100)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_ayahs__textdesc" />
+            <column name="textdesc" type="${clobType}">
+                <constraints nullable="false" />
             </column>
             <column name="number_in_surah" type="integer">
                 <constraints nullable="true" />
@@ -68,7 +68,7 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="number" type="numeric"/>
-            <column name="textdesc" type="string"/>
+            <column name="textdesc" type="clob"/>
             <column name="number_in_surah" type="numeric"/>
             <column name="page" type="numeric"/>
             <column name="surah_id" type="numeric"/>

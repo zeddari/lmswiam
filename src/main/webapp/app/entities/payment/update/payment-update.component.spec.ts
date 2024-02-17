@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IEnrolement } from 'app/entities/enrolement/enrolement.model';
 import { EnrolementService } from 'app/entities/enrolement/service/enrolement.service';
 import { ISponsoring } from 'app/entities/sponsoring/sponsoring.model';
@@ -26,6 +28,7 @@ describe('Payment Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let paymentFormService: PaymentFormService;
   let paymentService: PaymentService;
+  let siteService: SiteService;
   let enrolementService: EnrolementService;
   let sponsoringService: SponsoringService;
   let sessionService: SessionService;
@@ -51,6 +54,7 @@ describe('Payment Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     paymentFormService = TestBed.inject(PaymentFormService);
     paymentService = TestBed.inject(PaymentService);
+    siteService = TestBed.inject(SiteService);
     enrolementService = TestBed.inject(EnrolementService);
     sponsoringService = TestBed.inject(SponsoringService);
     sessionService = TestBed.inject(SessionService);
@@ -60,6 +64,28 @@ describe('Payment Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
+    it('Should call Site query and add missing value', () => {
+      const payment: IPayment = { id: 456 };
+      const site9: ISite = { id: 22287 };
+      payment.site9 = site9;
+
+      const siteCollection: ISite[] = [{ id: 30664 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site9];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ payment });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call Enrolement query and add missing value', () => {
       const payment: IPayment = { id: 456 };
       const enrolment: IEnrolement = { id: 5952 };
@@ -150,6 +176,8 @@ describe('Payment Management Update Component', () => {
 
     it('Should update editForm', () => {
       const payment: IPayment = { id: 456 };
+      const site9: ISite = { id: 23889 };
+      payment.site9 = site9;
       const enrolment: IEnrolement = { id: 3049 };
       payment.enrolment = enrolment;
       const sponsoring: ISponsoring = { id: 6241 };
@@ -162,6 +190,7 @@ describe('Payment Management Update Component', () => {
       activatedRoute.data = of({ payment });
       comp.ngOnInit();
 
+      expect(comp.sitesSharedCollection).toContain(site9);
       expect(comp.enrolementsSharedCollection).toContain(enrolment);
       expect(comp.sponsoringsSharedCollection).toContain(sponsoring);
       expect(comp.sessionsSharedCollection).toContain(session);
@@ -239,6 +268,16 @@ describe('Payment Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareEnrolement', () => {
       it('Should forward to enrolementService', () => {
         const entity = { id: 123 };

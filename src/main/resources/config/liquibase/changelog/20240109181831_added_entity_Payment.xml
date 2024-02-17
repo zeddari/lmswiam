@@ -44,6 +44,9 @@
             <column name="details" type="${clobType}">
                 <constraints nullable="true" />
             </column>
+            <column name="site9_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="enrolment_id" type="bigint">
                 <constraints nullable="true" />
             </column>

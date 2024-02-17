@@ -3,6 +3,7 @@ package com.wiam.lms.domain;
 import static com.wiam.lms.domain.CourseTestSamples.*;
 import static com.wiam.lms.domain.EnrolementTestSamples.*;
 import static com.wiam.lms.domain.PaymentTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,6 +48,18 @@ class EnrolementTest {
         enrolement.setPayments(new HashSet<>());
         assertThat(enrolement.getPayments()).doesNotContain(paymentBack);
         assertThat(paymentBack.getEnrolment()).isNull();
+    }
+
+    @Test
+    void site4Test() throws Exception {
+        Enrolement enrolement = getEnrolementRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        enrolement.setSite4(siteBack);
+        assertThat(enrolement.getSite4()).isEqualTo(siteBack);
+
+        enrolement.site4(null);
+        assertThat(enrolement.getSite4()).isNull();
     }
 
     @Test

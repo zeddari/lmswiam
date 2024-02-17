@@ -27,6 +27,7 @@ describe('Quiz Form Service', () => {
             isActive: expect.any(Object),
             groups: expect.any(Object),
             questions: expect.any(Object),
+            site7: expect.any(Object),
             topic1: expect.any(Object),
           }),
         );
@@ -45,6 +46,7 @@ describe('Quiz Form Service', () => {
             isActive: expect.any(Object),
             groups: expect.any(Object),
             questions: expect.any(Object),
+            site7: expect.any(Object),
             topic1: expect.any(Object),
           }),
         );

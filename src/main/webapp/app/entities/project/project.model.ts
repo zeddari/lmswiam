@@ -1,5 +1,5 @@
 import dayjs from 'dayjs/esm';
-import { ISponsoring } from 'app/entities/sponsoring/sponsoring.model';
+import { ISite } from 'app/entities/site/site.model';
 import { ITypeProject } from 'app/entities/type-project/type-project.model';
 
 export interface IProject {
@@ -17,8 +17,8 @@ export interface IProject {
   activateAt?: dayjs.Dayjs | null;
   startDate?: dayjs.Dayjs | null;
   endDate?: dayjs.Dayjs | null;
-  sponsorings?: ISponsoring[] | null;
-  typeProject?: ITypeProject | null;
+  site12?: Pick<ISite, 'id' | 'nameAr'> | null;
+  typeProject?: Pick<ITypeProject, 'id' | 'nameAr'> | null;
 }
 
 export type NewProject = Omit<IProject, 'id'> & { id: null };

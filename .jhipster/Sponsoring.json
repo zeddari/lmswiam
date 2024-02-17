@@ -3,6 +3,7 @@
     "changelogDate": "20240109181631"
   },
   "applications": "*",
+  "changelogDate": "20240109181631",
   "entityTableName": "sponsoring",
   "fields": [
     {
@@ -43,6 +44,13 @@
       "relationshipName": "payment",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site10",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "firstName",

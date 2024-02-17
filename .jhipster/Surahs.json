@@ -3,6 +3,7 @@
     "changelogDate": "20240109182331"
   },
   "applications": "*",
+  "changelogDate": "20240109182331",
   "entityTableName": "surahs",
   "fields": [
     {

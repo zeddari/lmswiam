@@ -145,6 +145,26 @@ public class CacheConfiguration {
             createCache(cm, com.wiam.lms.domain.Juzs.class.getName());
             createCache(cm, com.wiam.lms.domain.Surahs.class.getName());
             createCache(cm, com.wiam.lms.domain.Editions.class.getName());
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".courses");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".parts");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".reviews");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".enrolements");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".questions");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".answers");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".quizzes");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".quizResults");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".payments");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".sponsorings");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".groups");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".projects");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".userCustoms");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".sessions");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".sessionLinks");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".sessionInstances");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".progressions");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".tickets");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".certificates");
+            createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".diplomas");
             // jhipster-needle-ehcache-add-entry
         };
     }

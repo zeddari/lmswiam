@@ -27,14 +27,14 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     }
 
     @Query(
-        value = "select project from Project project left join fetch project.typeProject",
+        value = "select project from Project project left join fetch project.site12 left join fetch project.typeProject",
         countQuery = "select count(project) from Project project"
     )
     Page<Project> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select project from Project project left join fetch project.typeProject")
+    @Query("select project from Project project left join fetch project.site12 left join fetch project.typeProject")
     List<Project> findAllWithToOneRelationships();
 
-    @Query("select project from Project project left join fetch project.typeProject where project.id =:id")
+    @Query("select project from Project project left join fetch project.site12 left join fetch project.typeProject where project.id =:id")
     Optional<Project> findOneWithToOneRelationships(@Param("id") Long id);
 }

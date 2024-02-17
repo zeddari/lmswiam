@@ -3,6 +3,7 @@
     "changelogDate": "20240109181131"
   },
   "applications": "*",
+  "changelogDate": "20240109181131",
   "entityTableName": "session_instance",
   "fields": [
     {
@@ -63,6 +64,13 @@
       "relationshipName": "links",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site16",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "title",

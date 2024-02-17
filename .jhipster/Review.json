@@ -3,6 +3,7 @@
     "changelogDate": "20240109175831"
   },
   "applications": "*",
+  "changelogDate": "20240109175831",
   "entityTableName": "review",
   "fields": [
     {
@@ -26,6 +27,13 @@
   ],
   "name": "Review",
   "relationships": [
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site3",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
     {
       "otherEntityField": "titleAr",
       "otherEntityName": "part",

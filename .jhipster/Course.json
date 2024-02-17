@@ -3,6 +3,7 @@
     "changelogDate": "20240109175631"
   },
   "applications": "*",
+  "changelogDate": "20240109175631",
   "entityTableName": "course",
   "fields": [
     {
@@ -57,7 +58,8 @@
     },
     {
       "fieldName": "videoLink",
-      "fieldType": "String"
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
     },
     {
       "fieldName": "price",
@@ -105,6 +107,13 @@
       "relationshipName": "professors",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site1",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "titleAr",

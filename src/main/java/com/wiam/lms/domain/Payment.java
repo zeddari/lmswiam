@@ -74,16 +74,46 @@ public class Payment implements Serializable {
     private String details;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "payments", "userCustom4", "course" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site9;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "payments", "site4", "userCustom4", "course" }, allowSetters = true)
     private Enrolement enrolment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "payments", "sponsor", "project", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payments", "site10", "sponsor", "project", "currency" }, allowSetters = true)
     private Sponsoring sponsoring;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links" },
+        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links", "site14" },
         allowSetters = true
     )
     private Session session;
@@ -235,6 +265,19 @@ public class Payment implements Serializable {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public Site getSite9() {
+        return this.site9;
+    }
+
+    public void setSite9(Site site) {
+        this.site9 = site;
+    }
+
+    public Payment site9(Site site) {
+        this.setSite9(site);
+        return this;
     }
 
     public Enrolement getEnrolment() {

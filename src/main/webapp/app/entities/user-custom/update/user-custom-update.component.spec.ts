@@ -12,6 +12,8 @@ import { IDiploma } from 'app/entities/diploma/diploma.model';
 import { DiplomaService } from 'app/entities/diploma/service/diploma.service';
 import { ILanguage } from 'app/entities/language/language.model';
 import { LanguageService } from 'app/entities/language/service/language.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ICountry } from 'app/entities/country/country.model';
 import { CountryService } from 'app/entities/country/service/country.service';
 import { INationality } from 'app/entities/nationality/nationality.model';
@@ -35,6 +37,7 @@ describe('UserCustom Management Update Component', () => {
   let userService: UserService;
   let diplomaService: DiplomaService;
   let languageService: LanguageService;
+  let siteService: SiteService;
   let countryService: CountryService;
   let nationalityService: NationalityService;
   let jobService: JobService;
@@ -63,6 +66,7 @@ describe('UserCustom Management Update Component', () => {
     userService = TestBed.inject(UserService);
     diplomaService = TestBed.inject(DiplomaService);
     languageService = TestBed.inject(LanguageService);
+    siteService = TestBed.inject(SiteService);
     countryService = TestBed.inject(CountryService);
     nationalityService = TestBed.inject(NationalityService);
     jobService = TestBed.inject(JobService);
@@ -136,6 +140,28 @@ describe('UserCustom Management Update Component', () => {
         ...additionalLanguages.map(expect.objectContaining),
       );
       expect(comp.languagesSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call Site query and add missing value', () => {
+      const userCustom: IUserCustom = { id: 456 };
+      const site13: ISite = { id: 18424 };
+      userCustom.site13 = site13;
+
+      const siteCollection: ISite[] = [{ id: 29032 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site13];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ userCustom });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call Country query and add missing value', () => {
@@ -231,6 +257,8 @@ describe('UserCustom Management Update Component', () => {
       userCustom.diplomas = [diplomas];
       const languages: ILanguage = { id: 306 };
       userCustom.languages = [languages];
+      const site13: ISite = { id: 22269 };
+      userCustom.site13 = site13;
       const country: ICountry = { id: 14834 };
       userCustom.country = country;
       const nationality: INationality = { id: 6386 };
@@ -246,6 +274,7 @@ describe('UserCustom Management Update Component', () => {
       expect(comp.usersSharedCollection).toContain(user);
       expect(comp.diplomasSharedCollection).toContain(diplomas);
       expect(comp.languagesSharedCollection).toContain(languages);
+      expect(comp.sitesSharedCollection).toContain(site13);
       expect(comp.countriesSharedCollection).toContain(country);
       expect(comp.nationalitiesSharedCollection).toContain(nationality);
       expect(comp.jobsSharedCollection).toContain(job);
@@ -350,6 +379,16 @@ describe('UserCustom Management Update Component', () => {
         jest.spyOn(languageService, 'compareLanguage');
         comp.compareLanguage(entity, entity2);
         expect(languageService.compareLanguage).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
       });
     });
 

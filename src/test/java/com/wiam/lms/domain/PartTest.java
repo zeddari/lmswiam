@@ -4,6 +4,7 @@ import static com.wiam.lms.domain.CourseTestSamples.*;
 import static com.wiam.lms.domain.PartTestSamples.*;
 import static com.wiam.lms.domain.PartTestSamples.*;
 import static com.wiam.lms.domain.ReviewTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.wiam.lms.web.rest.TestUtil;
@@ -69,6 +70,18 @@ class PartTest {
         part.setReviews(new HashSet<>());
         assertThat(part.getReviews()).doesNotContain(reviewBack);
         assertThat(reviewBack.getPart2()).isNull();
+    }
+
+    @Test
+    void site2Test() throws Exception {
+        Part part = getPartRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        part.setSite2(siteBack);
+        assertThat(part.getSite2()).isEqualTo(siteBack);
+
+        part.site2(null);
+        assertThat(part.getSite2()).isNull();
     }
 
     @Test

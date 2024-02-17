@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IEnrolement } from 'app/entities/enrolement/enrolement.model';
 import { EnrolementService } from 'app/entities/enrolement/service/enrolement.service';
 import { ISponsoring } from 'app/entities/sponsoring/sponsoring.model';
@@ -36,6 +38,7 @@ export class PaymentUpdateComponent implements OnInit {
   paymentModeValues = Object.keys(PaymentMode);
   paymentTypeValues = Object.keys(PaymentType);
 
+  sitesSharedCollection: ISite[] = [];
   enrolementsSharedCollection: IEnrolement[] = [];
   sponsoringsSharedCollection: ISponsoring[] = [];
   sessionsSharedCollection: ISession[] = [];
@@ -48,6 +51,7 @@ export class PaymentUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected paymentService: PaymentService,
     protected paymentFormService: PaymentFormService,
+    protected siteService: SiteService,
     protected enrolementService: EnrolementService,
     protected sponsoringService: SponsoringService,
     protected sessionService: SessionService,
@@ -55,6 +59,8 @@ export class PaymentUpdateComponent implements OnInit {
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
   ) {}
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareEnrolement = (o1: IEnrolement | null, o2: IEnrolement | null): boolean => this.enrolementService.compareEnrolement(o1, o2);
 
@@ -137,6 +143,7 @@ export class PaymentUpdateComponent implements OnInit {
     this.payment = payment;
     this.paymentFormService.resetForm(this.editForm, payment);
 
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, payment.site9);
     this.enrolementsSharedCollection = this.enrolementService.addEnrolementToCollectionIfMissing<IEnrolement>(
       this.enrolementsSharedCollection,
       payment.enrolment,
@@ -156,6 +163,12 @@ export class PaymentUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.payment?.site9)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
+
     this.enrolementService
       .query()
       .pipe(map((res: HttpResponse<IEnrolement[]>) => res.body ?? []))

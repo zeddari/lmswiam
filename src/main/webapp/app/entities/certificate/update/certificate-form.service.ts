@@ -23,6 +23,7 @@ type CertificateFormGroupContent = {
   riwaya: FormControl<ICertificate['riwaya']>;
   miqdar: FormControl<ICertificate['miqdar']>;
   observation: FormControl<ICertificate['observation']>;
+  site19: FormControl<ICertificate['site19']>;
   userCustom6: FormControl<ICertificate['userCustom6']>;
   comitte: FormControl<ICertificate['comitte']>;
   topic4: FormControl<ICertificate['topic4']>;
@@ -56,6 +57,7 @@ export class CertificateFormService {
       observation: new FormControl(certificateRawValue.observation, {
         validators: [Validators.required],
       }),
+      site19: new FormControl(certificateRawValue.site19),
       userCustom6: new FormControl(certificateRawValue.userCustom6),
       comitte: new FormControl(certificateRawValue.comitte),
       topic4: new FormControl(certificateRawValue.topic4),

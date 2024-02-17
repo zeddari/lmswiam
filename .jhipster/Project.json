@@ -3,6 +3,7 @@
     "changelogDate": "20240109181531"
   },
   "applications": "*",
+  "changelogDate": "20240109181531",
   "entityTableName": "project",
   "fields": [
     {
@@ -41,7 +42,8 @@
     },
     {
       "fieldName": "videoLink",
-      "fieldType": "String"
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
     },
     {
       "fieldName": "budget",
@@ -74,6 +76,13 @@
       "relationshipName": "sponsoring",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site12",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "nameAr",

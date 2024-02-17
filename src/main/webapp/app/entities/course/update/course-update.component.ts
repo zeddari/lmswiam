@@ -12,6 +12,8 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ITopic } from 'app/entities/topic/topic.model';
 import { TopicService } from 'app/entities/topic/service/topic.service';
 import { Level } from 'app/entities/enumerations/level.model';
@@ -31,6 +33,7 @@ export class CourseUpdateComponent implements OnInit {
   levelValues = Object.keys(Level);
 
   userCustomsSharedCollection: IUserCustom[] = [];
+  sitesSharedCollection: ISite[] = [];
   topicsSharedCollection: ITopic[] = [];
 
   editForm: CourseFormGroup = this.courseFormService.createCourseFormGroup();
@@ -41,12 +44,15 @@ export class CourseUpdateComponent implements OnInit {
     protected courseService: CourseService,
     protected courseFormService: CourseFormService,
     protected userCustomService: UserCustomService,
+    protected siteService: SiteService,
     protected topicService: TopicService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
   ) {}
 
   compareUserCustom = (o1: IUserCustom | null, o2: IUserCustom | null): boolean => this.userCustomService.compareUserCustom(o1, o2);
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareTopic = (o1: ITopic | null, o2: ITopic | null): boolean => this.topicService.compareTopic(o1, o2);
 
@@ -127,6 +133,7 @@ export class CourseUpdateComponent implements OnInit {
       this.userCustomsSharedCollection,
       ...(course.professors ?? []),
     );
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, course.site1);
     this.topicsSharedCollection = this.topicService.addTopicToCollectionIfMissing<ITopic>(this.topicsSharedCollection, course.topic3);
   }
 
@@ -140,6 +147,12 @@ export class CourseUpdateComponent implements OnInit {
         ),
       )
       .subscribe((userCustoms: IUserCustom[]) => (this.userCustomsSharedCollection = userCustoms));
+
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.course?.site1)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
 
     this.topicService
       .query()

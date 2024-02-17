@@ -44,6 +44,7 @@ type ProjectFormGroupContent = {
   activateAt: FormControl<ProjectFormRawValue['activateAt']>;
   startDate: FormControl<ProjectFormRawValue['startDate']>;
   endDate: FormControl<ProjectFormRawValue['endDate']>;
+  site12: FormControl<ProjectFormRawValue['site12']>;
   typeProject: FormControl<ProjectFormRawValue['typeProject']>;
 };
 
@@ -83,6 +84,7 @@ export class ProjectFormService {
       activateAt: new FormControl(projectRawValue.activateAt),
       startDate: new FormControl(projectRawValue.startDate),
       endDate: new FormControl(projectRawValue.endDate),
+      site12: new FormControl(projectRawValue.site12),
       typeProject: new FormControl(projectRawValue.typeProject),
     });
   }

@@ -227,7 +227,7 @@ public class SessionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sessions in body.
      */
     @GetMapping("")
-    public List<Session> getAllSessions(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
+    public List<Session> getAllSessions(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Sessions");
         if (eagerload) {
             return sessionRepository.findAllWithEagerRelationships();
@@ -243,7 +243,7 @@ public class SessionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the session, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Session> getSession(@PathVariable("id") Long id) {
+    public ResponseEntity<Session> getSession(@PathVariable Long id) {
         log.debug("REST request to get Session : {}", id);
         Optional<Session> session = sessionRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(session);
@@ -256,7 +256,7 @@ public class SessionResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSession(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteSession(@PathVariable Long id) {
         log.debug("REST request to delete Session : {}", id);
         sessionRepository.deleteById(id);
         sessionSearchRepository.deleteFromIndexById(id);
@@ -274,7 +274,7 @@ public class SessionResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Session> searchSessions(@RequestParam("query") String query) {
+    public List<Session> searchSessions(@RequestParam String query) {
         log.debug("REST request to search Sessions for query {}", query);
         try {
             return StreamSupport.stream(sessionSearchRepository.search(query).spliterator(), false).toList();

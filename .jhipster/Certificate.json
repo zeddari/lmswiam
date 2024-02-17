@@ -3,6 +3,7 @@
     "changelogDate": "20240109180431"
   },
   "applications": "*",
+  "changelogDate": "20240109180431",
   "entityTableName": "certificate",
   "fields": [
     {
@@ -38,6 +39,13 @@
   ],
   "name": "Certificate",
   "relationships": [
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site19",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
     {
       "otherEntityField": "firstName",
       "otherEntityName": "userCustom",

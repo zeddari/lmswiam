@@ -28,9 +28,8 @@ public class Ayahs implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer number;
 
-    @NotNull
-    @Size(max = 100)
-    @Column(name = "textdesc", length = 100, nullable = false, unique = true)
+    @Lob
+    @Column(name = "textdesc", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String textdesc;
 

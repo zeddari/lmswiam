@@ -37,6 +37,7 @@ type ProgressionFormGroupContent = {
   hifdScore: FormControl<IProgression['hifdScore']>;
   adaeScore: FormControl<IProgression['adaeScore']>;
   observation: FormControl<IProgression['observation']>;
+  site17: FormControl<IProgression['site17']>;
   sessionInstance: FormControl<IProgression['sessionInstance']>;
   student: FormControl<IProgression['student']>;
 };
@@ -91,6 +92,7 @@ export class ProgressionFormService {
         validators: [Validators.required, Validators.min(1), Validators.max(5)],
       }),
       observation: new FormControl(progressionRawValue.observation),
+      site17: new FormControl(progressionRawValue.site17),
       sessionInstance: new FormControl(progressionRawValue.sessionInstance),
       student: new FormControl(progressionRawValue.student),
     });

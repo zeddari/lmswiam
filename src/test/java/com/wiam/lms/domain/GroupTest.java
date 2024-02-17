@@ -5,6 +5,7 @@ import static com.wiam.lms.domain.GroupTestSamples.*;
 import static com.wiam.lms.domain.GroupTestSamples.*;
 import static com.wiam.lms.domain.QuizTestSamples.*;
 import static com.wiam.lms.domain.SessionTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -89,6 +90,18 @@ class GroupTest {
 
         group.setElements(new HashSet<>());
         assertThat(group.getElements()).doesNotContain(userCustomBack);
+    }
+
+    @Test
+    void site11Test() throws Exception {
+        Group group = getGroupRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        group.setSite11(siteBack);
+        assertThat(group.getSite11()).isEqualTo(siteBack);
+
+        group.site11(null);
+        assertThat(group.getSite11()).isNull();
     }
 
     @Test

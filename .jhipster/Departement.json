@@ -3,6 +3,7 @@
     "changelogDate": "20240109174831"
   },
   "applications": "*",
+  "changelogDate": "20240109174831",
   "entityTableName": "departement",
   "fields": [
     {

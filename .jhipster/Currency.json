@@ -3,6 +3,7 @@
     "changelogDate": "20240109181731"
   },
   "applications": "*",
+  "changelogDate": "20240109181731",
   "entityTableName": "currency",
   "fields": [
     {

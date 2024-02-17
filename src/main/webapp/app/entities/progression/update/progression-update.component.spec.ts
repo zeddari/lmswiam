@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ISessionInstance } from 'app/entities/session-instance/session-instance.model';
 import { SessionInstanceService } from 'app/entities/session-instance/service/session-instance.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
@@ -22,6 +24,7 @@ describe('Progression Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let progressionFormService: ProgressionFormService;
   let progressionService: ProgressionService;
+  let siteService: SiteService;
   let sessionInstanceService: SessionInstanceService;
   let userCustomService: UserCustomService;
 
@@ -45,6 +48,7 @@ describe('Progression Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     progressionFormService = TestBed.inject(ProgressionFormService);
     progressionService = TestBed.inject(ProgressionService);
+    siteService = TestBed.inject(SiteService);
     sessionInstanceService = TestBed.inject(SessionInstanceService);
     userCustomService = TestBed.inject(UserCustomService);
 
@@ -52,6 +56,28 @@ describe('Progression Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
+    it('Should call Site query and add missing value', () => {
+      const progression: IProgression = { id: 456 };
+      const site17: ISite = { id: 6908 };
+      progression.site17 = site17;
+
+      const siteCollection: ISite[] = [{ id: 3345 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site17];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ progression });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call SessionInstance query and add missing value', () => {
       const progression: IProgression = { id: 456 };
       const sessionInstance: ISessionInstance = { id: 28968 };
@@ -98,6 +124,8 @@ describe('Progression Management Update Component', () => {
 
     it('Should update editForm', () => {
       const progression: IProgression = { id: 456 };
+      const site17: ISite = { id: 13992 };
+      progression.site17 = site17;
       const sessionInstance: ISessionInstance = { id: 2667 };
       progression.sessionInstance = sessionInstance;
       const student: IUserCustom = { id: 29370 };
@@ -106,6 +134,7 @@ describe('Progression Management Update Component', () => {
       activatedRoute.data = of({ progression });
       comp.ngOnInit();
 
+      expect(comp.sitesSharedCollection).toContain(site17);
       expect(comp.sessionInstancesSharedCollection).toContain(sessionInstance);
       expect(comp.userCustomsSharedCollection).toContain(student);
       expect(comp.progression).toEqual(progression);
@@ -181,6 +210,16 @@ describe('Progression Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareSessionInstance', () => {
       it('Should forward to sessionInstanceService', () => {
         const entity = { id: 123 };

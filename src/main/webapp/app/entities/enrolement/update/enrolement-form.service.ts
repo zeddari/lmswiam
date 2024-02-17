@@ -39,6 +39,7 @@ type EnrolementFormGroupContent = {
   enrolemntEndTime: FormControl<EnrolementFormRawValue['enrolemntEndTime']>;
   isActive: FormControl<EnrolementFormRawValue['isActive']>;
   activatedAt: FormControl<EnrolementFormRawValue['activatedAt']>;
+  site4: FormControl<EnrolementFormRawValue['site4']>;
   userCustom4: FormControl<EnrolementFormRawValue['userCustom4']>;
   course: FormControl<EnrolementFormRawValue['course']>;
 };
@@ -74,6 +75,7 @@ export class EnrolementFormService {
         validators: [Validators.required],
       }),
       activatedAt: new FormControl(enrolementRawValue.activatedAt),
+      site4: new FormControl(enrolementRawValue.site4),
       userCustom4: new FormControl(enrolementRawValue.userCustom4),
       course: new FormControl(enrolementRawValue.course),
     });

@@ -26,12 +26,15 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         return this.findAllWithToOneRelationships(pageable);
     }
 
-    @Query(value = "select review from Review review left join fetch review.part2", countQuery = "select count(review) from Review review")
+    @Query(
+        value = "select review from Review review left join fetch review.site3 left join fetch review.part2",
+        countQuery = "select count(review) from Review review"
+    )
     Page<Review> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select review from Review review left join fetch review.part2")
+    @Query("select review from Review review left join fetch review.site3 left join fetch review.part2")
     List<Review> findAllWithToOneRelationships();
 
-    @Query("select review from Review review left join fetch review.part2 where review.id =:id")
+    @Query("select review from Review review left join fetch review.site3 left join fetch review.part2 where review.id =:id")
     Optional<Review> findOneWithToOneRelationships(@Param("id") Long id);
 }

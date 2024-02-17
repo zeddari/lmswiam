@@ -183,7 +183,7 @@ public class SurahsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the surahs, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Surahs> getSurahs(@PathVariable("id") Integer id) {
+    public ResponseEntity<Surahs> getSurahs(@PathVariable Integer id) {
         log.debug("REST request to get Surahs : {}", id);
         Optional<Surahs> surahs = surahsRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(surahs);
@@ -196,7 +196,7 @@ public class SurahsResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSurahs(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteSurahs(@PathVariable Integer id) {
         log.debug("REST request to delete Surahs : {}", id);
         surahsRepository.deleteById(id);
         surahsSearchRepository.deleteFromIndexById(id);
@@ -214,7 +214,7 @@ public class SurahsResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Surahs> searchSurahs(@RequestParam("query") String query) {
+    public List<Surahs> searchSurahs(@RequestParam String query) {
         log.debug("REST request to search Surahs for query {}", query);
         try {
             return StreamSupport.stream(surahsSearchRepository.search(query).spliterator(), false).toList();

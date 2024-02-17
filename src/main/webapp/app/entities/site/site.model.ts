@@ -1,4 +1,3 @@
-import { IClassroom } from 'app/entities/classroom/classroom.model';
 import { ICity } from 'app/entities/city/city.model';
 
 export interface ISite {
@@ -7,8 +6,7 @@ export interface ISite {
   nameLat?: string | null;
   description?: string | null;
   localisation?: string | null;
-  classrooms?: IClassroom[] | null;
-  city?: ICity | null;
+  city?: Pick<ICity, 'id' | 'nameAr'> | null;
 }
 
 export type NewSite = Omit<ISite, 'id'> & { id: null };

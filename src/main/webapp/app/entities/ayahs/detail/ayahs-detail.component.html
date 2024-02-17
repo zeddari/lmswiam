@@ -1,70 +1,68 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    @if (ayahs) {
-      <div>
-        <h2 data-cy="ayahsDetailsHeading"><span jhiTranslate="lmswiamApp.ayahs.detail.title">Ayahs</span></h2>
+    <div *ngIf="ayahs">
+      <h2 data-cy="ayahsDetailsHeading"><span jhiTranslate="lmswiamApp.ayahs.detail.title">Ayahs</span></h2>
 
-        <hr />
+      <hr />
 
-        <jhi-alert-error></jhi-alert-error>
+      <jhi-alert-error></jhi-alert-error>
 
-        <jhi-alert></jhi-alert>
+      <jhi-alert></jhi-alert>
 
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="lmswiamApp.ayahs.id">Id</span></dt>
-          <dd>
-            <span>{{ ayahs.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.ayahs.number">Number</span></dt>
-          <dd>
-            <span>{{ ayahs.number }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.ayahs.textdesc">Textdesc</span></dt>
-          <dd>
-            <span>{{ ayahs.textdesc }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.ayahs.numberInSurah">Number In Surah</span></dt>
-          <dd>
-            <span>{{ ayahs.numberInSurah }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.ayahs.page">Page</span></dt>
-          <dd>
-            <span>{{ ayahs.page }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.ayahs.surahId">Surah Id</span></dt>
-          <dd>
-            <span>{{ ayahs.surahId }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.ayahs.hizbId">Hizb Id</span></dt>
-          <dd>
-            <span>{{ ayahs.hizbId }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.ayahs.juzId">Juz Id</span></dt>
-          <dd>
-            <span>{{ ayahs.juzId }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.ayahs.sajda">Sajda</span></dt>
-          <dd>
-            <span>{{ ayahs.sajda }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.ayahs.createdAt">Created At</span></dt>
-          <dd>
-            <span>{{ ayahs.createdAt | formatMediumDatetime }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.ayahs.updatedAt">Updated At</span></dt>
-          <dd>
-            <span>{{ ayahs.updatedAt | formatMediumDatetime }}</span>
-          </dd>
-        </dl>
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="lmswiamApp.ayahs.id">Id</span></dt>
+        <dd>
+          <span>{{ ayahs.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.ayahs.number">Number</span></dt>
+        <dd>
+          <span>{{ ayahs.number }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.ayahs.textdesc">Textdesc</span></dt>
+        <dd>
+          <span>{{ ayahs.textdesc }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.ayahs.numberInSurah">Number In Surah</span></dt>
+        <dd>
+          <span>{{ ayahs.numberInSurah }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.ayahs.page">Page</span></dt>
+        <dd>
+          <span>{{ ayahs.page }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.ayahs.surahId">Surah Id</span></dt>
+        <dd>
+          <span>{{ ayahs.surahId }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.ayahs.hizbId">Hizb Id</span></dt>
+        <dd>
+          <span>{{ ayahs.hizbId }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.ayahs.juzId">Juz Id</span></dt>
+        <dd>
+          <span>{{ ayahs.juzId }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.ayahs.sajda">Sajda</span></dt>
+        <dd>
+          <span>{{ ayahs.sajda }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.ayahs.createdAt">Created At</span></dt>
+        <dd>
+          <span>{{ ayahs.createdAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.ayahs.updatedAt">Updated At</span></dt>
+        <dd>
+          <span>{{ ayahs.updatedAt | formatMediumDatetime }}</span>
+        </dd>
+      </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
 
-        <button type="button" [routerLink]="['/ayahs', ayahs.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
-      </div>
-    }
+      <button type="button" [routerLink]="['/ayahs', ayahs.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
   </div>
 </div>

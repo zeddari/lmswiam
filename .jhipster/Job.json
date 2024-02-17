@@ -3,6 +3,7 @@
     "changelogDate": "20240109175231"
   },
   "applications": "*",
+  "changelogDate": "20240109175231",
   "entityTableName": "job",
   "fields": [
     {

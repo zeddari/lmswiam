@@ -3,6 +3,7 @@
     "changelogDate": "20240109181831"
   },
   "applications": "*",
+  "changelogDate": "20240109181831",
   "entityTableName": "payment",
   "fields": [
     {
@@ -59,6 +60,13 @@
   ],
   "name": "Payment",
   "relationships": [
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site9",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
     {
       "otherEntityField": "ref",
       "otherEntityName": "enrolement",

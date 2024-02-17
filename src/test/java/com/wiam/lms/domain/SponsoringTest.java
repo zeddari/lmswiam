@@ -3,6 +3,7 @@ package com.wiam.lms.domain;
 import static com.wiam.lms.domain.CurrencyTestSamples.*;
 import static com.wiam.lms.domain.PaymentTestSamples.*;
 import static com.wiam.lms.domain.ProjectTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.SponsoringTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,6 +49,18 @@ class SponsoringTest {
         sponsoring.setPayments(new HashSet<>());
         assertThat(sponsoring.getPayments()).doesNotContain(paymentBack);
         assertThat(paymentBack.getSponsoring()).isNull();
+    }
+
+    @Test
+    void site10Test() throws Exception {
+        Sponsoring sponsoring = getSponsoringRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        sponsoring.setSite10(siteBack);
+        assertThat(sponsoring.getSite10()).isEqualTo(siteBack);
+
+        sponsoring.site10(null);
+        assertThat(sponsoring.getSite10()).isNull();
     }
 
     @Test

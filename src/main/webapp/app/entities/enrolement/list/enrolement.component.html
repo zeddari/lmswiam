@@ -41,140 +41,130 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (enrolements?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.enrolement.home.notFound">No Enrolements found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="enrolements?.length === 0">
+    <span jhiTranslate="lmswiamApp.enrolement.home.notFound">No Enrolements found</span>
+  </div>
 
-  @if (enrolements && enrolements.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="enrolements && enrolements.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="ref">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.enrolement.ref">Ref</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="enrolementType">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.enrolement.enrolementType">Enrolement Type</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="enrolmentStartTime">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.enrolement.enrolmentStartTime">Enrolment Start Time</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="enrolemntEndTime">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.enrolement.enrolemntEndTime">Enrolemnt End Time</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isActive">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.enrolement.isActive">Is Active</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="activatedAt">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.enrolement.activatedAt">Activated At</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site4.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.enrolement.site4">Site 4</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="userCustom4.firstName">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.enrolement.userCustom4">User Custom 4</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="course.titleAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.enrolement.course">Course</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let enrolement of enrolements; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/enrolement', enrolement.id, 'view']">{{ enrolement.id }}</a>
+          </td>
+          <td>{{ enrolement.ref }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.EnrolementType.' + enrolement.enrolementType }}">{{ enrolement.enrolementType }}</td>
+          <td>{{ enrolement.enrolmentStartTime | formatMediumDatetime }}</td>
+          <td>{{ enrolement.enrolemntEndTime | formatMediumDatetime }}</td>
+          <td>{{ enrolement.isActive }}</td>
+          <td>{{ enrolement.activatedAt | formatMediumDatetime }}</td>
+          <td>
+            <div *ngIf="enrolement.site4">
+              <a [routerLink]="['/site', enrolement.site4.id, 'view']">{{ enrolement.site4.nameAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="enrolement.userCustom4">
+              <a [routerLink]="['/user-custom', enrolement.userCustom4.id, 'view']">{{ enrolement.userCustom4.firstName }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="enrolement.course">
+              <a [routerLink]="['/course', enrolement.course.id, 'view']">{{ enrolement.course.titleAr }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/enrolement', enrolement.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="ref">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.enrolement.ref">Ref</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="enrolementType">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.enrolement.enrolementType">Enrolement Type</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="enrolmentStartTime">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.enrolement.enrolmentStartTime">Enrolment Start Time</span>
+              <a [routerLink]="['/enrolement', enrolement.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="enrolemntEndTime">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.enrolement.enrolemntEndTime">Enrolemnt End Time</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="isActive">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.enrolement.isActive">Is Active</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="activatedAt">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.enrolement.activatedAt">Activated At</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="userCustom4.id">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.enrolement.userCustom4">User Custom 4</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="course.titleAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.enrolement.course">Course</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (enrolement of enrolements; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/enrolement', enrolement.id, 'view']">{{ enrolement.id }}</a>
-              </td>
-              <td>{{ enrolement.ref }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.EnrolementType.' + enrolement.enrolementType }}">{{ enrolement.enrolementType }}</td>
-              <td>{{ enrolement.enrolmentStartTime | formatMediumDatetime }}</td>
-              <td>{{ enrolement.enrolemntEndTime | formatMediumDatetime }}</td>
-              <td>{{ enrolement.isActive }}</td>
-              <td>{{ enrolement.activatedAt | formatMediumDatetime }}</td>
-              <td>
-                @if (enrolement.userCustom4) {
-                  <div>
-                    <a [routerLink]="['/user-custom', enrolement.userCustom4.id, 'view']">{{ enrolement.userCustom4.id }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (enrolement.course) {
-                  <div>
-                    <a [routerLink]="['/course', enrolement.course.id, 'view']">{{ enrolement.course.titleAr }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/enrolement', enrolement.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/enrolement', enrolement.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(enrolement)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(enrolement)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type DiplomaFormGroupInput = IDiploma | PartialWithRequiredKeyOf<NewDiploma>;
 
-type DiplomaFormDefaults = Pick<NewDiploma, 'id'>;
+type DiplomaFormDefaults = Pick<NewDiploma, 'id' | 'userCustom7s'>;
 
 type DiplomaFormGroupContent = {
   id: FormControl<IDiploma['id'] | NewDiploma['id']>;
@@ -28,6 +28,8 @@ type DiplomaFormGroupContent = {
   school: FormControl<IDiploma['school']>;
   attachment: FormControl<IDiploma['attachment']>;
   attachmentContentType: FormControl<IDiploma['attachmentContentType']>;
+  site20: FormControl<IDiploma['site20']>;
+  userCustom7s: FormControl<IDiploma['userCustom7s']>;
 };
 
 export type DiplomaFormGroup = FormGroup<DiplomaFormGroupContent>;
@@ -61,6 +63,8 @@ export class DiplomaFormService {
       school: new FormControl(diplomaRawValue.school),
       attachment: new FormControl(diplomaRawValue.attachment),
       attachmentContentType: new FormControl(diplomaRawValue.attachmentContentType),
+      site20: new FormControl(diplomaRawValue.site20),
+      userCustom7s: new FormControl(diplomaRawValue.userCustom7s ?? []),
     });
   }
 
@@ -81,6 +85,7 @@ export class DiplomaFormService {
   private getFormDefaults(): DiplomaFormDefaults {
     return {
       id: null,
+      userCustom7s: [],
     };
   }
 }

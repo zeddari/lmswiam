@@ -168,7 +168,7 @@ public class HizbsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the hizbs, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Hizbs> getHizbs(@PathVariable("id") Integer id) {
+    public ResponseEntity<Hizbs> getHizbs(@PathVariable Integer id) {
         log.debug("REST request to get Hizbs : {}", id);
         Optional<Hizbs> hizbs = hizbsRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(hizbs);
@@ -181,7 +181,7 @@ public class HizbsResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteHizbs(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteHizbs(@PathVariable Integer id) {
         log.debug("REST request to delete Hizbs : {}", id);
         hizbsRepository.deleteById(id);
         hizbsSearchRepository.deleteFromIndexById(id);
@@ -199,7 +199,7 @@ public class HizbsResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Hizbs> searchHizbs(@RequestParam("query") String query) {
+    public List<Hizbs> searchHizbs(@RequestParam String query) {
         log.debug("REST request to search Hizbs for query {}", query);
         try {
             return StreamSupport.stream(hizbsSearchRepository.search(query).spliterator(), false).toList();

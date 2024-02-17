@@ -40,10 +40,15 @@ describe('UserCustom Form Service', () => {
             user: expect.any(Object),
             diplomas: expect.any(Object),
             languages: expect.any(Object),
+            site13: expect.any(Object),
             country: expect.any(Object),
             nationality: expect.any(Object),
             job: expect.any(Object),
             departement2: expect.any(Object),
+            groups: expect.any(Object),
+            courses: expect.any(Object),
+            sessions2s: expect.any(Object),
+            sessions3s: expect.any(Object),
           }),
         );
       });
@@ -74,10 +79,15 @@ describe('UserCustom Form Service', () => {
             user: expect.any(Object),
             diplomas: expect.any(Object),
             languages: expect.any(Object),
+            site13: expect.any(Object),
             country: expect.any(Object),
             nationality: expect.any(Object),
             job: expect.any(Object),
             departement2: expect.any(Object),
+            groups: expect.any(Object),
+            courses: expect.any(Object),
+            sessions2s: expect.any(Object),
+            sessions3s: expect.any(Object),
           }),
         );
       });

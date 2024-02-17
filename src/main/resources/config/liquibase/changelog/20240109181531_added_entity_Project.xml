@@ -35,7 +35,7 @@
             <column name="image_link_content_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="video_link" type="varchar(255)">
+            <column name="video_link" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="budget" type="double">
@@ -51,6 +51,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="end_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="site12_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="type_project_id" type="bigint">
@@ -85,7 +88,7 @@
             <column name="requirements" type="clob"/>
             <column name="image_link" type="blob"/>
             <column name="image_link_content_type" type="string"/>
-            <column name="video_link" type="string"/>
+            <column name="video_link" type="clob"/>
             <column name="budget" type="numeric"/>
             <column name="is_active" type="boolean"/>
             <column name="activate_at" type="date"/>

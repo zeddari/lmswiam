@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { SessionLinkService } from '../service/session-link.service';
 import { ISessionLink } from '../session-link.model';
 import { SessionLinkFormService } from './session-link-form.service';
@@ -18,6 +20,7 @@ describe('SessionLink Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let sessionLinkFormService: SessionLinkFormService;
   let sessionLinkService: SessionLinkService;
+  let siteService: SiteService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,17 +42,43 @@ describe('SessionLink Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     sessionLinkFormService = TestBed.inject(SessionLinkFormService);
     sessionLinkService = TestBed.inject(SessionLinkService);
+    siteService = TestBed.inject(SiteService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should update editForm', () => {
+    it('Should call Site query and add missing value', () => {
       const sessionLink: ISessionLink = { id: 456 };
+      const site15: ISite = { id: 24563 };
+      sessionLink.site15 = site15;
+
+      const siteCollection: ISite[] = [{ id: 7189 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site15];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ sessionLink });
       comp.ngOnInit();
 
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should update editForm', () => {
+      const sessionLink: ISessionLink = { id: 456 };
+      const site15: ISite = { id: 13472 };
+      sessionLink.site15 = site15;
+
+      activatedRoute.data = of({ sessionLink });
+      comp.ngOnInit();
+
+      expect(comp.sitesSharedCollection).toContain(site15);
       expect(comp.sessionLink).toEqual(sessionLink);
     });
   });
@@ -119,6 +148,18 @@ describe('SessionLink Management Update Component', () => {
       expect(sessionLinkService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
     });
   });
 });

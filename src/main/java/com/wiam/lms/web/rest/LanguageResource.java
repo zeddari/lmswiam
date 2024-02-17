@@ -175,7 +175,7 @@ public class LanguageResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the language, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Language> getLanguage(@PathVariable("id") Long id) {
+    public ResponseEntity<Language> getLanguage(@PathVariable Long id) {
         log.debug("REST request to get Language : {}", id);
         Optional<Language> language = languageRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(language);
@@ -188,7 +188,7 @@ public class LanguageResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLanguage(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteLanguage(@PathVariable Long id) {
         log.debug("REST request to delete Language : {}", id);
         languageRepository.deleteById(id);
         languageSearchRepository.deleteFromIndexById(id);
@@ -206,7 +206,7 @@ public class LanguageResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Language> searchLanguages(@RequestParam("query") String query) {
+    public List<Language> searchLanguages(@RequestParam String query) {
         log.debug("REST request to search Languages for query {}", query);
         try {
             return StreamSupport.stream(languageSearchRepository.search(query).spliterator(), false).toList();

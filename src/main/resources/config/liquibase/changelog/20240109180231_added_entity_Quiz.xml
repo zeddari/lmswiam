@@ -29,6 +29,9 @@
             <column name="is_active" type="boolean">
                 <constraints nullable="false" />
             </column>
+            <column name="site7_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="topic1_id" type="bigint">
                 <constraints nullable="true" />
             </column>

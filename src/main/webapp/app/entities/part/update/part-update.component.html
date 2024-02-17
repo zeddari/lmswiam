@@ -8,45 +8,46 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.part.titleAr" for="field_titleAr">Title Ar</label>
           <input type="text" class="form-control" name="titleAr" id="field_titleAr" data-cy="titleAr" formControlName="titleAr" />
-          @if (editForm.get('titleAr')!.invalid && (editForm.get('titleAr')!.dirty || editForm.get('titleAr')!.touched)) {
-            <div>
-              @if (editForm.get('titleAr')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('titleAr')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('titleAr')!.invalid && (editForm.get('titleAr')!.dirty || editForm.get('titleAr')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('titleAr')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('titleAr')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+              >This field cannot be longer than 100 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.part.titleLat" for="field_titleLat">Title Lat</label>
           <input type="text" class="form-control" name="titleLat" id="field_titleLat" data-cy="titleLat" formControlName="titleLat" />
-          @if (editForm.get('titleLat')!.invalid && (editForm.get('titleLat')!.dirty || editForm.get('titleLat')!.touched)) {
-            <div>
-              @if (editForm.get('titleLat')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('titleLat')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('titleLat')!.invalid && (editForm.get('titleLat')!.dirty || editForm.get('titleLat')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('titleLat')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('titleLat')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+              >This field cannot be longer than 100 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -68,27 +69,24 @@
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.part.imageLink" for="field_imageLink">Image Link</label>
           <div>
-            @if (editForm.get('imageLink')!.value) {
-              <img
-                [src]="'data:' + editForm.get('imageLinkContentType')!.value + ';base64,' + editForm.get('imageLink')!.value"
-                style="max-height: 100px"
-                alt="part image"
-              />
-            }
-            @if (editForm.get('imageLink')!.value) {
-              <div class="form-text text-danger clearfix">
-                <span class="pull-start"
-                  >{{ editForm.get('imageLinkContentType')!.value }}, {{ byteSize(editForm.get('imageLink')!.value!) }}</span
-                >
-                <button
-                  type="button"
-                  (click)="clearInputImage('imageLink', 'imageLinkContentType', 'file_imageLink')"
-                  class="btn btn-secondary btn-xs pull-end"
-                >
-                  <fa-icon icon="times"></fa-icon>
-                </button>
-              </div>
-            }
+            <img
+              [src]="'data:' + editForm.get('imageLinkContentType')!.value + ';base64,' + editForm.get('imageLink')!.value"
+              style="max-height: 100px"
+              *ngIf="editForm.get('imageLink')!.value"
+              alt="part image"
+            />
+            <div *ngIf="editForm.get('imageLink')!.value" class="form-text text-danger clearfix">
+              <span class="pull-start"
+                >{{ editForm.get('imageLinkContentType')!.value }}, {{ byteSize(editForm.get('imageLink')!.value!) }}</span
+              >
+              <button
+                type="button"
+                (click)="clearInputImage('imageLink', 'imageLinkContentType', 'file_imageLink')"
+                class="btn btn-secondary btn-xs pull-end"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
             <input
               type="file"
               id="file_imageLink"
@@ -106,14 +104,20 @@
             id="field_imageLinkContentType"
             formControlName="imageLinkContentType"
           />
-          @if (editForm.get('imageLink')!.invalid && (editForm.get('imageLink')!.dirty || editForm.get('imageLink')!.touched)) {
-            <div></div>
-          }
+          <div *ngIf="editForm.get('imageLink')!.invalid && (editForm.get('imageLink')!.dirty || editForm.get('imageLink')!.touched)"></div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.part.videoLink" for="field_videoLink">Video Link</label>
-          <input type="text" class="form-control" name="videoLink" id="field_videoLink" data-cy="videoLink" formControlName="videoLink" />
+          <textarea class="form-control" name="videoLink" id="field_videoLink" data-cy="videoLink" formControlName="videoLink"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.part.site2" for="field_site2">Site 2</label>
+          <select class="form-control" id="field_site2" data-cy="site2" name="site2" formControlName="site2" [compareWith]="compareSite">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
+          </select>
         </div>
 
         <div class="mb-3">
@@ -127,9 +131,7 @@
             [compareWith]="compareCourse"
           >
             <option [ngValue]="null"></option>
-            @for (courseOption of coursesSharedCollection; track $index) {
-              <option [ngValue]="courseOption">{{ courseOption.titleAr }}</option>
-            }
+            <option [ngValue]="courseOption" *ngFor="let courseOption of coursesSharedCollection">{{ courseOption.titleAr }}</option>
           </select>
         </div>
 
@@ -137,9 +139,7 @@
           <label class="form-label" jhiTranslate="lmswiamApp.part.part1" for="field_part1">Part 1</label>
           <select class="form-control" id="field_part1" data-cy="part1" name="part1" formControlName="part1" [compareWith]="comparePart">
             <option [ngValue]="null"></option>
-            @for (partOption of partsSharedCollection; track $index) {
-              <option [ngValue]="partOption">{{ partOption.titleAr }}</option>
-            }
+            <option [ngValue]="partOption" *ngFor="let partOption of partsSharedCollection">{{ partOption.titleAr }}</option>
           </select>
         </div>
       </div>

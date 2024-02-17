@@ -20,6 +20,9 @@
             <column name="submitted_at" type="${datetimeType}">
                 <constraints nullable="false" />
             </column>
+            <column name="site8_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="quiz_id" type="bigint">
                 <constraints nullable="true" />
             </column>

@@ -41,336 +41,296 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (sessions?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.session.home.notFound">No Sessions found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="sessions?.length === 0">
+    <span jhiTranslate="lmswiamApp.session.home.notFound">No Sessions found</span>
+  </div>
 
-  @if (sessions && sessions.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="sessions && sessions.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sessionMode">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.sessionMode">Session Mode</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sessionType">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.sessionType">Session Type</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sessionJoinMode">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.sessionJoinMode">Session Join Mode</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="title">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.title">Title</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.description">Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="periodStartDate">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.periodStartDate">Period Start Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="periodeEndDate">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.periodeEndDate">Periode End Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sessionStartTime">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.sessionStartTime">Session Start Time</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sessionEndTime">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.sessionEndTime">Session End Time</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sessionSize">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.sessionSize">Session Size</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="targetedGender">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.targetedGender">Targeted Gender</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="price">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.price">Price</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="thumbnail">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.thumbnail">Thumbnail</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="monday">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.monday">Monday</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="tuesday">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.tuesday">Tuesday</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="wednesday">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.wednesday">Wednesday</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="thursday">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.thursday">Thursday</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="friday">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.friday">Friday</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="saturday">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.saturday">Saturday</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sunday">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.sunday">Sunday</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isPeriodic">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.isPeriodic">Is Periodic</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isMinorAllowed">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.isMinorAllowed">Is Minor Allowed</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isActive">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.isActive">Is Active</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="classrooms.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.classrooms">Classrooms</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="groups.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.groups">Groups</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="professors.firstName">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.professors">Professors</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="employees.firstName">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.employees">Employees</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="links.title">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.links">Links</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site14.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.session.site14">Site 14</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let session of sessions; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/session', session.id, 'view']">{{ session.id }}</a>
+          </td>
+          <td jhiTranslate="{{ 'lmswiamApp.SessionMode.' + session.sessionMode }}">{{ session.sessionMode }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.SessionType.' + session.sessionType }}">{{ session.sessionType }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.SessionJoinMode.' + session.sessionJoinMode }}">{{ session.sessionJoinMode }}</td>
+          <td>{{ session.title }}</td>
+          <td>{{ session.description }}</td>
+          <td>{{ session.periodStartDate | formatMediumDate }}</td>
+          <td>{{ session.periodeEndDate | formatMediumDate }}</td>
+          <td>{{ session.sessionStartTime | formatMediumDatetime }}</td>
+          <td>{{ session.sessionEndTime | formatMediumDatetime }}</td>
+          <td>{{ session.sessionSize }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.TargetedGender.' + session.targetedGender }}">{{ session.targetedGender }}</td>
+          <td>{{ session.price }}</td>
+          <td>
+            <a *ngIf="session.thumbnail" (click)="openFile(session.thumbnail, session.thumbnailContentType)">
+              <img
+                [src]="'data:' + session.thumbnailContentType + ';base64,' + session.thumbnail"
+                style="max-height: 30px"
+                alt="session image"
+              />
+            </a>
+            <span *ngIf="session.thumbnail">{{ session.thumbnailContentType }}, {{ byteSize(session.thumbnail) }}</span>
+          </td>
+          <td>{{ session.monday }}</td>
+          <td>{{ session.tuesday }}</td>
+          <td>{{ session.wednesday }}</td>
+          <td>{{ session.thursday }}</td>
+          <td>{{ session.friday }}</td>
+          <td>{{ session.saturday }}</td>
+          <td>{{ session.sunday }}</td>
+          <td>{{ session.isPeriodic }}</td>
+          <td>{{ session.isMinorAllowed }}</td>
+          <td>{{ session.isActive }}</td>
+          <td>
+            <span *ngFor="let classrooms of session.classrooms; let last = last">
+              <a class="form-control-static" [routerLink]="['/classroom', classrooms.id, 'view']">{{ classrooms.nameAr }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <span *ngFor="let groups of session.groups; let last = last">
+              <a class="form-control-static" [routerLink]="['/group', groups.id, 'view']">{{ groups.nameAr }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <span *ngFor="let professors of session.professors; let last = last">
+              <a class="form-control-static" [routerLink]="['/user-custom', professors.id, 'view']">{{ professors.firstName }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <span *ngFor="let employees of session.employees; let last = last">
+              <a class="form-control-static" [routerLink]="['/user-custom', employees.id, 'view']">{{ employees.firstName }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <span *ngFor="let links of session.links; let last = last">
+              <a class="form-control-static" [routerLink]="['/session-link', links.id, 'view']">{{ links.title }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <div *ngIf="session.site14">
+              <a [routerLink]="['/site', session.site14.id, 'view']">{{ session.site14.nameAr }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/session', session.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="sessionMode">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.sessionMode">Session Mode</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="sessionType">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.sessionType">Session Type</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="sessionJoinMode">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.sessionJoinMode">Session Join Mode</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="title">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.title">Title</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="description">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="periodStartDate">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.periodStartDate">Period Start Date</span>
+              <a [routerLink]="['/session', session.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="periodeEndDate">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.periodeEndDate">Periode End Date</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="sessionStartTime">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.sessionStartTime">Session Start Time</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="sessionEndTime">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.sessionEndTime">Session End Time</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="sessionSize">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.sessionSize">Session Size</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="targetedGender">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.targetedGender">Targeted Gender</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="price">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.price">Price</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="thumbnail">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.thumbnail">Thumbnail</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="monday">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.monday">Monday</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="tuesday">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.tuesday">Tuesday</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="wednesday">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.wednesday">Wednesday</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="thursday">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.thursday">Thursday</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="friday">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.friday">Friday</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="saturday">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.saturday">Saturday</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="sunday">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.sunday">Sunday</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="isPeriodic">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.isPeriodic">Is Periodic</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="isMinorAllowed">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.isMinorAllowed">Is Minor Allowed</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="isActive">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.isActive">Is Active</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="classrooms.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.classrooms">Classrooms</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="groups.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.groups">Groups</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="professors.firstName">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.professors">Professors</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="employees.firstName">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.employees">Employees</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="links.title">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.session.links">Links</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (session of sessions; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/session', session.id, 'view']">{{ session.id }}</a>
-              </td>
-              <td jhiTranslate="{{ 'lmswiamApp.SessionMode.' + session.sessionMode }}">{{ session.sessionMode }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.SessionType.' + session.sessionType }}">{{ session.sessionType }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.SessionJoinMode.' + session.sessionJoinMode }}">{{ session.sessionJoinMode }}</td>
-              <td>{{ session.title }}</td>
-              <td>{{ session.description }}</td>
-              <td>{{ session.periodStartDate | formatMediumDate }}</td>
-              <td>{{ session.periodeEndDate | formatMediumDate }}</td>
-              <td>{{ session.sessionStartTime | formatMediumDatetime }}</td>
-              <td>{{ session.sessionEndTime | formatMediumDatetime }}</td>
-              <td>{{ session.sessionSize }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.TargetedGender.' + session.targetedGender }}">{{ session.targetedGender }}</td>
-              <td>{{ session.price }}</td>
-              <td>
-                @if (session.thumbnail) {
-                  <a (click)="openFile(session.thumbnail, session.thumbnailContentType)">
-                    <img
-                      [src]="'data:' + session.thumbnailContentType + ';base64,' + session.thumbnail"
-                      style="max-height: 30px"
-                      alt="session image"
-                    />
-                  </a>
-                  <span>{{ session.thumbnailContentType }}, {{ byteSize(session.thumbnail) }}</span>
-                }
-              </td>
-              <td>{{ session.monday }}</td>
-              <td>{{ session.tuesday }}</td>
-              <td>{{ session.wednesday }}</td>
-              <td>{{ session.thursday }}</td>
-              <td>{{ session.friday }}</td>
-              <td>{{ session.saturday }}</td>
-              <td>{{ session.sunday }}</td>
-              <td>{{ session.isPeriodic }}</td>
-              <td>{{ session.isMinorAllowed }}</td>
-              <td>{{ session.isActive }}</td>
-              <td>
-                @for (classrooms of session.classrooms; track $index; let last = $last) {
-                  <span>
-                    <a class="form-control-static" [routerLink]="['/classroom', classrooms.id, 'view']">{{ classrooms.nameAr }}</a
-                    >{{ last ? '' : ', ' }}
-                  </span>
-                }
-              </td>
-              <td>
-                @for (groups of session.groups; track $index; let last = $last) {
-                  <span>
-                    <a class="form-control-static" [routerLink]="['/group', groups.id, 'view']">{{ groups.nameAr }}</a
-                    >{{ last ? '' : ', ' }}
-                  </span>
-                }
-              </td>
-              <td>
-                @for (professors of session.professors; track $index; let last = $last) {
-                  <span>
-                    <a class="form-control-static" [routerLink]="['/user-custom', professors.id, 'view']">{{ professors.firstName }}</a
-                    >{{ last ? '' : ', ' }}
-                  </span>
-                }
-              </td>
-              <td>
-                @for (employees of session.employees; track $index; let last = $last) {
-                  <span>
-                    <a class="form-control-static" [routerLink]="['/user-custom', employees.id, 'view']">{{ employees.firstName }}</a
-                    >{{ last ? '' : ', ' }}
-                  </span>
-                }
-              </td>
-              <td>
-                @for (links of session.links; track $index; let last = $last) {
-                  <span>
-                    <a class="form-control-static" [routerLink]="['/session-link', links.id, 'view']">{{ links.title }}</a
-                    >{{ last ? '' : ', ' }}
-                  </span>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/session', session.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/session', session.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(session)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(session)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

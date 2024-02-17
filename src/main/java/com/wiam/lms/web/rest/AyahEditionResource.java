@@ -184,7 +184,7 @@ public class AyahEditionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the ayahEdition, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<AyahEdition> getAyahEdition(@PathVariable("id") Integer id) {
+    public ResponseEntity<AyahEdition> getAyahEdition(@PathVariable Integer id) {
         log.debug("REST request to get AyahEdition : {}", id);
         Optional<AyahEdition> ayahEdition = ayahEditionRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(ayahEdition);
@@ -197,7 +197,7 @@ public class AyahEditionResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAyahEdition(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteAyahEdition(@PathVariable Integer id) {
         log.debug("REST request to delete AyahEdition : {}", id);
         ayahEditionRepository.deleteById(id);
         ayahEditionSearchRepository.deleteFromIndexById(id);
@@ -215,7 +215,7 @@ public class AyahEditionResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<AyahEdition> searchAyahEditions(@RequestParam("query") String query) {
+    public List<AyahEdition> searchAyahEditions(@RequestParam String query) {
         log.debug("REST request to search AyahEditions for query {}", query);
         try {
             return StreamSupport.stream(ayahEditionSearchRepository.search(query).spliterator(), false).toList();

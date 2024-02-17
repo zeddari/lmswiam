@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { SessionProvider } from 'app/entities/enumerations/session-provider.model';
 import { SessionLinkService } from '../service/session-link.service';
 import { ISessionLink } from '../session-link.model';
@@ -26,6 +28,8 @@ export class SessionLinkUpdateComponent implements OnInit {
   sessionLink: ISessionLink | null = null;
   sessionProviderValues = Object.keys(SessionProvider);
 
+  sitesSharedCollection: ISite[] = [];
+
   editForm: SessionLinkFormGroup = this.sessionLinkFormService.createSessionLinkFormGroup();
 
   constructor(
@@ -33,8 +37,11 @@ export class SessionLinkUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected sessionLinkService: SessionLinkService,
     protected sessionLinkFormService: SessionLinkFormService,
+    protected siteService: SiteService,
     protected activatedRoute: ActivatedRoute,
   ) {}
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ sessionLink }) => {
@@ -42,6 +49,8 @@ export class SessionLinkUpdateComponent implements OnInit {
       if (sessionLink) {
         this.updateForm(sessionLink);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -96,5 +105,15 @@ export class SessionLinkUpdateComponent implements OnInit {
   protected updateForm(sessionLink: ISessionLink): void {
     this.sessionLink = sessionLink;
     this.sessionLinkFormService.resetForm(this.editForm, sessionLink);
+
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, sessionLink.site15);
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.sessionLink?.site15)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
   }
 }

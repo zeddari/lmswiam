@@ -1,6 +1,7 @@
 package com.wiam.lms.domain;
 
 import static com.wiam.lms.domain.ProjectTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.SponsoringTestSamples.*;
 import static com.wiam.lms.domain.TypeProjectTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,6 +47,18 @@ class ProjectTest {
         project.setSponsorings(new HashSet<>());
         assertThat(project.getSponsorings()).doesNotContain(sponsoringBack);
         assertThat(sponsoringBack.getProject()).isNull();
+    }
+
+    @Test
+    void site12Test() throws Exception {
+        Project project = getProjectRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        project.setSite12(siteBack);
+        assertThat(project.getSite12()).isEqualTo(siteBack);
+
+        project.site12(null);
+        assertThat(project.getSite12()).isNull();
     }
 
     @Test

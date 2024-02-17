@@ -6,10 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { UserCustomService } from 'app/entities/user-custom/service/user-custom.service';
-import { TicketsService } from '../service/tickets.service';
 import { ITickets } from '../tickets.model';
+import { TicketsService } from '../service/tickets.service';
 import { TicketsFormService } from './tickets-form.service';
 
 import { TicketsUpdateComponent } from './tickets-update.component';
@@ -20,6 +22,7 @@ describe('Tickets Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let ticketsFormService: TicketsFormService;
   let ticketsService: TicketsService;
+  let siteService: SiteService;
   let userCustomService: UserCustomService;
 
   beforeEach(() => {
@@ -42,12 +45,35 @@ describe('Tickets Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     ticketsFormService = TestBed.inject(TicketsFormService);
     ticketsService = TestBed.inject(TicketsService);
+    siteService = TestBed.inject(SiteService);
     userCustomService = TestBed.inject(UserCustomService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
+    it('Should call Site query and add missing value', () => {
+      const tickets: ITickets = { id: 456 };
+      const site18: ISite = { id: 4638 };
+      tickets.site18 = site18;
+
+      const siteCollection: ISite[] = [{ id: 10890 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site18];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ tickets });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call UserCustom query and add missing value', () => {
       const tickets: ITickets = { id: 456 };
       const userCustom5: IUserCustom = { id: 9761 };
@@ -72,12 +98,15 @@ describe('Tickets Management Update Component', () => {
 
     it('Should update editForm', () => {
       const tickets: ITickets = { id: 456 };
+      const site18: ISite = { id: 27867 };
+      tickets.site18 = site18;
       const userCustom5: IUserCustom = { id: 18675 };
       tickets.userCustom5 = userCustom5;
 
       activatedRoute.data = of({ tickets });
       comp.ngOnInit();
 
+      expect(comp.sitesSharedCollection).toContain(site18);
       expect(comp.userCustomsSharedCollection).toContain(userCustom5);
       expect(comp.tickets).toEqual(tickets);
     });
@@ -152,6 +181,16 @@ describe('Tickets Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareUserCustom', () => {
       it('Should forward to userCustomService', () => {
         const entity = { id: 123 };

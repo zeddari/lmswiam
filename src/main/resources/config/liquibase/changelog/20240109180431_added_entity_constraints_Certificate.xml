@@ -8,6 +8,13 @@
     -->
     <changeSet id="20240109180431-2" author="jhipster">
 
+        <addForeignKeyConstraint baseColumnNames="site19_id"
+                                 baseTableName="certificate"
+                                 constraintName="fk_certificate__site19_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="site"
+                                 />
+
         <addForeignKeyConstraint baseColumnNames="user_custom6_id"
                                  baseTableName="certificate"
                                  constraintName="fk_certificate__user_custom6_id"

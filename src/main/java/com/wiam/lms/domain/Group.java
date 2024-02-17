@@ -53,13 +53,16 @@ public class Group implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "comitte")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "userCustom6", "comitte", "topic4" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site19", "userCustom6", "comitte", "topic4" }, allowSetters = true)
     private Set<Certificate> certificates = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "group1")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "certificates", "groups", "elements", "group1", "quizzes", "sessions5s" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "certificates", "groups", "elements", "site11", "group1", "quizzes", "sessions5s" },
+        allowSetters = true
+    )
     private Set<Group> groups = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -82,6 +85,7 @@ public class Group implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -96,20 +100,53 @@ public class Group implements Serializable {
     private Set<UserCustom> elements = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "certificates", "groups", "elements", "group1", "quizzes", "sessions5s" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site11;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = { "certificates", "groups", "elements", "site11", "group1", "quizzes", "sessions5s" },
+        allowSetters = true
+    )
     private Group group1;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "quizResults", "groups", "questions", "topic1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "quizResults", "groups", "questions", "site7", "topic1" }, allowSetters = true)
     private Set<Quiz> quizzes = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(
-        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links" },
+        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links", "site14" },
         allowSetters = true
     )
     private Set<Session> sessions5s = new HashSet<>();
@@ -263,6 +300,19 @@ public class Group implements Serializable {
 
     public Group removeElements(UserCustom userCustom) {
         this.elements.remove(userCustom);
+        return this;
+    }
+
+    public Site getSite11() {
+        return this.site11;
+    }
+
+    public void setSite11(Site site) {
+        this.site11 = site;
+    }
+
+    public Group site11(Site site) {
+        this.setSite11(site);
         return this;
     }
 

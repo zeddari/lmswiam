@@ -23,6 +23,7 @@ describe('Language Form Service', () => {
             nameAr: expect.any(Object),
             nameLat: expect.any(Object),
             code: expect.any(Object),
+            userCustom8s: expect.any(Object),
           }),
         );
       });
@@ -36,6 +37,7 @@ describe('Language Form Service', () => {
             nameAr: expect.any(Object),
             nameLat: expect.any(Object),
             code: expect.any(Object),
+            userCustom8s: expect.any(Object),
           }),
         );
       });

@@ -176,26 +176,6 @@ class AyahEditionResourceIT {
 
     @Test
     @Transactional
-    void checkDataIsRequired() throws Exception {
-        int databaseSizeBeforeTest = ayahEditionRepository.findAll().size();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(ayahEditionSearchRepository.findAll());
-        // set the field null
-        ayahEdition.setData(null);
-
-        // Create the AyahEdition, which fails.
-
-        restAyahEditionMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(ayahEdition)))
-            .andExpect(status().isBadRequest());
-
-        List<AyahEdition> ayahEditionList = ayahEditionRepository.findAll();
-        assertThat(ayahEditionList).hasSize(databaseSizeBeforeTest);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(ayahEditionSearchRepository.findAll());
-        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
-    }
-
-    @Test
-    @Transactional
     void getAllAyahEditions() throws Exception {
         // Initialize the database
         ayahEditionRepository.saveAndFlush(ayahEdition);
@@ -208,7 +188,7 @@ class AyahEditionResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(ayahEdition.getId().intValue())))
             .andExpect(jsonPath("$.[*].ayahId").value(hasItem(DEFAULT_AYAH_ID)))
             .andExpect(jsonPath("$.[*].editionId").value(hasItem(DEFAULT_EDITION_ID)))
-            .andExpect(jsonPath("$.[*].data").value(hasItem(DEFAULT_DATA)))
+            .andExpect(jsonPath("$.[*].data").value(hasItem(DEFAULT_DATA.toString())))
             .andExpect(jsonPath("$.[*].isAudio").value(hasItem(DEFAULT_IS_AUDIO.booleanValue())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
             .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(sameInstant(DEFAULT_UPDATED_AT))));
@@ -228,7 +208,7 @@ class AyahEditionResourceIT {
             .andExpect(jsonPath("$.id").value(ayahEdition.getId().intValue()))
             .andExpect(jsonPath("$.ayahId").value(DEFAULT_AYAH_ID))
             .andExpect(jsonPath("$.editionId").value(DEFAULT_EDITION_ID))
-            .andExpect(jsonPath("$.data").value(DEFAULT_DATA))
+            .andExpect(jsonPath("$.data").value(DEFAULT_DATA.toString()))
             .andExpect(jsonPath("$.isAudio").value(DEFAULT_IS_AUDIO.booleanValue()))
             .andExpect(jsonPath("$.createdAt").value(sameInstant(DEFAULT_CREATED_AT)))
             .andExpect(jsonPath("$.updatedAt").value(sameInstant(DEFAULT_UPDATED_AT)));
@@ -542,7 +522,7 @@ class AyahEditionResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(ayahEdition.getId().intValue())))
             .andExpect(jsonPath("$.[*].ayahId").value(hasItem(DEFAULT_AYAH_ID)))
             .andExpect(jsonPath("$.[*].editionId").value(hasItem(DEFAULT_EDITION_ID)))
-            .andExpect(jsonPath("$.[*].data").value(hasItem(DEFAULT_DATA)))
+            .andExpect(jsonPath("$.[*].data").value(hasItem(DEFAULT_DATA.toString())))
             .andExpect(jsonPath("$.[*].isAudio").value(hasItem(DEFAULT_IS_AUDIO.booleanValue())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
             .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(sameInstant(DEFAULT_UPDATED_AT))));

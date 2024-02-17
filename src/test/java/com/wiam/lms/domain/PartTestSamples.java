@@ -12,11 +12,11 @@ public class PartTestSamples {
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + (2 * Short.MAX_VALUE));
 
     public static Part getPartSample1() {
-        return new Part().id(1L).titleAr("titleAr1").titleLat("titleLat1").duration(1).videoLink("videoLink1");
+        return new Part().id(1L).titleAr("titleAr1").titleLat("titleLat1").duration(1);
     }
 
     public static Part getPartSample2() {
-        return new Part().id(2L).titleAr("titleAr2").titleLat("titleLat2").duration(2).videoLink("videoLink2");
+        return new Part().id(2L).titleAr("titleAr2").titleLat("titleLat2").duration(2);
     }
 
     public static Part getPartRandomSampleGenerator() {
@@ -24,7 +24,6 @@ public class PartTestSamples {
             .id(longCount.incrementAndGet())
             .titleAr(UUID.randomUUID().toString())
             .titleLat(UUID.randomUUID().toString())
-            .duration(intCount.incrementAndGet())
-            .videoLink(UUID.randomUUID().toString());
+            .duration(intCount.incrementAndGet());
     }
 }

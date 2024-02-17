@@ -1,4 +1,5 @@
 import dayjs from 'dayjs/esm';
+import { ISite } from 'app/entities/site/site.model';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { DiplomaType } from 'app/entities/enumerations/diploma-type.model';
 
@@ -14,7 +15,8 @@ export interface IDiploma {
   school?: string | null;
   attachment?: string | null;
   attachmentContentType?: string | null;
-  userCustom7s?: IUserCustom[] | null;
+  site20?: Pick<ISite, 'id' | 'nameAr'> | null;
+  userCustom7s?: Pick<IUserCustom, 'id' | 'firstName'>[] | null;
 }
 
 export type NewDiploma = Omit<IDiploma, 'id'> & { id: null };

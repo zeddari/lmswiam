@@ -161,9 +161,7 @@ public class QuizResultResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quizResults in body.
      */
     @GetMapping("")
-    public List<QuizResult> getAllQuizResults(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
-    ) {
+    public List<QuizResult> getAllQuizResults(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all QuizResults");
         if (eagerload) {
             return quizResultRepository.findAllWithEagerRelationships();
@@ -179,7 +177,7 @@ public class QuizResultResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the quizResult, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<QuizResult> getQuizResult(@PathVariable("id") Long id) {
+    public ResponseEntity<QuizResult> getQuizResult(@PathVariable Long id) {
         log.debug("REST request to get QuizResult : {}", id);
         Optional<QuizResult> quizResult = quizResultRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(quizResult);
@@ -192,7 +190,7 @@ public class QuizResultResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuizResult(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteQuizResult(@PathVariable Long id) {
         log.debug("REST request to delete QuizResult : {}", id);
         quizResultRepository.deleteById(id);
         quizResultSearchRepository.deleteFromIndexById(id);
@@ -210,7 +208,7 @@ public class QuizResultResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<QuizResult> searchQuizResults(@RequestParam("query") String query) {
+    public List<QuizResult> searchQuizResults(@RequestParam String query) {
         log.debug("REST request to search QuizResults for query {}", query);
         try {
             return StreamSupport.stream(quizResultSearchRepository.search(query).spliterator(), false).toList();

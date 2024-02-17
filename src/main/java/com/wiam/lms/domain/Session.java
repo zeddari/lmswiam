@@ -145,13 +145,13 @@ public class Session implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "session1")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "progressions", "links", "session1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "progressions", "links", "site16", "session1" }, allowSetters = true)
     private Set<SessionInstance> sessionInstances = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "session")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "enrolment", "sponsoring", "session", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site9", "enrolment", "sponsoring", "session", "currency" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -171,7 +171,10 @@ public class Session implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "groups_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "certificates", "groups", "elements", "group1", "quizzes", "sessions5s" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "certificates", "groups", "elements", "site11", "group1", "quizzes", "sessions5s" },
+        allowSetters = true
+    )
     private Set<Group> groups = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -194,6 +197,7 @@ public class Session implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -227,6 +231,7 @@ public class Session implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",
@@ -247,8 +252,38 @@ public class Session implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "links_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "sessions4s", "sessions7s" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "site15", "sessions4s", "sessions7s" }, allowSetters = true)
     private Set<SessionLink> links = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "classrooms",
+            "courses",
+            "parts",
+            "reviews",
+            "enrolements",
+            "questions",
+            "answers",
+            "quizzes",
+            "quizResults",
+            "payments",
+            "sponsorings",
+            "groups",
+            "projects",
+            "userCustoms",
+            "sessions",
+            "sessionLinks",
+            "sessionInstances",
+            "progressions",
+            "tickets",
+            "certificates",
+            "diplomas",
+            "city",
+        },
+        allowSetters = true
+    )
+    private Site site14;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -751,6 +786,19 @@ public class Session implements Serializable {
 
     public Session removeLinks(SessionLink sessionLink) {
         this.links.remove(sessionLink);
+        return this;
+    }
+
+    public Site getSite14() {
+        return this.site14;
+    }
+
+    public void setSite14(Site site) {
+        this.site14 = site;
+    }
+
+    public Session site14(Site site) {
+        this.setSite14(site);
         return this;
     }
 

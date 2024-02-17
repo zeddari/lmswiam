@@ -3,6 +3,7 @@
     "changelogDate": "20240109181231"
   },
   "applications": "*",
+  "changelogDate": "20240109181231",
   "entityTableName": "progression",
   "fields": [
     {
@@ -107,6 +108,13 @@
   ],
   "name": "Progression",
   "relationships": [
+    {
+      "otherEntityField": "nameAr",
+      "otherEntityName": "site",
+      "relationshipName": "site17",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
     {
       "otherEntityField": "title",
       "otherEntityName": "sessionInstance",

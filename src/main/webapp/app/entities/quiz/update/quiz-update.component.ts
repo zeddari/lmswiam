@@ -14,6 +14,8 @@ import { IGroup } from 'app/entities/group/group.model';
 import { GroupService } from 'app/entities/group/service/group.service';
 import { IQuestion } from 'app/entities/question/question.model';
 import { QuestionService } from 'app/entities/question/service/question.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { ITopic } from 'app/entities/topic/topic.model';
 import { TopicService } from 'app/entities/topic/service/topic.service';
 import { ExamType } from 'app/entities/enumerations/exam-type.model';
@@ -34,6 +36,7 @@ export class QuizUpdateComponent implements OnInit {
 
   groupsSharedCollection: IGroup[] = [];
   questionsSharedCollection: IQuestion[] = [];
+  sitesSharedCollection: ISite[] = [];
   topicsSharedCollection: ITopic[] = [];
 
   editForm: QuizFormGroup = this.quizFormService.createQuizFormGroup();
@@ -45,6 +48,7 @@ export class QuizUpdateComponent implements OnInit {
     protected quizFormService: QuizFormService,
     protected groupService: GroupService,
     protected questionService: QuestionService,
+    protected siteService: SiteService,
     protected topicService: TopicService,
     protected activatedRoute: ActivatedRoute,
   ) {}
@@ -52,6 +56,8 @@ export class QuizUpdateComponent implements OnInit {
   compareGroup = (o1: IGroup | null, o2: IGroup | null): boolean => this.groupService.compareGroup(o1, o2);
 
   compareQuestion = (o1: IQuestion | null, o2: IQuestion | null): boolean => this.questionService.compareQuestion(o1, o2);
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   compareTopic = (o1: ITopic | null, o2: ITopic | null): boolean => this.topicService.compareTopic(o1, o2);
 
@@ -126,6 +132,7 @@ export class QuizUpdateComponent implements OnInit {
       this.questionsSharedCollection,
       ...(quiz.questions ?? []),
     );
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, quiz.site7);
     this.topicsSharedCollection = this.topicService.addTopicToCollectionIfMissing<ITopic>(this.topicsSharedCollection, quiz.topic1);
   }
 
@@ -145,6 +152,12 @@ export class QuizUpdateComponent implements OnInit {
         ),
       )
       .subscribe((questions: IQuestion[]) => (this.questionsSharedCollection = questions));
+
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.quiz?.site7)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
 
     this.topicService
       .query()

@@ -60,7 +60,7 @@ export class AyahEditionFormService {
       ayahId: new FormControl(ayahEditionRawValue.ayahId),
       editionId: new FormControl(ayahEditionRawValue.editionId),
       data: new FormControl(ayahEditionRawValue.data, {
-        validators: [Validators.required, Validators.maxLength(100)],
+        validators: [Validators.required],
       }),
       isAudio: new FormControl(ayahEditionRawValue.isAudio),
       createdAt: new FormControl(ayahEditionRawValue.createdAt),

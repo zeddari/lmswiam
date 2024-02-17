@@ -1,122 +1,122 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    @if (progression) {
-      <div>
-        <h2 data-cy="progressionDetailsHeading"><span jhiTranslate="lmswiamApp.progression.detail.title">Progression</span></h2>
+    <div *ngIf="progression">
+      <h2 data-cy="progressionDetailsHeading"><span jhiTranslate="lmswiamApp.progression.detail.title">Progression</span></h2>
 
-        <hr />
+      <hr />
 
-        <jhi-alert-error></jhi-alert-error>
+      <jhi-alert-error></jhi-alert-error>
 
-        <jhi-alert></jhi-alert>
+      <jhi-alert></jhi-alert>
 
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="global.field.id">ID</span></dt>
-          <dd>
-            <span>{{ progression.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.attendance">Attendance</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.Attendance.' + progression.attendance }}">{{ progression.attendance }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.justifRef">Justif Ref</span></dt>
-          <dd>
-            <span>{{ progression.justifRef }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.lateArrival">Late Arrival</span></dt>
-          <dd>
-            <span>{{ progression.lateArrival }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.earlyDeparture">Early Departure</span></dt>
-          <dd>
-            <span>{{ progression.earlyDeparture }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.progressionMode">Progression Mode</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.ProgressionMode.' + progression.progressionMode }}">{{ progression.progressionMode }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.examType">Exam Type</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.ExamType.' + progression.examType }}">{{ progression.examType }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.riwaya">Riwaya</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.Riwayats.' + progression.riwaya }}">{{ progression.riwaya }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.fromSourate">From Sourate</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.Sourate.' + progression.fromSourate }}">{{ progression.fromSourate }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.toSourate">To Sourate</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.Sourate.' + progression.toSourate }}">{{ progression.toSourate }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.fromAyaNum">From Aya Num</span></dt>
-          <dd>
-            <span>{{ progression.fromAyaNum }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.toAyaNum">To Aya Num</span></dt>
-          <dd>
-            <span>{{ progression.toAyaNum }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.fromAyaVerset">From Aya Verset</span></dt>
-          <dd>
-            <span>{{ progression.fromAyaVerset }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.toAyaVerset">To Aya Verset</span></dt>
-          <dd>
-            <span>{{ progression.toAyaVerset }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.tilawaType">Tilawa Type</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.Tilawa.' + progression.tilawaType }}">{{ progression.tilawaType }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.taskDone">Task Done</span></dt>
-          <dd>
-            <span>{{ progression.taskDone }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.tajweedScore">Tajweed Score</span></dt>
-          <dd>
-            <span>{{ progression.tajweedScore }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.hifdScore">Hifd Score</span></dt>
-          <dd>
-            <span>{{ progression.hifdScore }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.adaeScore">Adae Score</span></dt>
-          <dd>
-            <span>{{ progression.adaeScore }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.observation">Observation</span></dt>
-          <dd>
-            <span>{{ progression.observation }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.sessionInstance">Session Instance</span></dt>
-          <dd>
-            @if (progression.sessionInstance) {
-              <div>
-                <a [routerLink]="['/session-instance', progression.sessionInstance.id, 'view']">{{ progression.sessionInstance.title }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.progression.student">Student</span></dt>
-          <dd>
-            @if (progression.student) {
-              <div>
-                <a [routerLink]="['/user-custom', progression.student.id, 'view']">{{ progression.student.firstName }}</a>
-              </div>
-            }
-          </dd>
-        </dl>
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ progression.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.attendance">Attendance</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.Attendance.' + progression.attendance }}">{{ progression.attendance }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.justifRef">Justif Ref</span></dt>
+        <dd>
+          <span>{{ progression.justifRef }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.lateArrival">Late Arrival</span></dt>
+        <dd>
+          <span>{{ progression.lateArrival }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.earlyDeparture">Early Departure</span></dt>
+        <dd>
+          <span>{{ progression.earlyDeparture }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.progressionMode">Progression Mode</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.ProgressionMode.' + progression.progressionMode }}">{{ progression.progressionMode }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.examType">Exam Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.ExamType.' + progression.examType }}">{{ progression.examType }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.riwaya">Riwaya</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.Riwayats.' + progression.riwaya }}">{{ progression.riwaya }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.fromSourate">From Sourate</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.Sourate.' + progression.fromSourate }}">{{ progression.fromSourate }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.toSourate">To Sourate</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.Sourate.' + progression.toSourate }}">{{ progression.toSourate }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.fromAyaNum">From Aya Num</span></dt>
+        <dd>
+          <span>{{ progression.fromAyaNum }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.toAyaNum">To Aya Num</span></dt>
+        <dd>
+          <span>{{ progression.toAyaNum }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.fromAyaVerset">From Aya Verset</span></dt>
+        <dd>
+          <span>{{ progression.fromAyaVerset }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.toAyaVerset">To Aya Verset</span></dt>
+        <dd>
+          <span>{{ progression.toAyaVerset }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.tilawaType">Tilawa Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.Tilawa.' + progression.tilawaType }}">{{ progression.tilawaType }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.taskDone">Task Done</span></dt>
+        <dd>
+          <span>{{ progression.taskDone }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.tajweedScore">Tajweed Score</span></dt>
+        <dd>
+          <span>{{ progression.tajweedScore }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.hifdScore">Hifd Score</span></dt>
+        <dd>
+          <span>{{ progression.hifdScore }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.adaeScore">Adae Score</span></dt>
+        <dd>
+          <span>{{ progression.adaeScore }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.observation">Observation</span></dt>
+        <dd>
+          <span>{{ progression.observation }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.site17">Site 17</span></dt>
+        <dd>
+          <div *ngIf="progression.site17">
+            <a [routerLink]="['/site', progression.site17.id, 'view']">{{ progression.site17.nameAr }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.sessionInstance">Session Instance</span></dt>
+        <dd>
+          <div *ngIf="progression.sessionInstance">
+            <a [routerLink]="['/session-instance', progression.sessionInstance.id, 'view']">{{ progression.sessionInstance.title }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.progression.student">Student</span></dt>
+        <dd>
+          <div *ngIf="progression.student">
+            <a [routerLink]="['/user-custom', progression.student.id, 'view']">{{ progression.student.firstName }}</a>
+          </div>
+        </dd>
+      </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
 
-        <button type="button" [routerLink]="['/progression', progression.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
-      </div>
-    }
+      <button type="button" [routerLink]="['/progression', progression.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
   </div>
 </div>

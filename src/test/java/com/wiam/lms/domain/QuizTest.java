@@ -4,6 +4,7 @@ import static com.wiam.lms.domain.GroupTestSamples.*;
 import static com.wiam.lms.domain.QuestionTestSamples.*;
 import static com.wiam.lms.domain.QuizResultTestSamples.*;
 import static com.wiam.lms.domain.QuizTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.TopicTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -84,6 +85,18 @@ class QuizTest {
 
         quiz.setQuestions(new HashSet<>());
         assertThat(quiz.getQuestions()).doesNotContain(questionBack);
+    }
+
+    @Test
+    void site7Test() throws Exception {
+        Quiz quiz = getQuizRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        quiz.setSite7(siteBack);
+        assertThat(quiz.getSite7()).isEqualTo(siteBack);
+
+        quiz.site7(null);
+        assertThat(quiz.getSite7()).isNull();
     }
 
     @Test

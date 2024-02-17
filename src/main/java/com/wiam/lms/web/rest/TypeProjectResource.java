@@ -172,7 +172,7 @@ public class TypeProjectResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the typeProject, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<TypeProject> getTypeProject(@PathVariable("id") Long id) {
+    public ResponseEntity<TypeProject> getTypeProject(@PathVariable Long id) {
         log.debug("REST request to get TypeProject : {}", id);
         Optional<TypeProject> typeProject = typeProjectRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(typeProject);
@@ -185,7 +185,7 @@ public class TypeProjectResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTypeProject(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteTypeProject(@PathVariable Long id) {
         log.debug("REST request to delete TypeProject : {}", id);
         typeProjectRepository.deleteById(id);
         typeProjectSearchRepository.deleteFromIndexById(id);
@@ -203,7 +203,7 @@ public class TypeProjectResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<TypeProject> searchTypeProjects(@RequestParam("query") String query) {
+    public List<TypeProject> searchTypeProjects(@RequestParam String query) {
         log.debug("REST request to search TypeProjects for query {}", query);
         try {
             return StreamSupport.stream(typeProjectSearchRepository.search(query).spliterator(), false).toList();

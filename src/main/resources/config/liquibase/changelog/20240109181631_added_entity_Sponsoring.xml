@@ -32,6 +32,9 @@
             <column name="is_always" type="boolean">
                 <constraints nullable="true" />
             </column>
+            <column name="site10_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="sponsor_id" type="bigint">
                 <constraints nullable="true" />
             </column>

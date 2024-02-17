@@ -33,6 +33,7 @@ type QuizResultFormGroupContent = {
   id: FormControl<QuizResultFormRawValue['id'] | NewQuizResult['id']>;
   result: FormControl<QuizResultFormRawValue['result']>;
   submittedAT: FormControl<QuizResultFormRawValue['submittedAT']>;
+  site8: FormControl<QuizResultFormRawValue['site8']>;
   quiz: FormControl<QuizResultFormRawValue['quiz']>;
   userCustom2: FormControl<QuizResultFormRawValue['userCustom2']>;
 };
@@ -60,6 +61,7 @@ export class QuizResultFormService {
       submittedAT: new FormControl(quizResultRawValue.submittedAT, {
         validators: [Validators.required],
       }),
+      site8: new FormControl(quizResultRawValue.site8),
       quiz: new FormControl(quizResultRawValue.quiz),
       userCustom2: new FormControl(quizResultRawValue.userCustom2),
     });

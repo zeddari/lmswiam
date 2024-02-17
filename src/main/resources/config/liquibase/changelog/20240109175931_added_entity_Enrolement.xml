@@ -32,6 +32,9 @@
             <column name="activated_at" type="${datetimeType}">
                 <constraints nullable="true" />
             </column>
+            <column name="site4_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="user_custom4_id" type="bigint">
                 <constraints nullable="true" />
             </column>

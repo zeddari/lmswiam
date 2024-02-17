@@ -41,7 +41,7 @@ public class TypeProject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "typeProject")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "sponsorings", "typeProject" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "sponsorings", "site12", "typeProject" }, allowSetters = true)
     private Set<Project> projects = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -59,6 +59,7 @@ public class Job implements Serializable {
             "sponsorings",
             "diplomas",
             "languages",
+            "site13",
             "country",
             "nationality",
             "job",

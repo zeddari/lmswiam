@@ -24,12 +24,12 @@ export const sampleWithFullData: IPart = {
   duration: 7194,
   imageLink: '../fake-data/blob/hipster.png',
   imageLinkContentType: 'unknown',
-  videoLink: 'throughout lest bicycle',
+  videoLink: '../fake-data/blob/hipster.txt',
 };
 
 export const sampleWithNewData: NewPart = {
-  titleAr: 'gift deliberately',
-  titleLat: 'cleverly snake',
+  titleAr: 'throughout lest bicycle',
+  titleLat: 'gift deliberately',
   id: null,
 };
 

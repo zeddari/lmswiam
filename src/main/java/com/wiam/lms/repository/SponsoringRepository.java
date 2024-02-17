@@ -27,18 +27,18 @@ public interface SponsoringRepository extends JpaRepository<Sponsoring, Long> {
     }
 
     @Query(
-        value = "select sponsoring from Sponsoring sponsoring left join fetch sponsoring.sponsor left join fetch sponsoring.project left join fetch sponsoring.currency",
+        value = "select sponsoring from Sponsoring sponsoring left join fetch sponsoring.site10 left join fetch sponsoring.sponsor left join fetch sponsoring.project left join fetch sponsoring.currency",
         countQuery = "select count(sponsoring) from Sponsoring sponsoring"
     )
     Page<Sponsoring> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select sponsoring from Sponsoring sponsoring left join fetch sponsoring.sponsor left join fetch sponsoring.project left join fetch sponsoring.currency"
+        "select sponsoring from Sponsoring sponsoring left join fetch sponsoring.site10 left join fetch sponsoring.sponsor left join fetch sponsoring.project left join fetch sponsoring.currency"
     )
     List<Sponsoring> findAllWithToOneRelationships();
 
     @Query(
-        "select sponsoring from Sponsoring sponsoring left join fetch sponsoring.sponsor left join fetch sponsoring.project left join fetch sponsoring.currency where sponsoring.id =:id"
+        "select sponsoring from Sponsoring sponsoring left join fetch sponsoring.site10 left join fetch sponsoring.sponsor left join fetch sponsoring.project left join fetch sponsoring.currency where sponsoring.id =:id"
     )
     Optional<Sponsoring> findOneWithToOneRelationships(@Param("id") Long id);
 }

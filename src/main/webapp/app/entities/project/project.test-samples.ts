@@ -17,35 +17,35 @@ export const sampleWithPartialData: IProject = {
   requirements: '../fake-data/blob/hipster.txt',
   imageLink: '../fake-data/blob/hipster.png',
   imageLinkContentType: 'unknown',
-  videoLink: 'studious',
-  budget: 30924.01,
+  videoLink: '../fake-data/blob/hipster.txt',
+  budget: 3027.73,
   isActive: false,
-  activateAt: dayjs('2024-01-09T06:21'),
+  activateAt: dayjs('2024-01-09T10:54'),
   startDate: dayjs('2024-01-09'),
   endDate: dayjs('2024-01-09'),
 };
 
 export const sampleWithFullData: IProject = {
-  id: 29956,
-  titleAr: 'excepting',
-  titleLat: 'before the',
+  id: 29490,
+  titleAr: 'usable wetly',
+  titleLat: 'hopelessly following',
   description: '../fake-data/blob/hipster.txt',
   goals: '../fake-data/blob/hipster.txt',
   requirements: '../fake-data/blob/hipster.txt',
   imageLink: '../fake-data/blob/hipster.png',
   imageLinkContentType: 'unknown',
-  videoLink: 'down with',
-  budget: 29946.31,
+  videoLink: '../fake-data/blob/hipster.txt',
+  budget: 26388.16,
   isActive: false,
-  activateAt: dayjs('2024-01-09T03:31'),
-  startDate: dayjs('2024-01-08'),
+  activateAt: dayjs('2024-01-08T18:22'),
+  startDate: dayjs('2024-01-09'),
   endDate: dayjs('2024-01-09'),
 };
 
 export const sampleWithNewData: NewProject = {
-  titleAr: 'careful officially',
-  titleLat: 'ew violently frightfully',
-  budget: 10649.27,
+  titleAr: 'hm',
+  titleLat: 'male sore',
+  budget: 3566.43,
   id: null,
 };
 

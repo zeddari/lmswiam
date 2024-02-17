@@ -1,62 +1,60 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    @if (editions) {
-      <div>
-        <h2 data-cy="editionsDetailsHeading"><span jhiTranslate="lmswiamApp.editions.detail.title">Editions</span></h2>
+    <div *ngIf="editions">
+      <h2 data-cy="editionsDetailsHeading"><span jhiTranslate="lmswiamApp.editions.detail.title">Editions</span></h2>
 
-        <hr />
+      <hr />
 
-        <jhi-alert-error></jhi-alert-error>
+      <jhi-alert-error></jhi-alert-error>
 
-        <jhi-alert></jhi-alert>
+      <jhi-alert></jhi-alert>
 
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="lmswiamApp.editions.id">Id</span></dt>
-          <dd>
-            <span>{{ editions.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.editions.identifier">Identifier</span></dt>
-          <dd>
-            <span>{{ editions.identifier }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.editions.language">Language</span></dt>
-          <dd>
-            <span>{{ editions.language }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.editions.name">Name</span></dt>
-          <dd>
-            <span>{{ editions.name }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.editions.englishName">English Name</span></dt>
-          <dd>
-            <span>{{ editions.englishName }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.editions.format">Format</span></dt>
-          <dd>
-            <span>{{ editions.format }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.editions.type">Type</span></dt>
-          <dd>
-            <span>{{ editions.type }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.editions.createdAt">Created At</span></dt>
-          <dd>
-            <span>{{ editions.createdAt | formatMediumDatetime }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.editions.updatedAt">Updated At</span></dt>
-          <dd>
-            <span>{{ editions.updatedAt | formatMediumDatetime }}</span>
-          </dd>
-        </dl>
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="lmswiamApp.editions.id">Id</span></dt>
+        <dd>
+          <span>{{ editions.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.editions.identifier">Identifier</span></dt>
+        <dd>
+          <span>{{ editions.identifier }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.editions.language">Language</span></dt>
+        <dd>
+          <span>{{ editions.language }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.editions.name">Name</span></dt>
+        <dd>
+          <span>{{ editions.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.editions.englishName">English Name</span></dt>
+        <dd>
+          <span>{{ editions.englishName }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.editions.format">Format</span></dt>
+        <dd>
+          <span>{{ editions.format }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.editions.type">Type</span></dt>
+        <dd>
+          <span>{{ editions.type }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.editions.createdAt">Created At</span></dt>
+        <dd>
+          <span>{{ editions.createdAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.editions.updatedAt">Updated At</span></dt>
+        <dd>
+          <span>{{ editions.updatedAt | formatMediumDatetime }}</span>
+        </dd>
+      </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
 
-        <button type="button" [routerLink]="['/editions', editions.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
-      </div>
-    }
+      <button type="button" [routerLink]="['/editions', editions.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
   </div>
 </div>

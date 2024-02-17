@@ -181,12 +181,17 @@ public class DiplomaResource {
     /**
      * {@code GET  /diplomas} : get all the diplomas.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of diplomas in body.
      */
     @GetMapping("")
-    public List<Diploma> getAllDiplomas() {
+    public List<Diploma> getAllDiplomas(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Diplomas");
-        return diplomaRepository.findAll();
+        if (eagerload) {
+            return diplomaRepository.findAllWithEagerRelationships();
+        } else {
+            return diplomaRepository.findAll();
+        }
     }
 
     /**
@@ -196,9 +201,9 @@ public class DiplomaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the diploma, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Diploma> getDiploma(@PathVariable("id") Long id) {
+    public ResponseEntity<Diploma> getDiploma(@PathVariable Long id) {
         log.debug("REST request to get Diploma : {}", id);
-        Optional<Diploma> diploma = diplomaRepository.findById(id);
+        Optional<Diploma> diploma = diplomaRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(diploma);
     }
 
@@ -209,7 +214,7 @@ public class DiplomaResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDiploma(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteDiploma(@PathVariable Long id) {
         log.debug("REST request to delete Diploma : {}", id);
         diplomaRepository.deleteById(id);
         diplomaSearchRepository.deleteFromIndexById(id);
@@ -227,7 +232,7 @@ public class DiplomaResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Diploma> searchDiplomas(@RequestParam("query") String query) {
+    public List<Diploma> searchDiplomas(@RequestParam String query) {
         log.debug("REST request to search Diplomas for query {}", query);
         try {
             return StreamSupport.stream(diplomaSearchRepository.search(query).spliterator(), false).toList();

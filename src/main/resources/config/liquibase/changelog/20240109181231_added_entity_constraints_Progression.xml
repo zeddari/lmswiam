@@ -8,6 +8,13 @@
     -->
     <changeSet id="20240109181231-2" author="jhipster">
 
+        <addForeignKeyConstraint baseColumnNames="site17_id"
+                                 baseTableName="progression"
+                                 constraintName="fk_progression__site17_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="site"
+                                 />
+
         <addForeignKeyConstraint baseColumnNames="session_instance_id"
                                  baseTableName="progression"
                                  constraintName="fk_progression__session_instance_id"

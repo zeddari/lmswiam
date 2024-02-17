@@ -8,62 +8,59 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.course.level" for="field_level">Level</label>
           <select class="form-control" name="level" formControlName="level" id="field_level" data-cy="level">
             <option [ngValue]="null">{{ 'lmswiamApp.Level.null' | translate }}</option>
-            @for (level of levelValues; track $index) {
-              <option [value]="level">{{ 'lmswiamApp.Level.' + level | translate }}</option>
-            }
+            <option *ngFor="let level of levelValues" [value]="level">{{ 'lmswiamApp.Level.' + level | translate }}</option>
           </select>
-          @if (editForm.get('level')!.invalid && (editForm.get('level')!.dirty || editForm.get('level')!.touched)) {
-            <div>
-              @if (editForm.get('level')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('level')!.invalid && (editForm.get('level')!.dirty || editForm.get('level')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('level')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.course.titleAr" for="field_titleAr">Title Ar</label>
           <input type="text" class="form-control" name="titleAr" id="field_titleAr" data-cy="titleAr" formControlName="titleAr" />
-          @if (editForm.get('titleAr')!.invalid && (editForm.get('titleAr')!.dirty || editForm.get('titleAr')!.touched)) {
-            <div>
-              @if (editForm.get('titleAr')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('titleAr')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('titleAr')!.invalid && (editForm.get('titleAr')!.dirty || editForm.get('titleAr')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('titleAr')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('titleAr')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+              >This field cannot be longer than 100 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.course.titleLat" for="field_titleLat">Title Lat</label>
           <input type="text" class="form-control" name="titleLat" id="field_titleLat" data-cy="titleLat" formControlName="titleLat" />
-          @if (editForm.get('titleLat')!.invalid && (editForm.get('titleLat')!.dirty || editForm.get('titleLat')!.touched)) {
-            <div>
-              @if (editForm.get('titleLat')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('titleLat')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('titleLat')!.invalid && (editForm.get('titleLat')!.dirty || editForm.get('titleLat')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('titleLat')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('titleLat')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+              >This field cannot be longer than 100 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -106,27 +103,24 @@
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.course.imageLink" for="field_imageLink">Image Link</label>
           <div>
-            @if (editForm.get('imageLink')!.value) {
-              <img
-                [src]="'data:' + editForm.get('imageLinkContentType')!.value + ';base64,' + editForm.get('imageLink')!.value"
-                style="max-height: 100px"
-                alt="course image"
-              />
-            }
-            @if (editForm.get('imageLink')!.value) {
-              <div class="form-text text-danger clearfix">
-                <span class="pull-start"
-                  >{{ editForm.get('imageLinkContentType')!.value }}, {{ byteSize(editForm.get('imageLink')!.value!) }}</span
-                >
-                <button
-                  type="button"
-                  (click)="clearInputImage('imageLink', 'imageLinkContentType', 'file_imageLink')"
-                  class="btn btn-secondary btn-xs pull-end"
-                >
-                  <fa-icon icon="times"></fa-icon>
-                </button>
-              </div>
-            }
+            <img
+              [src]="'data:' + editForm.get('imageLinkContentType')!.value + ';base64,' + editForm.get('imageLink')!.value"
+              style="max-height: 100px"
+              *ngIf="editForm.get('imageLink')!.value"
+              alt="course image"
+            />
+            <div *ngIf="editForm.get('imageLink')!.value" class="form-text text-danger clearfix">
+              <span class="pull-start"
+                >{{ editForm.get('imageLinkContentType')!.value }}, {{ byteSize(editForm.get('imageLink')!.value!) }}</span
+              >
+              <button
+                type="button"
+                (click)="clearInputImage('imageLink', 'imageLinkContentType', 'file_imageLink')"
+                class="btn btn-secondary btn-xs pull-end"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
             <input
               type="file"
               id="file_imageLink"
@@ -144,31 +138,29 @@
             id="field_imageLinkContentType"
             formControlName="imageLinkContentType"
           />
-          @if (editForm.get('imageLink')!.invalid && (editForm.get('imageLink')!.dirty || editForm.get('imageLink')!.touched)) {
-            <div></div>
-          }
+          <div *ngIf="editForm.get('imageLink')!.invalid && (editForm.get('imageLink')!.dirty || editForm.get('imageLink')!.touched)"></div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.course.videoLink" for="field_videoLink">Video Link</label>
-          <input type="text" class="form-control" name="videoLink" id="field_videoLink" data-cy="videoLink" formControlName="videoLink" />
+          <textarea class="form-control" name="videoLink" id="field_videoLink" data-cy="videoLink" formControlName="videoLink"></textarea>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.course.price" for="field_price">Price</label>
           <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="price" />
-          @if (editForm.get('price')!.invalid && (editForm.get('price')!.dirty || editForm.get('price')!.touched)) {
-            <div>
-              @if (editForm.get('price')?.errors?.min) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }"
-                  >This field should be at least 0.</small
-                >
-              }
-              <small class="form-text text-danger" [hidden]="!editForm.get('price')?.errors?.number" jhiTranslate="entity.validation.number"
-                >This field should be a number.</small
-              >
-            </div>
-          }
+          <div *ngIf="editForm.get('price')!.invalid && (editForm.get('price')!.dirty || editForm.get('price')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('price')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+              >This field should be at least 0.</small
+            >
+            <small class="form-text text-danger" [hidden]="!editForm.get('price')?.errors?.number" jhiTranslate="entity.validation.number"
+              >This field should be a number.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -229,9 +221,17 @@
             formControlName="professors"
             [compareWith]="compareUserCustom"
           >
-            @for (userCustomOption of userCustomsSharedCollection; track $index) {
-              <option [ngValue]="userCustomOption">{{ userCustomOption.firstName }}</option>
-            }
+            <option [ngValue]="userCustomOption" *ngFor="let userCustomOption of userCustomsSharedCollection">
+              {{ userCustomOption.firstName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.course.site1" for="field_site1">Site 1</label>
+          <select class="form-control" id="field_site1" data-cy="site1" name="site1" formControlName="site1" [compareWith]="compareSite">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
           </select>
         </div>
 
@@ -246,9 +246,7 @@
             [compareWith]="compareTopic"
           >
             <option [ngValue]="null"></option>
-            @for (topicOption of topicsSharedCollection; track $index) {
-              <option [ngValue]="topicOption">{{ topicOption.titleAr }}</option>
-            }
+            <option [ngValue]="topicOption" *ngFor="let topicOption of topicsSharedCollection">{{ topicOption.titleAr }}</option>
           </select>
         </div>
       </div>

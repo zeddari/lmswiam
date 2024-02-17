@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IPart } from 'app/entities/part/part.model';
 import { PartService } from 'app/entities/part/service/part.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
@@ -28,6 +30,7 @@ export class ReviewUpdateComponent implements OnInit {
   isSaving = false;
   review: IReview | null = null;
 
+  sitesSharedCollection: ISite[] = [];
   partsSharedCollection: IPart[] = [];
   userCustomsSharedCollection: IUserCustom[] = [];
 
@@ -38,10 +41,13 @@ export class ReviewUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected reviewService: ReviewService,
     protected reviewFormService: ReviewFormService,
+    protected siteService: SiteService,
     protected partService: PartService,
     protected userCustomService: UserCustomService,
     protected activatedRoute: ActivatedRoute,
   ) {}
+
+  compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
   comparePart = (o1: IPart | null, o2: IPart | null): boolean => this.partService.comparePart(o1, o2);
 
@@ -110,6 +116,7 @@ export class ReviewUpdateComponent implements OnInit {
     this.review = review;
     this.reviewFormService.resetForm(this.editForm, review);
 
+    this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, review.site3);
     this.partsSharedCollection = this.partService.addPartToCollectionIfMissing<IPart>(this.partsSharedCollection, review.part2);
     this.userCustomsSharedCollection = this.userCustomService.addUserCustomToCollectionIfMissing<IUserCustom>(
       this.userCustomsSharedCollection,
@@ -118,6 +125,12 @@ export class ReviewUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.siteService
+      .query()
+      .pipe(map((res: HttpResponse<ISite[]>) => res.body ?? []))
+      .pipe(map((sites: ISite[]) => this.siteService.addSiteToCollectionIfMissing<ISite>(sites, this.review?.site3)))
+      .subscribe((sites: ISite[]) => (this.sitesSharedCollection = sites));
+
     this.partService
       .query()
       .pipe(map((res: HttpResponse<IPart[]>) => res.body ?? []))

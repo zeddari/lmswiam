@@ -51,7 +51,7 @@ class QuestionSearchRepositoryInternalImpl implements QuestionSearchRepositoryIn
 
     @Override
     public void index(Question entity) {
-        repository.findById(entity.getId()).ifPresent(elasticsearchTemplate::save);
+        repository.findOneWithEagerRelationships(entity.getId()).ifPresent(elasticsearchTemplate::save);
     }
 
     @Override

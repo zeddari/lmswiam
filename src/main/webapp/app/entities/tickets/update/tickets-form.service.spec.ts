@@ -31,6 +31,7 @@ describe('Tickets Form Service', () => {
             from: expect.any(Object),
             toDate: expect.any(Object),
             decisionDetail: expect.any(Object),
+            site18: expect.any(Object),
             userCustom5: expect.any(Object),
           }),
         );
@@ -53,6 +54,7 @@ describe('Tickets Form Service', () => {
             from: expect.any(Object),
             toDate: expect.any(Object),
             decisionDetail: expect.any(Object),
+            site18: expect.any(Object),
             userCustom5: expect.any(Object),
           }),
         );

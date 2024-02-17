@@ -27,14 +27,18 @@ public interface EnrolementRepository extends JpaRepository<Enrolement, Long> {
     }
 
     @Query(
-        value = "select enrolement from Enrolement enrolement left join fetch enrolement.course",
+        value = "select enrolement from Enrolement enrolement left join fetch enrolement.site4 left join fetch enrolement.userCustom4 left join fetch enrolement.course",
         countQuery = "select count(enrolement) from Enrolement enrolement"
     )
     Page<Enrolement> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select enrolement from Enrolement enrolement left join fetch enrolement.course")
+    @Query(
+        "select enrolement from Enrolement enrolement left join fetch enrolement.site4 left join fetch enrolement.userCustom4 left join fetch enrolement.course"
+    )
     List<Enrolement> findAllWithToOneRelationships();
 
-    @Query("select enrolement from Enrolement enrolement left join fetch enrolement.course where enrolement.id =:id")
+    @Query(
+        "select enrolement from Enrolement enrolement left join fetch enrolement.site4 left join fetch enrolement.userCustom4 left join fetch enrolement.course where enrolement.id =:id"
+    )
     Optional<Enrolement> findOneWithToOneRelationships(@Param("id") Long id);
 }

@@ -26,6 +26,9 @@
             <column name="description" type="${clobType}">
                 <constraints nullable="true" />
             </column>
+            <column name="site11_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="group1_id" type="bigint">
                 <constraints nullable="true" />
             </column>

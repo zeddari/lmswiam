@@ -175,7 +175,7 @@ public class CurrencyResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the currency, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Currency> getCurrency(@PathVariable("id") Long id) {
+    public ResponseEntity<Currency> getCurrency(@PathVariable Long id) {
         log.debug("REST request to get Currency : {}", id);
         Optional<Currency> currency = currencyRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(currency);
@@ -188,7 +188,7 @@ public class CurrencyResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCurrency(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteCurrency(@PathVariable Long id) {
         log.debug("REST request to delete Currency : {}", id);
         currencyRepository.deleteById(id);
         currencySearchRepository.deleteFromIndexById(id);
@@ -206,7 +206,7 @@ public class CurrencyResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Currency> searchCurrencies(@RequestParam("query") String query) {
+    public List<Currency> searchCurrencies(@RequestParam String query) {
         log.debug("REST request to search Currencies for query {}", query);
         try {
             return StreamSupport.stream(currencySearchRepository.search(query).spliterator(), false).toList();

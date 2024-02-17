@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
+import { ISite } from 'app/entities/site/site.model';
+import { SiteService } from 'app/entities/site/service/site.service';
 import { IQuiz } from 'app/entities/quiz/quiz.model';
 import { QuizService } from 'app/entities/quiz/service/quiz.service';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
@@ -22,6 +24,7 @@ describe('QuizResult Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let quizResultFormService: QuizResultFormService;
   let quizResultService: QuizResultService;
+  let siteService: SiteService;
   let quizService: QuizService;
   let userCustomService: UserCustomService;
 
@@ -45,6 +48,7 @@ describe('QuizResult Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     quizResultFormService = TestBed.inject(QuizResultFormService);
     quizResultService = TestBed.inject(QuizResultService);
+    siteService = TestBed.inject(SiteService);
     quizService = TestBed.inject(QuizService);
     userCustomService = TestBed.inject(UserCustomService);
 
@@ -52,6 +56,28 @@ describe('QuizResult Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
+    it('Should call Site query and add missing value', () => {
+      const quizResult: IQuizResult = { id: 456 };
+      const site8: ISite = { id: 19470 };
+      quizResult.site8 = site8;
+
+      const siteCollection: ISite[] = [{ id: 16241 }];
+      jest.spyOn(siteService, 'query').mockReturnValue(of(new HttpResponse({ body: siteCollection })));
+      const additionalSites = [site8];
+      const expectedCollection: ISite[] = [...additionalSites, ...siteCollection];
+      jest.spyOn(siteService, 'addSiteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ quizResult });
+      comp.ngOnInit();
+
+      expect(siteService.query).toHaveBeenCalled();
+      expect(siteService.addSiteToCollectionIfMissing).toHaveBeenCalledWith(
+        siteCollection,
+        ...additionalSites.map(expect.objectContaining),
+      );
+      expect(comp.sitesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call Quiz query and add missing value', () => {
       const quizResult: IQuizResult = { id: 456 };
       const quiz: IQuiz = { id: 4586 };
@@ -98,6 +124,8 @@ describe('QuizResult Management Update Component', () => {
 
     it('Should update editForm', () => {
       const quizResult: IQuizResult = { id: 456 };
+      const site8: ISite = { id: 22497 };
+      quizResult.site8 = site8;
       const quiz: IQuiz = { id: 6686 };
       quizResult.quiz = quiz;
       const userCustom2: IUserCustom = { id: 20650 };
@@ -106,6 +134,7 @@ describe('QuizResult Management Update Component', () => {
       activatedRoute.data = of({ quizResult });
       comp.ngOnInit();
 
+      expect(comp.sitesSharedCollection).toContain(site8);
       expect(comp.quizzesSharedCollection).toContain(quiz);
       expect(comp.userCustomsSharedCollection).toContain(userCustom2);
       expect(comp.quizResult).toEqual(quizResult);
@@ -181,6 +210,16 @@ describe('QuizResult Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareSite', () => {
+      it('Should forward to siteService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(siteService, 'compareSite');
+        comp.compareSite(entity, entity2);
+        expect(siteService.compareSite).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareQuiz', () => {
       it('Should forward to quizService', () => {
         const entity = { id: 123 };

@@ -51,7 +51,7 @@ class SessionLinkSearchRepositoryInternalImpl implements SessionLinkSearchReposi
 
     @Override
     public void index(SessionLink entity) {
-        repository.findById(entity.getId()).ifPresent(elasticsearchTemplate::save);
+        repository.findOneWithEagerRelationships(entity.getId()).ifPresent(elasticsearchTemplate::save);
     }
 
     @Override

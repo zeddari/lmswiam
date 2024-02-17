@@ -41,148 +41,136 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (quizzes?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.quiz.home.notFound">No Quizzes found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="quizzes?.length === 0">
+    <span jhiTranslate="lmswiamApp.quiz.home.notFound">No Quizzes found</span>
+  </div>
 
-  @if (quizzes && quizzes.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="quizzes && quizzes.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="quizType">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.quiz.quizType">Quiz Type</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="quizTitle">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.quiz.quizTitle">Quiz Title</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="quizDescription">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.quiz.quizDescription">Quiz Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="deadline">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.quiz.deadline">Deadline</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isActive">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.quiz.isActive">Is Active</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="groups.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.quiz.groups">Groups</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="questions.question">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.quiz.questions">Questions</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site7.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.quiz.site7">Site 7</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="topic1.titleAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.quiz.topic1">Topic 1</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let quiz of quizzes; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/quiz', quiz.id, 'view']">{{ quiz.id }}</a>
+          </td>
+          <td jhiTranslate="{{ 'lmswiamApp.ExamType.' + quiz.quizType }}">{{ quiz.quizType }}</td>
+          <td>{{ quiz.quizTitle }}</td>
+          <td>{{ quiz.quizDescription }}</td>
+          <td>{{ quiz.deadline | formatMediumDatetime }}</td>
+          <td>{{ quiz.isActive }}</td>
+          <td>
+            <span *ngFor="let groups of quiz.groups; let last = last">
+              <a class="form-control-static" [routerLink]="['/group', groups.id, 'view']">{{ groups.nameAr }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <span *ngFor="let questions of quiz.questions; let last = last">
+              <a class="form-control-static" [routerLink]="['/question', questions.id, 'view']">{{ questions.question }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <div *ngIf="quiz.site7">
+              <a [routerLink]="['/site', quiz.site7.id, 'view']">{{ quiz.site7.nameAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="quiz.topic1">
+              <a [routerLink]="['/topic', quiz.topic1.id, 'view']">{{ quiz.topic1.titleAr }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/quiz', quiz.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="quizType">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.quiz.quizType">Quiz Type</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="quizTitle">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.quiz.quizTitle">Quiz Title</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="quizDescription">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.quiz.quizDescription">Quiz Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="deadline">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.quiz.deadline">Deadline</span>
+              <a [routerLink]="['/quiz', quiz.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="isActive">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.quiz.isActive">Is Active</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="groups.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.quiz.groups">Groups</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="questions.question">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.quiz.questions">Questions</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="topic1.titleAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.quiz.topic1">Topic 1</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (quiz of quizzes; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/quiz', quiz.id, 'view']">{{ quiz.id }}</a>
-              </td>
-              <td jhiTranslate="{{ 'lmswiamApp.ExamType.' + quiz.quizType }}">{{ quiz.quizType }}</td>
-              <td>{{ quiz.quizTitle }}</td>
-              <td>{{ quiz.quizDescription }}</td>
-              <td>{{ quiz.deadline | formatMediumDatetime }}</td>
-              <td>{{ quiz.isActive }}</td>
-              <td>
-                @for (groups of quiz.groups; track $index; let last = $last) {
-                  <span>
-                    <a class="form-control-static" [routerLink]="['/group', groups.id, 'view']">{{ groups.nameAr }}</a
-                    >{{ last ? '' : ', ' }}
-                  </span>
-                }
-              </td>
-              <td>
-                @for (questions of quiz.questions; track $index; let last = $last) {
-                  <span>
-                    <a class="form-control-static" [routerLink]="['/question', questions.id, 'view']">{{ questions.question }}</a
-                    >{{ last ? '' : ', ' }}
-                  </span>
-                }
-              </td>
-              <td>
-                @if (quiz.topic1) {
-                  <div>
-                    <a [routerLink]="['/topic', quiz.topic1.id, 'view']">{{ quiz.topic1.titleAr }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/quiz', quiz.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/quiz', quiz.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(quiz)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(quiz)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

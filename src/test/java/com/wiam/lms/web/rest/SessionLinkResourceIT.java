@@ -13,6 +13,7 @@ import com.wiam.lms.domain.enumeration.SessionProvider;
 import com.wiam.lms.repository.SessionLinkRepository;
 import com.wiam.lms.repository.search.SessionLinkSearchRepository;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -22,8 +23,13 @@ import org.assertj.core.util.IterableUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link SessionLinkResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class SessionLinkResourceIT {
@@ -58,6 +65,9 @@ class SessionLinkResourceIT {
 
     @Autowired
     private SessionLinkRepository sessionLinkRepository;
+
+    @Mock
+    private SessionLinkRepository sessionLinkRepositoryMock;
 
     @Autowired
     private SessionLinkSearchRepository sessionLinkSearchRepository;
@@ -194,6 +204,23 @@ class SessionLinkResourceIT {
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].link").value(hasItem(DEFAULT_LINK)));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllSessionLinksWithEagerRelationshipsIsEnabled() throws Exception {
+        when(sessionLinkRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restSessionLinkMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(sessionLinkRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllSessionLinksWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(sessionLinkRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restSessionLinkMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+        verify(sessionLinkRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
     @Test

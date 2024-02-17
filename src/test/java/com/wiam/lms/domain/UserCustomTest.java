@@ -15,6 +15,7 @@ import static com.wiam.lms.domain.ProgressionTestSamples.*;
 import static com.wiam.lms.domain.QuizResultTestSamples.*;
 import static com.wiam.lms.domain.ReviewTestSamples.*;
 import static com.wiam.lms.domain.SessionTestSamples.*;
+import static com.wiam.lms.domain.SiteTestSamples.*;
 import static com.wiam.lms.domain.SponsoringTestSamples.*;
 import static com.wiam.lms.domain.TicketsTestSamples.*;
 import static com.wiam.lms.domain.UserCustomTestSamples.*;
@@ -251,6 +252,18 @@ class UserCustomTest {
 
         userCustom.setLanguages(new HashSet<>());
         assertThat(userCustom.getLanguages()).doesNotContain(languageBack);
+    }
+
+    @Test
+    void site13Test() throws Exception {
+        UserCustom userCustom = getUserCustomRandomSampleGenerator();
+        Site siteBack = getSiteRandomSampleGenerator();
+
+        userCustom.setSite13(siteBack);
+        assertThat(userCustom.getSite13()).isEqualTo(siteBack);
+
+        userCustom.site13(null);
+        assertThat(userCustom.getSite13()).isNull();
     }
 
     @Test

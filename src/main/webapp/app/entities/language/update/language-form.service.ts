@@ -14,13 +14,14 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type LanguageFormGroupInput = ILanguage | PartialWithRequiredKeyOf<NewLanguage>;
 
-type LanguageFormDefaults = Pick<NewLanguage, 'id'>;
+type LanguageFormDefaults = Pick<NewLanguage, 'id' | 'userCustom8s'>;
 
 type LanguageFormGroupContent = {
   id: FormControl<ILanguage['id'] | NewLanguage['id']>;
   nameAr: FormControl<ILanguage['nameAr']>;
   nameLat: FormControl<ILanguage['nameLat']>;
   code: FormControl<ILanguage['code']>;
+  userCustom8s: FormControl<ILanguage['userCustom8s']>;
 };
 
 export type LanguageFormGroup = FormGroup<LanguageFormGroupContent>;
@@ -49,6 +50,7 @@ export class LanguageFormService {
       code: new FormControl(languageRawValue.code, {
         validators: [Validators.maxLength(10)],
       }),
+      userCustom8s: new FormControl(languageRawValue.userCustom8s ?? []),
     });
   }
 
@@ -69,6 +71,7 @@ export class LanguageFormService {
   private getFormDefaults(): LanguageFormDefaults {
     return {
       id: null,
+      userCustom8s: [],
     };
   }
 }

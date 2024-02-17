@@ -22,6 +22,13 @@
                                  referencedTableName="user_custom"
                                  />
 
+        <addForeignKeyConstraint baseColumnNames="site11_id"
+                                 baseTableName="jhi_group"
+                                 constraintName="fk_jhi_group__site11_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="site"
+                                 />
+
         <addForeignKeyConstraint baseColumnNames="group1_id"
                                  baseTableName="jhi_group"
                                  constraintName="fk_jhi_group__group1_id"

@@ -36,6 +36,13 @@
                                  referencedTableName="question"
                                  />
 
+        <addForeignKeyConstraint baseColumnNames="site7_id"
+                                 baseTableName="quiz"
+                                 constraintName="fk_quiz__site7_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="site"
+                                 />
+
         <addForeignKeyConstraint baseColumnNames="topic1_id"
                                  baseTableName="quiz"
                                  constraintName="fk_quiz__topic1_id"
