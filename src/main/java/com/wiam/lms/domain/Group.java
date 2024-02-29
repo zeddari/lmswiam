@@ -94,6 +94,7 @@ public class Group implements Serializable {
             "courses",
             "sessions2s",
             "sessions3s",
+            "photo",
         },
         allowSetters = true
     )

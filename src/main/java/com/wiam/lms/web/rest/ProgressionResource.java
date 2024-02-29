@@ -1,6 +1,8 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.Progression;
+import com.wiam.lms.domain.dto.ExamDto;
+import com.wiam.lms.domain.enumeration.Attendance;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.search.ProgressionSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -9,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -221,6 +224,37 @@ public class ProgressionResource {
         }
     }
 
+    @GetMapping("/exams")
+    public List<ExamDto> geAlltExams() {
+        log.debug("REST request to get all Progressions whish are exams");
+        List<ExamDto> exams = new ArrayList<ExamDto>();
+        List<Progression> progressions = progressionRepository.findExams();
+        for (Progression progression : progressions) {
+            ExamDto exam = new ExamDto();
+            exam.setId(progression.getId());
+            exam.setAdaeScore(progression.getAdaeScore());
+            exam.setTajweedScore(progression.getTajweedScore());
+            exam.setHifdScore(progression.getHifdScore());
+            exam.setExamType(progression.getExamType());
+            exam.setRiwaya(progression.getRiwaya());
+            exam.setObservation(progression.getObservation());
+            //exam.setSessionName(progression.getSessionInstance().getSession1().getTitle());
+            //exam.setStartTime(progression.getSessionInstance().getStartTime());
+            exam.setStudentCode(progression.getStudent().getCode());
+            exam.setStudentFullName(progression.getStudent().getLastName() + ' ' + progression.getStudent().getFirstName());
+            exam.setFromAyaNum(progression.getFromAyaNum());
+            exam.setToAyaNum(progression.getToAyaNum());
+            exam.setFromSourate(progression.getFromSourate());
+            exam.setToSourate(progression.getToSourate());
+            if (progression.getSite17() != null) exam.setSiteName(progression.getSite17().getNameAr());
+            exam.setFromAyaVerset(progression.getFromAyaVerset());
+            exam.setToAyaVerset(progression.getToAyaVerset());
+            exam.setAttendance(progression.getAttendance());
+            exams.add(exam);
+        }
+        return exams;
+    }
+
     /**
      * {@code GET  /progressions/:id} : get the "id" progression.
      *
@@ -232,6 +266,31 @@ public class ProgressionResource {
         log.debug("REST request to get Progression : {}", id);
         Optional<Progression> progression = progressionRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(progression);
+    }
+
+    @GetMapping("/{id}/updateAttendance")
+    public ResponseEntity<Progression> UpdateAttendanceProgression(@PathVariable Long id) {
+        log.debug("REST request to update attendance of the Progression : {}", id);
+        if (!progressionRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+        Progression progression = progressionRepository.findById(id).get();
+        if (progression.getAttendance().equals(Attendance.PRESENT)) progression.setAttendance(Attendance.ABSENT); else if (
+            progression.getAttendance().equals(Attendance.ABSENT)
+        ) progression.setAttendance(Attendance.PRESENT);
+
+        Progression result = progressionRepository.save(progression);
+        progressionSearchRepository.index(result);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, progression.getId().toString()))
+            .body(result);
+    }
+
+    @GetMapping("/{id}/byStudent")
+    public List<Progression> getProgressionsByStudent(@PathVariable Long id) {
+        log.debug("REST request to get the Progressions by student : {}", id);
+        return progressionRepository.findAllByStudent(id);
     }
 
     /**

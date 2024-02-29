@@ -1,5 +1,6 @@
 package com.wiam.lms.repository;
 
+import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.SessionInstance;
 import java.util.List;
 import java.util.Optional;
@@ -44,4 +45,9 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
         "select sessionInstance from SessionInstance sessionInstance left join fetch sessionInstance.site16 left join fetch sessionInstance.session1 where sessionInstance.id =:id"
     )
     Optional<SessionInstance> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query(
+        "select sessionInstance from SessionInstance sessionInstance  where sessionInstance.session1.sessionMode=SessionMode.ONLINE and sessionInstance.session1.sessionType=SessionType.HALAQA"
+    )
+    List<SessionInstance> findRemoteSessionInstances();
 }

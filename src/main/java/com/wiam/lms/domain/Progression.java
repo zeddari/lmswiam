@@ -160,7 +160,7 @@ public class Progression implements Serializable {
     private Site site17;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "progressions", "links", "site16", "session1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "progressions", "links", "site16" /*"session1" */ }, allowSetters = true)
     private SessionInstance sessionInstance;
 
     @ManyToOne(fetch = FetchType.LAZY)

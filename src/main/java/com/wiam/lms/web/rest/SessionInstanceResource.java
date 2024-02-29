@@ -1,6 +1,16 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Group;
+import com.wiam.lms.domain.Progression;
+import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.RemoteSessionDto;
+import com.wiam.lms.domain.enumeration.Attendance;
+import com.wiam.lms.domain.enumeration.ExamType;
+import com.wiam.lms.domain.enumeration.Riwayats;
+import com.wiam.lms.domain.enumeration.Tilawa;
+import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.SessionInstanceRepository;
 import com.wiam.lms.repository.search.SessionInstanceSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -9,9 +19,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +51,16 @@ public class SessionInstanceResource {
     private String applicationName;
 
     private final SessionInstanceRepository sessionInstanceRepository;
+    private final ProgressionRepository progressionRepository;
 
     private final SessionInstanceSearchRepository sessionInstanceSearchRepository;
 
     public SessionInstanceResource(
+        ProgressionRepository progressionRepository,
         SessionInstanceRepository sessionInstanceRepository,
         SessionInstanceSearchRepository sessionInstanceSearchRepository
     ) {
+        this.progressionRepository = progressionRepository;
         this.sessionInstanceRepository = sessionInstanceRepository;
         this.sessionInstanceSearchRepository = sessionInstanceSearchRepository;
     }
@@ -190,6 +206,37 @@ public class SessionInstanceResource {
         } else {
             return sessionInstanceRepository.findAll();
         }
+    }
+
+    @GetMapping("/remote")
+    public List<RemoteSessionDto> getRemoteSessions() {
+        log.debug("REST request to get all Remote Sessions");
+        List<RemoteSessionDto> remoteSessionDtos = new ArrayList<RemoteSessionDto>();
+        List<SessionInstance> remotSessions = sessionInstanceRepository.findRemoteSessionInstances();
+        for (SessionInstance sessionInstance : remotSessions) {
+            RemoteSessionDto remoteSessionDto = new RemoteSessionDto();
+            if (sessionInstance.getSession1() != null) {
+                remoteSessionDto.setId(sessionInstance.getSession1().getId());
+                remoteSessionDto.setTitle(sessionInstance.getSession1().getTitle());
+                remoteSessionDto.setGender(sessionInstance.getSession1().getTargetedGender().name());
+                remoteSessionDto.setMonday(sessionInstance.getSession1().getMonday());
+                remoteSessionDto.setTuesday(sessionInstance.getSession1().getTuesday());
+                remoteSessionDto.setWednesday(sessionInstance.getSession1().getWednesday());
+                remoteSessionDto.setThursday(sessionInstance.getSession1().getThursday());
+                remoteSessionDto.setFriday(sessionInstance.getSession1().getFriday());
+                remoteSessionDto.setSaturday(sessionInstance.getSession1().getSaturday());
+                remoteSessionDto.setSunday(sessionInstance.getSession1().getSunday());
+                remoteSessionDto.setProfessors(sessionInstance.getSession1().getProfessors());
+                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm:ss");
+                remoteSessionDto.setSessionTime(sessionInstance.getSession1().getSessionStartTime().format(myFormatObj));
+            }
+            remoteSessionDto.setGroupName(sessionInstance.getInfo());
+            remoteSessionDto.setIsActive(sessionInstance.getIsActive());
+            remoteSessionDto.setLinks(sessionInstance.getLinks());
+            remoteSessionDto.setSite(sessionInstance.getSite16().getNameAr());
+            remoteSessionDtos.add(remoteSessionDto);
+        }
+        return remoteSessionDtos;
     }
 
     /**
