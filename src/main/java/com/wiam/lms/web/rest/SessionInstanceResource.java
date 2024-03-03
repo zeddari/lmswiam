@@ -6,6 +6,7 @@ import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
+import com.wiam.lms.domain.dto.SessionInstanceUniqueDto;
 import com.wiam.lms.domain.enumeration.Attendance;
 import com.wiam.lms.domain.enumeration.ExamType;
 import com.wiam.lms.domain.enumeration.Riwayats;
@@ -19,6 +20,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -206,6 +208,17 @@ public class SessionInstanceResource {
         } else {
             return sessionInstanceRepository.findAll();
         }
+    }
+
+    /**
+     * {@code GET  /session-instances} : get all the sessionInstances.
+     *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sessionInstances in body.
+     */
+    @PostMapping("/unique")
+    public Optional<SessionInstance> getSessionInstanceUnique(@Valid @RequestBody SessionInstanceUniqueDto siuDto) {
+        return sessionInstanceRepository.findOne(siuDto.getSessionId(), siuDto.getSessionDate(), siuDto.getGroupId());
     }
 
     @GetMapping("/remote")

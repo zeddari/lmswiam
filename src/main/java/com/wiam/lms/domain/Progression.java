@@ -104,6 +104,11 @@ public class Progression implements Serializable {
     private Boolean taskDone;
 
     @NotNull
+    @Column(name = "is_for_attendance", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
+    private Boolean isForAttendance;
+
+    @NotNull
     @Min(value = 1)
     @Max(value = 5)
     @Column(name = "tajweed_score", nullable = false)
@@ -392,6 +397,10 @@ public class Progression implements Serializable {
         return this.taskDone;
     }
 
+    public Boolean getIsForAttendance() {
+        return this.isForAttendance;
+    }
+
     public Progression taskDone(Boolean taskDone) {
         this.setTaskDone(taskDone);
         return this;
@@ -399,6 +408,10 @@ public class Progression implements Serializable {
 
     public void setTaskDone(Boolean taskDone) {
         this.taskDone = taskDone;
+    }
+
+    public void setIsForAttendance(Boolean isForAttendance) {
+        this.isForAttendance = isForAttendance;
     }
 
     public Integer getTajweedScore() {

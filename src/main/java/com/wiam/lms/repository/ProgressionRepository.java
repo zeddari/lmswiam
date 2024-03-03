@@ -1,6 +1,8 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Progression;
+import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.UserCustom;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -47,4 +49,7 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
 
     @Query("select progression from Progression progression where progression.examType <> ExamType.NONE and progression.taskDone = false")
     List<Progression> findExams();
+
+    @Query("select progression from Progression progression where progression.student.id=:id2 and progression.sessionInstance.id=:id1")
+    Progression isAlreadyExists(@Param("id1") Long id1, @Param("id2") Long id2);
 }

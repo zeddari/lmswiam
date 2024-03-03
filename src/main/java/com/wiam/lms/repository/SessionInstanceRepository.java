@@ -1,7 +1,7 @@
 package com.wiam.lms.repository;
 
-import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.SessionInstance;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -50,4 +50,13 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
         "select sessionInstance from SessionInstance sessionInstance  where sessionInstance.session1.sessionMode=SessionMode.ONLINE and sessionInstance.session1.sessionType=SessionType.HALAQA"
     )
     List<SessionInstance> findRemoteSessionInstances();
+
+    @Query(
+        "select sessionInstance from SessionInstance sessionInstance  where sessionInstance.session1.id=:sessionId and sessionInstance.sessionDate=:sessionDate and sessionInstance.group.id=:groupId"
+    )
+    Optional<SessionInstance> findOne(
+        @Param("sessionId") Long sessionId,
+        @Param("sessionDate") LocalDate sessionDate,
+        @Param("groupId") Long groupId
+    );
 }

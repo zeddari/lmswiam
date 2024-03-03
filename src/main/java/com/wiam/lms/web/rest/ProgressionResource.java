@@ -62,12 +62,16 @@ public class ProgressionResource {
         if (progression.getId() != null) {
             throw new BadRequestAlertException("A new progression cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Progression result = progressionRepository.save(progression);
-        progressionSearchRepository.index(result);
-        return ResponseEntity
-            .created(new URI("/api/progressions/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        if (progressionRepository.isAlreadyExists(progression.getSessionInstance().getId(), progression.getStudent().getId()) != null) {
+            throw new BadRequestAlertException("A progression exists already for the student in this session", ENTITY_NAME, "");
+        } else {
+            Progression result = progressionRepository.save(progression);
+            progressionSearchRepository.index(result);
+            return ResponseEntity
+                .created(new URI("/api/progressions/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        }
     }
 
     /**
