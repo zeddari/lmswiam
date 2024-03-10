@@ -436,13 +436,35 @@ entity Editions {
   updatedAt ZonedDateTime
 }
 
+entity Notifications {
+    id Integer,
+    title String required,
+    type TextBlob required,
+    message TextBlob required,
+    createdBy TextBlob
+    createdAt ZonedDateTime,
+    updatedAt ZonedDateTime
+}
+
+entity Books {
+    id Integer,
+    title TextBlob required,
+    url String required,
+    createdBy TextBlob
+    createdAt ZonedDateTime,
+    updatedAt ZonedDateTime
+}
+
+enum NotificationType {
+    EVENT, URGENT, NORMAL
+}
 /*************************************Relationships*************************************************/
 relationship OneToOne{
 	UserCustom{user(login)} to User with builtInEntity
 }
 relationship OneToMany{
  Site to Classroom{site(nameAr)}
- 
+
  Site to Course{site1(nameAr)}
  Site to Part{site2(nameAr)}
  Site to Review{site3(nameAr)}
@@ -468,6 +490,7 @@ relationship OneToMany{
  Group to Certificate{comitte(nameAr)}
  Topic to Certificate{topic4(titleAr)}
 
+
  Country to UserCustom{country(nameAr)}
  Nationality to UserCustom{nationality(nameAr)}
  Job to UserCustom{job(titleAr)}
@@ -477,6 +500,7 @@ relationship OneToMany{
 
  Question to Answer{question}
  UserCustom to Answer{userCustom1}
+ UserCustom to Notifications{receiverId}
  Topic to Quiz{topic1(titleAr)}
  Quiz to QuizResult{quiz}
  UserCustom to QuizResult{userCustom2(firstName)}
@@ -500,6 +524,7 @@ relationship OneToMany{
  Group to Group{group1(nameAr)}
 
  SessionInstance to Progression{sessionInstance(title)}
+ SessionInstance to Books{session(title)}
  UserCustom to Progression{student(firstName)}
  UserCustom to Tickets{userCustom5(firstName)}
 
