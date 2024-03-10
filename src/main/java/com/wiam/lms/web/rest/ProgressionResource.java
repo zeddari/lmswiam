@@ -1,9 +1,17 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Progression;
+import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.ExamDto;
 import com.wiam.lms.domain.enumeration.Attendance;
+import com.wiam.lms.domain.enumeration.ExamType;
+import com.wiam.lms.domain.enumeration.Riwayats;
+import com.wiam.lms.domain.enumeration.Tilawa;
+import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.ProgressionRepository;
+import com.wiam.lms.repository.SessionInstanceRepository;
 import com.wiam.lms.repository.search.ProgressionSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
@@ -41,12 +49,21 @@ public class ProgressionResource {
     private String applicationName;
 
     private final ProgressionRepository progressionRepository;
+    private final SessionInstanceRepository sessionInstanceRepository;
+    private final GroupRepository groupRepository;
 
     private final ProgressionSearchRepository progressionSearchRepository;
 
-    public ProgressionResource(ProgressionRepository progressionRepository, ProgressionSearchRepository progressionSearchRepository) {
+    public ProgressionResource(
+        ProgressionRepository progressionRepository,
+        ProgressionSearchRepository progressionSearchRepository,
+        SessionInstanceRepository sessionInstanceRepository,
+        GroupRepository groupRepository
+    ) {
         this.progressionRepository = progressionRepository;
         this.progressionSearchRepository = progressionSearchRepository;
+        this.sessionInstanceRepository = sessionInstanceRepository;
+        this.groupRepository = groupRepository;
     }
 
     /**
@@ -61,10 +78,10 @@ public class ProgressionResource {
         log.debug("REST request to save Progression : {}", progression);
         if (progression.getId() != null) {
             throw new BadRequestAlertException("A new progression cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        if (progressionRepository.isAlreadyExists(progression.getSessionInstance().getId(), progression.getStudent().getId()) != null) {
+        } /*if (progressionRepository.isAlreadyExists(progression.getSessionInstance().getId(), progression.getStudent().getId()) != null) {
             throw new BadRequestAlertException("A progression exists already for the student in this session", ENTITY_NAME, "");
-        } else {
+        } */
+        else {
             Progression result = progressionRepository.save(progression);
             progressionSearchRepository.index(result);
             return ResponseEntity
@@ -228,31 +245,34 @@ public class ProgressionResource {
         }
     }
 
-    @GetMapping("/exams")
-    public List<ExamDto> geAlltExams() {
+    @GetMapping("/{id}/bysessioninstance")
+    public List<Progression> getAllProgressionsBySessionInstance(@PathVariable Long id) {
+        log.debug("REST request to get all Progressions for a given sessionInstance id");
+        return progressionRepository.findAllBySessionInstance(id);
+    }
+
+    @GetMapping("{id}/exams")
+    public List<ExamDto> geAlltExams(@PathVariable Long id) {
         log.debug("REST request to get all Progressions whish are exams");
         List<ExamDto> exams = new ArrayList<ExamDto>();
-        List<Progression> progressions = progressionRepository.findExams();
+        List<Progression> progressions = progressionRepository.findExams(id);
         for (Progression progression : progressions) {
             ExamDto exam = new ExamDto();
-            exam.setId(progression.getId());
+            // score info
             exam.setAdaeScore(progression.getAdaeScore());
             exam.setTajweedScore(progression.getTajweedScore());
             exam.setHifdScore(progression.getHifdScore());
+            exam.setObservation(progression.getObservation());
+            // exam info
+            if (progression.getSessionInstance() != null) exam.setSessionName(progression.getSessionInstance().getTitle());
             exam.setExamType(progression.getExamType());
             exam.setRiwaya(progression.getRiwaya());
-            exam.setObservation(progression.getObservation());
-            //exam.setSessionName(progression.getSessionInstance().getSession1().getTitle());
-            //exam.setStartTime(progression.getSessionInstance().getStartTime());
-            exam.setStudentCode(progression.getStudent().getCode());
-            exam.setStudentFullName(progression.getStudent().getLastName() + ' ' + progression.getStudent().getFirstName());
+            exam.setStartTime(progression.getStartTime());
             exam.setFromAyaNum(progression.getFromAyaNum());
             exam.setToAyaNum(progression.getToAyaNum());
             exam.setFromSourate(progression.getFromSourate());
             exam.setToSourate(progression.getToSourate());
-            if (progression.getSite17() != null) exam.setSiteName(progression.getSite17().getNameAr());
-            exam.setFromAyaVerset(progression.getFromAyaVerset());
-            exam.setToAyaVerset(progression.getToAyaVerset());
+            // attendance infp
             exam.setAttendance(progression.getAttendance());
             exams.add(exam);
         }
@@ -289,6 +309,45 @@ public class ProgressionResource {
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, progression.getId().toString()))
             .body(result);
+    }
+
+    @GetMapping("/{id}/forgroup")
+    public ResponseEntity<SessionInstance> createProgressionsforGroup(@PathVariable Long id) {
+        log.debug("REST request to create the progressions of the group elements given the sessionInstanceId : {}", id);
+        if (!sessionInstanceRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", "SessionInstance", "idnotfound");
+        } else {
+            SessionInstance instance = sessionInstanceRepository.findById(id).get();
+            if (instance.getGroup() != null) {
+                Group group = groupRepository.findById(instance.getGroup().getId()).get();
+                if (group.getElements() != null && group.getElements().size() > 0) {
+                    for (UserCustom student : group.getElements()) {
+                        if (progressionRepository.isAlreadyExists(id, student.getId()) == null) {
+                            Progression progression = new Progression();
+                            progression.setLateArrival(false);
+                            progression.setEarlyDeparture(false);
+                            progression.setIsForAttendance(true);
+                            progression.setTaskDone(true);
+                            progression.setHifdScore(0);
+                            progression.setTajweedScore(0);
+                            progression.setAdaeScore(0);
+                            progression.setAttendance(Attendance.PRESENT);
+                            progression.setExamType(ExamType.NONE);
+                            progression.setRiwaya(Riwayats.WARSHS_NARRATION_ON_THE_AUTHORITY_OF_NAFI_THROUGH_TAYYIBAH);
+                            progression.setTilawaType(Tilawa.HIFD);
+                            progression.setSessionInstance(instance);
+                            progression.setStudent(student);
+                            progression.setSite17(instance.getSite16());
+                            progressionRepository.save(progression);
+                        }
+                    }
+                }
+            }
+            return ResponseEntity
+                .ok()
+                .headers(HeaderUtil.createAlert(applicationName, "Progressions table created with success", ENTITY_NAME))
+                .body(instance);
+        }
     }
 
     @GetMapping("/{id}/byStudent")

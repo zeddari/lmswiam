@@ -11,8 +11,10 @@ import com.wiam.lms.domain.enumeration.Attendance;
 import com.wiam.lms.domain.enumeration.ExamType;
 import com.wiam.lms.domain.enumeration.Riwayats;
 import com.wiam.lms.domain.enumeration.Tilawa;
+import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.SessionInstanceRepository;
+import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.SessionInstanceSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
@@ -20,6 +22,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -54,14 +58,19 @@ public class SessionInstanceResource {
 
     private final SessionInstanceRepository sessionInstanceRepository;
     private final ProgressionRepository progressionRepository;
-
+    private final GroupRepository groupRepository;
     private final SessionInstanceSearchRepository sessionInstanceSearchRepository;
+    private final UserCustomRepository userCustomRepository;
 
     public SessionInstanceResource(
+        UserCustomRepository userCustomRepository,
+        GroupRepository groupRepository,
         ProgressionRepository progressionRepository,
         SessionInstanceRepository sessionInstanceRepository,
         SessionInstanceSearchRepository sessionInstanceSearchRepository
     ) {
+        this.userCustomRepository = userCustomRepository;
+        this.groupRepository = groupRepository;
         this.progressionRepository = progressionRepository;
         this.sessionInstanceRepository = sessionInstanceRepository;
         this.sessionInstanceSearchRepository = sessionInstanceSearchRepository;
@@ -80,6 +89,14 @@ public class SessionInstanceResource {
         log.debug("REST request to save SessionInstance : {}", sessionInstance);
         if (sessionInstance.getId() != null) {
             throw new BadRequestAlertException("A new sessionInstance cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        SessionInstance alreadyResult = sessionInstanceRepository.findOne(
+            sessionInstance.getSession1().getId(),
+            sessionInstance.getSessionDate(),
+            sessionInstance.getGroup().getId()
+        );
+        if (alreadyResult != null) {
+            throw new BadRequestAlertException("There session instance already exists!", ENTITY_NAME, "idexists");
         }
         SessionInstance result = sessionInstanceRepository.save(sessionInstance);
         sessionInstanceSearchRepository.index(result);
@@ -208,6 +225,7 @@ public class SessionInstanceResource {
         } else {
             return sessionInstanceRepository.findAll();
         }
+        return sessionInstanceRepository.findAll();
     }
 
     /**
@@ -217,38 +235,55 @@ public class SessionInstanceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sessionInstances in body.
      */
     @PostMapping("/unique")
-    public Optional<SessionInstance> getSessionInstanceUnique(@Valid @RequestBody SessionInstanceUniqueDto siuDto) {
-        return sessionInstanceRepository.findOne(siuDto.getSessionId(), siuDto.getSessionDate(), siuDto.getGroupId());
+    public ResponseEntity<SessionInstance> getSessionInstanceUnique(@Valid @RequestBody SessionInstanceUniqueDto siuDto)
+        throws URISyntaxException {
+        log.debug("REST request to get SessionInstance according to dto fields: {}");
+        SessionInstance result = sessionInstanceRepository.findOne(siuDto.getSessionId(), siuDto.getSessionDate(), siuDto.getGroupId());
+        if (result == null) {
+            throw new BadRequestAlertException("There is no session with those inputs, please create one !", ENTITY_NAME, "idexists");
+        }
+        return ResponseEntity
+            .created(new URI("/api/session-instances/unique" + result.getId()))
+            .headers(HeaderUtil.createAlert(applicationName, "One session found !", ENTITY_NAME))
+            .body(result);
     }
 
-    @GetMapping("/remote")
-    public List<RemoteSessionDto> getRemoteSessions() {
-        log.debug("REST request to get all Remote Sessions");
+    @GetMapping("{id}/remote")
+    public List<RemoteSessionDto> getRemoteSessions(@PathVariable Long id) {
+        log.debug("REST request to get all Session instances for the given student id");
+        // getting the list of the student groups
+        List<Group> groups = groupRepository.findAll();
+        List<Group> myGroups = new ArrayList<Group>();
+        UserCustom userCustom = userCustomRepository.findById(id).get();
+
+        for (Group g : groups) {
+            if (g.getElements() != null && g.getElements().size() > 0) {
+                if (g.getElements().contains(userCustom)) {
+                    myGroups.add(g);
+                }
+                //groups.remove(g);
+            }
+        }
         List<RemoteSessionDto> remoteSessionDtos = new ArrayList<RemoteSessionDto>();
-        List<SessionInstance> remotSessions = sessionInstanceRepository.findRemoteSessionInstances();
+        List<SessionInstance> remotSessions = sessionInstanceRepository.findRemoteSessionInstances(myGroups);
         for (SessionInstance sessionInstance : remotSessions) {
             RemoteSessionDto remoteSessionDto = new RemoteSessionDto();
             if (sessionInstance.getSession1() != null) {
-                remoteSessionDto.setId(sessionInstance.getSession1().getId());
-                remoteSessionDto.setTitle(sessionInstance.getSession1().getTitle());
                 remoteSessionDto.setGender(sessionInstance.getSession1().getTargetedGender().name());
-                remoteSessionDto.setMonday(sessionInstance.getSession1().getMonday());
-                remoteSessionDto.setTuesday(sessionInstance.getSession1().getTuesday());
-                remoteSessionDto.setWednesday(sessionInstance.getSession1().getWednesday());
-                remoteSessionDto.setThursday(sessionInstance.getSession1().getThursday());
-                remoteSessionDto.setFriday(sessionInstance.getSession1().getFriday());
-                remoteSessionDto.setSaturday(sessionInstance.getSession1().getSaturday());
-                remoteSessionDto.setSunday(sessionInstance.getSession1().getSunday());
-                remoteSessionDto.setProfessors(sessionInstance.getSession1().getProfessors());
-                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm:ss");
-                remoteSessionDto.setSessionTime(sessionInstance.getSession1().getSessionStartTime().format(myFormatObj));
+                //remoteSessionDto.setSessionType(sessionInstance.getSession1().getSessionMode().name());
             }
-            remoteSessionDto.setGroupName(sessionInstance.getInfo());
+            remoteSessionDto.setTitle(sessionInstance.getTitle());
+            remoteSessionDto.setSessionDate(sessionInstance.getSessionDate());
+            remoteSessionDto.setDay(sessionInstance.getSessionDate().getDayOfWeek().getValue());
+            remoteSessionDto.setSessionStartTime(sessionInstance.getSessionStartTime());
+            remoteSessionDto.setSessionEndTime(sessionInstance.getSessionEndTime());
+            if (sessionInstance.getGroup() != null) remoteSessionDto.setGroupName(sessionInstance.getGroup().getNameAr());
             remoteSessionDto.setIsActive(sessionInstance.getIsActive());
-            remoteSessionDto.setLinks(sessionInstance.getLinks());
-            remoteSessionDto.setSite(sessionInstance.getSite16().getNameAr());
+            remoteSessionDto.setLink(sessionInstance.getSessionLink());
+            remoteSessionDto.setInfo(sessionInstance.getInfo());
             remoteSessionDtos.add(remoteSessionDto);
         }
+
         return remoteSessionDtos;
     }
 

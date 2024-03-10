@@ -47,9 +47,16 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     @Query("select progression from Progression progression where progression.student.id=:id")
     List<Progression> findAllByStudent(@Param("id") Long id);
 
-    @Query("select progression from Progression progression where progression.examType <> ExamType.NONE and progression.taskDone = false")
-    List<Progression> findExams();
+    @Query(
+        "select progression from Progression progression where progression.examType <> ExamType.NONE and progression.isForAttendance = false and progression.student.id=:id"
+    )
+    List<Progression> findExams(@Param("id") Long id);
 
-    @Query("select progression from Progression progression where progression.student.id=:id2 and progression.sessionInstance.id=:id1")
+    @Query(
+        "select progression from Progression progression where progression.sessionInstance.id=:id1 and progression.student.id=:id2 and progression.isForAttendance=true"
+    )
     Progression isAlreadyExists(@Param("id1") Long id1, @Param("id2") Long id2);
+
+    @Query("select progression from Progression progression left join fetch progression.student where progression.sessionInstance.id=:id")
+    List<Progression> findAllBySessionInstance(@Param("id") Long id);
 }
