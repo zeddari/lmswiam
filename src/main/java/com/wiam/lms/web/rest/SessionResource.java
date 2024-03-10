@@ -1,6 +1,12 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Session;
+import com.wiam.lms.domain.SessionLink;
+import com.wiam.lms.domain.Site;
+import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.RemoteSessionDto;
+import com.wiam.lms.domain.enumeration.TargetedGender;
 import com.wiam.lms.repository.SessionRepository;
 import com.wiam.lms.repository.search.SessionSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -9,9 +15,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -234,6 +244,11 @@ public class SessionResource {
         } else {
             return sessionRepository.findAll();
         }
+    }
+
+    @GetMapping("/{id}/bysite")
+    public List<Session> getAllSessionsBySite(@PathVariable Long id) {
+        if (id == 0) return sessionRepository.findAll(); else return sessionRepository.findAllBySite(id);
     }
 
     /**

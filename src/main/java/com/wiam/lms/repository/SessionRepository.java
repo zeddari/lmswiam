@@ -40,4 +40,7 @@ public interface SessionRepository extends SessionRepositoryWithBagRelationships
 
     @Query("select session from Session session left join fetch session.site14 where session.id =:id")
     Optional<Session> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query("select session from Session session  where session.site14.id =:id")
+    List<Session> findAllBySite(@Param("id") Long id);
 }

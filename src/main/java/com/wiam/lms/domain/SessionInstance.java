@@ -29,6 +29,10 @@ public class SessionInstance implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    // Linking with id group
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Group group;
+
     @NotNull
     @Size(max = 100)
     @Column(name = "title", length = 100, nullable = false)
@@ -125,6 +129,10 @@ public class SessionInstance implements Serializable {
 
     public Long getId() {
         return this.id;
+    }
+
+    public Group getGroup() {
+        return group;
     }
 
     public SessionInstance id(Long id) {
@@ -353,5 +361,9 @@ public class SessionInstance implements Serializable {
             ", justifRef='" + getJustifRef() + "'" +
             ", isActive='" + getIsActive() + "'" +
             "}";
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }
