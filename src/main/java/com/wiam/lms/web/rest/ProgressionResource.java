@@ -19,6 +19,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -78,10 +79,9 @@ public class ProgressionResource {
         log.debug("REST request to save Progression : {}", progression);
         if (progression.getId() != null) {
             throw new BadRequestAlertException("A new progression cannot already have an ID", ENTITY_NAME, "idexists");
-        } /*if (progressionRepository.isAlreadyExists(progression.getSessionInstance().getId(), progression.getStudent().getId()) != null) {
+        }/*if (progressionRepository.isAlreadyExists(progression.getSessionInstance().getId(), progression.getStudent().getId()) != null) {
             throw new BadRequestAlertException("A progression exists already for the student in this session", ENTITY_NAME, "");
-        } */
-        else {
+        } */ else {
             Progression result = progressionRepository.save(progression);
             progressionSearchRepository.index(result);
             return ResponseEntity
@@ -338,6 +338,7 @@ public class ProgressionResource {
                             progression.setSessionInstance(instance);
                             progression.setStudent(student);
                             progression.setSite17(instance.getSite16());
+                            progression.setStartTime(ZonedDateTime.now());
                             progressionRepository.save(progression);
                         }
                     }
