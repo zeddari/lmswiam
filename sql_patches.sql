@@ -1,0 +1,1 @@
+alter table ayahs  add FULLTEXT KEY `ayahs_FULLTEXT_index` (`textdesc`);

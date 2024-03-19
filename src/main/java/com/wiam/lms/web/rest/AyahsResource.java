@@ -53,7 +53,7 @@ public class AyahsResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new ayahs, or with status {@code 400 (Bad Request)} if the ayahs has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("")
+    //    @PostMapping("")
     public ResponseEntity<Ayahs> createAyahs(@Valid @RequestBody Ayahs ayahs) throws URISyntaxException {
         log.debug("REST request to save Ayahs : {}", ayahs);
         if (ayahs.getId() != null) {
@@ -77,7 +77,7 @@ public class AyahsResource {
      * or with status {@code 500 (Internal Server Error)} if the ayahs couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/{id}")
+    //    @PutMapping("/{id}")
     public ResponseEntity<Ayahs> updateAyahs(
         @PathVariable(value = "id", required = false) final Integer id,
         @Valid @RequestBody Ayahs ayahs
@@ -113,7 +113,7 @@ public class AyahsResource {
      * or with status {@code 500 (Internal Server Error)} if the ayahs couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    //    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Ayahs> partialUpdateAyahs(
         @PathVariable(value = "id", required = false) final Integer id,
         @NotNull @RequestBody Ayahs ayahs
@@ -208,7 +208,7 @@ public class AyahsResource {
      * @param id the id of the ayahs to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/{id}")
+    //    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAyahs(@PathVariable Integer id) {
         log.debug("REST request to delete Ayahs : {}", id);
         ayahsRepository.deleteById(id);
