@@ -1,6 +1,7 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.UserCustomSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -216,6 +218,17 @@ public class UserCustomResource {
         } else {
             return userCustomRepository.findAll();
         }
+    }
+
+    @GetMapping("/{role}/role")
+    public List<UserCustom> getAllUserCustomsByUserType(@PathVariable String role) {
+        List<UserCustom> usersbyrole = new ArrayList<UserCustom>();
+        List<UserCustom> users = userCustomRepository.findAll();
+
+        for (UserCustom user : users) {
+            if (user.getRole().name().equals(role)) usersbyrole.add(user);
+        }
+        return usersbyrole;
     }
 
     /**

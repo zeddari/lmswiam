@@ -33,6 +33,14 @@ public class SessionInstance implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Group group;
 
+    // Linking with id professor
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserCustom professor;
+
+    public UserCustom getProfessor() {
+        return professor;
+    }
+
     @NotNull
     @Size(max = 100)
     @Column(name = "title", length = 100, nullable = false)
@@ -46,6 +54,25 @@ public class SessionInstance implements Serializable {
     @NotNull
     @Column(name = "start_time", nullable = false)
     private ZonedDateTime startTime;
+
+    private String sessionStartTime;
+    private String sessionEndTime;
+
+    public String getSessionStartTime() {
+        return sessionStartTime;
+    }
+
+    public String getSessionEndTime() {
+        return sessionEndTime;
+    }
+
+    public void setSessionStartTime(String sessionStartTime) {
+        this.sessionStartTime = sessionStartTime;
+    }
+
+    public void setSessionEndTime(String sessionEndTime) {
+        this.sessionEndTime = sessionEndTime;
+    }
 
     @NotNull
     @Column(name = "duration", nullable = false)
@@ -78,15 +105,9 @@ public class SessionInstance implements Serializable {
     @JsonIgnoreProperties(value = { "site17", "sessionInstance", "student" }, allowSetters = true)
     private Set<Progression> progressions = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "rel_session_instance__links",
-        joinColumns = @JoinColumn(name = "session_instance_id"),
-        inverseJoinColumns = @JoinColumn(name = "links_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "site15", "sessions4s", "sessions7s" }, allowSetters = true)
-    private Set<SessionLink> links = new HashSet<>();
+    @Column(name = "session_link")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String sessionLink;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
@@ -106,7 +127,6 @@ public class SessionInstance implements Serializable {
             "projects",
             "userCustoms",
             "sessions",
-            "sessionLinks",
             "sessionInstances",
             "progressions",
             "tickets",
@@ -118,9 +138,17 @@ public class SessionInstance implements Serializable {
     )
     private Site site16;
 
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public String getSessionLink() {
+        return sessionLink;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links", "site14" },
+        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "site14" },
         allowSetters = true
     )
     private Session session1;
@@ -279,29 +307,6 @@ public class SessionInstance implements Serializable {
         return this;
     }
 
-    public Set<SessionLink> getLinks() {
-        return this.links;
-    }
-
-    public void setLinks(Set<SessionLink> sessionLinks) {
-        this.links = sessionLinks;
-    }
-
-    public SessionInstance links(Set<SessionLink> sessionLinks) {
-        this.setLinks(sessionLinks);
-        return this;
-    }
-
-    public SessionInstance addLinks(SessionLink sessionLink) {
-        this.links.add(sessionLink);
-        return this;
-    }
-
-    public SessionInstance removeLinks(SessionLink sessionLink) {
-        this.links.remove(sessionLink);
-        return this;
-    }
-
     public Site getSite16() {
         return this.site16;
     }
@@ -365,5 +370,13 @@ public class SessionInstance implements Serializable {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public void setProfessor(UserCustom professor) {
+        this.professor = professor;
+    }
+
+    public void setSessionLink(String sessionLink) {
+        this.sessionLink = sessionLink;
     }
 }

@@ -209,7 +209,7 @@ public class UserCustom implements Serializable {
             "quizResults",
             "payments",
             "sponsorings",
-            "groups",
+            //"groups",
             "projects",
             "userCustoms",
             "sessions",

@@ -5,6 +5,7 @@ import com.wiam.lms.repository.SurahsRepository;
 import com.wiam.lms.repository.search.SurahsSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
+import io.swagger.v3.oas.annotations.Hidden;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +53,7 @@ public class SurahsResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new surahs, or with status {@code 400 (Bad Request)} if the surahs has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("")
+    //    @PostMapping("")
     public ResponseEntity<Surahs> createSurahs(@RequestBody Surahs surahs) throws URISyntaxException {
         log.debug("REST request to save Surahs : {}", surahs);
         if (surahs.getId() != null) {
@@ -75,7 +77,7 @@ public class SurahsResource {
      * or with status {@code 500 (Internal Server Error)} if the surahs couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/{id}")
+    //    @PutMapping("/{id}")
     public ResponseEntity<Surahs> updateSurahs(@PathVariable(value = "id", required = false) final Integer id, @RequestBody Surahs surahs)
         throws URISyntaxException {
         log.debug("REST request to update Surahs : {}, {}", id, surahs);
@@ -109,7 +111,7 @@ public class SurahsResource {
      * or with status {@code 500 (Internal Server Error)} if the surahs couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    //    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Surahs> partialUpdateSurahs(
         @PathVariable(value = "id", required = false) final Integer id,
         @RequestBody Surahs surahs
@@ -195,7 +197,8 @@ public class SurahsResource {
      * @param id the id of the surahs to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/{id}")
+
+    //    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSurahs(@PathVariable Integer id) {
         log.debug("REST request to delete Surahs : {}", id);
         surahsRepository.deleteById(id);

@@ -10,6 +10,7 @@ import com.wiam.lms.domain.enumeration.Tilawa;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -29,6 +30,10 @@ public class Progression implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @NotNull
+    @Column(name = "start_time", nullable = false)
+    private ZonedDateTime startTime;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -109,21 +114,21 @@ public class Progression implements Serializable {
     private Boolean isForAttendance;
 
     @NotNull
-    @Min(value = 1)
+    @Min(value = 0)
     @Max(value = 5)
     @Column(name = "tajweed_score", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer tajweedScore;
 
     @NotNull
-    @Min(value = 1)
+    @Min(value = 0)
     @Max(value = 5)
     @Column(name = "hifd_score", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer hifdScore;
 
     @NotNull
-    @Min(value = 1)
+    @Min(value = 0)
     @Max(value = 5)
     @Column(name = "adae_score", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
@@ -549,5 +554,13 @@ public class Progression implements Serializable {
             ", adaeScore=" + getAdaeScore() +
             ", observation='" + getObservation() + "'" +
             "}";
+    }
+
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public ZonedDateTime getStartTime() {
+        return startTime;
     }
 }

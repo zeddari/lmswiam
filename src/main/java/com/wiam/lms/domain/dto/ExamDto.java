@@ -12,52 +12,23 @@ public class ExamDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
-
     private ExamType examType;
-
     private Riwayats riwaya;
-
     private Sourate fromSourate;
-
     private Sourate toSourate;
-
     private Integer fromAyaNum;
-
     private Integer toAyaNum;
-
-    private String fromAyaVerset;
-
-    private String toAyaVerset;
-
     private Tilawa tilawaType;
-
     private Integer tajweedScore;
-
     private Integer hifdScore;
-
     private Integer adaeScore;
-
     private String observation;
-
-    private String siteName;
-
     private String sessionName;
-
     private ZonedDateTime startTime;
-
-    private String studentCode;
-
-    private String studentFullName;
-
     private Attendance attendance;
 
     public Attendance getAttendance() {
         return attendance;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public ExamType getExamType() {
@@ -84,14 +55,6 @@ public class ExamDto implements Serializable {
         return toAyaNum;
     }
 
-    public String getFromAyaVerset() {
-        return fromAyaVerset;
-    }
-
-    public String getToAyaVerset() {
-        return toAyaVerset;
-    }
-
     public Tilawa getTilawaType() {
         return tilawaType;
     }
@@ -112,28 +75,8 @@ public class ExamDto implements Serializable {
         return observation;
     }
 
-    public String getSiteName() {
-        return siteName;
-    }
-
-    public String getSessionName() {
-        return sessionName;
-    }
-
     public ZonedDateTime getStartTime() {
         return startTime;
-    }
-
-    public String getStudentCode() {
-        return studentCode;
-    }
-
-    public String getStudentFullName() {
-        return studentFullName;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setExamType(ExamType examType) {
@@ -160,14 +103,6 @@ public class ExamDto implements Serializable {
         this.toAyaNum = toAyaNum;
     }
 
-    public void setFromAyaVerset(String fromAyaVerset) {
-        this.fromAyaVerset = fromAyaVerset;
-    }
-
-    public void setToAyaVerset(String toAyaVerset) {
-        this.toAyaVerset = toAyaVerset;
-    }
-
     public void setTilawaType(Tilawa tilawaType) {
         this.tilawaType = tilawaType;
     }
@@ -188,24 +123,8 @@ public class ExamDto implements Serializable {
         this.observation = observation;
     }
 
-    public void setSiteName(String siteName) {
-        this.siteName = siteName;
-    }
-
-    public void setSessionName(String sessionName) {
-        this.sessionName = sessionName;
-    }
-
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
-    }
-
-    public void setStudentCode(String studentCode) {
-        this.studentCode = studentCode;
-    }
-
-    public void setStudentFullName(String studentFullName) {
-        this.studentFullName = studentFullName;
     }
 
     public void setAttendance(Attendance attendance) {
@@ -214,5 +133,13 @@ public class ExamDto implements Serializable {
 
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    public String getSessionName() {
+        return sessionName;
+    }
+
+    public void setSessionName(String sessionName) {
+        this.sessionName = sessionName;
     }
 }
