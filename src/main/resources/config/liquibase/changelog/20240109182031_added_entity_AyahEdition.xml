@@ -20,7 +20,7 @@
             <column name="edition_id" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="data" type="${clobType}">
+            <column name="data" type="varchar(500)">
                 <constraints nullable="false" />
             </column>
             <column name="is_audio" type="boolean">

@@ -70,15 +70,11 @@ public class Progression implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private Riwayats riwaya;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "from_sourate")
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
-    private Sourate fromSourate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Surahs fromSourate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "to_sourate")
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
-    private Sourate toSourate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Surahs toSourate;
 
     @Column(name = "from_aya_num")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
@@ -307,29 +303,29 @@ public class Progression implements Serializable {
         this.riwaya = riwaya;
     }
 
-    public Sourate getFromSourate() {
+    public Surahs getFromSourate() {
         return this.fromSourate;
     }
 
-    public Progression fromSourate(Sourate fromSourate) {
+    public Progression fromSourate(Surahs fromSourate) {
         this.setFromSourate(fromSourate);
         return this;
     }
 
-    public void setFromSourate(Sourate fromSourate) {
+    public void setFromSourate(Surahs fromSourate) {
         this.fromSourate = fromSourate;
     }
 
-    public Sourate getToSourate() {
+    public Surahs getToSourate() {
         return this.toSourate;
     }
 
-    public Progression toSourate(Sourate toSourate) {
+    public Progression toSourate(Surahs toSourate) {
         this.setToSourate(toSourate);
         return this;
     }
 
-    public void setToSourate(Sourate toSourate) {
+    public void setToSourate(Surahs toSourate) {
         this.toSourate = toSourate;
     }
 

@@ -225,7 +225,6 @@ public class SessionInstanceResource {
         } else {
             return sessionInstanceRepository.findAll();
         }
-        return sessionInstanceRepository.findAll();
     }
 
     /**

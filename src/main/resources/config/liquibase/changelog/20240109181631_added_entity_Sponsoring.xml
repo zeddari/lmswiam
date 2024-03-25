@@ -17,7 +17,7 @@
             <column name="ref" type="varchar(100)">
                 <constraints nullable="false" />
             </column>
-            <column name="message" type="${clobType}">
+            <column name="message" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="amount" type="double">

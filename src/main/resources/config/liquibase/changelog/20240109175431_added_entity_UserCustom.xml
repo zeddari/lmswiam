@@ -44,13 +44,13 @@
             <column name="birthdate" type="date">
                 <constraints nullable="false" />
             </column>
-            <column name="photo" type="${blobType}">
+            <column name="photo" type="blob">
                 <constraints nullable="true" />
             </column>
             <column name="photo_content_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="address" type="${clobType}">
+            <column name="address" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="facebook" type="varchar(255)">
@@ -62,10 +62,10 @@
             <column name="telegram_user_custom_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="biography" type="${clobType}">
+            <column name="biography" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
-            <column name="bank_account_details" type="${clobType}">
+            <column name="bank_account_details" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="user_id" type="bigint">
