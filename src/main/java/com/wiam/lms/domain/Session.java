@@ -902,8 +902,7 @@ public class Session implements Serializable {
             ", description='" + getDescription() + "'" +
             ", periodStartDate='" + getPeriodStartDate() + "'" +
             ", periodeEndDate='" + getPeriodeEndDate() + "'" +
-            ", sessionStartTime='" + getSessionStartTime() + "'" +
-            ", sessionEndTime='" + getSessionEndTime() + "'" +
+
             ", sessionSize=" + getSessionSize() +
             ", targetedGender='" + getTargetedGender() + "'" +
             ", price=" + getPrice() +
