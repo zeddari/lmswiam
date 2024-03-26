@@ -79,9 +79,9 @@ public class ProgressionResource {
         log.debug("REST request to save Progression : {}", progression);
         if (progression.getId() != null) {
             throw new BadRequestAlertException("A new progression cannot already have an ID", ENTITY_NAME, "idexists");
-        }/*if (progressionRepository.isAlreadyExists(progression.getSessionInstance().getId(), progression.getStudent().getId()) != null) {
+        } /*if (progressionRepository.isAlreadyExists(progression.getSessionInstance().getId(), progression.getStudent().getId()) != null) {
             throw new BadRequestAlertException("A progression exists already for the student in this session", ENTITY_NAME, "");
-        } */ else {
+        } */else {
             Progression result = progressionRepository.save(progression);
             progressionSearchRepository.index(result);
             return ResponseEntity
@@ -270,8 +270,8 @@ public class ProgressionResource {
             exam.setStartTime(progression.getStartTime());
             exam.setFromAyaNum(progression.getFromAyaNum());
             exam.setToAyaNum(progression.getToAyaNum());
-            exam.setFromSourate(progression.getFromSourate());
-            exam.setToSourate(progression.getToSourate());
+            if (progression.getFromSourate() != null) exam.setFromSourate(progression.getFromSourate().getNameAr());
+            if (progression.getToSourate() != null) exam.setToSourate(progression.getToSourate().getNameAr());
             // attendance infp
             exam.setAttendance(progression.getAttendance());
             exams.add(exam);

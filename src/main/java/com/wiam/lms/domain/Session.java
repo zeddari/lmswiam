@@ -69,14 +69,6 @@ public class Session implements Serializable {
     private LocalDate periodeEndDate;
 
     @NotNull
-    @Column(name = "session_start_time", nullable = false)
-    private ZonedDateTime sessionStartTime;
-
-    @NotNull
-    @Column(name = "session_end_time", nullable = false)
-    private ZonedDateTime sessionEndTime;
-
-    @NotNull
     @Min(value = 0)
     @Max(value = 100)
     @Column(name = "session_size", nullable = false)
@@ -492,32 +484,6 @@ public class Session implements Serializable {
 
     public void setPeriodeEndDate(LocalDate periodeEndDate) {
         this.periodeEndDate = periodeEndDate;
-    }
-
-    public ZonedDateTime getSessionStartTime() {
-        return this.sessionStartTime;
-    }
-
-    public Session sessionStartTime(ZonedDateTime sessionStartTime) {
-        this.setSessionStartTime(sessionStartTime);
-        return this;
-    }
-
-    public void setSessionStartTime(ZonedDateTime sessionStartTime) {
-        this.sessionStartTime = sessionStartTime;
-    }
-
-    public ZonedDateTime getSessionEndTime() {
-        return this.sessionEndTime;
-    }
-
-    public Session sessionEndTime(ZonedDateTime sessionEndTime) {
-        this.setSessionEndTime(sessionEndTime);
-        return this;
-    }
-
-    public void setSessionEndTime(ZonedDateTime sessionEndTime) {
-        this.sessionEndTime = sessionEndTime;
     }
 
     public Integer getSessionSize() {

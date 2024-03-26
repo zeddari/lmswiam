@@ -55,7 +55,7 @@ public class SessionInstance implements Serializable {
     @Column(name = "start_time", nullable = false)
     private ZonedDateTime startTime;
 
-    private String sessionStartTime;
+    private String sessionStartTime; // 09:00
     private String sessionEndTime;
 
     public String getSessionStartTime() {
