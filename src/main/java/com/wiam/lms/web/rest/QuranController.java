@@ -38,7 +38,8 @@ public class QuranController {
     @GetMapping(value = "/ayahs/_search", produces = "application/json;charset=utf-8")
     public List<Ayahs> searchAyahs(@RequestParam String query) {
         LOG.debug("REST request to search searchAyahs for params {}", query);
-        query = "'\"" + query + "'\"";
+        //      String query2 = "'\"" + query + "'\"";  // if we use MATCH(ayah.textdesc_normalized) AGAINST
+        query = "%" + query + "%"; // if we use like
         return ayahsRepository.searchAyahs(query);
     }
 

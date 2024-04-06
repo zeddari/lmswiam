@@ -14,7 +14,11 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface AyahsRepository extends JpaRepository<Ayahs, Integer> {
-    @Query(value = "select ayah.* from Ayahs ayah where MATCH(ayah.textdesc) AGAINST(:part IN BOOLEAN MODE)", nativeQuery = true)
+    //    @Query(value = "select ayah.* from Ayahs ayah where MATCH(ayah.textdesc_normalized) AGAINST(:part IN BOOLEAN MODE)", nativeQuery = true)
+    @Query(
+        value = "select ayah.* from Ayahs ayah where ayah.textdesc_normalized LIKE remove_accents(:part) ORDER BY number ASC",
+        nativeQuery = true
+    )
     List<Ayahs> searchAyahs(@Param("part") String part);
 
     @Query("select ayah from Ayahs ayah where ayah.surahId = :id")
