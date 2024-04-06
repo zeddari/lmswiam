@@ -220,18 +220,18 @@ public class SessionInstanceResource {
     @GetMapping("")
     public List<SessionInstance> getAllSessionInstances(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all SessionInstances");
+        List<SessionInstance> result = null;
         if (eagerload) {
-            return sessionInstanceRepository.findAllWithEagerRelationships();
+            result = sessionInstanceRepository.findAllWithEagerRelationships();
         } else {
-            return sessionInstanceRepository.findAll();
+            result = sessionInstanceRepository.findAll();
         }
-        return sessionInstanceRepository.findAll();
+        return result;
     }
 
     /**
      * {@code GET  /session-instances} : get all the sessionInstances.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sessionInstances in body.
      */
     @PostMapping("/unique")

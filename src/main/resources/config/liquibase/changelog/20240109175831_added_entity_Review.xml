@@ -14,7 +14,7 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="body" type="${clobType}">
+            <column name="body" type="varchar(500)">
                 <constraints nullable="false" />
             </column>
             <column name="rating" type="integer">

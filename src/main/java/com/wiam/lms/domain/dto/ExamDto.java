@@ -14,8 +14,8 @@ public class ExamDto implements Serializable {
 
     private ExamType examType;
     private Riwayats riwaya;
-    private Sourate fromSourate;
-    private Sourate toSourate;
+    private String fromSourate;
+    private String toSourate;
     private Integer fromAyaNum;
     private Integer toAyaNum;
     private Tilawa tilawaType;
@@ -37,14 +37,6 @@ public class ExamDto implements Serializable {
 
     public Riwayats getRiwaya() {
         return riwaya;
-    }
-
-    public Sourate getFromSourate() {
-        return fromSourate;
-    }
-
-    public Sourate getToSourate() {
-        return toSourate;
     }
 
     public Integer getFromAyaNum() {
@@ -87,12 +79,20 @@ public class ExamDto implements Serializable {
         this.riwaya = riwaya;
     }
 
-    public void setFromSourate(Sourate fromSourate) {
+    public void setFromSourate(String fromSourate) {
         this.fromSourate = fromSourate;
     }
 
-    public void setToSourate(Sourate toSourate) {
+    public void setToSourate(String toSourate) {
         this.toSourate = toSourate;
+    }
+
+    public String getFromSourate() {
+        return fromSourate;
+    }
+
+    public String getToSourate() {
+        return toSourate;
     }
 
     public void setFromAyaNum(Integer fromAyaNum) {

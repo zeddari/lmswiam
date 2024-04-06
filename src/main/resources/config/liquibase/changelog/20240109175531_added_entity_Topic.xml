@@ -20,7 +20,7 @@
             <column name="title_lat" type="varchar(100)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_topic__title_lat" />
             </column>
-            <column name="description" type="${clobType}">
+            <column name="description" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="topic2_id" type="bigint">

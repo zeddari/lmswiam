@@ -23,7 +23,7 @@
             <column name="name_lat" type="varchar(100)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_jhi_group__name_lat" />
             </column>
-            <column name="description" type="${clobType}">
+            <column name="description" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="site11_id" type="bigint">

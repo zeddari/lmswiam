@@ -23,7 +23,7 @@
             <column name="paied_by" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="proof" type="${blobType}">
+            <column name="proof" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="proof_content_type" type="varchar(255)">
@@ -41,7 +41,7 @@
             <column name="validity_end_time" type="${datetimeType}">
                 <constraints nullable="false" />
             </column>
-            <column name="details" type="${clobType}">
+            <column name="details" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="site9_id" type="bigint">
