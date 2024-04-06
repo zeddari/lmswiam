@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class PdfService {
 
     private TemplateEngine createTemplateEngine() {
         ClassLoaderTemplateResolver pdfTemplateResolver = new ClassLoaderTemplateResolver();
-        pdfTemplateResolver.setPrefix("pdf-templates/");
+        pdfTemplateResolver.setPrefix("templates/");
         pdfTemplateResolver.setSuffix(".html");
         pdfTemplateResolver.setTemplateMode("HTML");
         pdfTemplateResolver.setCharacterEncoding("UTF-8");
@@ -49,7 +50,7 @@ public class PdfService {
      * @throws IOException
      * @throws DocumentException
      */
-    public File generatePdf(PeriodicReportPdfDetailInterface details, PeriodicReportPdfRequest pdfRequest)
+    public File generatePdf(List<PeriodicReportPdfDetailInterface> details, PeriodicReportPdfRequest pdfRequest)
         throws IOException, DocumentException {
         Context context = getContext(details, "pdfDetails");
         String html = loadAndFillTemplate(context, "report/" + pdfRequest.getTemplateName());

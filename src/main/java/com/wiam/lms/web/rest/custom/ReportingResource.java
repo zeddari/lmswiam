@@ -53,12 +53,12 @@ public class ReportingResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new quiz, or with status {@code 400 (Bad Request)} if the quiz has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/student/daily")
+    @PostMapping("/student/periodic")
     public ResponseEntity<byte[]> generatePdfReport(@Valid @RequestBody PeriodicReportPdfRequest pdfRequest)
         throws URISyntaxException, IOException, DocumentException {
         log.debug("REST request to generate pdf report : {}", pdfRequest);
-        List<PeriodicReportPdfDetailInterface> pdfDetail = reportingRepository.getNativePeriodicReport();
-        File pdfReportFile = pdfService.generatePdf(null, pdfRequest);
+        List<PeriodicReportPdfDetailInterface> pdfDetails = reportingRepository.getNativePeriodicReport();
+        File pdfReportFile = pdfService.generatePdf(pdfDetails, pdfRequest);
         FileInputStream fileStream = new FileInputStream(pdfReportFile);
         byte contents[] = new byte[(int) pdfReportFile.length()];
         fileStream.read(contents);
