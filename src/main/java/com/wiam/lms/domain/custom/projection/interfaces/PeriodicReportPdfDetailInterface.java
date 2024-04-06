@@ -14,9 +14,9 @@ public interface PeriodicReportPdfDetailInterface {
 
     public String getGroupName();
 
-    public int getNbStudentSession();
+    public int getNbStudentTotal();
 
-    public int getNbStudentSession2();
+    public int getNbStudentTotal2();
 
     public int getNbDaysSchoolingTotal();
 
