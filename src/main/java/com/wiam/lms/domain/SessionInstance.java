@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,33 +52,10 @@ public class SessionInstance implements Serializable {
     @Column(name = "session_date", nullable = false)
     private LocalDate sessionDate;
 
-    @NotNull
-    @Column(name = "start_time", nullable = false)
+    private LocalTime sessionStartTime; // 09:00
+    private LocalTime sessionEndTime;
+
     private ZonedDateTime startTime;
-
-    private String sessionStartTime; // 09:00
-    private String sessionEndTime;
-
-    public String getSessionStartTime() {
-        return sessionStartTime;
-    }
-
-    public String getSessionEndTime() {
-        return sessionEndTime;
-    }
-
-    public void setSessionStartTime(String sessionStartTime) {
-        this.sessionStartTime = sessionStartTime;
-    }
-
-    public void setSessionEndTime(String sessionEndTime) {
-        this.sessionEndTime = sessionEndTime;
-    }
-
-    @NotNull
-    @Column(name = "duration", nullable = false)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
-    private Integer duration;
 
     @Lob
     @Column(name = "info")
@@ -105,9 +83,8 @@ public class SessionInstance implements Serializable {
     @JsonIgnoreProperties(value = { "site17", "sessionInstance", "student" }, allowSetters = true)
     private Set<Progression> progressions = new HashSet<>();
 
-    @Column(name = "session_link")
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
-    private String sessionLink;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private SessionLink sessionLink;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
@@ -140,10 +117,6 @@ public class SessionInstance implements Serializable {
 
     public static long getSerialversionuid() {
         return serialVersionUID;
-    }
-
-    public String getSessionLink() {
-        return sessionLink;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -198,30 +171,20 @@ public class SessionInstance implements Serializable {
         this.sessionDate = sessionDate;
     }
 
-    public ZonedDateTime getStartTime() {
-        return this.startTime;
+    public void setSessionStartTime(LocalTime sessionStartTime) {
+        this.sessionStartTime = sessionStartTime;
     }
 
-    public SessionInstance startTime(ZonedDateTime startTime) {
-        this.setStartTime(startTime);
-        return this;
+    public void setSessionEndTime(LocalTime sessionEndTime) {
+        this.sessionEndTime = sessionEndTime;
     }
 
-    public void setStartTime(ZonedDateTime startTime) {
-        this.startTime = startTime;
+    public LocalTime getSessionStartTime() {
+        return sessionStartTime;
     }
 
-    public Integer getDuration() {
-        return this.duration;
-    }
-
-    public SessionInstance duration(Integer duration) {
-        this.setDuration(duration);
-        return this;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
+    public LocalTime getSessionEndTime() {
+        return sessionEndTime;
     }
 
     public String getInfo() {
@@ -359,8 +322,6 @@ public class SessionInstance implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", sessionDate='" + getSessionDate() + "'" +
-            ", startTime='" + getStartTime() + "'" +
-            ", duration=" + getDuration() +
             ", info='" + getInfo() + "'" +
             ", attendance='" + getAttendance() + "'" +
             ", justifRef='" + getJustifRef() + "'" +
@@ -376,7 +337,19 @@ public class SessionInstance implements Serializable {
         this.professor = professor;
     }
 
-    public void setSessionLink(String sessionLink) {
+    public SessionLink getSessionLink() {
+        return sessionLink;
+    }
+
+    public void setSessionLink(SessionLink sessionLink) {
         this.sessionLink = sessionLink;
+    }
+
+    public ZonedDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
     }
 }

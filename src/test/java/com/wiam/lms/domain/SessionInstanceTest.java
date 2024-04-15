@@ -54,18 +54,6 @@ class SessionInstanceTest {
     void linksTest() throws Exception {
         SessionInstance sessionInstance = getSessionInstanceRandomSampleGenerator();
         SessionLink sessionLinkBack = getSessionLinkRandomSampleGenerator();
-
-        sessionInstance.addLinks(sessionLinkBack);
-        assertThat(sessionInstance.getLinks()).containsOnly(sessionLinkBack);
-
-        sessionInstance.removeLinks(sessionLinkBack);
-        assertThat(sessionInstance.getLinks()).doesNotContain(sessionLinkBack);
-
-        sessionInstance.links(new HashSet<>(Set.of(sessionLinkBack)));
-        assertThat(sessionInstance.getLinks()).containsOnly(sessionLinkBack);
-
-        sessionInstance.setLinks(new HashSet<>());
-        assertThat(sessionInstance.getLinks()).doesNotContain(sessionLinkBack);
     }
 
     @Test

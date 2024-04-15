@@ -1,6 +1,7 @@
 package com.wiam.lms.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.wiam.lms.domain.enumeration.Periodicity;
 import com.wiam.lms.domain.enumeration.SessionJoinMode;
 import com.wiam.lms.domain.enumeration.SessionMode;
 import com.wiam.lms.domain.enumeration.SessionType;
@@ -38,6 +39,12 @@ public class Session implements Serializable {
     @Column(name = "session_mode", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SessionMode sessionMode;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "session_periodicity", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+    private Periodicity sessionPeriodicity;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -165,6 +172,62 @@ public class Session implements Serializable {
 
     @Column(name = "sundayEndTime")
     private LocalTime sundayEndTime;
+
+    public void setMondayEndTime(LocalTime mondayEndTime) {
+        this.mondayEndTime = mondayEndTime;
+    }
+
+    public void setTuesdayEndTime(LocalTime tuesdayEndTime) {
+        this.tuesdayEndTime = tuesdayEndTime;
+    }
+
+    public void setWednesdayEndTime(LocalTime wednesdayEndTime) {
+        this.wednesdayEndTime = wednesdayEndTime;
+    }
+
+    public void setThursdayEndTime(LocalTime thursdayEndTime) {
+        this.thursdayEndTime = thursdayEndTime;
+    }
+
+    public void setFridayEndTime(LocalTime fridayEndTime) {
+        this.fridayEndTime = fridayEndTime;
+    }
+
+    public void setSaturdayEndTime(LocalTime saturdayEndTime) {
+        this.saturdayEndTime = saturdayEndTime;
+    }
+
+    public void setSundayEndTime(LocalTime sundayEndTime) {
+        this.sundayEndTime = sundayEndTime;
+    }
+
+    public LocalTime getMondayEndTime() {
+        return mondayEndTime;
+    }
+
+    public LocalTime getTuesdayEndTime() {
+        return tuesdayEndTime;
+    }
+
+    public LocalTime getWednesdayEndTime() {
+        return wednesdayEndTime;
+    }
+
+    public LocalTime getThursdayEndTime() {
+        return thursdayEndTime;
+    }
+
+    public LocalTime getFridayEndTime() {
+        return fridayEndTime;
+    }
+
+    public LocalTime getSaturdayEndTime() {
+        return saturdayEndTime;
+    }
+
+    public LocalTime getSundayEndTime() {
+        return sundayEndTime;
+    }
 
     @NotNull
     @Column(name = "is_periodic", nullable = false)
@@ -919,5 +982,17 @@ public class Session implements Serializable {
             ", isMinorAllowed='" + getIsMinorAllowed() + "'" +
             ", isActive='" + getIsActive() + "'" +
             "}";
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public Periodicity getSessionPeriodicity() {
+        return sessionPeriodicity;
+    }
+
+    public void setSessionPeriodicity(Periodicity sessionPeriodicity) {
+        this.sessionPeriodicity = sessionPeriodicity;
     }
 }

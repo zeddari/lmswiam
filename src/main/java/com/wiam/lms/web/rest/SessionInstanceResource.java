@@ -181,9 +181,7 @@ public class SessionInstanceResource {
                 if (sessionInstance.getStartTime() != null) {
                     existingSessionInstance.setStartTime(sessionInstance.getStartTime());
                 }
-                if (sessionInstance.getDuration() != null) {
-                    existingSessionInstance.setDuration(sessionInstance.getDuration());
-                }
+
                 if (sessionInstance.getInfo() != null) {
                     existingSessionInstance.setInfo(sessionInstance.getInfo());
                 }
@@ -275,11 +273,11 @@ public class SessionInstanceResource {
             remoteSessionDto.setTitle(sessionInstance.getTitle());
             remoteSessionDto.setSessionDate(sessionInstance.getSessionDate());
             remoteSessionDto.setDay(sessionInstance.getSessionDate().getDayOfWeek().getValue());
-            remoteSessionDto.setSessionStartTime(sessionInstance.getSessionStartTime());
-            remoteSessionDto.setSessionEndTime(sessionInstance.getSessionEndTime());
+            remoteSessionDto.setSessionStartTime(sessionInstance.getSessionStartTime().toString());
+            remoteSessionDto.setSessionEndTime(sessionInstance.getSessionEndTime().toString());
             if (sessionInstance.getGroup() != null) remoteSessionDto.setGroupName(sessionInstance.getGroup().getNameAr());
             remoteSessionDto.setIsActive(sessionInstance.getIsActive());
-            remoteSessionDto.setLink(sessionInstance.getSessionLink());
+            remoteSessionDto.setLink(sessionInstance.getSessionLink().getLink());
             remoteSessionDto.setInfo(sessionInstance.getInfo());
             remoteSessionDtos.add(remoteSessionDto);
         }
