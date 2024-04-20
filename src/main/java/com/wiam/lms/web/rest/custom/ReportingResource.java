@@ -47,7 +47,7 @@ public class ReportingResource {
     private ReportingRepository reportingRepository;
 
     /**
-     * {@code Get  /student/daily} : generate a new report.
+     * {@code Get  /student/periodic} : generate a new report.
      *
      * @param pdfRequest the pdfRequest to generate.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new quiz, or with status {@code 400 (Bad Request)} if the quiz has already an ID.
