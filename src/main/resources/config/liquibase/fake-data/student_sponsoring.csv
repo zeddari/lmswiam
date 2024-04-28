@@ -1,0 +1,11 @@
+id;ref;message;amount;start_date;end_date;is_always
+1;successfully;../fake-data/blob/hipster.txt;28277.61;2024-01-09;2024-01-09;true
+2;wow;../fake-data/blob/hipster.txt;17943.41;2024-01-09;2024-01-08;true
+3;accoutre psst;../fake-data/blob/hipster.txt;5273.1;2024-01-08;2024-01-09;false
+4;vice yawningly;../fake-data/blob/hipster.txt;7075.09;2024-01-08;2024-01-08;false
+5;boo;../fake-data/blob/hipster.txt;12891.16;2024-01-09;2024-01-09;true
+6;fugato too;../fake-data/blob/hipster.txt;27228.38;2024-01-09;2024-01-08;true
+7;finally coat before;../fake-data/blob/hipster.txt;9657.53;2024-01-09;2024-01-09;false
+8;rehearse and oof;../fake-data/blob/hipster.txt;32698.23;2024-01-08;2024-01-08;true
+9;hence into moonlight;../fake-data/blob/hipster.txt;22310.91;2024-01-09;2024-01-09;true
+10;pertinent truthfully;../fake-data/blob/hipster.txt;2191.62;2024-01-08;2024-01-08;true

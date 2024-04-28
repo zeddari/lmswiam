@@ -1,0 +1,30 @@
+{
+  "lmswiamApp": {
+    "studentSponsoring": {
+      "home": {
+        "title": "Student Sponsorings",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Student Sponsoring",
+        "createOrEditLabel": "Create or edit a Student Sponsoring",
+        "search": "Search for Student Sponsoring",
+        "notFound": "No Student Sponsorings found"
+      },
+      "created": "A new Student Sponsoring is created with identifier {{ param }}",
+      "updated": "A Student Sponsoring is updated with identifier {{ param }}",
+      "deleted": "A Student Sponsoring is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Student Sponsoring {{ id }}?"
+      },
+      "detail": {
+        "title": "Student Sponsoring"
+      },
+      "id": "ID",
+      "ref": "Ref",
+      "message": "Message",
+      "amount": "Amount",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "isAlways": "Is Always"
+    }
+  }
+}

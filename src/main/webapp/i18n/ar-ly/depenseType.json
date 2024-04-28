@@ -1,0 +1,19 @@
+{
+  "lmswiamApp": {
+    "DepenseType": {
+      "null": "",
+      "REGISTER": "REGISTER",
+      "MONTHLY_FEES": "MONTHLY_FEES",
+      "ACTIVITY_FEES": "ACTIVITY_FEES",
+      "DONATION": "DONATION",
+      "SALARY": "SALARY",
+      "RENT": "RENT",
+      "INTERNET": "INTERNET",
+      "ELECTRICITY": "ELECTRICITY",
+      "OTHERS": "OTHERS",
+      "EXTERNAL_ACTIVITY": "EXTERNAL_ACTIVITY",
+      "INTERNAL_ACTIVITY": "INTERNAL_ACTIVITY",
+      "KHATM_ACTIVITY": "KHATM_ACTIVITY"
+    }
+  }
+}

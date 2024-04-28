@@ -1,0 +1,9 @@
+{
+  "lmswiamApp": {
+    "PaymentSide": {
+      "null": "",
+      "IN": "IN",
+      "OUT": "OUT"
+    }
+  }
+}

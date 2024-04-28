@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20240109174831"
+  },
+  "applications": "*",
+  "entityTableName": "student_sponsoring",
+  "fields": [
+    {
+      "fieldName": "ref",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "message",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "isAlways",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "StudentSponsoring",
+  "relationships": []
+}
