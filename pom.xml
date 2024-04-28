@@ -89,6 +89,29 @@
 
     <dependencies>
         <dependency>
+		<groupId>org.projectlombok</groupId>
+		<artifactId>lombok</artifactId>
+		<version>1.18.32</version>
+		<scope>provided</scope>
+	</dependency>
+    <!-- https://mvnrepository.com/artifact/io.woo/htmltopdf -->
+<dependency>
+    <groupId>io.woo</groupId>
+    <artifactId>htmltopdf</artifactId>
+    <version>1.0.8</version>
+</dependency>
+ <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf</artifactId>
+            <version>9.1.20</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>71.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>tech.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
         </dependency>

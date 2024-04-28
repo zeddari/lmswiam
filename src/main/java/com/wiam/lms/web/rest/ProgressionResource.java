@@ -267,11 +267,11 @@ public class ProgressionResource {
             if (progression.getSessionInstance() != null) exam.setSessionName(progression.getSessionInstance().getTitle());
             exam.setExamType(progression.getExamType());
             exam.setRiwaya(progression.getRiwaya());
-            exam.setStartTime(progression.getStartTime());
+            //exam.setStartTime(progression.getStartTime());
             exam.setFromAyaNum(progression.getFromAyaNum());
             exam.setToAyaNum(progression.getToAyaNum());
-            if (progression.getFromSourate() != null) exam.setFromSourate(progression.getFromSourate().getNameAr());
-            if (progression.getToSourate() != null) exam.setToSourate(progression.getToSourate().getNameAr());
+            //if (progression.getFromSourate() != null) exam.setFromSourate(progression.getFromSourate().getNameAr());
+            //if (progression.getToSourate() != null) exam.setToSourate(progression.getToSourate().getNameAr());
             // attendance infp
             exam.setAttendance(progression.getAttendance());
             exams.add(exam);
@@ -326,7 +326,7 @@ public class ProgressionResource {
                             Progression progression = new Progression();
                             progression.setLateArrival(false);
                             progression.setEarlyDeparture(false);
-                            progression.setIsForAttendance(true);
+                            //progression.setIsForAttendance(true);
                             progression.setTaskDone(true);
                             progression.setHifdScore(0);
                             progression.setTajweedScore(0);
@@ -338,7 +338,7 @@ public class ProgressionResource {
                             progression.setSessionInstance(instance);
                             progression.setStudent(student);
                             progression.setSite17(instance.getSite16());
-                            progression.setStartTime(ZonedDateTime.now());
+                            //progression.setStartTime(ZonedDateTime.now());
                             progressionRepository.save(progression);
                         }
                     }
