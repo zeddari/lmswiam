@@ -10,7 +10,6 @@ import com.wiam.lms.domain.enumeration.Tilawa;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -20,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "progression")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "progression")
+@org.springframework.data.elasticsearch.annotations.Document(createIndex = false, indexName = "progression")
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Progression implements Serializable {
 
@@ -30,10 +29,6 @@ public class Progression implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @NotNull
-    @Column(name = "start_time", nullable = false)
-    private ZonedDateTime startTime;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -70,11 +65,15 @@ public class Progression implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private Riwayats riwaya;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Surahs fromSourate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "from_sourate")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+    private Sourate fromSourate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Surahs toSourate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "to_sourate")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+    private Sourate toSourate;
 
     @Column(name = "from_aya_num")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
@@ -83,6 +82,28 @@ public class Progression implements Serializable {
     @Column(name = "to_aya_num")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer toAyaNum;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Ayahs fromAyahs;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Ayahs toAyahs;
+
+    public void setFromAyahs(Ayahs fromAyahs) {
+        this.fromAyahs = fromAyahs;
+    }
+
+    public void setToAyahs(Ayahs toAyahs) {
+        this.toAyahs = toAyahs;
+    }
+
+    public Ayahs getFromAyahs() {
+        return fromAyahs;
+    }
+
+    public Ayahs getToAyahs() {
+        return toAyahs;
+    }
 
     @Lob
     @Column(name = "from_aya_verset")
@@ -105,26 +126,21 @@ public class Progression implements Serializable {
     private Boolean taskDone;
 
     @NotNull
-    @Column(name = "is_for_attendance", nullable = false)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
-    private Boolean isForAttendance;
-
-    @NotNull
-    @Min(value = 0)
+    @Min(value = 1)
     @Max(value = 5)
     @Column(name = "tajweed_score", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer tajweedScore;
 
     @NotNull
-    @Min(value = 0)
+    @Min(value = 1)
     @Max(value = 5)
     @Column(name = "hifd_score", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer hifdScore;
 
     @NotNull
-    @Min(value = 0)
+    @Min(value = 1)
     @Max(value = 5)
     @Column(name = "adae_score", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
@@ -166,7 +182,7 @@ public class Progression implements Serializable {
     private Site site17;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "progressions", "links", "site16" /*"session1" */ }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "progressions", "links", "site16", "session1" }, allowSetters = true)
     private SessionInstance sessionInstance;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -181,6 +197,7 @@ public class Progression implements Serializable {
             "progressions",
             "tickets",
             "sponsorings",
+            "depenses",
             "diplomas",
             "languages",
             "site13",
@@ -303,29 +320,29 @@ public class Progression implements Serializable {
         this.riwaya = riwaya;
     }
 
-    public Surahs getFromSourate() {
+    public Sourate getFromSourate() {
         return this.fromSourate;
     }
 
-    public Progression fromSourate(Surahs fromSourate) {
+    public Progression fromSourate(Sourate fromSourate) {
         this.setFromSourate(fromSourate);
         return this;
     }
 
-    public void setFromSourate(Surahs fromSourate) {
+    public void setFromSourate(Sourate fromSourate) {
         this.fromSourate = fromSourate;
     }
 
-    public Surahs getToSourate() {
+    public Sourate getToSourate() {
         return this.toSourate;
     }
 
-    public Progression toSourate(Surahs toSourate) {
+    public Progression toSourate(Sourate toSourate) {
         this.setToSourate(toSourate);
         return this;
     }
 
-    public void setToSourate(Surahs toSourate) {
+    public void setToSourate(Sourate toSourate) {
         this.toSourate = toSourate;
     }
 
@@ -398,10 +415,6 @@ public class Progression implements Serializable {
         return this.taskDone;
     }
 
-    public Boolean getIsForAttendance() {
-        return this.isForAttendance;
-    }
-
     public Progression taskDone(Boolean taskDone) {
         this.setTaskDone(taskDone);
         return this;
@@ -409,10 +422,6 @@ public class Progression implements Serializable {
 
     public void setTaskDone(Boolean taskDone) {
         this.taskDone = taskDone;
-    }
-
-    public void setIsForAttendance(Boolean isForAttendance) {
-        this.isForAttendance = isForAttendance;
     }
 
     public Integer getTajweedScore() {
@@ -550,13 +559,5 @@ public class Progression implements Serializable {
             ", adaeScore=" + getAdaeScore() +
             ", observation='" + getObservation() + "'" +
             "}";
-    }
-
-    public void setStartTime(ZonedDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public ZonedDateTime getStartTime() {
-        return startTime;
     }
 }
