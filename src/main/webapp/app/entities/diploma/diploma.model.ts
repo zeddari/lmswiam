@@ -15,8 +15,8 @@ export interface IDiploma {
   school?: string | null;
   attachment?: string | null;
   attachmentContentType?: string | null;
-  site20?: Pick<ISite, 'id' | 'nameAr'> | null;
-  userCustom7s?: Pick<IUserCustom, 'id' | 'firstName'>[] | null;
+  site20?: ISite | null;
+  userCustom7s?: IUserCustom[] | null;
 }
 
 export type NewDiploma = Omit<IDiploma, 'id'> & { id: null };

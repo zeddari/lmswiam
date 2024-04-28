@@ -102,10 +102,10 @@ describe('QuizResult Management Update Component', () => {
 
     it('Should call UserCustom query and add missing value', () => {
       const quizResult: IQuizResult = { id: 456 };
-      const userCustom2: IUserCustom = { id: 26931 };
+      const userCustom2: IUserCustom = { id: 9761 };
       quizResult.userCustom2 = userCustom2;
 
-      const userCustomCollection: IUserCustom[] = [{ id: 28592 }];
+      const userCustomCollection: IUserCustom[] = [{ id: 20607 }];
       jest.spyOn(userCustomService, 'query').mockReturnValue(of(new HttpResponse({ body: userCustomCollection })));
       const additionalUserCustoms = [userCustom2];
       const expectedCollection: IUserCustom[] = [...additionalUserCustoms, ...userCustomCollection];
@@ -128,7 +128,7 @@ describe('QuizResult Management Update Component', () => {
       quizResult.site8 = site8;
       const quiz: IQuiz = { id: 6686 };
       quizResult.quiz = quiz;
-      const userCustom2: IUserCustom = { id: 20650 };
+      const userCustom2: IUserCustom = { id: 18675 };
       quizResult.userCustom2 = userCustom2;
 
       activatedRoute.data = of({ quizResult });

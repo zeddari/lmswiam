@@ -1,0 +1,52 @@
+{
+  "annotations": {
+    "changelogDate": "20240109174831"
+  },
+  "applications": "*",
+  "entityTableName": "depense",
+  "fields": [
+    {
+      "fieldName": "type",
+      "fieldType": "DepenseType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "REGISTER,MONTHLY_FEES,ACTIVITY_FEES,DONATION,SALARY,RENT,INTERNET,ELECTRICITY,OTHERS,EXTERNAL_ACTIVITY,INTERNAL_ACTIVITY,KHATM_ACTIVITY"
+    },
+    {
+      "fieldName": "target",
+      "fieldType": "DepenseTarget",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "TEACHER,REDAL,IAM,LOYER,OTHERS"
+    },
+    {
+      "fieldName": "frequency",
+      "fieldType": "DepenseFrequency",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "MONTHLY,YEARLY,DAILY,FIXED_DATE"
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "ref",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "message",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Depense",
+  "relationships": [
+    {
+      "otherEntityField": "firstName",
+      "otherEntityName": "userCustom",
+      "relationshipName": "resource",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}

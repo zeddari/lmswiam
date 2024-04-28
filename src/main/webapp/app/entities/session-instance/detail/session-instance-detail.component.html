@@ -1,79 +1,89 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <div *ngIf="sessionInstance">
-      <h2 data-cy="sessionInstanceDetailsHeading"><span jhiTranslate="lmswiamApp.sessionInstance.detail.title">Session Instance</span></h2>
+    @if (sessionInstance) {
+      <div>
+        <h2 data-cy="sessionInstanceDetailsHeading">
+          <span jhiTranslate="lmswiamApp.sessionInstance.detail.title">Session Instance</span>
+        </h2>
 
-      <hr />
+        <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+        <jhi-alert-error></jhi-alert-error>
 
-      <jhi-alert></jhi-alert>
+        <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ sessionInstance.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.title">Title</span></dt>
-        <dd>
-          <span>{{ sessionInstance.title }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.sessionDate">Session Date</span></dt>
-        <dd>
-          <span>{{ sessionInstance.sessionDate | formatMediumDate }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.startTime">Start Time</span></dt>
-        <dd>
-          <span>{{ sessionInstance.startTime | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.duration">Duration</span></dt>
-        <dd>
-          <span>{{ sessionInstance.duration }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.info">Info</span></dt>
-        <dd>
-          <span>{{ sessionInstance.info }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.attendance">Attendance</span></dt>
-        <dd>
-          <span jhiTranslate="{{ 'lmswiamApp.Attendance.' + sessionInstance.attendance }}">{{ sessionInstance.attendance }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.justifRef">Justif Ref</span></dt>
-        <dd>
-          <span>{{ sessionInstance.justifRef }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.isActive">Is Active</span></dt>
-        <dd>
-          <span>{{ sessionInstance.isActive }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.links">Links</span></dt>
-        <dd>
-          <span *ngFor="let links of sessionInstance.links; let last = last">
-            <a [routerLink]="['/session-link', links.id, 'view']">{{ links.title }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.site16">Site 16</span></dt>
-        <dd>
-          <div *ngIf="sessionInstance.site16">
-            <a [routerLink]="['/site', sessionInstance.site16.id, 'view']">{{ sessionInstance.site16.nameAr }}</a>
-          </div>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionInstance.session1">Session 1</span></dt>
-        <dd>
-          <div *ngIf="sessionInstance.session1">
-            <a [routerLink]="['/session', sessionInstance.session1.id, 'view']">{{ sessionInstance.session1.title }}</a>
-          </div>
-        </dd>
-      </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ sessionInstance.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.title">Title</span></dt>
+          <dd>
+            <span>{{ sessionInstance.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.sessionDate">Session Date</span></dt>
+          <dd>
+            <span>{{ sessionInstance.sessionDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.startTime">Start Time</span></dt>
+          <dd>
+            <span>{{ sessionInstance.startTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.duration">Duration</span></dt>
+          <dd>
+            <span>{{ sessionInstance.duration }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.info">Info</span></dt>
+          <dd>
+            <span>{{ sessionInstance.info }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.attendance">Attendance</span></dt>
+          <dd>
+            <span jhiTranslate="{{ 'lmswiamApp.Attendance.' + sessionInstance.attendance }}">{{ sessionInstance.attendance }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.justifRef">Justif Ref</span></dt>
+          <dd>
+            <span>{{ sessionInstance.justifRef }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.isActive">Is Active</span></dt>
+          <dd>
+            <span>{{ sessionInstance.isActive }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.links">Links</span></dt>
+          <dd>
+            @for (links of sessionInstance.links; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/session-link', links.id, 'view']">{{ links.title }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.site16">Site 16</span></dt>
+          <dd>
+            @if (sessionInstance.site16) {
+              <div>
+                <a [routerLink]="['/site', sessionInstance.site16.id, 'view']">{{ sessionInstance.site16.nameAr }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionInstance.session1">Session 1</span></dt>
+          <dd>
+            @if (sessionInstance.session1) {
+              <div>
+                <a [routerLink]="['/session', sessionInstance.session1.id, 'view']">{{ sessionInstance.session1.title }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
 
-      <button type="button" [routerLink]="['/session-instance', sessionInstance.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
-    </div>
+        <button type="button" [routerLink]="['/session-instance', sessionInstance.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
   </div>
 </div>

@@ -52,6 +52,7 @@ public class Nationality implements Serializable {
             "progressions",
             "tickets",
             "sponsorings",
+            "depenses",
             "diplomas",
             "languages",
             "site13",

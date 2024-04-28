@@ -3,33 +3,37 @@ import dayjs from 'dayjs/esm';
 import { ISponsoring, NewSponsoring } from './sponsoring.model';
 
 export const sampleWithRequiredData: ISponsoring = {
-  id: 25850,
-  ref: 'concuss for',
-  amount: 16156.92,
+  id: 19516,
+  refKey: 'EXTERNAL_ACTIVITY',
+  ref: 'skin yahoo',
+  amount: 13165.01,
 };
 
 export const sampleWithPartialData: ISponsoring = {
-  id: 10599,
-  ref: 'offer',
+  id: 19992,
+  refKey: 'INTERNET',
+  ref: 'basement polite',
   message: '../fake-data/blob/hipster.txt',
-  amount: 25132.44,
-  startDate: dayjs('2024-01-09'),
+  amount: 6805.61,
   endDate: dayjs('2024-01-09'),
+  isAlways: false,
 };
 
 export const sampleWithFullData: ISponsoring = {
-  id: 7694,
-  ref: 'contraindicate screenwriting bravely',
+  id: 9853,
+  refKey: 'ELECTRICITY',
+  ref: 'pro carefully biology',
   message: '../fake-data/blob/hipster.txt',
-  amount: 996.65,
+  amount: 3966.38,
   startDate: dayjs('2024-01-08'),
   endDate: dayjs('2024-01-09'),
-  isAlways: true,
+  isAlways: false,
 };
 
 export const sampleWithNewData: NewSponsoring = {
-  ref: 'case which obedient',
-  amount: 22974.71,
+  refKey: 'RENT',
+  ref: 'safe',
+  amount: 21946.36,
   id: null,
 };
 

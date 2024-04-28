@@ -14,22 +14,22 @@
             <column name="id" type="integer" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="identifier" type="varchar(500)">
+            <column name="identifier" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="language" type="varchar(500)">
+            <column name="language" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="name" type="varchar(500)">
+            <column name="name" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="english_name" type="varchar(500)">
+            <column name="english_name" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="format" type="varchar(500)">
+            <column name="format" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="type" type="varchar(500)">
+            <column name="type" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="created_at" type="${datetimeType}">

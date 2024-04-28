@@ -84,10 +84,10 @@ describe('Certificate Management Update Component', () => {
 
     it('Should call UserCustom query and add missing value', () => {
       const certificate: ICertificate = { id: 456 };
-      const userCustom6: IUserCustom = { id: 5143 };
+      const userCustom6: IUserCustom = { id: 17635 };
       certificate.userCustom6 = userCustom6;
 
-      const userCustomCollection: IUserCustom[] = [{ id: 4801 }];
+      const userCustomCollection: IUserCustom[] = [{ id: 18923 }];
       jest.spyOn(userCustomService, 'query').mockReturnValue(of(new HttpResponse({ body: userCustomCollection })));
       const additionalUserCustoms = [userCustom6];
       const expectedCollection: IUserCustom[] = [...additionalUserCustoms, ...userCustomCollection];
@@ -152,7 +152,7 @@ describe('Certificate Management Update Component', () => {
       const certificate: ICertificate = { id: 456 };
       const site19: ISite = { id: 786 };
       certificate.site19 = site19;
-      const userCustom6: IUserCustom = { id: 29505 };
+      const userCustom6: IUserCustom = { id: 23430 };
       certificate.userCustom6 = userCustom6;
       const comitte: IGroup = { id: 27596 };
       certificate.comitte = comitte;

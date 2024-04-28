@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (depense) {
+      <div>
+        <h2 data-cy="depenseDetailsHeading"><span jhiTranslate="lmswiamApp.depense.detail.title">Depense</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ depense.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.depense.type">Type</span></dt>
+          <dd>
+            <span jhiTranslate="{{ 'lmswiamApp.DepenseType.' + depense.type }}">{{ depense.type }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.depense.target">Target</span></dt>
+          <dd>
+            <span jhiTranslate="{{ 'lmswiamApp.DepenseTarget.' + depense.target }}">{{ depense.target }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.depense.frequency">Frequency</span></dt>
+          <dd>
+            <span jhiTranslate="{{ 'lmswiamApp.DepenseFrequency.' + depense.frequency }}">{{ depense.frequency }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.depense.amount">Amount</span></dt>
+          <dd>
+            <span>{{ depense.amount }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.depense.ref">Ref</span></dt>
+          <dd>
+            <span>{{ depense.ref }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.depense.message">Message</span></dt>
+          <dd>
+            <span>{{ depense.message }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.depense.resource">Resource</span></dt>
+          <dd>
+            @if (depense.resource) {
+              <div>
+                <a [routerLink]="['/user-custom', depense.resource.id, 'view']">{{ depense.resource.firstName }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/depense', depense.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

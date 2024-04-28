@@ -1,7 +1,6 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.UserCustom;
-import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.UserCustomSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -10,7 +9,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -211,24 +209,15 @@ public class UserCustomResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userCustoms in body.
      */
     @GetMapping("")
-    public List<UserCustom> getAllUserCustoms(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
+    public List<UserCustom> getAllUserCustoms(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+    ) {
         log.debug("REST request to get all UserCustoms");
         if (eagerload) {
             return userCustomRepository.findAllWithEagerRelationships();
         } else {
             return userCustomRepository.findAll();
         }
-    }
-
-    @GetMapping("/{role}/role")
-    public List<UserCustom> getAllUserCustomsByUserType(@PathVariable String role) {
-        List<UserCustom> usersbyrole = new ArrayList<UserCustom>();
-        List<UserCustom> users = userCustomRepository.findAll();
-
-        for (UserCustom user : users) {
-            if (user.getRole().name().equals(role)) usersbyrole.add(user);
-        }
-        return usersbyrole;
     }
 
     /**
@@ -238,7 +227,7 @@ public class UserCustomResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the userCustom, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<UserCustom> getUserCustom(@PathVariable Long id) {
+    public ResponseEntity<UserCustom> getUserCustom(@PathVariable("id") Long id) {
         log.debug("REST request to get UserCustom : {}", id);
         Optional<UserCustom> userCustom = userCustomRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(userCustom);
@@ -251,7 +240,7 @@ public class UserCustomResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserCustom(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUserCustom(@PathVariable("id") Long id) {
         log.debug("REST request to delete UserCustom : {}", id);
         userCustomRepository.deleteById(id);
         userCustomSearchRepository.deleteFromIndexById(id);
@@ -269,7 +258,7 @@ public class UserCustomResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<UserCustom> searchUserCustoms(@RequestParam String query) {
+    public List<UserCustom> searchUserCustoms(@RequestParam("query") String query) {
         log.debug("REST request to search UserCustoms for query {}", query);
         try {
             return StreamSupport.stream(userCustomSearchRepository.search(query).spliterator(), false).toList();

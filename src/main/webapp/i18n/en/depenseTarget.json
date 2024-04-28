@@ -1,0 +1,12 @@
+{
+  "lmswiamApp": {
+    "DepenseTarget": {
+      "null": "",
+      "TEACHER": "TEACHER",
+      "REDAL": "REDAL",
+      "IAM": "IAM",
+      "LOYER": "LOYER",
+      "OTHERS": "OTHERS"
+    }
+  }
+}

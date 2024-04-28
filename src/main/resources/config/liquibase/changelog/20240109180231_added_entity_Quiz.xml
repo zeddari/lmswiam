@@ -20,7 +20,7 @@
             <column name="quiz_title" type="varchar(100)">
                 <constraints nullable="false" />
             </column>
-            <column name="quiz_description" type="varchar(500)">
+            <column name="quiz_description" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="deadline" type="${datetimeType}">

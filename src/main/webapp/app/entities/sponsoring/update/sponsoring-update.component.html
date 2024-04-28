@@ -8,26 +8,45 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.sponsoring.refKey" for="field_refKey">Ref Key</label>
+          <select class="form-control" name="refKey" formControlName="refKey" id="field_refKey" data-cy="refKey">
+            <option [ngValue]="null">{{ 'lmswiamApp.SponsoringRef.null' | translate }}</option>
+            @for (sponsoringRef of sponsoringRefValues; track $index) {
+              <option [value]="sponsoringRef">{{ 'lmswiamApp.SponsoringRef.' + sponsoringRef | translate }}</option>
+            }
+          </select>
+          @if (editForm.get('refKey')!.invalid && (editForm.get('refKey')!.dirty || editForm.get('refKey')!.touched)) {
+            <div>
+              @if (editForm.get('refKey')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.sponsoring.ref" for="field_ref">Ref</label>
           <input type="text" class="form-control" name="ref" id="field_ref" data-cy="ref" formControlName="ref" />
-          <div *ngIf="editForm.get('ref')!.invalid && (editForm.get('ref')!.dirty || editForm.get('ref')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('ref')?.errors?.required" jhiTranslate="entity.validation.required"
-              >This field is required.</small
-            >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('ref')?.errors?.maxlength"
-              jhiTranslate="entity.validation.maxlength"
-              [translateValues]="{ max: 100 }"
-              >This field cannot be longer than 100 characters.</small
-            >
-          </div>
+          @if (editForm.get('ref')!.invalid && (editForm.get('ref')!.dirty || editForm.get('ref')!.touched)) {
+            <div>
+              @if (editForm.get('ref')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('ref')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
+                  >This field cannot be longer than 100 characters.</small
+                >
+              }
+            </div>
+          }
         </div>
 
         <div class="mb-3">
@@ -38,21 +57,24 @@
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.sponsoring.amount" for="field_amount">Amount</label>
           <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
-          <div *ngIf="editForm.get('amount')!.invalid && (editForm.get('amount')!.dirty || editForm.get('amount')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('amount')?.errors?.required" jhiTranslate="entity.validation.required"
-              >This field is required.</small
-            >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('amount')?.errors?.min"
-              jhiTranslate="entity.validation.min"
-              [translateValues]="{ min: 0 }"
-              >This field should be at least 0.</small
-            >
-            <small class="form-text text-danger" [hidden]="!editForm.get('amount')?.errors?.number" jhiTranslate="entity.validation.number"
-              >This field should be a number.</small
-            >
-          </div>
+          @if (editForm.get('amount')!.invalid && (editForm.get('amount')!.dirty || editForm.get('amount')!.touched)) {
+            <div>
+              @if (editForm.get('amount')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('amount')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }"
+                  >This field should be at least 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('amount')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
         </div>
 
         <div class="mb-3">
@@ -105,7 +127,9 @@
             [compareWith]="compareSite"
           >
             <option [ngValue]="null"></option>
-            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
+            @for (siteOption of sitesSharedCollection; track $index) {
+              <option [ngValue]="siteOption">{{ siteOption.nameAr }}</option>
+            }
           </select>
         </div>
 
@@ -120,9 +144,9 @@
             [compareWith]="compareUserCustom"
           >
             <option [ngValue]="null"></option>
-            <option [ngValue]="userCustomOption" *ngFor="let userCustomOption of userCustomsSharedCollection">
-              {{ userCustomOption.firstName }}
-            </option>
+            @for (userCustomOption of userCustomsSharedCollection; track $index) {
+              <option [ngValue]="userCustomOption">{{ userCustomOption.firstName }}</option>
+            }
           </select>
         </div>
 
@@ -137,7 +161,9 @@
             [compareWith]="compareProject"
           >
             <option [ngValue]="null"></option>
-            <option [ngValue]="projectOption" *ngFor="let projectOption of projectsSharedCollection">{{ projectOption.titleAr }}</option>
+            @for (projectOption of projectsSharedCollection; track $index) {
+              <option [ngValue]="projectOption">{{ projectOption.titleAr }}</option>
+            }
           </select>
         </div>
 
@@ -152,9 +178,9 @@
             [compareWith]="compareCurrency"
           >
             <option [ngValue]="null"></option>
-            <option [ngValue]="currencyOption" *ngFor="let currencyOption of currenciesSharedCollection">
-              {{ currencyOption.nameAr }}
-            </option>
+            @for (currencyOption of currenciesSharedCollection; track $index) {
+              <option [ngValue]="currencyOption">{{ currencyOption.nameAr }}</option>
+            }
           </select>
         </div>
       </div>

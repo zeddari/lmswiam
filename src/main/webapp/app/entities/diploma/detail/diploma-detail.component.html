@@ -1,81 +1,87 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <div *ngIf="diploma">
-      <h2 data-cy="diplomaDetailsHeading">
-        <span jhiTranslate="lmswiamApp.diploma.detail.title">Translation missing for lmswiamApp.diploma.detail.title</span>
-      </h2>
+    @if (diploma) {
+      <div>
+        <h2 data-cy="diplomaDetailsHeading">
+          <span jhiTranslate="lmswiamApp.diploma.detail.title">Translation missing for lmswiamApp.diploma.detail.title</span>
+        </h2>
 
-      <hr />
+        <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+        <jhi-alert-error></jhi-alert-error>
 
-      <jhi-alert></jhi-alert>
+        <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ diploma.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.diploma.type">Type</span></dt>
-        <dd>
-          <span jhiTranslate="{{ 'lmswiamApp.DiplomaType.' + diploma.type }}">{{ diploma.type }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.diploma.title">Title</span></dt>
-        <dd>
-          <span>{{ diploma.title }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.diploma.subject">Subject</span></dt>
-        <dd>
-          <span>{{ diploma.subject }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.diploma.detail">Detail</span></dt>
-        <dd>
-          <span>{{ diploma.detail }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.diploma.supervisor">Supervisor</span></dt>
-        <dd>
-          <span>{{ diploma.supervisor }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.diploma.grade">Grade</span></dt>
-        <dd>
-          <span>{{ diploma.grade }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.diploma.graduationDate">Graduation Date</span></dt>
-        <dd>
-          <span>{{ diploma.graduationDate | formatMediumDate }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.diploma.school">School</span></dt>
-        <dd>
-          <span>{{ diploma.school }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.diploma.attachment">Attachment</span></dt>
-        <dd>
-          <div *ngIf="diploma.attachment">
-            <a (click)="openFile(diploma.attachment, diploma.attachmentContentType)">
-              <img
-                [src]="'data:' + diploma.attachmentContentType + ';base64,' + diploma.attachment"
-                style="max-width: 100%"
-                alt="diploma image"
-              />
-            </a>
-            {{ diploma.attachmentContentType }}, {{ byteSize(diploma.attachment) }}
-          </div>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.diploma.site20">Site 20</span></dt>
-        <dd>
-          <div *ngIf="diploma.site20">
-            <a [routerLink]="['/site', diploma.site20.id, 'view']">{{ diploma.site20.nameAr }}</a>
-          </div>
-        </dd>
-      </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ diploma.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.diploma.type">Type</span></dt>
+          <dd>
+            <span jhiTranslate="{{ 'lmswiamApp.DiplomaType.' + diploma.type }}">{{ diploma.type }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.diploma.title">Title</span></dt>
+          <dd>
+            <span>{{ diploma.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.diploma.subject">Subject</span></dt>
+          <dd>
+            <span>{{ diploma.subject }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.diploma.detail">Detail</span></dt>
+          <dd>
+            <span>{{ diploma.detail }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.diploma.supervisor">Supervisor</span></dt>
+          <dd>
+            <span>{{ diploma.supervisor }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.diploma.grade">Grade</span></dt>
+          <dd>
+            <span>{{ diploma.grade }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.diploma.graduationDate">Graduation Date</span></dt>
+          <dd>
+            <span>{{ diploma.graduationDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.diploma.school">School</span></dt>
+          <dd>
+            <span>{{ diploma.school }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.diploma.attachment">Attachment</span></dt>
+          <dd>
+            @if (diploma.attachment) {
+              <div>
+                <a (click)="openFile(diploma.attachment, diploma.attachmentContentType)">
+                  <img
+                    [src]="'data:' + diploma.attachmentContentType + ';base64,' + diploma.attachment"
+                    style="max-width: 100%"
+                    alt="diploma image"
+                  />
+                </a>
+                {{ diploma.attachmentContentType }}, {{ byteSize(diploma.attachment) }}
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.diploma.site20">Site 20</span></dt>
+          <dd>
+            @if (diploma.site20) {
+              <div>
+                <a [routerLink]="['/site', diploma.site20.id, 'view']">{{ diploma.site20.nameAr }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
 
-      <button type="button" [routerLink]="['/diploma', diploma.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
-    </div>
+        <button type="button" [routerLink]="['/diploma', diploma.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
   </div>
 </div>

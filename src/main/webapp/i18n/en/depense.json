@@ -1,0 +1,31 @@
+{
+  "lmswiamApp": {
+    "depense": {
+      "home": {
+        "title": "Depenses",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Depense",
+        "createOrEditLabel": "Create or edit a Depense",
+        "search": "Search for Depense",
+        "notFound": "No Depenses found"
+      },
+      "created": "A new Depense is created with identifier {{ param }}",
+      "updated": "A Depense is updated with identifier {{ param }}",
+      "deleted": "A Depense is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Depense {{ id }}?"
+      },
+      "detail": {
+        "title": "Depense"
+      },
+      "id": "ID",
+      "type": "Type",
+      "target": "Target",
+      "frequency": "Frequency",
+      "amount": "Amount",
+      "ref": "Ref",
+      "message": "Message",
+      "resource": "Resource"
+    }
+  }
+}

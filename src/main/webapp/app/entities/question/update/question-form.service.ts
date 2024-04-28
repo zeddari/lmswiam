@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type QuestionFormGroupInput = IQuestion | PartialWithRequiredKeyOf<NewQuestion>;
 
-type QuestionFormDefaults = Pick<NewQuestion, 'id' | 'a1v' | 'a2v' | 'a3v' | 'a4v' | 'isActive' | 'quizzes'>;
+type QuestionFormDefaults = Pick<NewQuestion, 'id' | 'a1v' | 'a2v' | 'a3v' | 'a4v' | 'isActive'>;
 
 type QuestionFormGroupContent = {
   id: FormControl<IQuestion['id'] | NewQuestion['id']>;
@@ -30,7 +30,6 @@ type QuestionFormGroupContent = {
   a4v: FormControl<IQuestion['a4v']>;
   isActive: FormControl<IQuestion['isActive']>;
   site5: FormControl<IQuestion['site5']>;
-  quizzes: FormControl<IQuestion['quizzes']>;
 };
 
 export type QuestionFormGroup = FormGroup<QuestionFormGroupContent>;
@@ -74,7 +73,6 @@ export class QuestionFormService {
         validators: [Validators.required],
       }),
       site5: new FormControl(questionRawValue.site5),
-      quizzes: new FormControl(questionRawValue.quizzes ?? []),
     });
   }
 
@@ -100,7 +98,6 @@ export class QuestionFormService {
       a3v: false,
       a4v: false,
       isActive: false,
-      quizzes: [],
     };
   }
 }

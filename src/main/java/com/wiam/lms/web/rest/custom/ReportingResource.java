@@ -1,13 +1,10 @@
 package com.wiam.lms.web.rest.custom;
 
 import com.lowagie.text.DocumentException;
-import com.wiam.lms.domain.Progression;
-import com.wiam.lms.domain.custom.projection.dto.PeriodicReportPdfDetail;
 import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
-import com.wiam.lms.repository.ProgressionRepository;
-import com.wiam.lms.repository.customer.ReportingRepository;
-import com.wiam.lms.service.reporting.PdfService;
-import com.wiam.lms.service.reporting.request.PeriodicReportPdfRequest;
+import com.wiam.lms.repository.custom.ReportingRepository;
+import com.wiam.lms.service.custom.reporting.PdfService;
+import com.wiam.lms.service.custom.reporting.request.PeriodicReportPdfRequest;
 import jakarta.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;

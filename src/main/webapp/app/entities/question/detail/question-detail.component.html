@@ -1,78 +1,82 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <div *ngIf="question">
-      <h2 data-cy="questionDetailsHeading"><span jhiTranslate="lmswiamApp.question.detail.title">Question</span></h2>
+    @if (question) {
+      <div>
+        <h2 data-cy="questionDetailsHeading"><span jhiTranslate="lmswiamApp.question.detail.title">Question</span></h2>
 
-      <hr />
+        <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+        <jhi-alert-error></jhi-alert-error>
 
-      <jhi-alert></jhi-alert>
+        <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ question.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.question">Question</span></dt>
-        <dd>
-          <span>{{ question.question }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.details">Details</span></dt>
-        <dd>
-          <span>{{ question.details }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.a1">A 1</span></dt>
-        <dd>
-          <span>{{ question.a1 }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.a1v">A 1 V</span></dt>
-        <dd>
-          <span>{{ question.a1v }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.a2">A 2</span></dt>
-        <dd>
-          <span>{{ question.a2 }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.a2v">A 2 V</span></dt>
-        <dd>
-          <span>{{ question.a2v }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.a3">A 3</span></dt>
-        <dd>
-          <span>{{ question.a3 }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.a3v">A 3 V</span></dt>
-        <dd>
-          <span>{{ question.a3v }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.a4">A 4</span></dt>
-        <dd>
-          <span>{{ question.a4 }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.a4v">A 4 V</span></dt>
-        <dd>
-          <span>{{ question.a4v }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.isActive">Is Active</span></dt>
-        <dd>
-          <span>{{ question.isActive }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.question.site5">Site 5</span></dt>
-        <dd>
-          <div *ngIf="question.site5">
-            <a [routerLink]="['/site', question.site5.id, 'view']">{{ question.site5.nameAr }}</a>
-          </div>
-        </dd>
-      </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ question.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.question">Question</span></dt>
+          <dd>
+            <span>{{ question.question }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.details">Details</span></dt>
+          <dd>
+            <span>{{ question.details }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.a1">A 1</span></dt>
+          <dd>
+            <span>{{ question.a1 }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.a1v">A 1 V</span></dt>
+          <dd>
+            <span>{{ question.a1v }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.a2">A 2</span></dt>
+          <dd>
+            <span>{{ question.a2 }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.a2v">A 2 V</span></dt>
+          <dd>
+            <span>{{ question.a2v }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.a3">A 3</span></dt>
+          <dd>
+            <span>{{ question.a3 }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.a3v">A 3 V</span></dt>
+          <dd>
+            <span>{{ question.a3v }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.a4">A 4</span></dt>
+          <dd>
+            <span>{{ question.a4 }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.a4v">A 4 V</span></dt>
+          <dd>
+            <span>{{ question.a4v }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.isActive">Is Active</span></dt>
+          <dd>
+            <span>{{ question.isActive }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.question.site5">Site 5</span></dt>
+          <dd>
+            @if (question.site5) {
+              <div>
+                <a [routerLink]="['/site', question.site5.id, 'view']">{{ question.site5.nameAr }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
 
-      <button type="button" [routerLink]="['/question', question.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
-    </div>
+        <button type="button" [routerLink]="['/question', question.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
   </div>
 </div>

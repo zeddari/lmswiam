@@ -8,6 +8,8 @@
       "entities": {
         "main": "الكيانات",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "depense": "Depense",
+        "studentSponsoring": "Student Sponsoring",
         "departement": "Departement",
         "country": "Country",
         "nationality": "Nationality",

@@ -41,104 +41,124 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-          <fa-icon icon="trash-alt"></fa-icon>
-        </button>
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
       </div>
     </div>
   </form>
 
-  <div class="alert alert-warning" id="no-result" *ngIf="surahs?.length === 0">
-    <span jhiTranslate="lmswiamApp.surahs.home.notFound">No Surahs found</span>
-  </div>
+  @if (surahs?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="lmswiamApp.surahs.home.notFound">No Surahs found</span>
+    </div>
+  }
 
-  <div class="table-responsive table-entities" id="entities" *ngIf="surahs && surahs.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.surahs.id">Id</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="number">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.surahs.number">Number</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="nameAr">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.surahs.nameAr">Name Ar</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="nameEn">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.surahs.nameEn">Name En</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="nameEnTranslation">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.surahs.nameEnTranslation">Name En Translation</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="type">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.surahs.type">Type</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="createdAt">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.surahs.createdAt">Created At</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="updatedAt">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.surahs.updatedAt">Updated At</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let surahs of surahs; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/surahs', surahs.id, 'view']">{{ surahs.id }}</a>
-          </td>
-          <td>{{ surahs.number }}</td>
-          <td>{{ surahs.nameAr }}</td>
-          <td>{{ surahs.nameEn }}</td>
-          <td>{{ surahs.nameEnTranslation }}</td>
-          <td>{{ surahs.type }}</td>
-          <td>{{ surahs.createdAt | formatMediumDatetime }}</td>
-          <td>{{ surahs.updatedAt | formatMediumDatetime }}</td>
-          <td class="text-end">
-            <div class="btn-group">
-              <a [routerLink]="['/surahs', surahs.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </a>
+  @if (surahs && surahs.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.surahs.id">Id</span>
 
-              <a [routerLink]="['/surahs', surahs.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </a>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="number">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.surahs.number">Number</span>
 
-              <button type="submit" (click)="delete(surahs)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nameAr">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.surahs.nameAr">Name Ar</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nameEn">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.surahs.nameEn">Name En</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nameEnTranslation">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.surahs.nameEnTranslation">Name En Translation</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="type">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.surahs.type">Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdAt">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.surahs.createdAt">Created At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="updatedAt">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.surahs.updatedAt">Updated At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (surahs of surahs; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/surahs', surahs.id, 'view']">{{ surahs.id }}</a>
+              </td>
+              <td>{{ surahs.number }}</td>
+              <td>{{ surahs.nameAr }}</td>
+              <td>{{ surahs.nameEn }}</td>
+              <td>{{ surahs.nameEnTranslation }}</td>
+              <td>{{ surahs.type }}</td>
+              <td>{{ surahs.createdAt | formatMediumDatetime }}</td>
+              <td>{{ surahs.updatedAt | formatMediumDatetime }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/surahs', surahs.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/surahs', surahs.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(surahs)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </div>

@@ -1,7 +1,6 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.UserCustom;
-import com.wiam.lms.domain.enumeration.Role;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;

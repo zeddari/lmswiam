@@ -23,7 +23,7 @@
             <column name="paied_by" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="proof" type="varchar(500)">
+            <column name="proof" type="${blobType}">
                 <constraints nullable="true" />
             </column>
             <column name="proof_content_type" type="varchar(255)">
@@ -35,13 +35,16 @@
             <column name="type" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="side" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="validity_start_time" type="${datetimeType}">
                 <constraints nullable="false" />
             </column>
             <column name="validity_end_time" type="${datetimeType}">
                 <constraints nullable="false" />
             </column>
-            <column name="details" type="varchar(500)">
+            <column name="details" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="site9_id" type="bigint">
@@ -90,6 +93,7 @@
             <column name="proof_content_type" type="string"/>
             <column name="paid_at" type="date"/>
             <column name="type" type="string"/>
+            <column name="side" type="string"/>
             <column name="validity_start_time" type="date"/>
             <column name="validity_end_time" type="date"/>
             <column name="details" type="clob"/>

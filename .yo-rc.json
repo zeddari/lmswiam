@@ -16,6 +16,8 @@
     "enableSwaggerCodegen": false,
     "enableTranslation": true,
     "entities": [
+      "Depense",
+      "StudentSponsoring",
       "Departement",
       "Country",
       "Nationality",

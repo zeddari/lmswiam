@@ -32,7 +32,6 @@ describe('Question Form Service', () => {
             a4v: expect.any(Object),
             isActive: expect.any(Object),
             site5: expect.any(Object),
-            quizzes: expect.any(Object),
           }),
         );
       });
@@ -55,7 +54,6 @@ describe('Question Form Service', () => {
             a4v: expect.any(Object),
             isActive: expect.any(Object),
             site5: expect.any(Object),
-            quizzes: expect.any(Object),
           }),
         );
       });

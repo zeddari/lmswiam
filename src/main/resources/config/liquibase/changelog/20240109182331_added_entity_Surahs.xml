@@ -17,16 +17,16 @@
             <column name="number" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="name_ar" type="varchar(500)">
+            <column name="name_ar" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="name_en" type="varchar(500)">
+            <column name="name_en" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="name_en_translation" type="varchar(500)">
+            <column name="name_en_translation" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="type" type="varchar(500)">
+            <column name="type" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="created_at" type="${datetimeType}">

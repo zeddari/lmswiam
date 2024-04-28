@@ -1,15 +1,16 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Progression;
-import com.wiam.lms.service.dto.FollowupAvgDTO;
-import com.wiam.lms.service.dto.FollowupListDTO;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import com.wiam.lms.service.dto.FollowupAvgDTO;
+import com.wiam.lms.service.dto.FollowupListDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -46,21 +47,6 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     )
     Optional<Progression> findOneWithToOneRelationships(@Param("id") Long id);
 
-    @Query("select progression from Progression progression where progression.student.id=:id")
-    List<Progression> findAllByStudent(@Param("id") Long id);
-
-    @Query(
-        "select progression from Progression progression where progression.examType <> ExamType.NONE and progression.isForAttendance = false and progression.student.id=:id"
-    )
-    List<Progression> findExams(@Param("id") Long id);
-
-    @Query(
-        "select progression from Progression progression where progression.sessionInstance.id=:id1 and progression.student.id=:id2 and progression.isForAttendance=true"
-    )
-    Progression isAlreadyExists(@Param("id1") Long id1, @Param("id2") Long id2);
-
-    @Query("select progression from Progression progression left join fetch progression.student where progression.sessionInstance.id=:id")
-    List<Progression> findAllBySessionInstance(@Param("id") Long id);
 
     @Query(
         "select new com.wiam.lms.service.dto.FollowupAvgDTO(progression.tilawaType,AVG(progression.hifdScore)) from Progression progression where progression.student.id=:id and progression.sessionInstance.sessionDate BETWEEN :startDate AND :endDate group by progression.tilawaType"
