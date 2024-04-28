@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type UserCustomFormGroupInput = IUserCustom | PartialWithRequiredKeyOf<NewUserCustom>;
 
-type UserCustomFormDefaults = Pick<NewUserCustom, 'id' | 'diplomas' | 'languages' | 'groups' | 'courses' | 'sessions2s' | 'sessions3s'>;
+type UserCustomFormDefaults = Pick<NewUserCustom, 'id' | 'diplomas' | 'languages'>;
 
 type UserCustomFormGroupContent = {
   id: FormControl<IUserCustom['id'] | NewUserCustom['id']>;
@@ -44,10 +44,6 @@ type UserCustomFormGroupContent = {
   nationality: FormControl<IUserCustom['nationality']>;
   job: FormControl<IUserCustom['job']>;
   departement2: FormControl<IUserCustom['departement2']>;
-  groups: FormControl<IUserCustom['groups']>;
-  courses: FormControl<IUserCustom['courses']>;
-  sessions2s: FormControl<IUserCustom['sessions2s']>;
-  sessions3s: FormControl<IUserCustom['sessions3s']>;
 };
 
 export type UserCustomFormGroup = FormGroup<UserCustomFormGroupContent>;
@@ -113,10 +109,6 @@ export class UserCustomFormService {
       nationality: new FormControl(userCustomRawValue.nationality),
       job: new FormControl(userCustomRawValue.job),
       departement2: new FormControl(userCustomRawValue.departement2),
-      groups: new FormControl(userCustomRawValue.groups ?? []),
-      courses: new FormControl(userCustomRawValue.courses ?? []),
-      sessions2s: new FormControl(userCustomRawValue.sessions2s ?? []),
-      sessions3s: new FormControl(userCustomRawValue.sessions3s ?? []),
     });
   }
 
@@ -139,10 +131,6 @@ export class UserCustomFormService {
       id: null,
       diplomas: [],
       languages: [],
-      groups: [],
-      courses: [],
-      sessions2s: [],
-      sessions3s: [],
     };
   }
 }

@@ -1,50 +1,54 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <div *ngIf="site">
-      <h2 data-cy="siteDetailsHeading"><span jhiTranslate="lmswiamApp.site.detail.title">Site</span></h2>
+    @if (site) {
+      <div>
+        <h2 data-cy="siteDetailsHeading"><span jhiTranslate="lmswiamApp.site.detail.title">Site</span></h2>
 
-      <hr />
+        <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+        <jhi-alert-error></jhi-alert-error>
 
-      <jhi-alert></jhi-alert>
+        <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ site.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.site.nameAr">Name Ar</span></dt>
-        <dd>
-          <span>{{ site.nameAr }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.site.nameLat">Name Lat</span></dt>
-        <dd>
-          <span>{{ site.nameLat }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.site.description">Description</span></dt>
-        <dd>
-          <span>{{ site.description }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.site.localisation">Localisation</span></dt>
-        <dd>
-          <span>{{ site.localisation }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.site.city">City</span></dt>
-        <dd>
-          <div *ngIf="site.city">
-            <a [routerLink]="['/city', site.city.id, 'view']">{{ site.city.nameAr }}</a>
-          </div>
-        </dd>
-      </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ site.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.site.nameAr">Name Ar</span></dt>
+          <dd>
+            <span>{{ site.nameAr }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.site.nameLat">Name Lat</span></dt>
+          <dd>
+            <span>{{ site.nameLat }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.site.description">Description</span></dt>
+          <dd>
+            <span>{{ site.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.site.localisation">Localisation</span></dt>
+          <dd>
+            <span>{{ site.localisation }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.site.city">City</span></dt>
+          <dd>
+            @if (site.city) {
+              <div>
+                <a [routerLink]="['/city', site.city.id, 'view']">{{ site.city.nameAr }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
 
-      <button type="button" [routerLink]="['/site', site.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
-    </div>
+        <button type="button" [routerLink]="['/site', site.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
   </div>
 </div>

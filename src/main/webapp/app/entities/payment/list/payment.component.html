@@ -41,178 +41,226 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-          <fa-icon icon="trash-alt"></fa-icon>
-        </button>
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
       </div>
     </div>
   </form>
 
-  <div class="alert alert-warning" id="no-result" *ngIf="payments?.length === 0">
-    <span jhiTranslate="lmswiamApp.payment.home.notFound">No Payments found</span>
-  </div>
+  @if (payments?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="lmswiamApp.payment.home.notFound">No Payments found</span>
+    </div>
+  }
 
-  <div class="table-responsive table-entities" id="entities" *ngIf="payments && payments.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id">ID</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="amount">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.amount">Amount</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="paymentMethod">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.paymentMethod">Payment Method</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="paiedBy">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.paiedBy">Paied By</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="proof">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.proof">Proof</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="paidAt">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.paidAt">Paid At</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="type">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.type">Type</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="validityStartTime">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.validityStartTime">Validity Start Time</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="validityEndTime">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.validityEndTime">Validity End Time</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="details">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.details">Details</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="site9.nameAr">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.site9">Site 9</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="enrolment.ref">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.enrolment">Enrolment</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="sponsoring.ref">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.sponsoring">Sponsoring</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="session.title">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.session">Session</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="currency.nameAr">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.payment.currency">Currency</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let payment of payments; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/payment', payment.id, 'view']">{{ payment.id }}</a>
-          </td>
-          <td>{{ payment.amount }}</td>
-          <td jhiTranslate="{{ 'lmswiamApp.PaymentMode.' + payment.paymentMethod }}">{{ payment.paymentMethod }}</td>
-          <td>{{ payment.paiedBy }}</td>
-          <td>
-            <a *ngIf="payment.proof" (click)="openFile(payment.proof, payment.proofContentType)">
-              <img [src]="'data:' + payment.proofContentType + ';base64,' + payment.proof" style="max-height: 30px" alt="payment image" />
-            </a>
-            <span *ngIf="payment.proof">{{ payment.proofContentType }}, {{ byteSize(payment.proof) }}</span>
-          </td>
-          <td>{{ payment.paidAt | formatMediumDatetime }}</td>
-          <td jhiTranslate="{{ 'lmswiamApp.PaymentType.' + payment.type }}">{{ payment.type }}</td>
-          <td>{{ payment.validityStartTime | formatMediumDatetime }}</td>
-          <td>{{ payment.validityEndTime | formatMediumDatetime }}</td>
-          <td>{{ payment.details }}</td>
-          <td>
-            <div *ngIf="payment.site9">
-              <a [routerLink]="['/site', payment.site9.id, 'view']">{{ payment.site9.nameAr }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="payment.enrolment">
-              <a [routerLink]="['/enrolement', payment.enrolment.id, 'view']">{{ payment.enrolment.ref }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="payment.sponsoring">
-              <a [routerLink]="['/sponsoring', payment.sponsoring.id, 'view']">{{ payment.sponsoring.ref }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="payment.session">
-              <a [routerLink]="['/session', payment.session.id, 'view']">{{ payment.session.title }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="payment.currency">
-              <a [routerLink]="['/currency', payment.currency.id, 'view']">{{ payment.currency.nameAr }}</a>
-            </div>
-          </td>
-          <td class="text-end">
-            <div class="btn-group">
-              <a [routerLink]="['/payment', payment.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </a>
+  @if (payments && payments.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
 
-              <a [routerLink]="['/payment', payment.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </a>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="amount">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.amount">Amount</span>
 
-              <button type="submit" (click)="delete(payment)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paymentMethod">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.paymentMethod">Payment Method</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiedBy">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.paiedBy">Paied By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="proof">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.proof">Proof</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paidAt">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.paidAt">Paid At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="type">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.type">Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="side">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.side">Side</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="validityStartTime">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.validityStartTime">Validity Start Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="validityEndTime">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.validityEndTime">Validity End Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="details">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.details">Details</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="site9.nameAr">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.site9">Site 9</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="enrolment.ref">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.enrolment">Enrolment</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="sponsoring.ref">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.sponsoring">Sponsoring</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="session.title">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.session">Session</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="currency.nameAr">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.payment.currency">Currency</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (payment of payments; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/payment', payment.id, 'view']">{{ payment.id }}</a>
+              </td>
+              <td>{{ payment.amount }}</td>
+              <td jhiTranslate="{{ 'lmswiamApp.PaymentMode.' + payment.paymentMethod }}">{{ payment.paymentMethod }}</td>
+              <td>{{ payment.paiedBy }}</td>
+              <td>
+                @if (payment.proof) {
+                  <a (click)="openFile(payment.proof, payment.proofContentType)">
+                    <img
+                      [src]="'data:' + payment.proofContentType + ';base64,' + payment.proof"
+                      style="max-height: 30px"
+                      alt="payment image"
+                    />
+                  </a>
+                  <span>{{ payment.proofContentType }}, {{ byteSize(payment.proof) }}</span>
+                }
+              </td>
+              <td>{{ payment.paidAt | formatMediumDatetime }}</td>
+              <td jhiTranslate="{{ 'lmswiamApp.PaymentType.' + payment.type }}">{{ payment.type }}</td>
+              <td jhiTranslate="{{ 'lmswiamApp.PaymentSide.' + payment.side }}">{{ payment.side }}</td>
+              <td>{{ payment.validityStartTime | formatMediumDatetime }}</td>
+              <td>{{ payment.validityEndTime | formatMediumDatetime }}</td>
+              <td>{{ payment.details }}</td>
+              <td>
+                @if (payment.site9) {
+                  <div>
+                    <a [routerLink]="['/site', payment.site9.id, 'view']">{{ payment.site9.nameAr }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (payment.enrolment) {
+                  <div>
+                    <a [routerLink]="['/enrolement', payment.enrolment.id, 'view']">{{ payment.enrolment.ref }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (payment.sponsoring) {
+                  <div>
+                    <a [routerLink]="['/sponsoring', payment.sponsoring.id, 'view']">{{ payment.sponsoring.ref }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (payment.session) {
+                  <div>
+                    <a [routerLink]="['/session', payment.session.id, 'view']">{{ payment.session.title }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (payment.currency) {
+                  <div>
+                    <a [routerLink]="['/currency', payment.currency.id, 'view']">{{ payment.currency.nameAr }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/payment', payment.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/payment', payment.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(payment)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </div>

@@ -41,69 +41,82 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-          <fa-icon icon="trash-alt"></fa-icon>
-        </button>
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
       </div>
     </div>
   </form>
 
-  <div class="alert alert-warning" id="no-result" *ngIf="nationalities?.length === 0">
-    <span jhiTranslate="lmswiamApp.nationality.home.notFound">No Nationalities found</span>
-  </div>
+  @if (nationalities?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="lmswiamApp.nationality.home.notFound">No Nationalities found</span>
+    </div>
+  }
 
-  <div class="table-responsive table-entities" id="entities" *ngIf="nationalities && nationalities.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id">ID</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="nameAr">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.nationality.nameAr">Name Ar</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="nameLat">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.nationality.nameLat">Name Lat</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let nationality of nationalities; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/nationality', nationality.id, 'view']">{{ nationality.id }}</a>
-          </td>
-          <td>{{ nationality.nameAr }}</td>
-          <td>{{ nationality.nameLat }}</td>
-          <td class="text-end">
-            <div class="btn-group">
-              <a [routerLink]="['/nationality', nationality.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </a>
+  @if (nationalities && nationalities.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
 
-              <a [routerLink]="['/nationality', nationality.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </a>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nameAr">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.nationality.nameAr">Name Ar</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nameLat">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.nationality.nameLat">Name Lat</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (nationality of nationalities; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/nationality', nationality.id, 'view']">{{ nationality.id }}</a>
+              </td>
+              <td>{{ nationality.nameAr }}</td>
+              <td>{{ nationality.nameLat }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/nationality', nationality.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
 
-              <button type="submit" (click)="delete(nationality)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+                  <a [routerLink]="['/nationality', nationality.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(nationality)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </div>

@@ -164,7 +164,7 @@ public class ReviewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reviews in body.
      */
     @GetMapping("")
-    public List<Review> getAllReviews(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
+    public List<Review> getAllReviews(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Reviews");
         if (eagerload) {
             return reviewRepository.findAllWithEagerRelationships();
@@ -180,7 +180,7 @@ public class ReviewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the review, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Review> getReview(@PathVariable Long id) {
+    public ResponseEntity<Review> getReview(@PathVariable("id") Long id) {
         log.debug("REST request to get Review : {}", id);
         Optional<Review> review = reviewRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(review);
@@ -193,7 +193,7 @@ public class ReviewResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteReview(@PathVariable("id") Long id) {
         log.debug("REST request to delete Review : {}", id);
         reviewRepository.deleteById(id);
         reviewSearchRepository.deleteFromIndexById(id);
@@ -211,7 +211,7 @@ public class ReviewResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Review> searchReviews(@RequestParam String query) {
+    public List<Review> searchReviews(@RequestParam("query") String query) {
         log.debug("REST request to search Reviews for query {}", query);
         try {
             return StreamSupport.stream(reviewSearchRepository.search(query).spliterator(), false).toList();

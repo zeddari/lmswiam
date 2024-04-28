@@ -19,6 +19,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -39,7 +40,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link ProjectResource} REST controller.
@@ -305,7 +305,7 @@ class ProjectResourceIT {
             .andExpect(jsonPath("$.[*].goals").value(hasItem(DEFAULT_GOALS.toString())))
             .andExpect(jsonPath("$.[*].requirements").value(hasItem(DEFAULT_REQUIREMENTS.toString())))
             .andExpect(jsonPath("$.[*].imageLinkContentType").value(hasItem(DEFAULT_IMAGE_LINK_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].imageLink").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE_LINK))))
+            .andExpect(jsonPath("$.[*].imageLink").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_IMAGE_LINK))))
             .andExpect(jsonPath("$.[*].videoLink").value(hasItem(DEFAULT_VIDEO_LINK.toString())))
             .andExpect(jsonPath("$.[*].budget").value(hasItem(DEFAULT_BUDGET.doubleValue())))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
@@ -349,7 +349,7 @@ class ProjectResourceIT {
             .andExpect(jsonPath("$.goals").value(DEFAULT_GOALS.toString()))
             .andExpect(jsonPath("$.requirements").value(DEFAULT_REQUIREMENTS.toString()))
             .andExpect(jsonPath("$.imageLinkContentType").value(DEFAULT_IMAGE_LINK_CONTENT_TYPE))
-            .andExpect(jsonPath("$.imageLink").value(Base64Utils.encodeToString(DEFAULT_IMAGE_LINK)))
+            .andExpect(jsonPath("$.imageLink").value(Base64.getEncoder().encodeToString(DEFAULT_IMAGE_LINK)))
             .andExpect(jsonPath("$.videoLink").value(DEFAULT_VIDEO_LINK.toString()))
             .andExpect(jsonPath("$.budget").value(DEFAULT_BUDGET.doubleValue()))
             .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
@@ -716,7 +716,7 @@ class ProjectResourceIT {
             .andExpect(jsonPath("$.[*].goals").value(hasItem(DEFAULT_GOALS.toString())))
             .andExpect(jsonPath("$.[*].requirements").value(hasItem(DEFAULT_REQUIREMENTS.toString())))
             .andExpect(jsonPath("$.[*].imageLinkContentType").value(hasItem(DEFAULT_IMAGE_LINK_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].imageLink").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE_LINK))))
+            .andExpect(jsonPath("$.[*].imageLink").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_IMAGE_LINK))))
             .andExpect(jsonPath("$.[*].videoLink").value(hasItem(DEFAULT_VIDEO_LINK.toString())))
             .andExpect(jsonPath("$.[*].budget").value(hasItem(DEFAULT_BUDGET.doubleValue())))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))

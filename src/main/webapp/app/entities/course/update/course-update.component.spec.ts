@@ -58,10 +58,10 @@ describe('Course Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call UserCustom query and add missing value', () => {
       const course: ICourse = { id: 456 };
-      const professors: IUserCustom[] = [{ id: 12805 }];
+      const professors: IUserCustom[] = [{ id: 29505 }];
       course.professors = professors;
 
-      const userCustomCollection: IUserCustom[] = [{ id: 6504 }];
+      const userCustomCollection: IUserCustom[] = [{ id: 15319 }];
       jest.spyOn(userCustomService, 'query').mockReturnValue(of(new HttpResponse({ body: userCustomCollection })));
       const additionalUserCustoms = [...professors];
       const expectedCollection: IUserCustom[] = [...additionalUserCustoms, ...userCustomCollection];
@@ -124,7 +124,7 @@ describe('Course Management Update Component', () => {
 
     it('Should update editForm', () => {
       const course: ICourse = { id: 456 };
-      const professors: IUserCustom = { id: 17879 };
+      const professors: IUserCustom = { id: 13992 };
       course.professors = [professors];
       const site1: ISite = { id: 5733 };
       course.site1 = site1;

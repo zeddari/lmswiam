@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang= ar dir= rtl>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+        .detailed-report tr:nth-child(even){
+            background-color: #F4F5F5;
+        }
+        .border-left-bottom{
+            border-left: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+        }
+        .border-table{
+            border: .19rem solid #5344C6;
+        }
+    </style>
+</head>
+<body style="font-family: 'Tajawal', sans-serif; font-weight: 500;" class="m-5">
+<table class="table text-center table-borderless mb-3">
+  <tr>
+    <td style="font-size: 30px; text-align: right; font-weight: 600; color: #5344C6; text-decoration: underline #5344C6;">  تقرير حلقة دوري</td>
+    <td style="text-align: left;"><img src="img/alwiam-logo.png" alt=""></td>
+  </tr>
+</table>
+<div class="d-flex col-12">
+  <table class="table text-center ms-4" style="font-size: 1rem;">
+    <tr>
+      <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344C6; color: #5344C6;">إسم المدرسة</th>
+    </tr>
+    <tr>
+      <td class="py-2 px-4" style="background-color: #F4F5F5;">مركز تابريكت</td>
+    </tr>
+  </table>
+  <table class="table text-center ms-4" style="font-size: 1rem;">
+    <tr>
+      <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344C6; color: #5344C6;">إسم الحلقة</th>
+    </tr>
+    <tr>
+      <td class="py-2 px-4" style="background-color: #F4F5F5;">مركز تابريكت</td>
+    </tr>
+  </table>
+  <table class="table text-center" style="font-size: 1rem;">
+    <tr>
+      <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344C6; color: #5344C6;"> فترة التقرير - هجري</th>
+    </tr>
+    <tr>
+      <td class="py-2 px-4" style="background-color: #F4F5F5;">من 20 شعبان 1445 إلى 21 رمضان 1445</td>
+    </tr>
+  </table>
+</div>
+<div class="d-flex col-12">
+  <table class="table text-center ms-4" style="font-size: 1rem;">
+    <tr>
+      <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344C6; color: #5344C6;">إسم المعلم</th>
+    </tr>
+    <tr>
+      <td class="py-2 px-4" style="background-color: #F4F5F5;">أبو بكر الصديق</td>
+    </tr>
+  </table>
+  <table class="table text-center ms-4" style="font-size: 1rem;">
+    <tr>
+      <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344C6; color: #5344C6;">الفئة</th>
+    </tr>
+    <tr>
+      <td class="py-2 px-4" style="background-color: #F4F5F5;">ذكر</td>
+    </tr>
+  </table>
+  <table class="table text-center" style="font-size: 1rem;">
+    <tr>
+      <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344C6; color: #5344C6;"> فترة التقرير - ميلادي</th>
+    </tr>
+    <tr>
+      <td class="py-2 px-4" style="background-color: #F4F5F5;">من 01 مارس 2024 إلى 31 مارس 2024</td>
+    </tr>
+  </table>
+</div>
+<!-- <table  class="table text-center" style="font-size: 16px;">
+    <tr style="border: 2px solid #fff">
+        <td style="width: 15%; background-color: #E6E3F1; color: #5344C6;">إسم المدرسة</td>
+        <td style="width: 35%; background-color: #F4F5F5;">مركز تابريكت</td>
+        <td style="width: 15%; background-color: #E6E3F1; color: #5344C6;">إسم الحلقة</td>
+        <td style="width: 35%; background-color: #F4F5F5;">أبو بكر الصديق</td>
+    </tr>
+    <tr style="border: 2px solid #fff">
+        <td style="width: 15%; background-color: #E6E3F1; color: #5344C6;">إسم المعلم</td>
+        <td style="width: 35%; background-color: #F4F5F5;"></td>
+        <td style="width: 15%;background-color: #E6E3F1; color: #5344C6;">الفئة</td>
+        <td style="width: 35%; background-color: #F4F5F5;">ذكر</td>
+    </tr>
+    <tr style="border: 2px solid #fff; border-top: 6px solid #fff;">
+        <td class="text-center align-middle" rowspan="2" style="width: 15%; background-color: #E6E3F1; color: #5344C6;">فترة التقرير</td>
+        <td class="text-center " style="width: 35%; background-color: #F4F5F5; color: #191C17; border-left: 2px solid #fff;">هجري</td>
+        <td colspan="2" class="text-center " style="width: 50%; background-color: #F4F5F5; color: #191C17;">من 20 شعبان 1445 إلى 21 رمضان 1445</td>
+    </tr>
+    <tr style="border: 2px solid #fff">
+        <td class="text-center " style="width: 35%; background-color: #F4F5F5; color: #191C17;  border-left: 2px solid #fff;">ميلادي</td>
+        <td colspan="2" class="text-center " style="width: 50%; background-color: #F4F5F5; color: #191C17;">من 01 مارس 2024 إلى 31 مارس 2024</td>
+    </tr>
+</table> -->
+<table class="table mt-4 border-table">
+  <tr class="">
+    <th colspan="8" class="text-center" style=" color: #5344C6; border-bottom: .5rem solid #5344C6;">التقرير الإجمالي</td>
+  </tr>
+  <tr>
+    <th class="text-center border-left-bottom" style="width: 15%; background-color: #E6E3F1; color: #5344C6;">عدد الطلاب</th>
+    <td class="text-center border-left-bottom" style="width: 10%; color: #191C17; background-color: #F4F5F5;">11</td>
+    <th class="text-center border-left-bottom" style="width: 15%; background-color: #E6E3F1; color: #5344C6;">عدد أيام الدوام</th>
+    <td class="text-center border-left-bottom" style="width: 10%; color: #191C17; background-color: #F4F5F5;">22</td>
+    <th class="text-center border-left-bottom" style="width: 15%; background-color: #E6E3F1; color: #5344C6;">دروس المنهج المصاحب</th>
+    <td class="text-center border-left-bottom" style="width: 10%; color: #191C17; background-color: #F4F5F5;">0</td>
+    <th class="text-center border-left-bottom" style="width: 15%; background-color: #E6E3F1; color: #5344C6;">عدد دروس التجويد</th>
+    <td class="text-center border-left-bottom" style="width: 10%; color: #191C17; background-color: #F4F5F5;">0</td>
+  </tr>
+  <tr>
+    <th class="text-center border-left-bottom" style="width: 15%; background-color: #E6E3F1; color: #5344C6;">عدد الأجزاء</th>
+    <td class="text-center border-left-bottom" style="width: 10%; color: #191C17; background-color: #F4F5F5;">11</td>
+    <th class="text-center border-left-bottom" style="width: 15%; background-color: #E6E3F1; color: #5344C6;">عدد اجزاء مراجعة</th>
+    <td class="text-center border-left-bottom" style="width: 10%; color: #191C17; background-color: #F4F5F5;">22</td>
+    <th class="text-center border-left-bottom" style="width: 15%; background-color: #E6E3F1; color: #5344C6;">عدد أجزاء الواجب المنزلي</th>
+    <td class="text-center border-left-bottom" style="width: 10%; color: #191C17; background-color: #F4F5F5;">0</td>
+    <th class="text-center border-left-bottom" style="width: 15%; background-color: #E6E3F1; color: #5344C6;">صفحات التلقين الجماعي</th>
+    <td class="text-center border-left-bottom" style="width: 10%; color: #191C17; background-color: #F4F5F5;">0</td>
+  </tr>
+
+</table>
+<table class="table detailed-report mt-5 border-table">
+  <tr>
+    <th colspan="13" class="text-center " style="color: #5344C6; border-bottom: .5rem solid #5344C6;">التقرير التفصيلي</th>
+  </tr>
+  <tr>
+    <th class="text-center align-middle" rowspan="2" style="width: 2%;border: 2px solid #fff;  background-color: #E2E6EA;">م</td>
+    <th class="text-center align-middle" rowspan="2" style="width: 14%; border: 2px solid #fff; background-color: #E2E6EA;">إسم الطالب</td>
+    <th class="text-center" colspan="3" style="width: 20%; border: 2px solid #fff; background-color: #E2E6EA;background-color: #b7600845; color: #b76008;">حفظ</td>
+    <th class="text-center" colspan="3" style="width: 20%; border: 2px solid #fff; background-color: #E2E6EA; background-color: #5344C645; color: #5344C6;">مراجعة</td>
+    <th class="text-center" colspan="3" style="width: 20%; border: 2px solid #fff; background-color: #E2E6EA; background-color: #CB401545; color: #CB4015;">الواجب المنزلي</td>
+    <th class="text-center align-middle" rowspan="2" style="width: 7%; border: 2px solid #fff; background-color: #E2E6EA;">أيام الدوام</td>
+    <th class="text-center align-middle" rowspan="2" style="width: 7%; border: 2px solid #fff; background-color: #E2E6EA;">نسبة المواظبة</td>
+  </tr>
+  <tr>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #b7600845;">عدد الصفحات</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #b7600845;">عدد الأجزاء</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #b7600845;">معدل الدرجة</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #5344C645;">عدد الصفحات</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #5344C645;">عدد الأجزاء</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #5344C645;">معدل الدرجة</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #CB401545;">عدد الصفحات</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #CB401545;">عدد الأجزاء</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #CB401545;">معدل الدرجة</td>
+  </tr>
+  <tr>
+    <td class="text-center" style="border: 2px solid #fff;">1</td>
+    <td class="text-center" style="border: 2px solid #fff;">آدم الزويني</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822;">5.60</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822;">0.28</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822;">17</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+    <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+    <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+    <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+    <td class="text-center" style="border: 2px solid #fff;">6</td>
+    <td class="text-center" style="border: 2px solid #fff;">27.27%</td>
+  </tr>
+  <tr>
+    <td class="text-center" style="border: 2px solid #fff;">2</td>
+    <td class="text-center" style="border: 2px solid #fff;">أنس السباعي</td>
+    <td class="text-center" style="border: 1px solid #fff;background-color: #b7600822;">5.60</td>
+    <td class="text-center" style="border: 1px solid #fff;background-color: #b7600822;">0.28</td>
+    <td class="text-center" style="border: 1px solid #fff;background-color: #b7600822;">17</td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+    <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+    <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+    <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+    <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+    <td class="text-center" style="border: 2px solid #fff;">6</td>
+    <td class="text-center" style="border: 2px solid #fff;">27.27%</td>
+  </tr><tr>
+  <td class="text-center" style="border: 2px solid #fff;">3</td>
+  <td class="text-center" style="border: 2px solid #fff;">إسلام الزويني</td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #b7600822;">5.60</td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #b7600822;">0.28</td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #b7600822;">17</td>
+  <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+  <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+  <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+  <td class="text-center" style="border: 2px solid #fff;">6</td>
+  <td class="text-center" style="border: 2px solid #fff;">27.27%</td>
+</tr><tr>
+  <td class="text-center" style="border: 2px solid #fff;">4</td>
+  <td class="text-center" style="border: 2px solid #fff;">آدم الزويني</td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #b7600822;">5.60</td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #b7600822;">0.28</td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #b7600822;">17</td>
+  <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+  <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+  <td class="text-center" style="border: 1px solid #fff; background-color: #5344C622;"></td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+  <td class="text-center" style="border: 1px solid #fff;background-color: #CB401522;"></td>
+  <td class="text-center" style="border: 2px solid #fff;">6</td>
+  <td class="text-center" style="border: 2px solid #fff;">27.27%</td>
+</tr>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -23,28 +23,28 @@
             <column name="title_lat" type="varchar(100)">
                 <constraints nullable="false" />
             </column>
-            <column name="description" type="varchar(500)">
+            <column name="description" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="sub_titles" type="varchar(500)">
+            <column name="sub_titles" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="requirements" type="varchar(500)">
+            <column name="requirements" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="options" type="varchar(500)">
+            <column name="options" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="duration" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="image_link" type="blob">
+            <column name="image_link" type="${blobType}">
                 <constraints nullable="true" />
             </column>
             <column name="image_link_content_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="video_link" type="varchar(500)">
+            <column name="video_link" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="price" type="double">
@@ -53,13 +53,13 @@
             <column name="is_active" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="activate_at" type="datetime">
+            <column name="activate_at" type="${datetimeType}">
                 <constraints nullable="true" />
             </column>
             <column name="is_confirmed" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="confirmed_at" type="datetime">
+            <column name="confirmed_at" type="${datetimeType}">
                 <constraints nullable="true" />
             </column>
             <column name="site1_id" type="bigint">
@@ -70,8 +70,8 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <dropDefaultValue tableName="course" columnName="activate_at" columnDataType="datetime"/>
-        <dropDefaultValue tableName="course" columnName="confirmed_at" columnDataType="datetime"/>
+        <dropDefaultValue tableName="course" columnName="activate_at" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="course" columnName="confirmed_at" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <changeSet id="20240109175631-1-relations" author="jhipster">

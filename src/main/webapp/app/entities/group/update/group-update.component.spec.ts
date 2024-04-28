@@ -76,10 +76,10 @@ describe('Group Management Update Component', () => {
 
     it('Should call UserCustom query and add missing value', () => {
       const group: IGroup = { id: 456 };
-      const elements: IUserCustom[] = [{ id: 15319 }];
+      const elements: IUserCustom[] = [{ id: 4502 }];
       group.elements = elements;
 
-      const userCustomCollection: IUserCustom[] = [{ id: 13992 }];
+      const userCustomCollection: IUserCustom[] = [{ id: 31140 }];
       jest.spyOn(userCustomService, 'query').mockReturnValue(of(new HttpResponse({ body: userCustomCollection })));
       const additionalUserCustoms = [...elements];
       const expectedCollection: IUserCustom[] = [...additionalUserCustoms, ...userCustomCollection];
@@ -122,7 +122,7 @@ describe('Group Management Update Component', () => {
       const group: IGroup = { id: 456 };
       const group1: IGroup = { id: 761 };
       group.group1 = group1;
-      const elements: IUserCustom = { id: 15692 };
+      const elements: IUserCustom = { id: 13583 };
       group.elements = [elements];
       const site11: ISite = { id: 6891 };
       group.site11 = site11;

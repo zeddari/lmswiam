@@ -162,7 +162,7 @@ public class TopicResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of topics in body.
      */
     @GetMapping("")
-    public List<Topic> getAllTopics(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
+    public List<Topic> getAllTopics(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Topics");
         if (eagerload) {
             return topicRepository.findAllWithEagerRelationships();
@@ -178,7 +178,7 @@ public class TopicResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the topic, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Topic> getTopic(@PathVariable Long id) {
+    public ResponseEntity<Topic> getTopic(@PathVariable("id") Long id) {
         log.debug("REST request to get Topic : {}", id);
         Optional<Topic> topic = topicRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(topic);
@@ -191,7 +191,7 @@ public class TopicResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTopic(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTopic(@PathVariable("id") Long id) {
         log.debug("REST request to delete Topic : {}", id);
         topicRepository.deleteById(id);
         topicSearchRepository.deleteFromIndexById(id);
@@ -209,7 +209,7 @@ public class TopicResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Topic> searchTopics(@RequestParam String query) {
+    public List<Topic> searchTopics(@RequestParam("query") String query) {
         log.debug("REST request to search Topics for query {}", query);
         try {
             return StreamSupport.stream(topicSearchRepository.search(query).spliterator(), false).toList();

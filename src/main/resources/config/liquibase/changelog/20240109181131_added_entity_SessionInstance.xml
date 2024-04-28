@@ -26,7 +26,7 @@
             <column name="duration" type="integer">
                 <constraints nullable="false" />
             </column>
-            <column name="info" type="varchar(500)">
+            <column name="info" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="attendance" type="varchar(255)">

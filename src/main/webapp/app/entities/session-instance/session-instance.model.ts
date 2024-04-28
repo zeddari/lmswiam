@@ -1,4 +1,5 @@
 import dayjs from 'dayjs/esm';
+import { IProgression } from 'app/entities/progression/progression.model';
 import { ISessionLink } from 'app/entities/session-link/session-link.model';
 import { ISite } from 'app/entities/site/site.model';
 import { ISession } from 'app/entities/session/session.model';
@@ -14,9 +15,10 @@ export interface ISessionInstance {
   attendance?: keyof typeof Attendance | null;
   justifRef?: string | null;
   isActive?: boolean | null;
-  links?: Pick<ISessionLink, 'id' | 'title'>[] | null;
-  site16?: Pick<ISite, 'id' | 'nameAr'> | null;
-  session1?: Pick<ISession, 'id' | 'title'> | null;
+  progressions?: IProgression[] | null;
+  links?: ISessionLink[] | null;
+  site16?: ISite | null;
+  session1?: ISession | null;
 }
 
 export type NewSessionInstance = Omit<ISessionInstance, 'id'> & { id: null };

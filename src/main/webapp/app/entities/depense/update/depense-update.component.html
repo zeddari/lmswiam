@@ -1,0 +1,144 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-depense-heading" data-cy="DepenseCreateUpdateHeading" jhiTranslate="lmswiamApp.depense.home.createOrEditLabel">
+        Create or edit a Depense
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.depense.type" for="field_type">Type</label>
+          <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
+            <option [ngValue]="null">{{ 'lmswiamApp.DepenseType.null' | translate }}</option>
+            @for (depenseType of depenseTypeValues; track $index) {
+              <option [value]="depenseType">{{ 'lmswiamApp.DepenseType.' + depenseType | translate }}</option>
+            }
+          </select>
+          @if (editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)) {
+            <div>
+              @if (editForm.get('type')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.depense.target" for="field_target">Target</label>
+          <select class="form-control" name="target" formControlName="target" id="field_target" data-cy="target">
+            <option [ngValue]="null">{{ 'lmswiamApp.DepenseTarget.null' | translate }}</option>
+            @for (depenseTarget of depenseTargetValues; track $index) {
+              <option [value]="depenseTarget">{{ 'lmswiamApp.DepenseTarget.' + depenseTarget | translate }}</option>
+            }
+          </select>
+          @if (editForm.get('target')!.invalid && (editForm.get('target')!.dirty || editForm.get('target')!.touched)) {
+            <div>
+              @if (editForm.get('target')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.depense.frequency" for="field_frequency">Frequency</label>
+          <select class="form-control" name="frequency" formControlName="frequency" id="field_frequency" data-cy="frequency">
+            <option [ngValue]="null">{{ 'lmswiamApp.DepenseFrequency.null' | translate }}</option>
+            @for (depenseFrequency of depenseFrequencyValues; track $index) {
+              <option [value]="depenseFrequency">{{ 'lmswiamApp.DepenseFrequency.' + depenseFrequency | translate }}</option>
+            }
+          </select>
+          @if (editForm.get('frequency')!.invalid && (editForm.get('frequency')!.dirty || editForm.get('frequency')!.touched)) {
+            <div>
+              @if (editForm.get('frequency')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.depense.amount" for="field_amount">Amount</label>
+          <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
+          @if (editForm.get('amount')!.invalid && (editForm.get('amount')!.dirty || editForm.get('amount')!.touched)) {
+            <div>
+              @if (editForm.get('amount')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('amount')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }"
+                  >This field should be at least 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('amount')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.depense.ref" for="field_ref">Ref</label>
+          <input type="text" class="form-control" name="ref" id="field_ref" data-cy="ref" formControlName="ref" />
+          @if (editForm.get('ref')!.invalid && (editForm.get('ref')!.dirty || editForm.get('ref')!.touched)) {
+            <div>
+              @if (editForm.get('ref')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.depense.message" for="field_message">Message</label>
+          <input type="text" class="form-control" name="message" id="field_message" data-cy="message" formControlName="message" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="lmswiamApp.depense.resource" for="field_resource">Resource</label>
+          <select
+            class="form-control"
+            id="field_resource"
+            data-cy="resource"
+            name="resource"
+            formControlName="resource"
+            [compareWith]="compareUserCustom"
+          >
+            <option [ngValue]="null"></option>
+            @for (userCustomOption of userCustomsSharedCollection; track $index) {
+              <option [ngValue]="userCustomOption">{{ userCustomOption.firstName }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

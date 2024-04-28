@@ -12,10 +12,10 @@ export interface ICertificate {
   riwaya?: keyof typeof Riwayats | null;
   miqdar?: number | null;
   observation?: string | null;
-  site19?: Pick<ISite, 'id' | 'nameAr'> | null;
-  userCustom6?: Pick<IUserCustom, 'id' | 'firstName'> | null;
-  comitte?: Pick<IGroup, 'id' | 'nameAr'> | null;
-  topic4?: Pick<ITopic, 'id' | 'titleAr'> | null;
+  site19?: ISite | null;
+  userCustom6?: IUserCustom | null;
+  comitte?: IGroup | null;
+  topic4?: ITopic | null;
 }
 
 export type NewCertificate = Omit<ICertificate, 'id'> & { id: null };

@@ -1,20 +1,7 @@
 package com.wiam.lms.web.rest;
 
-import com.wiam.lms.domain.Group;
-import com.wiam.lms.domain.Progression;
-import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.SessionInstance;
-import com.wiam.lms.domain.UserCustom;
-import com.wiam.lms.domain.dto.RemoteSessionDto;
-import com.wiam.lms.domain.dto.SessionInstanceUniqueDto;
-import com.wiam.lms.domain.enumeration.Attendance;
-import com.wiam.lms.domain.enumeration.ExamType;
-import com.wiam.lms.domain.enumeration.Riwayats;
-import com.wiam.lms.domain.enumeration.Tilawa;
-import com.wiam.lms.repository.GroupRepository;
-import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.SessionInstanceRepository;
-import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.SessionInstanceSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
@@ -22,15 +9,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,21 +38,13 @@ public class SessionInstanceResource {
     private String applicationName;
 
     private final SessionInstanceRepository sessionInstanceRepository;
-    private final ProgressionRepository progressionRepository;
-    private final GroupRepository groupRepository;
+
     private final SessionInstanceSearchRepository sessionInstanceSearchRepository;
-    private final UserCustomRepository userCustomRepository;
 
     public SessionInstanceResource(
-        UserCustomRepository userCustomRepository,
-        GroupRepository groupRepository,
-        ProgressionRepository progressionRepository,
         SessionInstanceRepository sessionInstanceRepository,
         SessionInstanceSearchRepository sessionInstanceSearchRepository
     ) {
-        this.userCustomRepository = userCustomRepository;
-        this.groupRepository = groupRepository;
-        this.progressionRepository = progressionRepository;
         this.sessionInstanceRepository = sessionInstanceRepository;
         this.sessionInstanceSearchRepository = sessionInstanceSearchRepository;
     }
@@ -89,14 +62,6 @@ public class SessionInstanceResource {
         log.debug("REST request to save SessionInstance : {}", sessionInstance);
         if (sessionInstance.getId() != null) {
             throw new BadRequestAlertException("A new sessionInstance cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        SessionInstance alreadyResult = sessionInstanceRepository.findOne(
-            sessionInstance.getSession1().getId(),
-            sessionInstance.getSessionDate(),
-            sessionInstance.getGroup().getId()
-        );
-        if (alreadyResult != null) {
-            throw new BadRequestAlertException("There session instance already exists!", ENTITY_NAME, "idexists");
         }
         SessionInstance result = sessionInstanceRepository.save(sessionInstance);
         sessionInstanceSearchRepository.index(result);
@@ -218,73 +183,15 @@ public class SessionInstanceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sessionInstances in body.
      */
     @GetMapping("")
-    public List<SessionInstance> getAllSessionInstances(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
+    public List<SessionInstance> getAllSessionInstances(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+    ) {
         log.debug("REST request to get all SessionInstances");
-        List<SessionInstance> result = null;
         if (eagerload) {
-            result = sessionInstanceRepository.findAllWithEagerRelationships();
+            return sessionInstanceRepository.findAllWithEagerRelationships();
         } else {
-            result = sessionInstanceRepository.findAll();
+            return sessionInstanceRepository.findAll();
         }
-        return result;
-    }
-
-    /**
-     * {@code GET  /session-instances} : get all the sessionInstances.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sessionInstances in body.
-     */
-    @PostMapping("/unique")
-    public ResponseEntity<SessionInstance> getSessionInstanceUnique(@Valid @RequestBody SessionInstanceUniqueDto siuDto)
-        throws URISyntaxException {
-        log.debug("REST request to get SessionInstance according to dto fields: {}");
-        SessionInstance result = sessionInstanceRepository.findOne(siuDto.getSessionId(), siuDto.getSessionDate(), siuDto.getGroupId());
-        if (result == null) {
-            throw new BadRequestAlertException("There is no session with those inputs, please create one !", ENTITY_NAME, "idexists");
-        }
-        return ResponseEntity
-            .created(new URI("/api/session-instances/unique" + result.getId()))
-            .headers(HeaderUtil.createAlert(applicationName, "One session found !", ENTITY_NAME))
-            .body(result);
-    }
-
-    @GetMapping("{id}/remote")
-    public List<RemoteSessionDto> getRemoteSessions(@PathVariable Long id) {
-        log.debug("REST request to get all Session instances for the given student id");
-        // getting the list of the student groups
-        List<Group> groups = groupRepository.findAll();
-        List<Group> myGroups = new ArrayList<Group>();
-        UserCustom userCustom = userCustomRepository.findById(id).get();
-
-        for (Group g : groups) {
-            if (g.getElements() != null && g.getElements().size() > 0) {
-                if (g.getElements().contains(userCustom)) {
-                    myGroups.add(g);
-                }
-                //groups.remove(g);
-            }
-        }
-        List<RemoteSessionDto> remoteSessionDtos = new ArrayList<RemoteSessionDto>();
-        List<SessionInstance> remotSessions = sessionInstanceRepository.findRemoteSessionInstances(myGroups);
-        for (SessionInstance sessionInstance : remotSessions) {
-            RemoteSessionDto remoteSessionDto = new RemoteSessionDto();
-            if (sessionInstance.getSession1() != null) {
-                remoteSessionDto.setGender(sessionInstance.getSession1().getTargetedGender().name());
-                //remoteSessionDto.setSessionType(sessionInstance.getSession1().getSessionMode().name());
-            }
-            remoteSessionDto.setTitle(sessionInstance.getTitle());
-            remoteSessionDto.setSessionDate(sessionInstance.getSessionDate());
-            remoteSessionDto.setDay(sessionInstance.getSessionDate().getDayOfWeek().getValue());
-            remoteSessionDto.setSessionStartTime(sessionInstance.getSessionStartTime());
-            remoteSessionDto.setSessionEndTime(sessionInstance.getSessionEndTime());
-            if (sessionInstance.getGroup() != null) remoteSessionDto.setGroupName(sessionInstance.getGroup().getNameAr());
-            remoteSessionDto.setIsActive(sessionInstance.getIsActive());
-            remoteSessionDto.setLink(sessionInstance.getSessionLink());
-            remoteSessionDto.setInfo(sessionInstance.getInfo());
-            remoteSessionDtos.add(remoteSessionDto);
-        }
-
-        return remoteSessionDtos;
     }
 
     /**
@@ -294,7 +201,7 @@ public class SessionInstanceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sessionInstance, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<SessionInstance> getSessionInstance(@PathVariable Long id) {
+    public ResponseEntity<SessionInstance> getSessionInstance(@PathVariable("id") Long id) {
         log.debug("REST request to get SessionInstance : {}", id);
         Optional<SessionInstance> sessionInstance = sessionInstanceRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(sessionInstance);
@@ -307,7 +214,7 @@ public class SessionInstanceResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSessionInstance(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSessionInstance(@PathVariable("id") Long id) {
         log.debug("REST request to delete SessionInstance : {}", id);
         sessionInstanceRepository.deleteById(id);
         sessionInstanceSearchRepository.deleteFromIndexById(id);
@@ -325,7 +232,7 @@ public class SessionInstanceResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<SessionInstance> searchSessionInstances(@RequestParam String query) {
+    public List<SessionInstance> searchSessionInstances(@RequestParam("query") String query) {
         log.debug("REST request to search SessionInstances for query {}", query);
         try {
             return StreamSupport.stream(sessionInstanceSearchRepository.search(query).spliterator(), false).toList();

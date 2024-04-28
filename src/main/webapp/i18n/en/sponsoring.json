@@ -19,6 +19,7 @@
         "title": "Sponsoring"
       },
       "id": "ID",
+      "refKey": "Ref Key",
       "ref": "Ref",
       "message": "Message",
       "amount": "Amount",

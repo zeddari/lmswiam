@@ -167,7 +167,9 @@ public class SessionLinkResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sessionLinks in body.
      */
     @GetMapping("")
-    public List<SessionLink> getAllSessionLinks(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
+    public List<SessionLink> getAllSessionLinks(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+    ) {
         log.debug("REST request to get all SessionLinks");
         if (eagerload) {
             return sessionLinkRepository.findAllWithEagerRelationships();
@@ -183,7 +185,7 @@ public class SessionLinkResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sessionLink, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<SessionLink> getSessionLink(@PathVariable Long id) {
+    public ResponseEntity<SessionLink> getSessionLink(@PathVariable("id") Long id) {
         log.debug("REST request to get SessionLink : {}", id);
         Optional<SessionLink> sessionLink = sessionLinkRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(sessionLink);
@@ -196,7 +198,7 @@ public class SessionLinkResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSessionLink(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSessionLink(@PathVariable("id") Long id) {
         log.debug("REST request to delete SessionLink : {}", id);
         sessionLinkRepository.deleteById(id);
         sessionLinkSearchRepository.deleteFromIndexById(id);
@@ -214,7 +216,7 @@ public class SessionLinkResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<SessionLink> searchSessionLinks(@RequestParam String query) {
+    public List<SessionLink> searchSessionLinks(@RequestParam("query") String query) {
         log.debug("REST request to search SessionLinks for query {}", query);
         try {
             return StreamSupport.stream(sessionLinkSearchRepository.search(query).spliterator(), false).toList();

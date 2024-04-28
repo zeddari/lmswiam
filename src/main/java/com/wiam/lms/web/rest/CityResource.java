@@ -170,7 +170,7 @@ public class CityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the city, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<City> getCity(@PathVariable Long id) {
+    public ResponseEntity<City> getCity(@PathVariable("id") Long id) {
         log.debug("REST request to get City : {}", id);
         Optional<City> city = cityRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(city);
@@ -183,7 +183,7 @@ public class CityResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCity(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCity(@PathVariable("id") Long id) {
         log.debug("REST request to delete City : {}", id);
         cityRepository.deleteById(id);
         citySearchRepository.deleteFromIndexById(id);
@@ -201,7 +201,7 @@ public class CityResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<City> searchCities(@RequestParam String query) {
+    public List<City> searchCities(@RequestParam("query") String query) {
         log.debug("REST request to search Cities for query {}", query);
         try {
             return StreamSupport.stream(citySearchRepository.search(query).spliterator(), false).toList();

@@ -168,7 +168,7 @@ public class QuizResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quizzes in body.
      */
     @GetMapping("")
-    public List<Quiz> getAllQuizzes(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
+    public List<Quiz> getAllQuizzes(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Quizzes");
         if (eagerload) {
             return quizRepository.findAllWithEagerRelationships();
@@ -184,7 +184,7 @@ public class QuizResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the quiz, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Quiz> getQuiz(@PathVariable Long id) {
+    public ResponseEntity<Quiz> getQuiz(@PathVariable("id") Long id) {
         log.debug("REST request to get Quiz : {}", id);
         Optional<Quiz> quiz = quizRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(quiz);
@@ -197,7 +197,7 @@ public class QuizResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuiz(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteQuiz(@PathVariable("id") Long id) {
         log.debug("REST request to delete Quiz : {}", id);
         quizRepository.deleteById(id);
         quizSearchRepository.deleteFromIndexById(id);
@@ -215,7 +215,7 @@ public class QuizResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Quiz> searchQuizzes(@RequestParam String query) {
+    public List<Quiz> searchQuizzes(@RequestParam("query") String query) {
         log.debug("REST request to search Quizzes for query {}", query);
         try {
             return StreamSupport.stream(quizSearchRepository.search(query).spliterator(), false).toList();

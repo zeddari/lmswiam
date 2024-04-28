@@ -170,7 +170,9 @@ public class CertificateResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of certificates in body.
      */
     @GetMapping("")
-    public List<Certificate> getAllCertificates(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
+    public List<Certificate> getAllCertificates(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+    ) {
         log.debug("REST request to get all Certificates");
         if (eagerload) {
             return certificateRepository.findAllWithEagerRelationships();
@@ -186,7 +188,7 @@ public class CertificateResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the certificate, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Certificate> getCertificate(@PathVariable Long id) {
+    public ResponseEntity<Certificate> getCertificate(@PathVariable("id") Long id) {
         log.debug("REST request to get Certificate : {}", id);
         Optional<Certificate> certificate = certificateRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(certificate);
@@ -199,7 +201,7 @@ public class CertificateResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCertificate(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCertificate(@PathVariable("id") Long id) {
         log.debug("REST request to delete Certificate : {}", id);
         certificateRepository.deleteById(id);
         certificateSearchRepository.deleteFromIndexById(id);
@@ -217,7 +219,7 @@ public class CertificateResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Certificate> searchCertificates(@RequestParam String query) {
+    public List<Certificate> searchCertificates(@RequestParam("query") String query) {
         log.debug("REST request to search Certificates for query {}", query);
         try {
             return StreamSupport.stream(certificateSearchRepository.search(query).spliterator(), false).toList();

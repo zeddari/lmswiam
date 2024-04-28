@@ -20,6 +20,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +41,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link TicketsResource} REST controller.
@@ -339,7 +339,7 @@ class TicketsResourceIT {
             .andExpect(jsonPath("$.[*].reference").value(hasItem(DEFAULT_REFERENCE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].justifDocContentType").value(hasItem(DEFAULT_JUSTIF_DOC_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].justifDoc").value(hasItem(Base64Utils.encodeToString(DEFAULT_JUSTIF_DOC))))
+            .andExpect(jsonPath("$.[*].justifDoc").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_JUSTIF_DOC))))
             .andExpect(jsonPath("$.[*].dateTicket").value(hasItem(sameInstant(DEFAULT_DATE_TICKET))))
             .andExpect(jsonPath("$.[*].dateProcess").value(hasItem(sameInstant(DEFAULT_DATE_PROCESS))))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.toString())))
@@ -382,7 +382,7 @@ class TicketsResourceIT {
             .andExpect(jsonPath("$.reference").value(DEFAULT_REFERENCE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.justifDocContentType").value(DEFAULT_JUSTIF_DOC_CONTENT_TYPE))
-            .andExpect(jsonPath("$.justifDoc").value(Base64Utils.encodeToString(DEFAULT_JUSTIF_DOC)))
+            .andExpect(jsonPath("$.justifDoc").value(Base64.getEncoder().encodeToString(DEFAULT_JUSTIF_DOC)))
             .andExpect(jsonPath("$.dateTicket").value(sameInstant(DEFAULT_DATE_TICKET)))
             .andExpect(jsonPath("$.dateProcess").value(sameInstant(DEFAULT_DATE_PROCESS)))
             .andExpect(jsonPath("$.processed").value(DEFAULT_PROCESSED.toString()))
@@ -741,7 +741,7 @@ class TicketsResourceIT {
             .andExpect(jsonPath("$.[*].reference").value(hasItem(DEFAULT_REFERENCE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].justifDocContentType").value(hasItem(DEFAULT_JUSTIF_DOC_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].justifDoc").value(hasItem(Base64Utils.encodeToString(DEFAULT_JUSTIF_DOC))))
+            .andExpect(jsonPath("$.[*].justifDoc").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_JUSTIF_DOC))))
             .andExpect(jsonPath("$.[*].dateTicket").value(hasItem(sameInstant(DEFAULT_DATE_TICKET))))
             .andExpect(jsonPath("$.[*].dateProcess").value(hasItem(sameInstant(DEFAULT_DATE_PROCESS))))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.toString())))

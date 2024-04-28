@@ -164,7 +164,9 @@ public class DepartementResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of departements in body.
      */
     @GetMapping("")
-    public List<Departement> getAllDepartements(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
+    public List<Departement> getAllDepartements(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+    ) {
         log.debug("REST request to get all Departements");
         if (eagerload) {
             return departementRepository.findAllWithEagerRelationships();
@@ -180,7 +182,7 @@ public class DepartementResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the departement, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Departement> getDepartement(@PathVariable Long id) {
+    public ResponseEntity<Departement> getDepartement(@PathVariable("id") Long id) {
         log.debug("REST request to get Departement : {}", id);
         Optional<Departement> departement = departementRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(departement);
@@ -193,7 +195,7 @@ public class DepartementResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDepartement(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDepartement(@PathVariable("id") Long id) {
         log.debug("REST request to delete Departement : {}", id);
         departementRepository.deleteById(id);
         departementSearchRepository.deleteFromIndexById(id);
@@ -211,7 +213,7 @@ public class DepartementResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Departement> searchDepartements(@RequestParam String query) {
+    public List<Departement> searchDepartements(@RequestParam("query") String query) {
         log.debug("REST request to search Departements for query {}", query);
         try {
             return StreamSupport.stream(departementSearchRepository.search(query).spliterator(), false).toList();

@@ -8,9 +8,9 @@ export interface IReview {
   body?: string | null;
   rating?: number | null;
   reviewDate?: dayjs.Dayjs | null;
-  site3?: Pick<ISite, 'id' | 'nameAr'> | null;
-  part2?: Pick<IPart, 'id' | 'titleAr'> | null;
-  userCustom3?: Pick<IUserCustom, 'id'> | null;
+  site3?: ISite | null;
+  part2?: IPart | null;
+  userCustom3?: IUserCustom | null;
 }
 
 export type NewReview = Omit<IReview, 'id'> & { id: null };

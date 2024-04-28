@@ -1,0 +1,16 @@
+{
+  "lmswiamApp": {
+    "SponsoringRef": {
+      "null": "",
+      "STUDENT": "STUDENT",
+      "SALARY": "SALARY",
+      "RENT": "RENT",
+      "INTERNET": "INTERNET",
+      "ELECTRICITY": "ELECTRICITY",
+      "OTHERS": "OTHERS",
+      "EXTERNAL_ACTIVITY": "EXTERNAL_ACTIVITY",
+      "INTERNAL_ACTIVITY": "INTERNAL_ACTIVITY",
+      "KHATM_ACTIVITY": "KHATM_ACTIVITY"
+    }
+  }
+}

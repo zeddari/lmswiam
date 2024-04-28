@@ -1,4 +1,5 @@
 import dayjs from 'dayjs/esm';
+import { IPayment } from 'app/entities/payment/payment.model';
 import { ISite } from 'app/entities/site/site.model';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { ICourse } from 'app/entities/course/course.model';
@@ -12,9 +13,10 @@ export interface IEnrolement {
   enrolemntEndTime?: dayjs.Dayjs | null;
   isActive?: boolean | null;
   activatedAt?: dayjs.Dayjs | null;
-  site4?: Pick<ISite, 'id' | 'nameAr'> | null;
-  userCustom4?: Pick<IUserCustom, 'id' | 'firstName'> | null;
-  course?: Pick<ICourse, 'id' | 'titleAr'> | null;
+  payments?: IPayment[] | null;
+  site4?: ISite | null;
+  userCustom4?: IUserCustom | null;
+  course?: ICourse | null;
 }
 
 export type NewEnrolement = Omit<IEnrolement, 'id'> & { id: null };

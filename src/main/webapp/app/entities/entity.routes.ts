@@ -186,6 +186,16 @@ const routes: Routes = [
     data: { pageTitle: 'lmswiamApp.editions.home.title' },
     loadChildren: () => import('./editions/editions.routes'),
   },
+  {
+    path: 'depense',
+    data: { pageTitle: 'lmswiamApp.depense.home.title' },
+    loadChildren: () => import('./depense/depense.routes'),
+  },
+  {
+    path: 'student-sponsoring',
+    data: { pageTitle: 'lmswiamApp.studentSponsoring.home.title' },
+    loadChildren: () => import('./student-sponsoring/student-sponsoring.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 
