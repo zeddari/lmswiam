@@ -3,11 +3,10 @@ package com.wiam.lms.repository.custom;
 import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesData;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Spring Data JPA repository for the Progression entity.
@@ -16,34 +15,85 @@ import java.util.List;
 public interface DashboardRepository extends JpaRepository<Progression, Long> {
     @Query(
         value = "SELECT  day(start_time) xaxis, count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') \n" +
-            "and MONTH(start_time) = MONTH(CURRENT_DATE())\n" +
-            "AND YEAR(start_time) = YEAR(CURRENT_DATE())\n" +
-            "group by day(start_time)",
+        "and MONTH(start_time) = MONTH(CURRENT_DATE())\n" +
+        "AND YEAR(start_time) = YEAR(CURRENT_DATE())\n" +
+        "group by day(start_time)",
         nativeQuery = true
     )
     List<RowSeriesData> getAbsenceRowSeries();
 
     @Query(
         value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') \n" +
-            "and MONTH(start_time) = MONTH(CURRENT_DATE())\n" +
-            "AND YEAR(start_time) = YEAR(CURRENT_DATE())\n" +
-            "group by day(start_time)",
+        "and MONTH(start_time) = MONTH(CURRENT_DATE())\n" +
+        "AND YEAR(start_time) = YEAR(CURRENT_DATE())\n" +
+        "group by day(start_time)",
         nativeQuery = true
     )
     List<Long> getAbsenceRowCountPerDay();
+
     @Query(
         value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') \n" +
-            "and MONTH(start_time) = MONTH(CURRENT_DATE())\n" +
-            "AND YEAR(start_time) = YEAR(CURRENT_DATE())",
+        "and MONTH(start_time) = MONTH(CURRENT_DATE())\n" +
+        "AND YEAR(start_time) = YEAR(CURRENT_DATE())",
         nativeQuery = true
     )
     Long getAbsenceRowCount();
 
     @Query(
         value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') \n" +
-            "and MONTH(start_time) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)\n" +
-            "AND YEAR(start_time) = YEAR(CURRENT_DATE())",
+        "and MONTH(start_time) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)\n" +
+        "AND YEAR(start_time) = YEAR(CURRENT_DATE())",
         nativeQuery = true
     )
     Long getAbsenceRowCountMonthBefore();
+
+    @Query(
+        value = "select COALESCE(floor(sum(amount)),0) yaxis from payment where side in ('IN')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE())" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())",
+        nativeQuery = true
+    )
+    Long getIncomeCurrentMonth();
+
+    @Query(
+        value = "select COALESCE(floor(sum(amount)),0) yaxis from payment where side in ('IN')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())",
+        nativeQuery = true
+    )
+    Long getIncomeLastMonth();
+
+    @Query(
+        value = "select floor(sum(amount)) yaxis from payment where side in ('IN')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE())" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())" +
+        " group by day(paid_at)",
+        nativeQuery = true
+    )
+    List<Long> getIncomeListPerDay();
+
+    @Query(
+        value = "select COALESCE(floor(sum(amount)),0) yaxis from payment where side in ('OUT')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE())" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())",
+        nativeQuery = true
+    )
+    Long getExpensesCurrentMonth();
+
+    @Query(
+        value = "select COALESCE(floor(sum(amount)),0) yaxis from payment where side in ('OUT')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())",
+        nativeQuery = true
+    )
+    Long getExpensesLastMonth();
+
+    @Query(
+        value = "select floor(sum(amount)) yaxis from payment where side in ('OUT')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE())" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())" +
+        " group by day(paid_at)",
+        nativeQuery = true
+    )
+    List<Long> getExpensesListPerDay();
 }
