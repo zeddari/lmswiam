@@ -1,6 +1,12 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Session;
+import com.wiam.lms.domain.SessionLink;
+import com.wiam.lms.domain.Site;
+import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.RemoteSessionDto;
+import com.wiam.lms.domain.enumeration.TargetedGender;
 import com.wiam.lms.repository.SessionRepository;
 import com.wiam.lms.repository.search.SessionSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -9,9 +15,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -154,12 +164,7 @@ public class SessionResource {
                 if (session.getPeriodeEndDate() != null) {
                     existingSession.setPeriodeEndDate(session.getPeriodeEndDate());
                 }
-                if (session.getSessionStartTime() != null) {
-                    existingSession.setSessionStartTime(session.getSessionStartTime());
-                }
-                if (session.getSessionEndTime() != null) {
-                    existingSession.setSessionEndTime(session.getSessionEndTime());
-                }
+
                 if (session.getSessionSize() != null) {
                     existingSession.setSessionSize(session.getSessionSize());
                 }
@@ -227,13 +232,18 @@ public class SessionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sessions in body.
      */
     @GetMapping("")
-    public List<Session> getAllSessions(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
+    public List<Session> getAllSessions(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Sessions");
         if (eagerload) {
             return sessionRepository.findAllWithEagerRelationships();
         } else {
             return sessionRepository.findAll();
         }
+    }
+
+    @GetMapping("/{id}/bysite")
+    public List<Session> getAllSessionsBySite(@PathVariable Long id) {
+        if (id == 0) return sessionRepository.findAll(); else return sessionRepository.findAllBySite(id);
     }
 
     /**
@@ -243,7 +253,7 @@ public class SessionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the session, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Session> getSession(@PathVariable("id") Long id) {
+    public ResponseEntity<Session> getSession(@PathVariable Long id) {
         log.debug("REST request to get Session : {}", id);
         Optional<Session> session = sessionRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(session);
@@ -256,7 +266,7 @@ public class SessionResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSession(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteSession(@PathVariable Long id) {
         log.debug("REST request to delete Session : {}", id);
         sessionRepository.deleteById(id);
         sessionSearchRepository.deleteFromIndexById(id);
@@ -274,7 +284,7 @@ public class SessionResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Session> searchSessions(@RequestParam("query") String query) {
+    public List<Session> searchSessions(@RequestParam String query) {
         log.debug("REST request to search Sessions for query {}", query);
         try {
             return StreamSupport.stream(sessionSearchRepository.search(query).spliterator(), false).toList();

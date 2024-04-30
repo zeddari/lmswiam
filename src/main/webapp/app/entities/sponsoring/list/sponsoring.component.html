@@ -41,175 +41,141 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (sponsorings?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.sponsoring.home.notFound">No Sponsorings found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="sponsorings?.length === 0">
+    <span jhiTranslate="lmswiamApp.sponsoring.home.notFound">No Sponsorings found</span>
+  </div>
 
-  @if (sponsorings && sponsorings.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="sponsorings && sponsorings.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="ref">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.sponsoring.ref">Ref</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="message">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.sponsoring.message">Message</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="amount">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.sponsoring.amount">Amount</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="startDate">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.sponsoring.startDate">Start Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="endDate">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.sponsoring.endDate">End Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isAlways">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.sponsoring.isAlways">Is Always</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site10.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.sponsoring.site10">Site 10</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sponsor.firstName">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.sponsoring.sponsor">Sponsor</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="project.titleAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.sponsoring.project">Project</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="currency.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.sponsoring.currency">Currency</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sponsoring of sponsorings; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/sponsoring', sponsoring.id, 'view']">{{ sponsoring.id }}</a>
+          </td>
+          <td>{{ sponsoring.ref }}</td>
+          <td>{{ sponsoring.message }}</td>
+          <td>{{ sponsoring.amount }}</td>
+          <td>{{ sponsoring.startDate | formatMediumDate }}</td>
+          <td>{{ sponsoring.endDate | formatMediumDate }}</td>
+          <td>{{ sponsoring.isAlways }}</td>
+          <td>
+            <div *ngIf="sponsoring.site10">
+              <a [routerLink]="['/site', sponsoring.site10.id, 'view']">{{ sponsoring.site10.nameAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="sponsoring.sponsor">
+              <a [routerLink]="['/user-custom', sponsoring.sponsor.id, 'view']">{{ sponsoring.sponsor.firstName }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="sponsoring.project">
+              <a [routerLink]="['/project', sponsoring.project.id, 'view']">{{ sponsoring.project.titleAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="sponsoring.currency">
+              <a [routerLink]="['/currency', sponsoring.currency.id, 'view']">{{ sponsoring.currency.nameAr }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/sponsoring', sponsoring.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="refKey">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.refKey">Ref Key</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="ref">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.ref">Ref</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="message">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.message">Message</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="amount">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.amount">Amount</span>
+              <a [routerLink]="['/sponsoring', sponsoring.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="startDate">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.startDate">Start Date</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="endDate">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.endDate">End Date</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="isAlways">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.isAlways">Is Always</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="site10.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.site10">Site 10</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="sponsor.firstName">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.sponsor">Sponsor</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="project.titleAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.project">Project</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="currency.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.sponsoring.currency">Currency</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (sponsoring of sponsorings; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/sponsoring', sponsoring.id, 'view']">{{ sponsoring.id }}</a>
-              </td>
-              <td jhiTranslate="{{ 'lmswiamApp.SponsoringRef.' + sponsoring.refKey }}">{{ sponsoring.refKey }}</td>
-              <td>{{ sponsoring.ref }}</td>
-              <td>{{ sponsoring.message }}</td>
-              <td>{{ sponsoring.amount }}</td>
-              <td>{{ sponsoring.startDate | formatMediumDate }}</td>
-              <td>{{ sponsoring.endDate | formatMediumDate }}</td>
-              <td>{{ sponsoring.isAlways }}</td>
-              <td>
-                @if (sponsoring.site10) {
-                  <div>
-                    <a [routerLink]="['/site', sponsoring.site10.id, 'view']">{{ sponsoring.site10.nameAr }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (sponsoring.sponsor) {
-                  <div>
-                    <a [routerLink]="['/user-custom', sponsoring.sponsor.id, 'view']">{{ sponsoring.sponsor.firstName }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (sponsoring.project) {
-                  <div>
-                    <a [routerLink]="['/project', sponsoring.project.id, 'view']">{{ sponsoring.project.titleAr }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (sponsoring.currency) {
-                  <div>
-                    <a [routerLink]="['/currency', sponsoring.currency.id, 'view']">{{ sponsoring.currency.nameAr }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/sponsoring', sponsoring.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/sponsoring', sponsoring.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(sponsoring)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(sponsoring)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

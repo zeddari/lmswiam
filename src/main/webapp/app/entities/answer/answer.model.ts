@@ -9,9 +9,9 @@ export interface IAnswer {
   a3v?: boolean | null;
   a4v?: boolean | null;
   result?: boolean | null;
-  site6?: ISite | null;
-  question?: IQuestion | null;
-  userCustom1?: IUserCustom | null;
+  site6?: Pick<ISite, 'id' | 'nameAr'> | null;
+  question?: Pick<IQuestion, 'id'> | null;
+  userCustom1?: Pick<IUserCustom, 'id'> | null;
 }
 
 export type NewAnswer = Omit<IAnswer, 'id'> & { id: null };

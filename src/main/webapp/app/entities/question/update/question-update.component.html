@@ -8,23 +8,22 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.question.question" for="field_question">Question</label>
           <textarea class="form-control" name="question" id="field_question" data-cy="question" formControlName="question"></textarea>
-          @if (editForm.get('question')!.invalid && (editForm.get('question')!.dirty || editForm.get('question')!.touched)) {
-            <div>
-              @if (editForm.get('question')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('question')!.invalid && (editForm.get('question')!.dirty || editForm.get('question')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('question')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -35,49 +34,41 @@
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.question.a1" for="field_a1">A 1</label>
           <textarea class="form-control" name="a1" id="field_a1" data-cy="a1" formControlName="a1"></textarea>
-          @if (editForm.get('a1')!.invalid && (editForm.get('a1')!.dirty || editForm.get('a1')!.touched)) {
-            <div>
-              @if (editForm.get('a1')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('a1')!.invalid && (editForm.get('a1')!.dirty || editForm.get('a1')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('a1')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.question.a1v" for="field_a1v">A 1 V</label>
           <input type="checkbox" class="form-check" name="a1v" id="field_a1v" data-cy="a1v" formControlName="a1v" />
-          @if (editForm.get('a1v')!.invalid && (editForm.get('a1v')!.dirty || editForm.get('a1v')!.touched)) {
-            <div>
-              @if (editForm.get('a1v')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('a1v')!.invalid && (editForm.get('a1v')!.dirty || editForm.get('a1v')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('a1v')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.question.a2" for="field_a2">A 2</label>
           <textarea class="form-control" name="a2" id="field_a2" data-cy="a2" formControlName="a2"></textarea>
-          @if (editForm.get('a2')!.invalid && (editForm.get('a2')!.dirty || editForm.get('a2')!.touched)) {
-            <div>
-              @if (editForm.get('a2')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('a2')!.invalid && (editForm.get('a2')!.dirty || editForm.get('a2')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('a2')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.question.a2v" for="field_a2v">A 2 V</label>
           <input type="checkbox" class="form-check" name="a2v" id="field_a2v" data-cy="a2v" formControlName="a2v" />
-          @if (editForm.get('a2v')!.invalid && (editForm.get('a2v')!.dirty || editForm.get('a2v')!.touched)) {
-            <div>
-              @if (editForm.get('a2v')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('a2v')!.invalid && (editForm.get('a2v')!.dirty || editForm.get('a2v')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('a2v')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -103,22 +94,21 @@
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.question.isActive" for="field_isActive">Is Active</label>
           <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
-          @if (editForm.get('isActive')!.invalid && (editForm.get('isActive')!.dirty || editForm.get('isActive')!.touched)) {
-            <div>
-              @if (editForm.get('isActive')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('isActive')!.invalid && (editForm.get('isActive')!.dirty || editForm.get('isActive')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('isActive')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.question.site5" for="field_site5">Site 5</label>
           <select class="form-control" id="field_site5" data-cy="site5" name="site5" formControlName="site5" [compareWith]="compareSite">
             <option [ngValue]="null"></option>
-            @for (siteOption of sitesSharedCollection; track $index) {
-              <option [ngValue]="siteOption">{{ siteOption.nameAr }}</option>
-            }
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
           </select>
         </div>
       </div>

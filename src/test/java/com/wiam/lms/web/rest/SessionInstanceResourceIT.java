@@ -108,8 +108,6 @@ class SessionInstanceResourceIT {
         SessionInstance sessionInstance = new SessionInstance()
             .title(DEFAULT_TITLE)
             .sessionDate(DEFAULT_SESSION_DATE)
-            .startTime(DEFAULT_START_TIME)
-            .duration(DEFAULT_DURATION)
             .info(DEFAULT_INFO)
             .attendance(DEFAULT_ATTENDANCE)
             .justifRef(DEFAULT_JUSTIF_REF)
@@ -127,8 +125,6 @@ class SessionInstanceResourceIT {
         SessionInstance sessionInstance = new SessionInstance()
             .title(UPDATED_TITLE)
             .sessionDate(UPDATED_SESSION_DATE)
-            .startTime(UPDATED_START_TIME)
-            .duration(UPDATED_DURATION)
             .info(UPDATED_INFO)
             .attendance(UPDATED_ATTENDANCE)
             .justifRef(UPDATED_JUSTIF_REF)
@@ -171,8 +167,7 @@ class SessionInstanceResourceIT {
         SessionInstance testSessionInstance = sessionInstanceList.get(sessionInstanceList.size() - 1);
         assertThat(testSessionInstance.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testSessionInstance.getSessionDate()).isEqualTo(DEFAULT_SESSION_DATE);
-        assertThat(testSessionInstance.getStartTime()).isEqualTo(DEFAULT_START_TIME);
-        assertThat(testSessionInstance.getDuration()).isEqualTo(DEFAULT_DURATION);
+
         assertThat(testSessionInstance.getInfo()).isEqualTo(DEFAULT_INFO);
         assertThat(testSessionInstance.getAttendance()).isEqualTo(DEFAULT_ATTENDANCE);
         assertThat(testSessionInstance.getJustifRef()).isEqualTo(DEFAULT_JUSTIF_REF);
@@ -252,7 +247,6 @@ class SessionInstanceResourceIT {
         int databaseSizeBeforeTest = sessionInstanceRepository.findAll().size();
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(sessionInstanceSearchRepository.findAll());
         // set the field null
-        sessionInstance.setStartTime(null);
 
         // Create the SessionInstance, which fails.
 
@@ -274,7 +268,6 @@ class SessionInstanceResourceIT {
         int databaseSizeBeforeTest = sessionInstanceRepository.findAll().size();
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(sessionInstanceSearchRepository.findAll());
         // set the field null
-        sessionInstance.setDuration(null);
 
         // Create the SessionInstance, which fails.
 
@@ -348,8 +341,6 @@ class SessionInstanceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(sessionInstance.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].sessionDate").value(hasItem(DEFAULT_SESSION_DATE.toString())))
-            .andExpect(jsonPath("$.[*].startTime").value(hasItem(sameInstant(DEFAULT_START_TIME))))
-            .andExpect(jsonPath("$.[*].duration").value(hasItem(DEFAULT_DURATION)))
             .andExpect(jsonPath("$.[*].info").value(hasItem(DEFAULT_INFO.toString())))
             .andExpect(jsonPath("$.[*].attendance").value(hasItem(DEFAULT_ATTENDANCE.toString())))
             .andExpect(jsonPath("$.[*].justifRef").value(hasItem(DEFAULT_JUSTIF_REF)))
@@ -387,8 +378,6 @@ class SessionInstanceResourceIT {
             .andExpect(jsonPath("$.id").value(sessionInstance.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.sessionDate").value(DEFAULT_SESSION_DATE.toString()))
-            .andExpect(jsonPath("$.startTime").value(sameInstant(DEFAULT_START_TIME)))
-            .andExpect(jsonPath("$.duration").value(DEFAULT_DURATION))
             .andExpect(jsonPath("$.info").value(DEFAULT_INFO.toString()))
             .andExpect(jsonPath("$.attendance").value(DEFAULT_ATTENDANCE.toString()))
             .andExpect(jsonPath("$.justifRef").value(DEFAULT_JUSTIF_REF))
@@ -419,8 +408,6 @@ class SessionInstanceResourceIT {
         updatedSessionInstance
             .title(UPDATED_TITLE)
             .sessionDate(UPDATED_SESSION_DATE)
-            .startTime(UPDATED_START_TIME)
-            .duration(UPDATED_DURATION)
             .info(UPDATED_INFO)
             .attendance(UPDATED_ATTENDANCE)
             .justifRef(UPDATED_JUSTIF_REF)
@@ -440,8 +427,7 @@ class SessionInstanceResourceIT {
         SessionInstance testSessionInstance = sessionInstanceList.get(sessionInstanceList.size() - 1);
         assertThat(testSessionInstance.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testSessionInstance.getSessionDate()).isEqualTo(UPDATED_SESSION_DATE);
-        assertThat(testSessionInstance.getStartTime()).isEqualTo(UPDATED_START_TIME);
-        assertThat(testSessionInstance.getDuration()).isEqualTo(UPDATED_DURATION);
+
         assertThat(testSessionInstance.getInfo()).isEqualTo(UPDATED_INFO);
         assertThat(testSessionInstance.getAttendance()).isEqualTo(UPDATED_ATTENDANCE);
         assertThat(testSessionInstance.getJustifRef()).isEqualTo(UPDATED_JUSTIF_REF);
@@ -455,8 +441,7 @@ class SessionInstanceResourceIT {
                 SessionInstance testSessionInstanceSearch = sessionInstanceSearchList.get(searchDatabaseSizeAfter - 1);
                 assertThat(testSessionInstanceSearch.getTitle()).isEqualTo(UPDATED_TITLE);
                 assertThat(testSessionInstanceSearch.getSessionDate()).isEqualTo(UPDATED_SESSION_DATE);
-                assertThat(testSessionInstanceSearch.getStartTime()).isEqualTo(UPDATED_START_TIME);
-                assertThat(testSessionInstanceSearch.getDuration()).isEqualTo(UPDATED_DURATION);
+
                 assertThat(testSessionInstanceSearch.getInfo()).isEqualTo(UPDATED_INFO);
                 assertThat(testSessionInstanceSearch.getAttendance()).isEqualTo(UPDATED_ATTENDANCE);
                 assertThat(testSessionInstanceSearch.getJustifRef()).isEqualTo(UPDATED_JUSTIF_REF);
@@ -545,8 +530,6 @@ class SessionInstanceResourceIT {
 
         partialUpdatedSessionInstance
             .sessionDate(UPDATED_SESSION_DATE)
-            .startTime(UPDATED_START_TIME)
-            .duration(UPDATED_DURATION)
             .attendance(UPDATED_ATTENDANCE)
             .justifRef(UPDATED_JUSTIF_REF)
             .isActive(UPDATED_IS_ACTIVE);
@@ -565,8 +548,7 @@ class SessionInstanceResourceIT {
         SessionInstance testSessionInstance = sessionInstanceList.get(sessionInstanceList.size() - 1);
         assertThat(testSessionInstance.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testSessionInstance.getSessionDate()).isEqualTo(UPDATED_SESSION_DATE);
-        assertThat(testSessionInstance.getStartTime()).isEqualTo(UPDATED_START_TIME);
-        assertThat(testSessionInstance.getDuration()).isEqualTo(UPDATED_DURATION);
+
         assertThat(testSessionInstance.getInfo()).isEqualTo(DEFAULT_INFO);
         assertThat(testSessionInstance.getAttendance()).isEqualTo(UPDATED_ATTENDANCE);
         assertThat(testSessionInstance.getJustifRef()).isEqualTo(UPDATED_JUSTIF_REF);
@@ -588,8 +570,6 @@ class SessionInstanceResourceIT {
         partialUpdatedSessionInstance
             .title(UPDATED_TITLE)
             .sessionDate(UPDATED_SESSION_DATE)
-            .startTime(UPDATED_START_TIME)
-            .duration(UPDATED_DURATION)
             .info(UPDATED_INFO)
             .attendance(UPDATED_ATTENDANCE)
             .justifRef(UPDATED_JUSTIF_REF)
@@ -609,8 +589,7 @@ class SessionInstanceResourceIT {
         SessionInstance testSessionInstance = sessionInstanceList.get(sessionInstanceList.size() - 1);
         assertThat(testSessionInstance.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testSessionInstance.getSessionDate()).isEqualTo(UPDATED_SESSION_DATE);
-        assertThat(testSessionInstance.getStartTime()).isEqualTo(UPDATED_START_TIME);
-        assertThat(testSessionInstance.getDuration()).isEqualTo(UPDATED_DURATION);
+
         assertThat(testSessionInstance.getInfo()).isEqualTo(UPDATED_INFO);
         assertThat(testSessionInstance.getAttendance()).isEqualTo(UPDATED_ATTENDANCE);
         assertThat(testSessionInstance.getJustifRef()).isEqualTo(UPDATED_JUSTIF_REF);
@@ -725,8 +704,6 @@ class SessionInstanceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(sessionInstance.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].sessionDate").value(hasItem(DEFAULT_SESSION_DATE.toString())))
-            .andExpect(jsonPath("$.[*].startTime").value(hasItem(sameInstant(DEFAULT_START_TIME))))
-            .andExpect(jsonPath("$.[*].duration").value(hasItem(DEFAULT_DURATION)))
             .andExpect(jsonPath("$.[*].info").value(hasItem(DEFAULT_INFO.toString())))
             .andExpect(jsonPath("$.[*].attendance").value(hasItem(DEFAULT_ATTENDANCE.toString())))
             .andExpect(jsonPath("$.[*].justifRef").value(hasItem(DEFAULT_JUSTIF_REF)))

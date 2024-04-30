@@ -5,7 +5,6 @@ import static com.wiam.lms.domain.CertificateTestSamples.*;
 import static com.wiam.lms.domain.CountryTestSamples.*;
 import static com.wiam.lms.domain.CourseTestSamples.*;
 import static com.wiam.lms.domain.DepartementTestSamples.*;
-import static com.wiam.lms.domain.DepenseTestSamples.*;
 import static com.wiam.lms.domain.DiplomaTestSamples.*;
 import static com.wiam.lms.domain.EnrolementTestSamples.*;
 import static com.wiam.lms.domain.GroupTestSamples.*;
@@ -217,28 +216,6 @@ class UserCustomTest {
         userCustom.setSponsorings(new HashSet<>());
         assertThat(userCustom.getSponsorings()).doesNotContain(sponsoringBack);
         assertThat(sponsoringBack.getSponsor()).isNull();
-    }
-
-    @Test
-    void depenseTest() throws Exception {
-        UserCustom userCustom = getUserCustomRandomSampleGenerator();
-        Depense depenseBack = getDepenseRandomSampleGenerator();
-
-        userCustom.addDepense(depenseBack);
-        assertThat(userCustom.getDepenses()).containsOnly(depenseBack);
-        assertThat(depenseBack.getResource()).isEqualTo(userCustom);
-
-        userCustom.removeDepense(depenseBack);
-        assertThat(userCustom.getDepenses()).doesNotContain(depenseBack);
-        assertThat(depenseBack.getResource()).isNull();
-
-        userCustom.depenses(new HashSet<>(Set.of(depenseBack)));
-        assertThat(userCustom.getDepenses()).containsOnly(depenseBack);
-        assertThat(depenseBack.getResource()).isEqualTo(userCustom);
-
-        userCustom.setDepenses(new HashSet<>());
-        assertThat(userCustom.getDepenses()).doesNotContain(depenseBack);
-        assertThat(depenseBack.getResource()).isNull();
     }
 
     @Test

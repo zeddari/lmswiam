@@ -41,244 +41,203 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (courses?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.course.home.notFound">No Courses found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="courses?.length === 0">
+    <span jhiTranslate="lmswiamApp.course.home.notFound">No Courses found</span>
+  </div>
 
-  @if (courses && courses.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="courses && courses.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="level">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.level">Level</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="titleAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.titleAr">Title Ar</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="titleLat">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.titleLat">Title Lat</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.description">Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="subTitles">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.subTitles">Sub Titles</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="requirements">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.requirements">Requirements</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="options">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.options">Options</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="duration">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.duration">Duration</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="imageLink">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.imageLink">Image Link</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="videoLink">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.videoLink">Video Link</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="price">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.price">Price</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isActive">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.isActive">Is Active</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="activateAt">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.activateAt">Activate At</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isConfirmed">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.isConfirmed">Is Confirmed</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="confirmedAt">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.confirmedAt">Confirmed At</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="professors.firstName">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.professors">Professors</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site1.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.site1">Site 1</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="topic3.titleAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.course.topic3">Topic 3</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of courses; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/course', course.id, 'view']">{{ course.id }}</a>
+          </td>
+          <td jhiTranslate="{{ 'lmswiamApp.Level.' + course.level }}">{{ course.level }}</td>
+          <td>{{ course.titleAr }}</td>
+          <td>{{ course.titleLat }}</td>
+          <td>{{ course.description }}</td>
+          <td>{{ course.subTitles }}</td>
+          <td>{{ course.requirements }}</td>
+          <td>{{ course.options }}</td>
+          <td>{{ course.duration }}</td>
+          <td>
+            <a *ngIf="course.imageLink" (click)="openFile(course.imageLink, course.imageLinkContentType)">
+              <img
+                [src]="'data:' + course.imageLinkContentType + ';base64,' + course.imageLink"
+                style="max-height: 30px"
+                alt="course image"
+              />
+            </a>
+            <span *ngIf="course.imageLink">{{ course.imageLinkContentType }}, {{ byteSize(course.imageLink) }}</span>
+          </td>
+          <td>{{ course.videoLink }}</td>
+          <td>{{ course.price }}</td>
+          <td>{{ course.isActive }}</td>
+          <td>{{ course.activateAt | formatMediumDatetime }}</td>
+          <td>{{ course.isConfirmed }}</td>
+          <td>{{ course.confirmedAt | formatMediumDatetime }}</td>
+          <td>
+            <span *ngFor="let professors of course.professors; let last = last">
+              <a class="form-control-static" [routerLink]="['/user-custom', professors.id, 'view']">{{ professors.firstName }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <div *ngIf="course.site1">
+              <a [routerLink]="['/site', course.site1.id, 'view']">{{ course.site1.nameAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="course.topic3">
+              <a [routerLink]="['/topic', course.topic3.id, 'view']">{{ course.topic3.titleAr }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/course', course.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="level">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.level">Level</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="titleAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.titleAr">Title Ar</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="titleLat">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.titleLat">Title Lat</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="description">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="subTitles">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.subTitles">Sub Titles</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="requirements">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.requirements">Requirements</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="options">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.options">Options</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="duration">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.duration">Duration</span>
+              <a [routerLink]="['/course', course.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="imageLink">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.imageLink">Image Link</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="videoLink">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.videoLink">Video Link</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="price">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.price">Price</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="isActive">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.isActive">Is Active</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="activateAt">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.activateAt">Activate At</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="isConfirmed">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.isConfirmed">Is Confirmed</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="confirmedAt">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.confirmedAt">Confirmed At</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="professors.firstName">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.professors">Professors</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="site1.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.site1">Site 1</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="topic3.titleAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.course.topic3">Topic 3</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (course of courses; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/course', course.id, 'view']">{{ course.id }}</a>
-              </td>
-              <td jhiTranslate="{{ 'lmswiamApp.Level.' + course.level }}">{{ course.level }}</td>
-              <td>{{ course.titleAr }}</td>
-              <td>{{ course.titleLat }}</td>
-              <td>{{ course.description }}</td>
-              <td>{{ course.subTitles }}</td>
-              <td>{{ course.requirements }}</td>
-              <td>{{ course.options }}</td>
-              <td>{{ course.duration }}</td>
-              <td>
-                @if (course.imageLink) {
-                  <a (click)="openFile(course.imageLink, course.imageLinkContentType)">
-                    <img
-                      [src]="'data:' + course.imageLinkContentType + ';base64,' + course.imageLink"
-                      style="max-height: 30px"
-                      alt="course image"
-                    />
-                  </a>
-                  <span>{{ course.imageLinkContentType }}, {{ byteSize(course.imageLink) }}</span>
-                }
-              </td>
-              <td>{{ course.videoLink }}</td>
-              <td>{{ course.price }}</td>
-              <td>{{ course.isActive }}</td>
-              <td>{{ course.activateAt | formatMediumDatetime }}</td>
-              <td>{{ course.isConfirmed }}</td>
-              <td>{{ course.confirmedAt | formatMediumDatetime }}</td>
-              <td>
-                @for (professors of course.professors; track $index; let last = $last) {
-                  <span>
-                    <a class="form-control-static" [routerLink]="['/user-custom', professors.id, 'view']">{{ professors.firstName }}</a
-                    >{{ last ? '' : ', ' }}
-                  </span>
-                }
-              </td>
-              <td>
-                @if (course.site1) {
-                  <div>
-                    <a [routerLink]="['/site', course.site1.id, 'view']">{{ course.site1.nameAr }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (course.topic3) {
-                  <div>
-                    <a [routerLink]="['/topic', course.topic3.id, 'view']">{{ course.topic3.titleAr }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/course', course.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/course', course.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(course)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(course)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

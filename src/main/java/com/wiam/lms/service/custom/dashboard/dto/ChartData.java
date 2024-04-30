@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChartData {
+
     private Long countItems;
     private Double deltaLastMonthPercent;
     private ChartSeries chartSeries;

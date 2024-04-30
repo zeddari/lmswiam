@@ -40,7 +40,6 @@ type PaymentFormGroupContent = {
   proofContentType: FormControl<PaymentFormRawValue['proofContentType']>;
   paidAt: FormControl<PaymentFormRawValue['paidAt']>;
   type: FormControl<PaymentFormRawValue['type']>;
-  side: FormControl<PaymentFormRawValue['side']>;
   validityStartTime: FormControl<PaymentFormRawValue['validityStartTime']>;
   validityEndTime: FormControl<PaymentFormRawValue['validityEndTime']>;
   details: FormControl<PaymentFormRawValue['details']>;
@@ -83,9 +82,6 @@ export class PaymentFormService {
         validators: [Validators.required],
       }),
       type: new FormControl(paymentRawValue.type, {
-        validators: [Validators.required],
-      }),
-      side: new FormControl(paymentRawValue.side, {
         validators: [Validators.required],
       }),
       validityStartTime: new FormControl(paymentRawValue.validityStartTime, {

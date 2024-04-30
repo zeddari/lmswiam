@@ -194,7 +194,7 @@ public class ProjectResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of projects in body.
      */
     @GetMapping("")
-    public List<Project> getAllProjects(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
+    public List<Project> getAllProjects(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Projects");
         if (eagerload) {
             return projectRepository.findAllWithEagerRelationships();
@@ -210,7 +210,7 @@ public class ProjectResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the project, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProject(@PathVariable("id") Long id) {
+    public ResponseEntity<Project> getProject(@PathVariable Long id) {
         log.debug("REST request to get Project : {}", id);
         Optional<Project> project = projectRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(project);
@@ -223,7 +223,7 @@ public class ProjectResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProject(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         log.debug("REST request to delete Project : {}", id);
         projectRepository.deleteById(id);
         projectSearchRepository.deleteFromIndexById(id);
@@ -241,7 +241,7 @@ public class ProjectResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Project> searchProjects(@RequestParam("query") String query) {
+    public List<Project> searchProjects(@RequestParam String query) {
         log.debug("REST request to search Projects for query {}", query);
         try {
             return StreamSupport.stream(projectSearchRepository.search(query).spliterator(), false).toList();

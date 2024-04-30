@@ -20,7 +20,6 @@ describe('Sponsoring Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            refKey: expect.any(Object),
             ref: expect.any(Object),
             message: expect.any(Object),
             amount: expect.any(Object),
@@ -41,7 +40,6 @@ describe('Sponsoring Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            refKey: expect.any(Object),
             ref: expect.any(Object),
             message: expect.any(Object),
             amount: expect.any(Object),

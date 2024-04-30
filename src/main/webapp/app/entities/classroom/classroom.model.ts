@@ -6,8 +6,8 @@ export interface IClassroom {
   nameAr?: string | null;
   nameLat?: string | null;
   description?: string | null;
-  site?: ISite | null;
-  sessions6s?: ISession[] | null;
+  site?: Pick<ISite, 'id' | 'nameAr'> | null;
+  sessions6s?: Pick<ISession, 'id' | 'title'>[] | null;
 }
 
 export type NewClassroom = Omit<IClassroom, 'id'> & { id: null };

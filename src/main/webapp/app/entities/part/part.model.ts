@@ -1,4 +1,3 @@
-import { IReview } from 'app/entities/review/review.model';
 import { ISite } from 'app/entities/site/site.model';
 import { ICourse } from 'app/entities/course/course.model';
 
@@ -11,11 +10,9 @@ export interface IPart {
   imageLink?: string | null;
   imageLinkContentType?: string | null;
   videoLink?: string | null;
-  parts?: IPart[] | null;
-  reviews?: IReview[] | null;
-  site2?: ISite | null;
-  course?: ICourse | null;
-  part1?: IPart | null;
+  site2?: Pick<ISite, 'id' | 'nameAr'> | null;
+  course?: Pick<ICourse, 'id' | 'titleAr'> | null;
+  part1?: Pick<IPart, 'id' | 'titleAr'> | null;
 }
 
 export type NewPart = Omit<IPart, 'id'> & { id: null };

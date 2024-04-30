@@ -30,7 +30,7 @@ import { SponsoringDeleteDialogComponent } from '../delete/sponsoring-delete-dia
   ],
 })
 export class SponsoringComponent implements OnInit {
-  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['refKey', 'ref', 'message'];
+  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['ref', 'message'];
 
   sponsorings?: ISponsoring[];
   isLoading = false;

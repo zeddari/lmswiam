@@ -188,7 +188,7 @@ public class QuestionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of questions in body.
      */
     @GetMapping("")
-    public List<Question> getAllQuestions(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
+    public List<Question> getAllQuestions(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Questions");
         if (eagerload) {
             return questionRepository.findAllWithEagerRelationships();
@@ -204,7 +204,7 @@ public class QuestionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the question, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Question> getQuestion(@PathVariable("id") Long id) {
+    public ResponseEntity<Question> getQuestion(@PathVariable Long id) {
         log.debug("REST request to get Question : {}", id);
         Optional<Question> question = questionRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(question);
@@ -217,7 +217,7 @@ public class QuestionResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         log.debug("REST request to delete Question : {}", id);
         questionRepository.deleteById(id);
         questionSearchRepository.deleteFromIndexById(id);
@@ -235,7 +235,7 @@ public class QuestionResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Question> searchQuestions(@RequestParam("query") String query) {
+    public List<Question> searchQuestions(@RequestParam String query) {
         log.debug("REST request to search Questions for query {}", query);
         try {
             return StreamSupport.stream(questionSearchRepository.search(query).spliterator(), false).toList();

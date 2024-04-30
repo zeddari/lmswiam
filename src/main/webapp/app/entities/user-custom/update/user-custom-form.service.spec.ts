@@ -45,6 +45,10 @@ describe('UserCustom Form Service', () => {
             nationality: expect.any(Object),
             job: expect.any(Object),
             departement2: expect.any(Object),
+            groups: expect.any(Object),
+            courses: expect.any(Object),
+            sessions2s: expect.any(Object),
+            sessions3s: expect.any(Object),
           }),
         );
       });
@@ -80,6 +84,10 @@ describe('UserCustom Form Service', () => {
             nationality: expect.any(Object),
             job: expect.any(Object),
             departement2: expect.any(Object),
+            groups: expect.any(Object),
+            courses: expect.any(Object),
+            sessions2s: expect.any(Object),
+            sessions3s: expect.any(Object),
           }),
         );
       });

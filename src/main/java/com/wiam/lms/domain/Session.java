@@ -1,6 +1,7 @@
 package com.wiam.lms.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.wiam.lms.domain.enumeration.Periodicity;
 import com.wiam.lms.domain.enumeration.SessionJoinMode;
 import com.wiam.lms.domain.enumeration.SessionMode;
 import com.wiam.lms.domain.enumeration.SessionType;
@@ -9,6 +10,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +42,12 @@ public class Session implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(name = "session_periodicity", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+    private Periodicity sessionPeriodicity;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "session_type", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SessionType sessionType;
@@ -66,14 +74,6 @@ public class Session implements Serializable {
 
     @Column(name = "periode_end_date")
     private LocalDate periodeEndDate;
-
-    @NotNull
-    @Column(name = "session_start_time", nullable = false)
-    private ZonedDateTime sessionStartTime;
-
-    @NotNull
-    @Column(name = "session_end_time", nullable = false)
-    private ZonedDateTime sessionEndTime;
 
     @NotNull
     @Min(value = 0)
@@ -126,6 +126,108 @@ public class Session implements Serializable {
     @Column(name = "sunday")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
     private Boolean sunday;
+
+    // start times
+
+    @Column(name = "mondayTime")
+    private LocalTime mondayTime;
+
+    @Column(name = "tuesdayTime")
+    private LocalTime tuesdayTime;
+
+    @Column(name = "wednesdayTime")
+    private LocalTime wednesdayTime;
+
+    @Column(name = "thursdayTime")
+    private LocalTime thursdayTime;
+
+    @Column(name = "fridayTime")
+    private LocalTime fridayTime;
+
+    @Column(name = "saturdayTime")
+    private LocalTime saturdayTime;
+
+    @Column(name = "sundayTime")
+    private LocalTime sundayTime;
+
+    // end times
+
+    @Column(name = "mondayEndTime")
+    private LocalTime mondayEndTime;
+
+    @Column(name = "tuesdayEndTime")
+    private LocalTime tuesdayEndTime;
+
+    @Column(name = "wednesdayEndTime")
+    private LocalTime wednesdayEndTime;
+
+    @Column(name = "thursdayEndTime")
+    private LocalTime thursdayEndTime;
+
+    @Column(name = "fridayEndTime")
+    private LocalTime fridayEndTime;
+
+    @Column(name = "saturdayEndTime")
+    private LocalTime saturdayEndTime;
+
+    @Column(name = "sundayEndTime")
+    private LocalTime sundayEndTime;
+
+    public void setMondayEndTime(LocalTime mondayEndTime) {
+        this.mondayEndTime = mondayEndTime;
+    }
+
+    public void setTuesdayEndTime(LocalTime tuesdayEndTime) {
+        this.tuesdayEndTime = tuesdayEndTime;
+    }
+
+    public void setWednesdayEndTime(LocalTime wednesdayEndTime) {
+        this.wednesdayEndTime = wednesdayEndTime;
+    }
+
+    public void setThursdayEndTime(LocalTime thursdayEndTime) {
+        this.thursdayEndTime = thursdayEndTime;
+    }
+
+    public void setFridayEndTime(LocalTime fridayEndTime) {
+        this.fridayEndTime = fridayEndTime;
+    }
+
+    public void setSaturdayEndTime(LocalTime saturdayEndTime) {
+        this.saturdayEndTime = saturdayEndTime;
+    }
+
+    public void setSundayEndTime(LocalTime sundayEndTime) {
+        this.sundayEndTime = sundayEndTime;
+    }
+
+    public LocalTime getMondayEndTime() {
+        return mondayEndTime;
+    }
+
+    public LocalTime getTuesdayEndTime() {
+        return tuesdayEndTime;
+    }
+
+    public LocalTime getWednesdayEndTime() {
+        return wednesdayEndTime;
+    }
+
+    public LocalTime getThursdayEndTime() {
+        return thursdayEndTime;
+    }
+
+    public LocalTime getFridayEndTime() {
+        return fridayEndTime;
+    }
+
+    public LocalTime getSaturdayEndTime() {
+        return saturdayEndTime;
+    }
+
+    public LocalTime getSundayEndTime() {
+        return sundayEndTime;
+    }
 
     @NotNull
     @Column(name = "is_periodic", nullable = false)
@@ -195,7 +297,6 @@ public class Session implements Serializable {
             "progressions",
             "tickets",
             "sponsorings",
-            "depenses",
             "diplomas",
             "languages",
             "site13",
@@ -230,7 +331,6 @@ public class Session implements Serializable {
             "progressions",
             "tickets",
             "sponsorings",
-            "depenses",
             "diplomas",
             "languages",
             "site13",
@@ -296,6 +396,62 @@ public class Session implements Serializable {
 
     public Long getId() {
         return this.id;
+    }
+
+    public LocalTime getMondayTime() {
+        return mondayTime;
+    }
+
+    public LocalTime getTuesdayTime() {
+        return tuesdayTime;
+    }
+
+    public LocalTime getWednesdayTime() {
+        return wednesdayTime;
+    }
+
+    public LocalTime getThursdayTime() {
+        return thursdayTime;
+    }
+
+    public LocalTime getFridayTime() {
+        return fridayTime;
+    }
+
+    public LocalTime getSaturdayTime() {
+        return saturdayTime;
+    }
+
+    public LocalTime getSundayTime() {
+        return sundayTime;
+    }
+
+    public void setMondayTime(LocalTime mondayTime) {
+        this.mondayTime = mondayTime;
+    }
+
+    public void setTuesdayTime(LocalTime tuesdayTime) {
+        this.tuesdayTime = tuesdayTime;
+    }
+
+    public void setWednesdayTime(LocalTime wednesdayTime) {
+        this.wednesdayTime = wednesdayTime;
+    }
+
+    public void setThursdayTime(LocalTime thursdayTime) {
+        this.thursdayTime = thursdayTime;
+    }
+
+    public void setFridayTime(LocalTime fridayTime) {
+        this.fridayTime = fridayTime;
+    }
+
+    public void setSaturdayTime(LocalTime saturdayTime) {
+        this.saturdayTime = saturdayTime;
+    }
+
+    public void setSundayTime(LocalTime sundayTime) {
+        this.sundayTime = sundayTime;
     }
 
     public Session id(Long id) {
@@ -396,32 +552,6 @@ public class Session implements Serializable {
 
     public void setPeriodeEndDate(LocalDate periodeEndDate) {
         this.periodeEndDate = periodeEndDate;
-    }
-
-    public ZonedDateTime getSessionStartTime() {
-        return this.sessionStartTime;
-    }
-
-    public Session sessionStartTime(ZonedDateTime sessionStartTime) {
-        this.setSessionStartTime(sessionStartTime);
-        return this;
-    }
-
-    public void setSessionStartTime(ZonedDateTime sessionStartTime) {
-        this.sessionStartTime = sessionStartTime;
-    }
-
-    public ZonedDateTime getSessionEndTime() {
-        return this.sessionEndTime;
-    }
-
-    public Session sessionEndTime(ZonedDateTime sessionEndTime) {
-        this.setSessionEndTime(sessionEndTime);
-        return this;
-    }
-
-    public void setSessionEndTime(ZonedDateTime sessionEndTime) {
-        this.sessionEndTime = sessionEndTime;
     }
 
     public Integer getSessionSize() {
@@ -871,8 +1001,7 @@ public class Session implements Serializable {
             ", description='" + getDescription() + "'" +
             ", periodStartDate='" + getPeriodStartDate() + "'" +
             ", periodeEndDate='" + getPeriodeEndDate() + "'" +
-            ", sessionStartTime='" + getSessionStartTime() + "'" +
-            ", sessionEndTime='" + getSessionEndTime() + "'" +
+
             ", sessionSize=" + getSessionSize() +
             ", targetedGender='" + getTargetedGender() + "'" +
             ", price=" + getPrice() +
@@ -889,5 +1018,17 @@ public class Session implements Serializable {
             ", isMinorAllowed='" + getIsMinorAllowed() + "'" +
             ", isActive='" + getIsActive() + "'" +
             "}";
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public Periodicity getSessionPeriodicity() {
+        return sessionPeriodicity;
+    }
+
+    public void setSessionPeriodicity(Periodicity sessionPeriodicity) {
+        this.sessionPeriodicity = sessionPeriodicity;
     }
 }

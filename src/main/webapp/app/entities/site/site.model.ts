@@ -1,24 +1,3 @@
-import { IClassroom } from 'app/entities/classroom/classroom.model';
-import { ICourse } from 'app/entities/course/course.model';
-import { IPart } from 'app/entities/part/part.model';
-import { IReview } from 'app/entities/review/review.model';
-import { IEnrolement } from 'app/entities/enrolement/enrolement.model';
-import { IQuestion } from 'app/entities/question/question.model';
-import { IAnswer } from 'app/entities/answer/answer.model';
-import { IQuiz } from 'app/entities/quiz/quiz.model';
-import { IQuizResult } from 'app/entities/quiz-result/quiz-result.model';
-import { IPayment } from 'app/entities/payment/payment.model';
-import { ISponsoring } from 'app/entities/sponsoring/sponsoring.model';
-import { IGroup } from 'app/entities/group/group.model';
-import { IProject } from 'app/entities/project/project.model';
-import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
-import { ISession } from 'app/entities/session/session.model';
-import { ISessionLink } from 'app/entities/session-link/session-link.model';
-import { ISessionInstance } from 'app/entities/session-instance/session-instance.model';
-import { IProgression } from 'app/entities/progression/progression.model';
-import { ITickets } from 'app/entities/tickets/tickets.model';
-import { ICertificate } from 'app/entities/certificate/certificate.model';
-import { IDiploma } from 'app/entities/diploma/diploma.model';
 import { ICity } from 'app/entities/city/city.model';
 
 export interface ISite {
@@ -27,28 +6,7 @@ export interface ISite {
   nameLat?: string | null;
   description?: string | null;
   localisation?: string | null;
-  classrooms?: IClassroom[] | null;
-  courses?: ICourse[] | null;
-  parts?: IPart[] | null;
-  reviews?: IReview[] | null;
-  enrolements?: IEnrolement[] | null;
-  questions?: IQuestion[] | null;
-  answers?: IAnswer[] | null;
-  quizzes?: IQuiz[] | null;
-  quizResults?: IQuizResult[] | null;
-  payments?: IPayment[] | null;
-  sponsorings?: ISponsoring[] | null;
-  groups?: IGroup[] | null;
-  projects?: IProject[] | null;
-  userCustoms?: IUserCustom[] | null;
-  sessions?: ISession[] | null;
-  sessionLinks?: ISessionLink[] | null;
-  sessionInstances?: ISessionInstance[] | null;
-  progressions?: IProgression[] | null;
-  tickets?: ITickets[] | null;
-  certificates?: ICertificate[] | null;
-  diplomas?: IDiploma[] | null;
-  city?: ICity | null;
+  city?: Pick<ICity, 'id' | 'nameAr'> | null;
 }
 
 export type NewSite = Omit<ISite, 'id'> & { id: null };

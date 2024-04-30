@@ -130,7 +130,6 @@ public class Course implements Serializable {
             "progressions",
             "tickets",
             "sponsorings",
-            "depenses",
             "diplomas",
             "languages",
             "site13",

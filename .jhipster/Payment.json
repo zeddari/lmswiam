@@ -40,13 +40,7 @@
       "fieldName": "type",
       "fieldType": "PaymentType",
       "fieldValidateRules": ["required"],
-      "fieldValues": "REGISTER,MONTHLY_FEES,ACTIVITY_FEES,DONATION,SALARY,RENT,INTERNET,ELECTRICITY,OTHERS,EXTERNAL_ACTIVITY,INTERNAL_ACTIVITY,KHATM_ACTIVITY"
-    },
-    {
-      "fieldName": "side",
-      "fieldType": "PaymentSide",
-      "fieldValidateRules": ["required"],
-      "fieldValues": "IN,OUT"
+      "fieldValues": "REGISTER,MONTHLY_FEES,ACTIVITY_FEES"
     },
     {
       "fieldName": "validityStartTime",

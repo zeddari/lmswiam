@@ -19,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "progression")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "progression")
+@org.springframework.data.elasticsearch.annotations.Document(createIndex = false, indexName = "progression")
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Progression implements Serializable {
 
@@ -83,6 +83,28 @@ public class Progression implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer toAyaNum;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Ayahs fromAyahs;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Ayahs toAyahs;
+
+    public void setFromAyahs(Ayahs fromAyahs) {
+        this.fromAyahs = fromAyahs;
+    }
+
+    public void setToAyahs(Ayahs toAyahs) {
+        this.toAyahs = toAyahs;
+    }
+
+    public Ayahs getFromAyahs() {
+        return fromAyahs;
+    }
+
+    public Ayahs getToAyahs() {
+        return toAyahs;
+    }
+
     @Lob
     @Column(name = "from_aya_verset")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
@@ -102,6 +124,11 @@ public class Progression implements Serializable {
     @Column(name = "task_done", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
     private Boolean taskDone;
+
+    @NotNull
+    @Column(name = "is_for_attendance", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
+    private Boolean isForAttendance;
 
     @NotNull
     @Min(value = 1)
@@ -193,6 +220,10 @@ public class Progression implements Serializable {
     private UserCustom student;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Boolean getIsForAttendance() {
+        return isForAttendance;
+    }
 
     public Long getId() {
         return this.id;
@@ -537,5 +568,9 @@ public class Progression implements Serializable {
             ", adaeScore=" + getAdaeScore() +
             ", observation='" + getObservation() + "'" +
             "}";
+    }
+
+    public void setIsForAttendance(Boolean isForAttendance) {
+        this.isForAttendance = isForAttendance;
     }
 }

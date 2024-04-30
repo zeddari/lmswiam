@@ -27,6 +27,8 @@ describe('Group Form Service', () => {
             elements: expect.any(Object),
             site11: expect.any(Object),
             group1: expect.any(Object),
+            quizzes: expect.any(Object),
+            sessions5s: expect.any(Object),
           }),
         );
       });
@@ -44,6 +46,8 @@ describe('Group Form Service', () => {
             elements: expect.any(Object),
             site11: expect.any(Object),
             group1: expect.any(Object),
+            quizzes: expect.any(Object),
+            sessions5s: expect.any(Object),
           }),
         );
       });

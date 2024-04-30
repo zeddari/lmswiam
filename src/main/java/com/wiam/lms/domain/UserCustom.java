@@ -175,12 +175,6 @@ public class UserCustom implements Serializable {
     @JsonIgnoreProperties(value = { "payments", "site10", "sponsor", "project", "currency" }, allowSetters = true)
     private Set<Sponsoring> sponsorings = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "resource")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "resource" }, allowSetters = true)
-    private Set<Depense> depenses = new HashSet<>();
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_user_custom__diplomas",
@@ -215,7 +209,7 @@ public class UserCustom implements Serializable {
             "quizResults",
             "payments",
             "sponsorings",
-            "groups",
+            //"groups",
             "projects",
             "userCustoms",
             "sessions",
@@ -787,37 +781,6 @@ public class UserCustom implements Serializable {
     public UserCustom removeSponsoring(Sponsoring sponsoring) {
         this.sponsorings.remove(sponsoring);
         sponsoring.setSponsor(null);
-        return this;
-    }
-
-    public Set<Depense> getDepenses() {
-        return this.depenses;
-    }
-
-    public void setDepenses(Set<Depense> depenses) {
-        if (this.depenses != null) {
-            this.depenses.forEach(i -> i.setResource(null));
-        }
-        if (depenses != null) {
-            depenses.forEach(i -> i.setResource(this));
-        }
-        this.depenses = depenses;
-    }
-
-    public UserCustom depenses(Set<Depense> depenses) {
-        this.setDepenses(depenses);
-        return this;
-    }
-
-    public UserCustom addDepense(Depense depense) {
-        this.depenses.add(depense);
-        depense.setResource(this);
-        return this;
-    }
-
-    public UserCustom removeDepense(Depense depense) {
-        this.depenses.remove(depense);
-        depense.setResource(null);
         return this;
     }
 

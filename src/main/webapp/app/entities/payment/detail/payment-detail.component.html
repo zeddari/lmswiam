@@ -1,121 +1,99 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    @if (payment) {
-      <div>
-        <h2 data-cy="paymentDetailsHeading"><span jhiTranslate="lmswiamApp.payment.detail.title">Payment</span></h2>
+    <div *ngIf="payment">
+      <h2 data-cy="paymentDetailsHeading"><span jhiTranslate="lmswiamApp.payment.detail.title">Payment</span></h2>
 
-        <hr />
+      <hr />
 
-        <jhi-alert-error></jhi-alert-error>
+      <jhi-alert-error></jhi-alert-error>
 
-        <jhi-alert></jhi-alert>
+      <jhi-alert></jhi-alert>
 
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="global.field.id">ID</span></dt>
-          <dd>
-            <span>{{ payment.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.amount">Amount</span></dt>
-          <dd>
-            <span>{{ payment.amount }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.paymentMethod">Payment Method</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.PaymentMode.' + payment.paymentMethod }}">{{ payment.paymentMethod }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.paiedBy">Paied By</span></dt>
-          <dd>
-            <span>{{ payment.paiedBy }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.proof">Proof</span></dt>
-          <dd>
-            @if (payment.proof) {
-              <div>
-                <a (click)="openFile(payment.proof, payment.proofContentType)">
-                  <img
-                    [src]="'data:' + payment.proofContentType + ';base64,' + payment.proof"
-                    style="max-width: 100%"
-                    alt="payment image"
-                  />
-                </a>
-                {{ payment.proofContentType }}, {{ byteSize(payment.proof) }}
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.paidAt">Paid At</span></dt>
-          <dd>
-            <span>{{ payment.paidAt | formatMediumDatetime }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.type">Type</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.PaymentType.' + payment.type }}">{{ payment.type }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.side">Side</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.PaymentSide.' + payment.side }}">{{ payment.side }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.validityStartTime">Validity Start Time</span></dt>
-          <dd>
-            <span>{{ payment.validityStartTime | formatMediumDatetime }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.validityEndTime">Validity End Time</span></dt>
-          <dd>
-            <span>{{ payment.validityEndTime | formatMediumDatetime }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.details">Details</span></dt>
-          <dd>
-            <span>{{ payment.details }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.site9">Site 9</span></dt>
-          <dd>
-            @if (payment.site9) {
-              <div>
-                <a [routerLink]="['/site', payment.site9.id, 'view']">{{ payment.site9.nameAr }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.enrolment">Enrolment</span></dt>
-          <dd>
-            @if (payment.enrolment) {
-              <div>
-                <a [routerLink]="['/enrolement', payment.enrolment.id, 'view']">{{ payment.enrolment.ref }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.sponsoring">Sponsoring</span></dt>
-          <dd>
-            @if (payment.sponsoring) {
-              <div>
-                <a [routerLink]="['/sponsoring', payment.sponsoring.id, 'view']">{{ payment.sponsoring.ref }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.session">Session</span></dt>
-          <dd>
-            @if (payment.session) {
-              <div>
-                <a [routerLink]="['/session', payment.session.id, 'view']">{{ payment.session.title }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.payment.currency">Currency</span></dt>
-          <dd>
-            @if (payment.currency) {
-              <div>
-                <a [routerLink]="['/currency', payment.currency.id, 'view']">{{ payment.currency.nameAr }}</a>
-              </div>
-            }
-          </dd>
-        </dl>
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ payment.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.amount">Amount</span></dt>
+        <dd>
+          <span>{{ payment.amount }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.paymentMethod">Payment Method</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.PaymentMode.' + payment.paymentMethod }}">{{ payment.paymentMethod }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.paiedBy">Paied By</span></dt>
+        <dd>
+          <span>{{ payment.paiedBy }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.proof">Proof</span></dt>
+        <dd>
+          <div *ngIf="payment.proof">
+            <a (click)="openFile(payment.proof, payment.proofContentType)">
+              <img [src]="'data:' + payment.proofContentType + ';base64,' + payment.proof" style="max-width: 100%" alt="payment image" />
+            </a>
+            {{ payment.proofContentType }}, {{ byteSize(payment.proof) }}
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.paidAt">Paid At</span></dt>
+        <dd>
+          <span>{{ payment.paidAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.type">Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.PaymentType.' + payment.type }}">{{ payment.type }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.validityStartTime">Validity Start Time</span></dt>
+        <dd>
+          <span>{{ payment.validityStartTime | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.validityEndTime">Validity End Time</span></dt>
+        <dd>
+          <span>{{ payment.validityEndTime | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.details">Details</span></dt>
+        <dd>
+          <span>{{ payment.details }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.site9">Site 9</span></dt>
+        <dd>
+          <div *ngIf="payment.site9">
+            <a [routerLink]="['/site', payment.site9.id, 'view']">{{ payment.site9.nameAr }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.enrolment">Enrolment</span></dt>
+        <dd>
+          <div *ngIf="payment.enrolment">
+            <a [routerLink]="['/enrolement', payment.enrolment.id, 'view']">{{ payment.enrolment.ref }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.sponsoring">Sponsoring</span></dt>
+        <dd>
+          <div *ngIf="payment.sponsoring">
+            <a [routerLink]="['/sponsoring', payment.sponsoring.id, 'view']">{{ payment.sponsoring.ref }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.session">Session</span></dt>
+        <dd>
+          <div *ngIf="payment.session">
+            <a [routerLink]="['/session', payment.session.id, 'view']">{{ payment.session.title }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.payment.currency">Currency</span></dt>
+        <dd>
+          <div *ngIf="payment.currency">
+            <a [routerLink]="['/currency', payment.currency.id, 'view']">{{ payment.currency.nameAr }}</a>
+          </div>
+        </dd>
+      </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
 
-        <button type="button" [routerLink]="['/payment', payment.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
-      </div>
-    }
+      <button type="button" [routerLink]="['/payment', payment.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
   </div>
 </div>

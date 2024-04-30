@@ -18,7 +18,6 @@ type SponsoringFormDefaults = Pick<NewSponsoring, 'id' | 'isAlways'>;
 
 type SponsoringFormGroupContent = {
   id: FormControl<ISponsoring['id'] | NewSponsoring['id']>;
-  refKey: FormControl<ISponsoring['refKey']>;
   ref: FormControl<ISponsoring['ref']>;
   message: FormControl<ISponsoring['message']>;
   amount: FormControl<ISponsoring['amount']>;
@@ -48,9 +47,6 @@ export class SponsoringFormService {
           validators: [Validators.required],
         },
       ),
-      refKey: new FormControl(sponsoringRawValue.refKey, {
-        validators: [Validators.required],
-      }),
       ref: new FormControl(sponsoringRawValue.ref, {
         validators: [Validators.required, Validators.maxLength(100)],
       }),

@@ -76,10 +76,10 @@ describe('Tickets Management Update Component', () => {
 
     it('Should call UserCustom query and add missing value', () => {
       const tickets: ITickets = { id: 456 };
-      const userCustom5: IUserCustom = { id: 8168 };
+      const userCustom5: IUserCustom = { id: 9761 };
       tickets.userCustom5 = userCustom5;
 
-      const userCustomCollection: IUserCustom[] = [{ id: 24448 }];
+      const userCustomCollection: IUserCustom[] = [{ id: 20607 }];
       jest.spyOn(userCustomService, 'query').mockReturnValue(of(new HttpResponse({ body: userCustomCollection })));
       const additionalUserCustoms = [userCustom5];
       const expectedCollection: IUserCustom[] = [...additionalUserCustoms, ...userCustomCollection];
@@ -100,7 +100,7 @@ describe('Tickets Management Update Component', () => {
       const tickets: ITickets = { id: 456 };
       const site18: ISite = { id: 27867 };
       tickets.site18 = site18;
-      const userCustom5: IUserCustom = { id: 29830 };
+      const userCustom5: IUserCustom = { id: 18675 };
       tickets.userCustom5 = userCustom5;
 
       activatedRoute.data = of({ tickets });

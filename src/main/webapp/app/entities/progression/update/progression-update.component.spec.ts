@@ -102,10 +102,10 @@ describe('Progression Management Update Component', () => {
 
     it('Should call UserCustom query and add missing value', () => {
       const progression: IProgression = { id: 456 };
-      const student: IUserCustom = { id: 26848 };
+      const student: IUserCustom = { id: 8484 };
       progression.student = student;
 
-      const userCustomCollection: IUserCustom[] = [{ id: 4350 }];
+      const userCustomCollection: IUserCustom[] = [{ id: 4609 }];
       jest.spyOn(userCustomService, 'query').mockReturnValue(of(new HttpResponse({ body: userCustomCollection })));
       const additionalUserCustoms = [student];
       const expectedCollection: IUserCustom[] = [...additionalUserCustoms, ...userCustomCollection];
@@ -128,7 +128,7 @@ describe('Progression Management Update Component', () => {
       progression.site17 = site17;
       const sessionInstance: ISessionInstance = { id: 2667 };
       progression.sessionInstance = sessionInstance;
-      const student: IUserCustom = { id: 26351 };
+      const student: IUserCustom = { id: 29370 };
       progression.student = student;
 
       activatedRoute.data = of({ progression });

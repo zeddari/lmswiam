@@ -30,7 +30,7 @@ import { PaymentDeleteDialogComponent } from '../delete/payment-delete-dialog.co
   ],
 })
 export class PaymentComponent implements OnInit {
-  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['paymentMethod', 'paiedBy', 'proof', 'type', 'side', 'details'];
+  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['paymentMethod', 'paiedBy', 'proof', 'type', 'details'];
 
   payments?: IPayment[];
   isLoading = false;

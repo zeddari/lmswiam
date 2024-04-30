@@ -1,74 +1,66 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    @if (answer) {
-      <div>
-        <h2 data-cy="answerDetailsHeading"><span jhiTranslate="lmswiamApp.answer.detail.title">Answer</span></h2>
+    <div *ngIf="answer">
+      <h2 data-cy="answerDetailsHeading"><span jhiTranslate="lmswiamApp.answer.detail.title">Answer</span></h2>
 
-        <hr />
+      <hr />
 
-        <jhi-alert-error></jhi-alert-error>
+      <jhi-alert-error></jhi-alert-error>
 
-        <jhi-alert></jhi-alert>
+      <jhi-alert></jhi-alert>
 
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="global.field.id">ID</span></dt>
-          <dd>
-            <span>{{ answer.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.answer.a1v">A 1 V</span></dt>
-          <dd>
-            <span>{{ answer.a1v }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.answer.a2v">A 2 V</span></dt>
-          <dd>
-            <span>{{ answer.a2v }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.answer.a3v">A 3 V</span></dt>
-          <dd>
-            <span>{{ answer.a3v }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.answer.a4v">A 4 V</span></dt>
-          <dd>
-            <span>{{ answer.a4v }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.answer.result">Result</span></dt>
-          <dd>
-            <span>{{ answer.result }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.answer.site6">Site 6</span></dt>
-          <dd>
-            @if (answer.site6) {
-              <div>
-                <a [routerLink]="['/site', answer.site6.id, 'view']">{{ answer.site6.nameAr }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.answer.question">Question</span></dt>
-          <dd>
-            @if (answer.question) {
-              <div>
-                <a [routerLink]="['/question', answer.question.id, 'view']">{{ answer.question.id }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.answer.userCustom1">User Custom 1</span></dt>
-          <dd>
-            @if (answer.userCustom1) {
-              <div>
-                <a [routerLink]="['/user-custom', answer.userCustom1.id, 'view']">{{ answer.userCustom1.id }}</a>
-              </div>
-            }
-          </dd>
-        </dl>
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ answer.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.answer.a1v">A 1 V</span></dt>
+        <dd>
+          <span>{{ answer.a1v }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.answer.a2v">A 2 V</span></dt>
+        <dd>
+          <span>{{ answer.a2v }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.answer.a3v">A 3 V</span></dt>
+        <dd>
+          <span>{{ answer.a3v }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.answer.a4v">A 4 V</span></dt>
+        <dd>
+          <span>{{ answer.a4v }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.answer.result">Result</span></dt>
+        <dd>
+          <span>{{ answer.result }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.answer.site6">Site 6</span></dt>
+        <dd>
+          <div *ngIf="answer.site6">
+            <a [routerLink]="['/site', answer.site6.id, 'view']">{{ answer.site6.nameAr }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.answer.question">Question</span></dt>
+        <dd>
+          <div *ngIf="answer.question">
+            <a [routerLink]="['/question', answer.question.id, 'view']">{{ answer.question.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.answer.userCustom1">User Custom 1</span></dt>
+        <dd>
+          <div *ngIf="answer.userCustom1">
+            <a [routerLink]="['/user-custom', answer.userCustom1.id, 'view']">{{ answer.userCustom1.id }}</a>
+          </div>
+        </dd>
+      </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
 
-        <button type="button" [routerLink]="['/answer', answer.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
-      </div>
-    }
+      <button type="button" [routerLink]="['/answer', answer.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
   </div>
 </div>

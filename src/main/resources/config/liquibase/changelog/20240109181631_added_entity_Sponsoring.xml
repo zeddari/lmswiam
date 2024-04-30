@@ -14,13 +14,10 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="ref_key" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
             <column name="ref" type="varchar(100)">
                 <constraints nullable="false" />
             </column>
-            <column name="message" type="${clobType}">
+            <column name="message" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="amount" type="double">
@@ -68,7 +65,6 @@
                   tableName="sponsoring"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="ref_key" type="string"/>
             <column name="ref" type="string"/>
             <column name="message" type="clob"/>
             <column name="amount" type="numeric"/>

@@ -8,59 +8,63 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.userCustom.firstName" for="field_firstName">First Name</label>
           <input type="text" class="form-control" name="firstName" id="field_firstName" data-cy="firstName" formControlName="firstName" />
-          @if (editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)) {
-            <div>
-              @if (editForm.get('firstName')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('firstName')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 50 }"
-                  >This field cannot be longer than 50 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('firstName')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('firstName')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 50 }"
+              >This field cannot be longer than 50 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.userCustom.lastName" for="field_lastName">Last Name</label>
           <input type="text" class="form-control" name="lastName" id="field_lastName" data-cy="lastName" formControlName="lastName" />
-          @if (editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)) {
-            <div>
-              @if (editForm.get('lastName')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('lastName')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 50 }"
-                  >This field cannot be longer than 50 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('lastName')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('lastName')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 50 }"
+              >This field cannot be longer than 50 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.userCustom.code" for="field_code">Code</label>
           <input type="text" class="form-control" name="code" id="field_code" data-cy="code" formControlName="code" />
-          @if (editForm.get('code')!.invalid && (editForm.get('code')!.dirty || editForm.get('code')!.touched)) {
-            <div>
-              @if (editForm.get('code')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('code')!.invalid && (editForm.get('code')!.dirty || editForm.get('code')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('code')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+              >This field cannot be longer than 100 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -73,35 +77,34 @@
             data-cy="accountName"
             formControlName="accountName"
           />
-          @if (editForm.get('accountName')!.invalid && (editForm.get('accountName')!.dirty || editForm.get('accountName')!.touched)) {
-            <div>
-              @if (editForm.get('accountName')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('accountName')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 50 }"
-                  >This field cannot be longer than 50 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('accountName')!.invalid && (editForm.get('accountName')!.dirty || editForm.get('accountName')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('accountName')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('accountName')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 50 }"
+              >This field cannot be longer than 50 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.userCustom.role" for="field_role">Role</label>
           <select class="form-control" name="role" formControlName="role" id="field_role" data-cy="role">
             <option [ngValue]="null">{{ 'lmswiamApp.Role.null' | translate }}</option>
-            @for (role of roleValues; track $index) {
-              <option [value]="role">{{ 'lmswiamApp.Role.' + role | translate }}</option>
-            }
+            <option *ngFor="let role of roleValues" [value]="role">{{ 'lmswiamApp.Role.' + role | translate }}</option>
           </select>
-          @if (editForm.get('role')!.invalid && (editForm.get('role')!.dirty || editForm.get('role')!.touched)) {
-            <div>
-              @if (editForm.get('role')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('role')!.invalid && (editForm.get('role')!.dirty || editForm.get('role')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('role')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -114,17 +117,22 @@
             data-cy="accountStatus"
           >
             <option [ngValue]="null">{{ 'lmswiamApp.AccountStatus.null' | translate }}</option>
-            @for (accountStatus of accountStatusValues; track $index) {
-              <option [value]="accountStatus">{{ 'lmswiamApp.AccountStatus.' + accountStatus | translate }}</option>
-            }
+            <option *ngFor="let accountStatus of accountStatusValues" [value]="accountStatus">
+              {{ 'lmswiamApp.AccountStatus.' + accountStatus | translate }}
+            </option>
           </select>
-          @if (editForm.get('accountStatus')!.invalid && (editForm.get('accountStatus')!.dirty || editForm.get('accountStatus')!.touched)) {
-            <div>
-              @if (editForm.get('accountStatus')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div
+            *ngIf="
+              editForm.get('accountStatus')!.invalid && (editForm.get('accountStatus')!.dirty || editForm.get('accountStatus')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('accountStatus')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -137,18 +145,23 @@
             data-cy="phoneNumber1"
             formControlName="phoneNumber1"
           />
-          @if (editForm.get('phoneNumber1')!.invalid && (editForm.get('phoneNumber1')!.dirty || editForm.get('phoneNumber1')!.touched)) {
-            <div>
-              @if (editForm.get('phoneNumber1')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('phoneNumber1')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 50 }"
-                  >This field cannot be longer than 50 characters.</small
-                >
-              }
-            </div>
-          }
+          <div
+            *ngIf="editForm.get('phoneNumber1')!.invalid && (editForm.get('phoneNumber1')!.dirty || editForm.get('phoneNumber1')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('phoneNumber1')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('phoneNumber1')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 50 }"
+              >This field cannot be longer than 50 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -161,32 +174,30 @@
             data-cy="phoneNumver2"
             formControlName="phoneNumver2"
           />
-          @if (editForm.get('phoneNumver2')!.invalid && (editForm.get('phoneNumver2')!.dirty || editForm.get('phoneNumver2')!.touched)) {
-            <div>
-              @if (editForm.get('phoneNumver2')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 50 }"
-                  >This field cannot be longer than 50 characters.</small
-                >
-              }
-            </div>
-          }
+          <div
+            *ngIf="editForm.get('phoneNumver2')!.invalid && (editForm.get('phoneNumver2')!.dirty || editForm.get('phoneNumver2')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('phoneNumver2')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 50 }"
+              >This field cannot be longer than 50 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.userCustom.sex" for="field_sex">Sex</label>
           <select class="form-control" name="sex" formControlName="sex" id="field_sex" data-cy="sex">
             <option [ngValue]="null">{{ 'lmswiamApp.Sex.null' | translate }}</option>
-            @for (sex of sexValues; track $index) {
-              <option [value]="sex">{{ 'lmswiamApp.Sex.' + sex | translate }}</option>
-            }
+            <option *ngFor="let sex of sexValues" [value]="sex">{{ 'lmswiamApp.Sex.' + sex | translate }}</option>
           </select>
-          @if (editForm.get('sex')!.invalid && (editForm.get('sex')!.dirty || editForm.get('sex')!.touched)) {
-            <div>
-              @if (editForm.get('sex')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('sex')!.invalid && (editForm.get('sex')!.dirty || editForm.get('sex')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('sex')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -204,37 +215,35 @@
             />
             <button type="button" class="btn btn-secondary" (click)="birthdateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
           </div>
-          @if (editForm.get('birthdate')!.invalid && (editForm.get('birthdate')!.dirty || editForm.get('birthdate')!.touched)) {
-            <div>
-              @if (editForm.get('birthdate')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('birthdate')!.invalid && (editForm.get('birthdate')!.dirty || editForm.get('birthdate')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('birthdate')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.userCustom.photo" for="field_photo">Photo</label>
           <div>
-            @if (editForm.get('photo')!.value) {
-              <img
-                [src]="'data:' + editForm.get('photoContentType')!.value + ';base64,' + editForm.get('photo')!.value"
-                style="max-height: 100px"
-                alt="userCustom image"
-              />
-            }
-            @if (editForm.get('photo')!.value) {
-              <div class="form-text text-danger clearfix">
-                <span class="pull-start">{{ editForm.get('photoContentType')!.value }}, {{ byteSize(editForm.get('photo')!.value!) }}</span>
-                <button
-                  type="button"
-                  (click)="clearInputImage('photo', 'photoContentType', 'file_photo')"
-                  class="btn btn-secondary btn-xs pull-end"
-                >
-                  <fa-icon icon="times"></fa-icon>
-                </button>
-              </div>
-            }
+            <img
+              [src]="'data:' + editForm.get('photoContentType')!.value + ';base64,' + editForm.get('photo')!.value"
+              style="max-height: 100px"
+              *ngIf="editForm.get('photo')!.value"
+              alt="userCustom image"
+            />
+            <div *ngIf="editForm.get('photo')!.value" class="form-text text-danger clearfix">
+              <span class="pull-start">{{ editForm.get('photoContentType')!.value }}, {{ byteSize(editForm.get('photo')!.value!) }}</span>
+              <button
+                type="button"
+                (click)="clearInputImage('photo', 'photoContentType', 'file_photo')"
+                class="btn btn-secondary btn-xs pull-end"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
             <input
               type="file"
               id="file_photo"
@@ -252,9 +261,7 @@
             id="field_photoContentType"
             formControlName="photoContentType"
           />
-          @if (editForm.get('photo')!.invalid && (editForm.get('photo')!.dirty || editForm.get('photo')!.touched)) {
-            <div></div>
-          }
+          <div *ngIf="editForm.get('photo')!.invalid && (editForm.get('photo')!.dirty || editForm.get('photo')!.touched)"></div>
         </div>
 
         <div class="mb-3">
@@ -317,9 +324,7 @@
           <label class="form-label" jhiTranslate="lmswiamApp.userCustom.user" for="field_user">User</label>
           <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareUser">
             <option [ngValue]="null"></option>
-            @for (userOption of usersSharedCollection; track $index) {
-              <option [ngValue]="userOption">{{ userOption.login }}</option>
-            }
+            <option [ngValue]="userOption" *ngFor="let userOption of usersSharedCollection">{{ userOption.login }}</option>
           </select>
         </div>
 
@@ -334,9 +339,7 @@
             formControlName="diplomas"
             [compareWith]="compareDiploma"
           >
-            @for (diplomaOption of diplomasSharedCollection; track $index) {
-              <option [ngValue]="diplomaOption">{{ diplomaOption.title }}</option>
-            }
+            <option [ngValue]="diplomaOption" *ngFor="let diplomaOption of diplomasSharedCollection">{{ diplomaOption.title }}</option>
           </select>
         </div>
 
@@ -351,9 +354,7 @@
             formControlName="languages"
             [compareWith]="compareLanguage"
           >
-            @for (languageOption of languagesSharedCollection; track $index) {
-              <option [ngValue]="languageOption">{{ languageOption.nameAr }}</option>
-            }
+            <option [ngValue]="languageOption" *ngFor="let languageOption of languagesSharedCollection">{{ languageOption.nameAr }}</option>
           </select>
         </div>
 
@@ -368,9 +369,7 @@
             [compareWith]="compareSite"
           >
             <option [ngValue]="null"></option>
-            @for (siteOption of sitesSharedCollection; track $index) {
-              <option [ngValue]="siteOption">{{ siteOption.nameAr }}</option>
-            }
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
           </select>
         </div>
 
@@ -385,9 +384,7 @@
             [compareWith]="compareCountry"
           >
             <option [ngValue]="null"></option>
-            @for (countryOption of countriesSharedCollection; track $index) {
-              <option [ngValue]="countryOption">{{ countryOption.nameAr }}</option>
-            }
+            <option [ngValue]="countryOption" *ngFor="let countryOption of countriesSharedCollection">{{ countryOption.nameAr }}</option>
           </select>
         </div>
 
@@ -402,9 +399,9 @@
             [compareWith]="compareNationality"
           >
             <option [ngValue]="null"></option>
-            @for (nationalityOption of nationalitiesSharedCollection; track $index) {
-              <option [ngValue]="nationalityOption">{{ nationalityOption.nameAr }}</option>
-            }
+            <option [ngValue]="nationalityOption" *ngFor="let nationalityOption of nationalitiesSharedCollection">
+              {{ nationalityOption.nameAr }}
+            </option>
           </select>
         </div>
 
@@ -412,9 +409,7 @@
           <label class="form-label" jhiTranslate="lmswiamApp.userCustom.job" for="field_job">Job</label>
           <select class="form-control" id="field_job" data-cy="job" name="job" formControlName="job" [compareWith]="compareJob">
             <option [ngValue]="null"></option>
-            @for (jobOption of jobsSharedCollection; track $index) {
-              <option [ngValue]="jobOption">{{ jobOption.titleAr }}</option>
-            }
+            <option [ngValue]="jobOption" *ngFor="let jobOption of jobsSharedCollection">{{ jobOption.titleAr }}</option>
           </select>
         </div>
 
@@ -429,9 +424,9 @@
             [compareWith]="compareDepartement"
           >
             <option [ngValue]="null"></option>
-            @for (departementOption of departementsSharedCollection; track $index) {
-              <option [ngValue]="departementOption">{{ departementOption.nameAr }}</option>
-            }
+            <option [ngValue]="departementOption" *ngFor="let departementOption of departementsSharedCollection">
+              {{ departementOption.nameAr }}
+            </option>
           </select>
         </div>
       </div>

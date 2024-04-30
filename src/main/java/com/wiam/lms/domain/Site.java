@@ -142,7 +142,6 @@ public class Site implements Serializable {
             "progressions",
             "tickets",
             "sponsorings",
-            "depenses",
             "diplomas",
             "languages",
             "site13",

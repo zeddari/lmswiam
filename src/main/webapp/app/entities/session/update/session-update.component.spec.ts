@@ -110,12 +110,12 @@ describe('Session Management Update Component', () => {
 
     it('Should call UserCustom query and add missing value', () => {
       const session: ISession = { id: 456 };
-      const professors: IUserCustom[] = [{ id: 30118 }];
+      const professors: IUserCustom[] = [{ id: 25621 }];
       session.professors = professors;
-      const employees: IUserCustom[] = [{ id: 13398 }];
+      const employees: IUserCustom[] = [{ id: 2941 }];
       session.employees = employees;
 
-      const userCustomCollection: IUserCustom[] = [{ id: 29917 }];
+      const userCustomCollection: IUserCustom[] = [{ id: 30255 }];
       jest.spyOn(userCustomService, 'query').mockReturnValue(of(new HttpResponse({ body: userCustomCollection })));
       const additionalUserCustoms = [...professors, ...employees];
       const expectedCollection: IUserCustom[] = [...additionalUserCustoms, ...userCustomCollection];
@@ -182,9 +182,9 @@ describe('Session Management Update Component', () => {
       session.classrooms = [classrooms];
       const groups: IGroup = { id: 12888 };
       session.groups = [groups];
-      const professors: IUserCustom = { id: 20061 };
+      const professors: IUserCustom = { id: 31298 };
       session.professors = [professors];
-      const employees: IUserCustom = { id: 31177 };
+      const employees: IUserCustom = { id: 8498 };
       session.employees = [employees];
       const links: ISessionLink = { id: 21015 };
       session.links = [links];

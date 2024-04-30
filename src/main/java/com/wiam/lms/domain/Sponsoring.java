@@ -1,7 +1,6 @@
 package com.wiam.lms.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.wiam.lms.domain.enumeration.SponsoringRef;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -27,12 +26,6 @@ public class Sponsoring implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "ref_key", nullable = false)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
-    private SponsoringRef refKey;
 
     @NotNull
     @Size(max = 100)
@@ -108,7 +101,6 @@ public class Sponsoring implements Serializable {
             "progressions",
             "tickets",
             "sponsorings",
-            "depenses",
             "diplomas",
             "languages",
             "site13",
@@ -146,19 +138,6 @@ public class Sponsoring implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public SponsoringRef getRefKey() {
-        return this.refKey;
-    }
-
-    public Sponsoring refKey(SponsoringRef refKey) {
-        this.setRefKey(refKey);
-        return this;
-    }
-
-    public void setRefKey(SponsoringRef refKey) {
-        this.refKey = refKey;
     }
 
     public String getRef() {
@@ -346,7 +325,6 @@ public class Sponsoring implements Serializable {
     public String toString() {
         return "Sponsoring{" +
             "id=" + getId() +
-            ", refKey='" + getRefKey() + "'" +
             ", ref='" + getRef() + "'" +
             ", message='" + getMessage() + "'" +
             ", amount=" + getAmount() +

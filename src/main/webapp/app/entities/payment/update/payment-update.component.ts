@@ -22,7 +22,6 @@ import { ICurrency } from 'app/entities/currency/currency.model';
 import { CurrencyService } from 'app/entities/currency/service/currency.service';
 import { PaymentMode } from 'app/entities/enumerations/payment-mode.model';
 import { PaymentType } from 'app/entities/enumerations/payment-type.model';
-import { PaymentSide } from 'app/entities/enumerations/payment-side.model';
 import { PaymentService } from '../service/payment.service';
 import { IPayment } from '../payment.model';
 import { PaymentFormService, PaymentFormGroup } from './payment-form.service';
@@ -38,7 +37,6 @@ export class PaymentUpdateComponent implements OnInit {
   payment: IPayment | null = null;
   paymentModeValues = Object.keys(PaymentMode);
   paymentTypeValues = Object.keys(PaymentType);
-  paymentSideValues = Object.keys(PaymentSide);
 
   sitesSharedCollection: ISite[] = [];
   enrolementsSharedCollection: IEnrolement[] = [];

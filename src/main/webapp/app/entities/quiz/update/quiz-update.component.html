@@ -8,38 +8,37 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.quiz.quizType" for="field_quizType">Quiz Type</label>
           <select class="form-control" name="quizType" formControlName="quizType" id="field_quizType" data-cy="quizType">
             <option [ngValue]="null">{{ 'lmswiamApp.ExamType.null' | translate }}</option>
-            @for (examType of examTypeValues; track $index) {
-              <option [value]="examType">{{ 'lmswiamApp.ExamType.' + examType | translate }}</option>
-            }
+            <option *ngFor="let examType of examTypeValues" [value]="examType">{{ 'lmswiamApp.ExamType.' + examType | translate }}</option>
           </select>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.quiz.quizTitle" for="field_quizTitle">Quiz Title</label>
           <input type="text" class="form-control" name="quizTitle" id="field_quizTitle" data-cy="quizTitle" formControlName="quizTitle" />
-          @if (editForm.get('quizTitle')!.invalid && (editForm.get('quizTitle')!.dirty || editForm.get('quizTitle')!.touched)) {
-            <div>
-              @if (editForm.get('quizTitle')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('quizTitle')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }"
-                  >This field cannot be longer than 100 characters.</small
-                >
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('quizTitle')!.invalid && (editForm.get('quizTitle')!.dirty || editForm.get('quizTitle')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('quizTitle')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('quizTitle')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+              >This field cannot be longer than 100 characters.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -66,31 +65,33 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-          @if (editForm.get('deadline')!.invalid && (editForm.get('deadline')!.dirty || editForm.get('deadline')!.touched)) {
-            <div>
-              @if (editForm.get('deadline')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('deadline')?.errors?.datetimelocal"
-                jhiTranslate="entity.validation.datetimelocal"
-                >This field should be a date and time.</small
-              >
-            </div>
-          }
+          <div *ngIf="editForm.get('deadline')!.invalid && (editForm.get('deadline')!.dirty || editForm.get('deadline')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('deadline')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('deadline')?.errors?.datetimelocal"
+              jhiTranslate="entity.validation.datetimelocal"
+              >This field should be a date and time.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.quiz.isActive" for="field_isActive">Is Active</label>
           <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
-          @if (editForm.get('isActive')!.invalid && (editForm.get('isActive')!.dirty || editForm.get('isActive')!.touched)) {
-            <div>
-              @if (editForm.get('isActive')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('isActive')!.invalid && (editForm.get('isActive')!.dirty || editForm.get('isActive')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('isActive')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -104,9 +105,7 @@
             formControlName="groups"
             [compareWith]="compareGroup"
           >
-            @for (groupOption of groupsSharedCollection; track $index) {
-              <option [ngValue]="groupOption">{{ groupOption.nameAr }}</option>
-            }
+            <option [ngValue]="groupOption" *ngFor="let groupOption of groupsSharedCollection">{{ groupOption.nameAr }}</option>
           </select>
         </div>
 
@@ -121,9 +120,9 @@
             formControlName="questions"
             [compareWith]="compareQuestion"
           >
-            @for (questionOption of questionsSharedCollection; track $index) {
-              <option [ngValue]="questionOption">{{ questionOption.question }}</option>
-            }
+            <option [ngValue]="questionOption" *ngFor="let questionOption of questionsSharedCollection">
+              {{ questionOption.question }}
+            </option>
           </select>
         </div>
 
@@ -131,9 +130,7 @@
           <label class="form-label" jhiTranslate="lmswiamApp.quiz.site7" for="field_site7">Site 7</label>
           <select class="form-control" id="field_site7" data-cy="site7" name="site7" formControlName="site7" [compareWith]="compareSite">
             <option [ngValue]="null"></option>
-            @for (siteOption of sitesSharedCollection; track $index) {
-              <option [ngValue]="siteOption">{{ siteOption.nameAr }}</option>
-            }
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
           </select>
         </div>
 
@@ -148,9 +145,7 @@
             [compareWith]="compareTopic"
           >
             <option [ngValue]="null"></option>
-            @for (topicOption of topicsSharedCollection; track $index) {
-              <option [ngValue]="topicOption">{{ topicOption.titleAr }}</option>
-            }
+            <option [ngValue]="topicOption" *ngFor="let topicOption of topicsSharedCollection">{{ topicOption.titleAr }}</option>
           </select>
         </div>
       </div>

@@ -1,82 +1,72 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    @if (certificate) {
-      <div>
-        <h2 data-cy="certificateDetailsHeading"><span jhiTranslate="lmswiamApp.certificate.detail.title">Certificate</span></h2>
+    <div *ngIf="certificate">
+      <h2 data-cy="certificateDetailsHeading"><span jhiTranslate="lmswiamApp.certificate.detail.title">Certificate</span></h2>
 
-        <hr />
+      <hr />
 
-        <jhi-alert-error></jhi-alert-error>
+      <jhi-alert-error></jhi-alert-error>
 
-        <jhi-alert></jhi-alert>
+      <jhi-alert></jhi-alert>
 
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="global.field.id">ID</span></dt>
-          <dd>
-            <span>{{ certificate.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.certificate.certificateType">Certificate Type</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.CertificateType.' + certificate.certificateType }}">{{ certificate.certificateType }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.certificate.title">Title</span></dt>
-          <dd>
-            <span>{{ certificate.title }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.certificate.riwaya">Riwaya</span></dt>
-          <dd>
-            <span jhiTranslate="{{ 'lmswiamApp.Riwayats.' + certificate.riwaya }}">{{ certificate.riwaya }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.certificate.miqdar">Miqdar</span></dt>
-          <dd>
-            <span>{{ certificate.miqdar }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.certificate.observation">Observation</span></dt>
-          <dd>
-            <span>{{ certificate.observation }}</span>
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.certificate.site19">Site 19</span></dt>
-          <dd>
-            @if (certificate.site19) {
-              <div>
-                <a [routerLink]="['/site', certificate.site19.id, 'view']">{{ certificate.site19.nameAr }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.certificate.userCustom6">User Custom 6</span></dt>
-          <dd>
-            @if (certificate.userCustom6) {
-              <div>
-                <a [routerLink]="['/user-custom', certificate.userCustom6.id, 'view']">{{ certificate.userCustom6.firstName }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.certificate.comitte">Comitte</span></dt>
-          <dd>
-            @if (certificate.comitte) {
-              <div>
-                <a [routerLink]="['/group', certificate.comitte.id, 'view']">{{ certificate.comitte.nameAr }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="lmswiamApp.certificate.topic4">Topic 4</span></dt>
-          <dd>
-            @if (certificate.topic4) {
-              <div>
-                <a [routerLink]="['/topic', certificate.topic4.id, 'view']">{{ certificate.topic4.titleAr }}</a>
-              </div>
-            }
-          </dd>
-        </dl>
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ certificate.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.certificate.certificateType">Certificate Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.CertificateType.' + certificate.certificateType }}">{{ certificate.certificateType }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.certificate.title">Title</span></dt>
+        <dd>
+          <span>{{ certificate.title }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.certificate.riwaya">Riwaya</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'lmswiamApp.Riwayats.' + certificate.riwaya }}">{{ certificate.riwaya }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.certificate.miqdar">Miqdar</span></dt>
+        <dd>
+          <span>{{ certificate.miqdar }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.certificate.observation">Observation</span></dt>
+        <dd>
+          <span>{{ certificate.observation }}</span>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.certificate.site19">Site 19</span></dt>
+        <dd>
+          <div *ngIf="certificate.site19">
+            <a [routerLink]="['/site', certificate.site19.id, 'view']">{{ certificate.site19.nameAr }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.certificate.userCustom6">User Custom 6</span></dt>
+        <dd>
+          <div *ngIf="certificate.userCustom6">
+            <a [routerLink]="['/user-custom', certificate.userCustom6.id, 'view']">{{ certificate.userCustom6.firstName }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.certificate.comitte">Comitte</span></dt>
+        <dd>
+          <div *ngIf="certificate.comitte">
+            <a [routerLink]="['/group', certificate.comitte.id, 'view']">{{ certificate.comitte.nameAr }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="lmswiamApp.certificate.topic4">Topic 4</span></dt>
+        <dd>
+          <div *ngIf="certificate.topic4">
+            <a [routerLink]="['/topic', certificate.topic4.id, 'view']">{{ certificate.topic4.titleAr }}</a>
+          </div>
+        </dd>
+      </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
 
-        <button type="button" [routerLink]="['/certificate', certificate.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
-      </div>
-    }
+      <button type="button" [routerLink]="['/certificate', certificate.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
   </div>
 </div>

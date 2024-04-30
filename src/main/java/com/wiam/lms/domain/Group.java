@@ -83,7 +83,6 @@ public class Group implements Serializable {
             "progressions",
             "tickets",
             "sponsorings",
-            "depenses",
             "diplomas",
             "languages",
             "site13",
@@ -95,6 +94,7 @@ public class Group implements Serializable {
             "courses",
             "sessions2s",
             "sessions3s",
+            "photo",
         },
         allowSetters = true
     )

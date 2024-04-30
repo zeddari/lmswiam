@@ -174,7 +174,7 @@ public class PartResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of parts in body.
      */
     @GetMapping("")
-    public List<Part> getAllParts(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
+    public List<Part> getAllParts(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Parts");
         if (eagerload) {
             return partRepository.findAllWithEagerRelationships();
@@ -190,7 +190,7 @@ public class PartResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the part, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Part> getPart(@PathVariable("id") Long id) {
+    public ResponseEntity<Part> getPart(@PathVariable Long id) {
         log.debug("REST request to get Part : {}", id);
         Optional<Part> part = partRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(part);
@@ -203,7 +203,7 @@ public class PartResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePart(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deletePart(@PathVariable Long id) {
         log.debug("REST request to delete Part : {}", id);
         partRepository.deleteById(id);
         partSearchRepository.deleteFromIndexById(id);
@@ -221,7 +221,7 @@ public class PartResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Part> searchParts(@RequestParam("query") String query) {
+    public List<Part> searchParts(@RequestParam String query) {
         log.debug("REST request to search Parts for query {}", query);
         try {
             return StreamSupport.stream(partSearchRepository.search(query).spliterator(), false).toList();

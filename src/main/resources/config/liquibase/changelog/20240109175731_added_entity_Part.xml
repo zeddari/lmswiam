@@ -20,19 +20,19 @@
             <column name="title_lat" type="varchar(100)">
                 <constraints nullable="false" />
             </column>
-            <column name="description" type="${clobType}">
+            <column name="description" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="duration" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="image_link" type="${blobType}">
+            <column name="image_link" type="blob">
                 <constraints nullable="true" />
             </column>
             <column name="image_link_content_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="video_link" type="${clobType}">
+            <column name="video_link" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="site2_id" type="bigint">

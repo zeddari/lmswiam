@@ -1,6 +1,11 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.enumeration.AccountStatus;
+import com.wiam.lms.domain.enumeration.Role;
+import com.wiam.lms.domain.enumeration.Sex;
+import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.UserRepository;
 import com.wiam.lms.security.SecurityUtils;
 import com.wiam.lms.service.MailService;
@@ -11,6 +16,7 @@ import com.wiam.lms.web.rest.errors.*;
 import com.wiam.lms.web.rest.vm.KeyAndPasswordVM;
 import com.wiam.lms.web.rest.vm.ManagedUserVM;
 import jakarta.validation.Valid;
+import java.time.LocalDate;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -36,14 +42,22 @@ public class AccountResource {
 
     private final UserRepository userRepository;
 
+    private final UserCustomRepository userCustomRepository;
+
     private final UserService userService;
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(
+        UserCustomRepository userCustomRepository,
+        UserRepository userRepository,
+        UserService userService,
+        MailService mailService
+    ) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.userCustomRepository = userCustomRepository;
     }
 
     /**
@@ -61,6 +75,20 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        if (user != null) {
+            System.out.println("HHHHHHHHHHHHHHHHHHHHH" + user.getFirstName() + " " + user.getLastName());
+            UserCustom userCustom = new UserCustom();
+            userCustom.setAccountName(user.getLogin());
+            userCustom.setFirstName(user.getFirstName());
+            userCustom.setLastName(user.getLastName());
+            userCustom.setPhoneNumber1("00000000");
+            userCustom.setSex(Sex.MALE);
+            userCustom.setAccountStatus(AccountStatus.ACTIVATED);
+            userCustom.setBirthdate(LocalDate.now());
+            userCustom.setRole(Role.STUDENT);
+
+            userCustomRepository.save(userCustom);
+        }
         mailService.sendActivationEmail(user);
     }
 

@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wiam.lms.IntegrationTest;
 import com.wiam.lms.domain.Payment;
 import com.wiam.lms.domain.enumeration.PaymentMode;
-import com.wiam.lms.domain.enumeration.PaymentSide;
 import com.wiam.lms.domain.enumeration.PaymentType;
 import com.wiam.lms.repository.PaymentRepository;
 import com.wiam.lms.repository.search.PaymentSearchRepository;
@@ -21,7 +20,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -42,6 +40,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link PaymentResource} REST controller.
@@ -71,9 +70,6 @@ class PaymentResourceIT {
 
     private static final PaymentType DEFAULT_TYPE = PaymentType.REGISTER;
     private static final PaymentType UPDATED_TYPE = PaymentType.MONTHLY_FEES;
-
-    private static final PaymentSide DEFAULT_SIDE = PaymentSide.IN;
-    private static final PaymentSide UPDATED_SIDE = PaymentSide.OUT;
 
     private static final ZonedDateTime DEFAULT_VALIDITY_START_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_VALIDITY_START_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -123,7 +119,6 @@ class PaymentResourceIT {
             .proofContentType(DEFAULT_PROOF_CONTENT_TYPE)
             .paidAt(DEFAULT_PAID_AT)
             .type(DEFAULT_TYPE)
-            .side(DEFAULT_SIDE)
             .validityStartTime(DEFAULT_VALIDITY_START_TIME)
             .validityEndTime(DEFAULT_VALIDITY_END_TIME)
             .details(DEFAULT_DETAILS);
@@ -145,7 +140,6 @@ class PaymentResourceIT {
             .proofContentType(UPDATED_PROOF_CONTENT_TYPE)
             .paidAt(UPDATED_PAID_AT)
             .type(UPDATED_TYPE)
-            .side(UPDATED_SIDE)
             .validityStartTime(UPDATED_VALIDITY_START_TIME)
             .validityEndTime(UPDATED_VALIDITY_END_TIME)
             .details(UPDATED_DETAILS);
@@ -190,7 +184,6 @@ class PaymentResourceIT {
         assertThat(testPayment.getProofContentType()).isEqualTo(DEFAULT_PROOF_CONTENT_TYPE);
         assertThat(testPayment.getPaidAt()).isEqualTo(DEFAULT_PAID_AT);
         assertThat(testPayment.getType()).isEqualTo(DEFAULT_TYPE);
-        assertThat(testPayment.getSide()).isEqualTo(DEFAULT_SIDE);
         assertThat(testPayment.getValidityStartTime()).isEqualTo(DEFAULT_VALIDITY_START_TIME);
         assertThat(testPayment.getValidityEndTime()).isEqualTo(DEFAULT_VALIDITY_END_TIME);
         assertThat(testPayment.getDetails()).isEqualTo(DEFAULT_DETAILS);
@@ -319,26 +312,6 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void checkSideIsRequired() throws Exception {
-        int databaseSizeBeforeTest = paymentRepository.findAll().size();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(paymentSearchRepository.findAll());
-        // set the field null
-        payment.setSide(null);
-
-        // Create the Payment, which fails.
-
-        restPaymentMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(payment)))
-            .andExpect(status().isBadRequest());
-
-        List<Payment> paymentList = paymentRepository.findAll();
-        assertThat(paymentList).hasSize(databaseSizeBeforeTest);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(paymentSearchRepository.findAll());
-        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
-    }
-
-    @Test
-    @Transactional
     void checkValidityStartTimeIsRequired() throws Exception {
         int databaseSizeBeforeTest = paymentRepository.findAll().size();
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(paymentSearchRepository.findAll());
@@ -393,10 +366,9 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentMethod").value(hasItem(DEFAULT_PAYMENT_METHOD.toString())))
             .andExpect(jsonPath("$.[*].paiedBy").value(hasItem(DEFAULT_PAIED_BY)))
             .andExpect(jsonPath("$.[*].proofContentType").value(hasItem(DEFAULT_PROOF_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].proof").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_PROOF))))
+            .andExpect(jsonPath("$.[*].proof").value(hasItem(Base64Utils.encodeToString(DEFAULT_PROOF))))
             .andExpect(jsonPath("$.[*].paidAt").value(hasItem(sameInstant(DEFAULT_PAID_AT))))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].side").value(hasItem(DEFAULT_SIDE.toString())))
             .andExpect(jsonPath("$.[*].validityStartTime").value(hasItem(sameInstant(DEFAULT_VALIDITY_START_TIME))))
             .andExpect(jsonPath("$.[*].validityEndTime").value(hasItem(sameInstant(DEFAULT_VALIDITY_END_TIME))))
             .andExpect(jsonPath("$.[*].details").value(hasItem(DEFAULT_DETAILS.toString())));
@@ -435,10 +407,9 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.paymentMethod").value(DEFAULT_PAYMENT_METHOD.toString()))
             .andExpect(jsonPath("$.paiedBy").value(DEFAULT_PAIED_BY))
             .andExpect(jsonPath("$.proofContentType").value(DEFAULT_PROOF_CONTENT_TYPE))
-            .andExpect(jsonPath("$.proof").value(Base64.getEncoder().encodeToString(DEFAULT_PROOF)))
+            .andExpect(jsonPath("$.proof").value(Base64Utils.encodeToString(DEFAULT_PROOF)))
             .andExpect(jsonPath("$.paidAt").value(sameInstant(DEFAULT_PAID_AT)))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
-            .andExpect(jsonPath("$.side").value(DEFAULT_SIDE.toString()))
             .andExpect(jsonPath("$.validityStartTime").value(sameInstant(DEFAULT_VALIDITY_START_TIME)))
             .andExpect(jsonPath("$.validityEndTime").value(sameInstant(DEFAULT_VALIDITY_END_TIME)))
             .andExpect(jsonPath("$.details").value(DEFAULT_DETAILS.toString()));
@@ -473,7 +444,6 @@ class PaymentResourceIT {
             .proofContentType(UPDATED_PROOF_CONTENT_TYPE)
             .paidAt(UPDATED_PAID_AT)
             .type(UPDATED_TYPE)
-            .side(UPDATED_SIDE)
             .validityStartTime(UPDATED_VALIDITY_START_TIME)
             .validityEndTime(UPDATED_VALIDITY_END_TIME)
             .details(UPDATED_DETAILS);
@@ -497,7 +467,6 @@ class PaymentResourceIT {
         assertThat(testPayment.getProofContentType()).isEqualTo(UPDATED_PROOF_CONTENT_TYPE);
         assertThat(testPayment.getPaidAt()).isEqualTo(UPDATED_PAID_AT);
         assertThat(testPayment.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testPayment.getSide()).isEqualTo(UPDATED_SIDE);
         assertThat(testPayment.getValidityStartTime()).isEqualTo(UPDATED_VALIDITY_START_TIME);
         assertThat(testPayment.getValidityEndTime()).isEqualTo(UPDATED_VALIDITY_END_TIME);
         assertThat(testPayment.getDetails()).isEqualTo(UPDATED_DETAILS);
@@ -515,7 +484,6 @@ class PaymentResourceIT {
                 assertThat(testPaymentSearch.getProofContentType()).isEqualTo(UPDATED_PROOF_CONTENT_TYPE);
                 assertThat(testPaymentSearch.getPaidAt()).isEqualTo(UPDATED_PAID_AT);
                 assertThat(testPaymentSearch.getType()).isEqualTo(UPDATED_TYPE);
-                assertThat(testPaymentSearch.getSide()).isEqualTo(UPDATED_SIDE);
                 assertThat(testPaymentSearch.getValidityStartTime()).isEqualTo(UPDATED_VALIDITY_START_TIME);
                 assertThat(testPaymentSearch.getValidityEndTime()).isEqualTo(UPDATED_VALIDITY_END_TIME);
                 assertThat(testPaymentSearch.getDetails()).isEqualTo(UPDATED_DETAILS);
@@ -604,8 +572,7 @@ class PaymentResourceIT {
             .paymentMethod(UPDATED_PAYMENT_METHOD)
             .proof(UPDATED_PROOF)
             .proofContentType(UPDATED_PROOF_CONTENT_TYPE)
-            .side(UPDATED_SIDE)
-            .details(UPDATED_DETAILS);
+            .validityStartTime(UPDATED_VALIDITY_START_TIME);
 
         restPaymentMockMvc
             .perform(
@@ -626,10 +593,9 @@ class PaymentResourceIT {
         assertThat(testPayment.getProofContentType()).isEqualTo(UPDATED_PROOF_CONTENT_TYPE);
         assertThat(testPayment.getPaidAt()).isEqualTo(DEFAULT_PAID_AT);
         assertThat(testPayment.getType()).isEqualTo(DEFAULT_TYPE);
-        assertThat(testPayment.getSide()).isEqualTo(UPDATED_SIDE);
-        assertThat(testPayment.getValidityStartTime()).isEqualTo(DEFAULT_VALIDITY_START_TIME);
+        assertThat(testPayment.getValidityStartTime()).isEqualTo(UPDATED_VALIDITY_START_TIME);
         assertThat(testPayment.getValidityEndTime()).isEqualTo(DEFAULT_VALIDITY_END_TIME);
-        assertThat(testPayment.getDetails()).isEqualTo(UPDATED_DETAILS);
+        assertThat(testPayment.getDetails()).isEqualTo(DEFAULT_DETAILS);
     }
 
     @Test
@@ -652,7 +618,6 @@ class PaymentResourceIT {
             .proofContentType(UPDATED_PROOF_CONTENT_TYPE)
             .paidAt(UPDATED_PAID_AT)
             .type(UPDATED_TYPE)
-            .side(UPDATED_SIDE)
             .validityStartTime(UPDATED_VALIDITY_START_TIME)
             .validityEndTime(UPDATED_VALIDITY_END_TIME)
             .details(UPDATED_DETAILS);
@@ -676,7 +641,6 @@ class PaymentResourceIT {
         assertThat(testPayment.getProofContentType()).isEqualTo(UPDATED_PROOF_CONTENT_TYPE);
         assertThat(testPayment.getPaidAt()).isEqualTo(UPDATED_PAID_AT);
         assertThat(testPayment.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testPayment.getSide()).isEqualTo(UPDATED_SIDE);
         assertThat(testPayment.getValidityStartTime()).isEqualTo(UPDATED_VALIDITY_START_TIME);
         assertThat(testPayment.getValidityEndTime()).isEqualTo(UPDATED_VALIDITY_END_TIME);
         assertThat(testPayment.getDetails()).isEqualTo(UPDATED_DETAILS);
@@ -788,10 +752,9 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentMethod").value(hasItem(DEFAULT_PAYMENT_METHOD.toString())))
             .andExpect(jsonPath("$.[*].paiedBy").value(hasItem(DEFAULT_PAIED_BY)))
             .andExpect(jsonPath("$.[*].proofContentType").value(hasItem(DEFAULT_PROOF_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].proof").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_PROOF))))
+            .andExpect(jsonPath("$.[*].proof").value(hasItem(Base64Utils.encodeToString(DEFAULT_PROOF))))
             .andExpect(jsonPath("$.[*].paidAt").value(hasItem(sameInstant(DEFAULT_PAID_AT))))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].side").value(hasItem(DEFAULT_SIDE.toString())))
             .andExpect(jsonPath("$.[*].validityStartTime").value(hasItem(sameInstant(DEFAULT_VALIDITY_START_TIME))))
             .andExpect(jsonPath("$.[*].validityEndTime").value(hasItem(sameInstant(DEFAULT_VALIDITY_END_TIME))))
             .andExpect(jsonPath("$.[*].details").value(hasItem(DEFAULT_DETAILS.toString())));

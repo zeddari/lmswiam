@@ -7,12 +7,6 @@
   "entityTableName": "sponsoring",
   "fields": [
     {
-      "fieldName": "refKey",
-      "fieldType": "SponsoringRef",
-      "fieldValidateRules": ["required"],
-      "fieldValues": "STUDENT,SALARY,RENT,INTERNET,ELECTRICITY,OTHERS,EXTERNAL_ACTIVITY,INTERNAL_ACTIVITY,KHATM_ACTIVITY"
-    },
-    {
       "fieldName": "ref",
       "fieldType": "String",
       "fieldValidateRules": ["required", "maxlength"],

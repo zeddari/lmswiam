@@ -8,35 +8,29 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.answer.a1v" for="field_a1v">A 1 V</label>
           <input type="checkbox" class="form-check" name="a1v" id="field_a1v" data-cy="a1v" formControlName="a1v" />
-          @if (editForm.get('a1v')!.invalid && (editForm.get('a1v')!.dirty || editForm.get('a1v')!.touched)) {
-            <div>
-              @if (editForm.get('a1v')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('a1v')!.invalid && (editForm.get('a1v')!.dirty || editForm.get('a1v')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('a1v')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.answer.a2v" for="field_a2v">A 2 V</label>
           <input type="checkbox" class="form-check" name="a2v" id="field_a2v" data-cy="a2v" formControlName="a2v" />
-          @if (editForm.get('a2v')!.invalid && (editForm.get('a2v')!.dirty || editForm.get('a2v')!.touched)) {
-            <div>
-              @if (editForm.get('a2v')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('a2v')!.invalid && (editForm.get('a2v')!.dirty || editForm.get('a2v')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('a2v')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -52,22 +46,18 @@
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.answer.result" for="field_result">Result</label>
           <input type="checkbox" class="form-check" name="result" id="field_result" data-cy="result" formControlName="result" />
-          @if (editForm.get('result')!.invalid && (editForm.get('result')!.dirty || editForm.get('result')!.touched)) {
-            <div>
-              @if (editForm.get('result')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('result')!.invalid && (editForm.get('result')!.dirty || editForm.get('result')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('result')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.answer.site6" for="field_site6">Site 6</label>
           <select class="form-control" id="field_site6" data-cy="site6" name="site6" formControlName="site6" [compareWith]="compareSite">
             <option [ngValue]="null"></option>
-            @for (siteOption of sitesSharedCollection; track $index) {
-              <option [ngValue]="siteOption">{{ siteOption.nameAr }}</option>
-            }
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
           </select>
         </div>
 
@@ -82,9 +72,7 @@
             [compareWith]="compareQuestion"
           >
             <option [ngValue]="null"></option>
-            @for (questionOption of questionsSharedCollection; track $index) {
-              <option [ngValue]="questionOption">{{ questionOption.id }}</option>
-            }
+            <option [ngValue]="questionOption" *ngFor="let questionOption of questionsSharedCollection">{{ questionOption.id }}</option>
           </select>
         </div>
 
@@ -99,9 +87,9 @@
             [compareWith]="compareUserCustom"
           >
             <option [ngValue]="null"></option>
-            @for (userCustomOption of userCustomsSharedCollection; track $index) {
-              <option [ngValue]="userCustomOption">{{ userCustomOption.id }}</option>
-            }
+            <option [ngValue]="userCustomOption" *ngFor="let userCustomOption of userCustomsSharedCollection">
+              {{ userCustomOption.id }}
+            </option>
           </select>
         </div>
       </div>

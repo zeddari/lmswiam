@@ -20,13 +20,13 @@
             <column name="title" type="varchar(100)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_diploma__title" />
             </column>
-            <column name="subject" type="${clobType}">
+            <column name="subject" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
-            <column name="detail" type="${clobType}">
+            <column name="detail" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
-            <column name="supervisor" type="${clobType}">
+            <column name="supervisor" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="grade" type="varchar(255)">
@@ -35,10 +35,10 @@
             <column name="graduation_date" type="date">
                 <constraints nullable="true" />
             </column>
-            <column name="school" type="${clobType}">
+            <column name="school" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
-            <column name="attachment" type="${blobType}">
+            <column name="attachment" type="blob">
                 <constraints nullable="true" />
             </column>
             <column name="attachment_content_type" type="varchar(255)">

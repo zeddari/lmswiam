@@ -41,196 +41,163 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (tickets?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.tickets.home.notFound">No Tickets found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="tickets?.length === 0">
+    <span jhiTranslate="lmswiamApp.tickets.home.notFound">No Tickets found</span>
+  </div>
 
-  @if (tickets && tickets.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="tickets && tickets.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="subject">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.subject">Subject</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="title">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.title">Title</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="reference">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.reference">Reference</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.description">Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="justifDoc">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.justifDoc">Justif Doc</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateTicket">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.dateTicket">Date Ticket</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateProcess">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.dateProcess">Date Process</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="processed">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.processed">Processed</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="from">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.from">From</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="toDate">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.toDate">To Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="decisionDetail">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.decisionDetail">Decision Detail</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site18.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.site18">Site 18</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="userCustom5.firstName">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.tickets.userCustom5">User Custom 5</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tickets of tickets; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/tickets', tickets.id, 'view']">{{ tickets.id }}</a>
+          </td>
+          <td jhiTranslate="{{ 'lmswiamApp.TicketSubjects.' + tickets.subject }}">{{ tickets.subject }}</td>
+          <td>{{ tickets.title }}</td>
+          <td>{{ tickets.reference }}</td>
+          <td>{{ tickets.description }}</td>
+          <td>
+            <a *ngIf="tickets.justifDoc" (click)="openFile(tickets.justifDoc, tickets.justifDocContentType)">
+              <img
+                [src]="'data:' + tickets.justifDocContentType + ';base64,' + tickets.justifDoc"
+                style="max-height: 30px"
+                alt="tickets image"
+              />
+            </a>
+            <span *ngIf="tickets.justifDoc">{{ tickets.justifDocContentType }}, {{ byteSize(tickets.justifDoc) }}</span>
+          </td>
+          <td>{{ tickets.dateTicket | formatMediumDatetime }}</td>
+          <td>{{ tickets.dateProcess | formatMediumDatetime }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.TicketStatus.' + tickets.processed }}">{{ tickets.processed }}</td>
+          <td>{{ tickets.from | formatMediumDatetime }}</td>
+          <td>{{ tickets.toDate | formatMediumDatetime }}</td>
+          <td>{{ tickets.decisionDetail }}</td>
+          <td>
+            <div *ngIf="tickets.site18">
+              <a [routerLink]="['/site', tickets.site18.id, 'view']">{{ tickets.site18.nameAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="tickets.userCustom5">
+              <a [routerLink]="['/user-custom', tickets.userCustom5.id, 'view']">{{ tickets.userCustom5.firstName }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/tickets', tickets.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="subject">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.subject">Subject</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="title">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.title">Title</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="reference">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.reference">Reference</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="description">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="justifDoc">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.justifDoc">Justif Doc</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="dateTicket">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.dateTicket">Date Ticket</span>
+              <a [routerLink]="['/tickets', tickets.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="dateProcess">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.dateProcess">Date Process</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="processed">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.processed">Processed</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="from">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.from">From</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="toDate">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.toDate">To Date</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="decisionDetail">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.decisionDetail">Decision Detail</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="site18.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.site18">Site 18</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="userCustom5.firstName">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.tickets.userCustom5">User Custom 5</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (tickets of tickets; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/tickets', tickets.id, 'view']">{{ tickets.id }}</a>
-              </td>
-              <td jhiTranslate="{{ 'lmswiamApp.TicketSubjects.' + tickets.subject }}">{{ tickets.subject }}</td>
-              <td>{{ tickets.title }}</td>
-              <td>{{ tickets.reference }}</td>
-              <td>{{ tickets.description }}</td>
-              <td>
-                @if (tickets.justifDoc) {
-                  <a (click)="openFile(tickets.justifDoc, tickets.justifDocContentType)">
-                    <img
-                      [src]="'data:' + tickets.justifDocContentType + ';base64,' + tickets.justifDoc"
-                      style="max-height: 30px"
-                      alt="tickets image"
-                    />
-                  </a>
-                  <span>{{ tickets.justifDocContentType }}, {{ byteSize(tickets.justifDoc) }}</span>
-                }
-              </td>
-              <td>{{ tickets.dateTicket | formatMediumDatetime }}</td>
-              <td>{{ tickets.dateProcess | formatMediumDatetime }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.TicketStatus.' + tickets.processed }}">{{ tickets.processed }}</td>
-              <td>{{ tickets.from | formatMediumDatetime }}</td>
-              <td>{{ tickets.toDate | formatMediumDatetime }}</td>
-              <td>{{ tickets.decisionDetail }}</td>
-              <td>
-                @if (tickets.site18) {
-                  <div>
-                    <a [routerLink]="['/site', tickets.site18.id, 'view']">{{ tickets.site18.nameAr }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (tickets.userCustom5) {
-                  <div>
-                    <a [routerLink]="['/user-custom', tickets.userCustom5.id, 'view']">{{ tickets.userCustom5.firstName }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/tickets', tickets.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/tickets', tickets.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(tickets)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(tickets)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

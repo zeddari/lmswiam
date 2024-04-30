@@ -29,9 +29,9 @@ export interface IProgression {
   hifdScore?: number | null;
   adaeScore?: number | null;
   observation?: string | null;
-  site17?: ISite | null;
-  sessionInstance?: ISessionInstance | null;
-  student?: IUserCustom | null;
+  site17?: Pick<ISite, 'id' | 'nameAr'> | null;
+  sessionInstance?: Pick<ISessionInstance, 'id' | 'title'> | null;
+  student?: Pick<IUserCustom, 'id' | 'firstName'> | null;
 }
 
 export type NewProgression = Omit<IProgression, 'id'> & { id: null };

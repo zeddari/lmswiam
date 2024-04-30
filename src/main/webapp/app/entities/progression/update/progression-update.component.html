@@ -12,28 +12,27 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.progression.attendance" for="field_attendance">Attendance</label>
           <select class="form-control" name="attendance" formControlName="attendance" id="field_attendance" data-cy="attendance">
             <option [ngValue]="null">{{ 'lmswiamApp.Attendance.null' | translate }}</option>
-            @for (attendance of attendanceValues; track $index) {
-              <option [value]="attendance">{{ 'lmswiamApp.Attendance.' + attendance | translate }}</option>
-            }
+            <option *ngFor="let attendance of attendanceValues" [value]="attendance">
+              {{ 'lmswiamApp.Attendance.' + attendance | translate }}
+            </option>
           </select>
-          @if (editForm.get('attendance')!.invalid && (editForm.get('attendance')!.dirty || editForm.get('attendance')!.touched)) {
-            <div>
-              @if (editForm.get('attendance')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('attendance')!.invalid && (editForm.get('attendance')!.dirty || editForm.get('attendance')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('attendance')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -51,13 +50,14 @@
             data-cy="lateArrival"
             formControlName="lateArrival"
           />
-          @if (editForm.get('lateArrival')!.invalid && (editForm.get('lateArrival')!.dirty || editForm.get('lateArrival')!.touched)) {
-            <div>
-              @if (editForm.get('lateArrival')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('lateArrival')!.invalid && (editForm.get('lateArrival')!.dirty || editForm.get('lateArrival')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('lateArrival')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -70,15 +70,18 @@
             data-cy="earlyDeparture"
             formControlName="earlyDeparture"
           />
-          @if (
-            editForm.get('earlyDeparture')!.invalid && (editForm.get('earlyDeparture')!.dirty || editForm.get('earlyDeparture')!.touched)
-          ) {
-            <div>
-              @if (editForm.get('earlyDeparture')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div
+            *ngIf="
+              editForm.get('earlyDeparture')!.invalid && (editForm.get('earlyDeparture')!.dirty || editForm.get('earlyDeparture')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('earlyDeparture')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -93,9 +96,9 @@
             data-cy="progressionMode"
           >
             <option [ngValue]="null">{{ 'lmswiamApp.ProgressionMode.null' | translate }}</option>
-            @for (progressionMode of progressionModeValues; track $index) {
-              <option [value]="progressionMode">{{ 'lmswiamApp.ProgressionMode.' + progressionMode | translate }}</option>
-            }
+            <option *ngFor="let progressionMode of progressionModeValues" [value]="progressionMode">
+              {{ 'lmswiamApp.ProgressionMode.' + progressionMode | translate }}
+            </option>
           </select>
         </div>
 
@@ -103,9 +106,7 @@
           <label class="form-label" jhiTranslate="lmswiamApp.progression.examType" for="field_examType">Exam Type</label>
           <select class="form-control" name="examType" formControlName="examType" id="field_examType" data-cy="examType">
             <option [ngValue]="null">{{ 'lmswiamApp.ExamType.null' | translate }}</option>
-            @for (examType of examTypeValues; track $index) {
-              <option [value]="examType">{{ 'lmswiamApp.ExamType.' + examType | translate }}</option>
-            }
+            <option *ngFor="let examType of examTypeValues" [value]="examType">{{ 'lmswiamApp.ExamType.' + examType | translate }}</option>
           </select>
         </div>
 
@@ -113,9 +114,7 @@
           <label class="form-label" jhiTranslate="lmswiamApp.progression.riwaya" for="field_riwaya">Riwaya</label>
           <select class="form-control" name="riwaya" formControlName="riwaya" id="field_riwaya" data-cy="riwaya">
             <option [ngValue]="null">{{ 'lmswiamApp.Riwayats.null' | translate }}</option>
-            @for (riwayats of riwayatsValues; track $index) {
-              <option [value]="riwayats">{{ 'lmswiamApp.Riwayats.' + riwayats | translate }}</option>
-            }
+            <option *ngFor="let riwayats of riwayatsValues" [value]="riwayats">{{ 'lmswiamApp.Riwayats.' + riwayats | translate }}</option>
           </select>
         </div>
 
@@ -123,9 +122,7 @@
           <label class="form-label" jhiTranslate="lmswiamApp.progression.fromSourate" for="field_fromSourate">From Sourate</label>
           <select class="form-control" name="fromSourate" formControlName="fromSourate" id="field_fromSourate" data-cy="fromSourate">
             <option [ngValue]="null">{{ 'lmswiamApp.Sourate.null' | translate }}</option>
-            @for (sourate of sourateValues; track $index) {
-              <option [value]="sourate">{{ 'lmswiamApp.Sourate.' + sourate | translate }}</option>
-            }
+            <option *ngFor="let sourate of sourateValues" [value]="sourate">{{ 'lmswiamApp.Sourate.' + sourate | translate }}</option>
           </select>
         </div>
 
@@ -133,9 +130,7 @@
           <label class="form-label" jhiTranslate="lmswiamApp.progression.toSourate" for="field_toSourate">To Sourate</label>
           <select class="form-control" name="toSourate" formControlName="toSourate" id="field_toSourate" data-cy="toSourate">
             <option [ngValue]="null">{{ 'lmswiamApp.Sourate.null' | translate }}</option>
-            @for (sourate of sourateValues; track $index) {
-              <option [value]="sourate">{{ 'lmswiamApp.Sourate.' + sourate | translate }}</option>
-            }
+            <option *ngFor="let sourate of sourateValues" [value]="sourate">{{ 'lmswiamApp.Sourate.' + sourate | translate }}</option>
           </select>
         </div>
 
@@ -182,22 +177,21 @@
           <label class="form-label" jhiTranslate="lmswiamApp.progression.tilawaType" for="field_tilawaType">Tilawa Type</label>
           <select class="form-control" name="tilawaType" formControlName="tilawaType" id="field_tilawaType" data-cy="tilawaType">
             <option [ngValue]="null">{{ 'lmswiamApp.Tilawa.null' | translate }}</option>
-            @for (tilawa of tilawaValues; track $index) {
-              <option [value]="tilawa">{{ 'lmswiamApp.Tilawa.' + tilawa | translate }}</option>
-            }
+            <option *ngFor="let tilawa of tilawaValues" [value]="tilawa">{{ 'lmswiamApp.Tilawa.' + tilawa | translate }}</option>
           </select>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.progression.taskDone" for="field_taskDone">Task Done</label>
           <input type="checkbox" class="form-check" name="taskDone" id="field_taskDone" data-cy="taskDone" formControlName="taskDone" />
-          @if (editForm.get('taskDone')!.invalid && (editForm.get('taskDone')!.dirty || editForm.get('taskDone')!.touched)) {
-            <div>
-              @if (editForm.get('taskDone')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
-          }
+          <div *ngIf="editForm.get('taskDone')!.invalid && (editForm.get('taskDone')!.dirty || editForm.get('taskDone')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('taskDone')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -210,85 +204,102 @@
             data-cy="tajweedScore"
             formControlName="tajweedScore"
           />
-          @if (editForm.get('tajweedScore')!.invalid && (editForm.get('tajweedScore')!.dirty || editForm.get('tajweedScore')!.touched)) {
-            <div>
-              @if (editForm.get('tajweedScore')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('tajweedScore')?.errors?.min) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 1 }"
-                  >This field should be at least 1.</small
-                >
-              }
-              @if (editForm.get('tajweedScore')?.errors?.max) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: 5 }"
-                  >This field cannot be more than 5.</small
-                >
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('tajweedScore')?.errors?.number"
-                jhiTranslate="entity.validation.number"
-                >This field should be a number.</small
-              >
-            </div>
-          }
+          <div
+            *ngIf="editForm.get('tajweedScore')!.invalid && (editForm.get('tajweedScore')!.dirty || editForm.get('tajweedScore')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('tajweedScore')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('tajweedScore')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 1 }"
+              >This field should be at least 1.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('tajweedScore')?.errors?.max"
+              jhiTranslate="entity.validation.max"
+              [translateValues]="{ max: 5 }"
+              >This field cannot be more than 5.</small
+            >
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('tajweedScore')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+              >This field should be a number.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.progression.hifdScore" for="field_hifdScore">Hifd Score</label>
           <input type="number" class="form-control" name="hifdScore" id="field_hifdScore" data-cy="hifdScore" formControlName="hifdScore" />
-          @if (editForm.get('hifdScore')!.invalid && (editForm.get('hifdScore')!.dirty || editForm.get('hifdScore')!.touched)) {
-            <div>
-              @if (editForm.get('hifdScore')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('hifdScore')?.errors?.min) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 1 }"
-                  >This field should be at least 1.</small
-                >
-              }
-              @if (editForm.get('hifdScore')?.errors?.max) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: 5 }"
-                  >This field cannot be more than 5.</small
-                >
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('hifdScore')?.errors?.number"
-                jhiTranslate="entity.validation.number"
-                >This field should be a number.</small
-              >
-            </div>
-          }
+          <div *ngIf="editForm.get('hifdScore')!.invalid && (editForm.get('hifdScore')!.dirty || editForm.get('hifdScore')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('hifdScore')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('hifdScore')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 1 }"
+              >This field should be at least 1.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('hifdScore')?.errors?.max"
+              jhiTranslate="entity.validation.max"
+              [translateValues]="{ max: 5 }"
+              >This field cannot be more than 5.</small
+            >
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('hifdScore')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+              >This field should be a number.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.progression.adaeScore" for="field_adaeScore">Adae Score</label>
           <input type="number" class="form-control" name="adaeScore" id="field_adaeScore" data-cy="adaeScore" formControlName="adaeScore" />
-          @if (editForm.get('adaeScore')!.invalid && (editForm.get('adaeScore')!.dirty || editForm.get('adaeScore')!.touched)) {
-            <div>
-              @if (editForm.get('adaeScore')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              @if (editForm.get('adaeScore')?.errors?.min) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: 1 }"
-                  >This field should be at least 1.</small
-                >
-              }
-              @if (editForm.get('adaeScore')?.errors?.max) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: 5 }"
-                  >This field cannot be more than 5.</small
-                >
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('adaeScore')?.errors?.number"
-                jhiTranslate="entity.validation.number"
-                >This field should be a number.</small
-              >
-            </div>
-          }
+          <div *ngIf="editForm.get('adaeScore')!.invalid && (editForm.get('adaeScore')!.dirty || editForm.get('adaeScore')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('adaeScore')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('adaeScore')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 1 }"
+              >This field should be at least 1.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('adaeScore')?.errors?.max"
+              jhiTranslate="entity.validation.max"
+              [translateValues]="{ max: 5 }"
+              >This field cannot be more than 5.</small
+            >
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('adaeScore')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+              >This field should be a number.</small
+            >
+          </div>
         </div>
 
         <div class="mb-3">
@@ -313,9 +324,7 @@
             [compareWith]="compareSite"
           >
             <option [ngValue]="null"></option>
-            @for (siteOption of sitesSharedCollection; track $index) {
-              <option [ngValue]="siteOption">{{ siteOption.nameAr }}</option>
-            }
+            <option [ngValue]="siteOption" *ngFor="let siteOption of sitesSharedCollection">{{ siteOption.nameAr }}</option>
           </select>
         </div>
 
@@ -332,9 +341,9 @@
             [compareWith]="compareSessionInstance"
           >
             <option [ngValue]="null"></option>
-            @for (sessionInstanceOption of sessionInstancesSharedCollection; track $index) {
-              <option [ngValue]="sessionInstanceOption">{{ sessionInstanceOption.title }}</option>
-            }
+            <option [ngValue]="sessionInstanceOption" *ngFor="let sessionInstanceOption of sessionInstancesSharedCollection">
+              {{ sessionInstanceOption.title }}
+            </option>
           </select>
         </div>
 
@@ -349,9 +358,9 @@
             [compareWith]="compareUserCustom"
           >
             <option [ngValue]="null"></option>
-            @for (userCustomOption of userCustomsSharedCollection; track $index) {
-              <option [ngValue]="userCustomOption">{{ userCustomOption.firstName }}</option>
-            }
+            <option [ngValue]="userCustomOption" *ngFor="let userCustomOption of userCustomsSharedCollection">
+              {{ userCustomOption.firstName }}
+            </option>
           </select>
         </div>
       </div>

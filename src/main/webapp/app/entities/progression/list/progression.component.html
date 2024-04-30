@@ -41,268 +41,221 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
       </div>
     </div>
   </form>
 
-  @if (progressions?.length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="lmswiamApp.progression.home.notFound">No Progressions found</span>
-    </div>
-  }
+  <div class="alert alert-warning" id="no-result" *ngIf="progressions?.length === 0">
+    <span jhiTranslate="lmswiamApp.progression.home.notFound">No Progressions found</span>
+  </div>
 
-  @if (progressions && progressions.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
+  <div class="table-responsive table-entities" id="entities" *ngIf="progressions && progressions.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="attendance">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.attendance">Attendance</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="justifRef">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.justifRef">Justif Ref</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="lateArrival">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.lateArrival">Late Arrival</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="earlyDeparture">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.earlyDeparture">Early Departure</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="progressionMode">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.progressionMode">Progression Mode</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="examType">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.examType">Exam Type</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="riwaya">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.riwaya">Riwaya</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="fromSourate">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.fromSourate">From Sourate</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="toSourate">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.toSourate">To Sourate</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="fromAyaNum">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.fromAyaNum">From Aya Num</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="toAyaNum">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.toAyaNum">To Aya Num</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="fromAyaVerset">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.fromAyaVerset">From Aya Verset</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="toAyaVerset">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.toAyaVerset">To Aya Verset</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="tilawaType">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.tilawaType">Tilawa Type</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="taskDone">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.taskDone">Task Done</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="tajweedScore">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.tajweedScore">Tajweed Score</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="hifdScore">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.hifdScore">Hifd Score</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="adaeScore">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.adaeScore">Adae Score</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="observation">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.observation">Observation</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="site17.nameAr">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.site17">Site 17</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sessionInstance.title">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.sessionInstance">Session Instance</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="student.firstName">
+            <div class="d-flex">
+              <span jhiTranslate="lmswiamApp.progression.student">Student</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let progression of progressions; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/progression', progression.id, 'view']">{{ progression.id }}</a>
+          </td>
+          <td jhiTranslate="{{ 'lmswiamApp.Attendance.' + progression.attendance }}">{{ progression.attendance }}</td>
+          <td>{{ progression.justifRef }}</td>
+          <td>{{ progression.lateArrival }}</td>
+          <td>{{ progression.earlyDeparture }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.ProgressionMode.' + progression.progressionMode }}">{{ progression.progressionMode }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.ExamType.' + progression.examType }}">{{ progression.examType }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.Riwayats.' + progression.riwaya }}">{{ progression.riwaya }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.Sourate.' + progression.fromSourate }}">{{ progression.fromSourate }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.Sourate.' + progression.toSourate }}">{{ progression.toSourate }}</td>
+          <td>{{ progression.fromAyaNum }}</td>
+          <td>{{ progression.toAyaNum }}</td>
+          <td>{{ progression.fromAyaVerset }}</td>
+          <td>{{ progression.toAyaVerset }}</td>
+          <td jhiTranslate="{{ 'lmswiamApp.Tilawa.' + progression.tilawaType }}">{{ progression.tilawaType }}</td>
+          <td>{{ progression.taskDone }}</td>
+          <td>{{ progression.tajweedScore }}</td>
+          <td>{{ progression.hifdScore }}</td>
+          <td>{{ progression.adaeScore }}</td>
+          <td>{{ progression.observation }}</td>
+          <td>
+            <div *ngIf="progression.site17">
+              <a [routerLink]="['/site', progression.site17.id, 'view']">{{ progression.site17.nameAr }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="progression.sessionInstance">
+              <a [routerLink]="['/session-instance', progression.sessionInstance.id, 'view']">{{ progression.sessionInstance.title }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="progression.student">
+              <a [routerLink]="['/user-custom', progression.student.id, 'view']">{{ progression.student.firstName }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/progression', progression.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="attendance">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.attendance">Attendance</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="justifRef">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.justifRef">Justif Ref</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="lateArrival">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.lateArrival">Late Arrival</span>
+              <a [routerLink]="['/progression', progression.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="earlyDeparture">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.earlyDeparture">Early Departure</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="progressionMode">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.progressionMode">Progression Mode</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="examType">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.examType">Exam Type</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="riwaya">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.riwaya">Riwaya</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="fromSourate">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.fromSourate">From Sourate</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="toSourate">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.toSourate">To Sourate</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="fromAyaNum">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.fromAyaNum">From Aya Num</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="toAyaNum">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.toAyaNum">To Aya Num</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="fromAyaVerset">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.fromAyaVerset">From Aya Verset</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="toAyaVerset">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.toAyaVerset">To Aya Verset</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="tilawaType">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.tilawaType">Tilawa Type</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="taskDone">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.taskDone">Task Done</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="tajweedScore">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.tajweedScore">Tajweed Score</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="hifdScore">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.hifdScore">Hifd Score</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="adaeScore">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.adaeScore">Adae Score</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="observation">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.observation">Observation</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="site17.nameAr">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.site17">Site 17</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="sessionInstance.title">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.sessionInstance">Session Instance</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="student.firstName">
-              <div class="d-flex">
-                <span jhiTranslate="lmswiamApp.progression.student">Student</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (progression of progressions; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/progression', progression.id, 'view']">{{ progression.id }}</a>
-              </td>
-              <td jhiTranslate="{{ 'lmswiamApp.Attendance.' + progression.attendance }}">{{ progression.attendance }}</td>
-              <td>{{ progression.justifRef }}</td>
-              <td>{{ progression.lateArrival }}</td>
-              <td>{{ progression.earlyDeparture }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.ProgressionMode.' + progression.progressionMode }}">{{ progression.progressionMode }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.ExamType.' + progression.examType }}">{{ progression.examType }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.Riwayats.' + progression.riwaya }}">{{ progression.riwaya }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.Sourate.' + progression.fromSourate }}">{{ progression.fromSourate }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.Sourate.' + progression.toSourate }}">{{ progression.toSourate }}</td>
-              <td>{{ progression.fromAyaNum }}</td>
-              <td>{{ progression.toAyaNum }}</td>
-              <td>{{ progression.fromAyaVerset }}</td>
-              <td>{{ progression.toAyaVerset }}</td>
-              <td jhiTranslate="{{ 'lmswiamApp.Tilawa.' + progression.tilawaType }}">{{ progression.tilawaType }}</td>
-              <td>{{ progression.taskDone }}</td>
-              <td>{{ progression.tajweedScore }}</td>
-              <td>{{ progression.hifdScore }}</td>
-              <td>{{ progression.adaeScore }}</td>
-              <td>{{ progression.observation }}</td>
-              <td>
-                @if (progression.site17) {
-                  <div>
-                    <a [routerLink]="['/site', progression.site17.id, 'view']">{{ progression.site17.nameAr }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (progression.sessionInstance) {
-                  <div>
-                    <a [routerLink]="['/session-instance', progression.sessionInstance.id, 'view']">{{
-                      progression.sessionInstance.title
-                    }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (progression.student) {
-                  <div>
-                    <a [routerLink]="['/user-custom', progression.student.id, 'view']">{{ progression.student.firstName }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/progression', progression.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/progression', progression.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(progression)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              <button type="submit" (click)="delete(progression)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

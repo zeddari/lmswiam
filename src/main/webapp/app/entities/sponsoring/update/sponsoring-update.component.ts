@@ -18,7 +18,6 @@ import { IProject } from 'app/entities/project/project.model';
 import { ProjectService } from 'app/entities/project/service/project.service';
 import { ICurrency } from 'app/entities/currency/currency.model';
 import { CurrencyService } from 'app/entities/currency/service/currency.service';
-import { SponsoringRef } from 'app/entities/enumerations/sponsoring-ref.model';
 import { SponsoringService } from '../service/sponsoring.service';
 import { ISponsoring } from '../sponsoring.model';
 import { SponsoringFormService, SponsoringFormGroup } from './sponsoring-form.service';
@@ -32,7 +31,6 @@ import { SponsoringFormService, SponsoringFormGroup } from './sponsoring-form.se
 export class SponsoringUpdateComponent implements OnInit {
   isSaving = false;
   sponsoring: ISponsoring | null = null;
-  sponsoringRefValues = Object.keys(SponsoringRef);
 
   sitesSharedCollection: ISite[] = [];
   userCustomsSharedCollection: IUserCustom[] = [];

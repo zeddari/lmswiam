@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.wiam.lms.IntegrationTest;
 import com.wiam.lms.domain.Sponsoring;
-import com.wiam.lms.domain.enumeration.SponsoringRef;
 import com.wiam.lms.repository.SponsoringRepository;
 import com.wiam.lms.repository.search.SponsoringSearchRepository;
 import jakarta.persistence.EntityManager;
@@ -45,9 +44,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 class SponsoringResourceIT {
-
-    private static final SponsoringRef DEFAULT_REF_KEY = SponsoringRef.STUDENT;
-    private static final SponsoringRef UPDATED_REF_KEY = SponsoringRef.SALARY;
 
     private static final String DEFAULT_REF = "AAAAAAAAAA";
     private static final String UPDATED_REF = "BBBBBBBBBB";
@@ -99,7 +95,6 @@ class SponsoringResourceIT {
      */
     public static Sponsoring createEntity(EntityManager em) {
         Sponsoring sponsoring = new Sponsoring()
-            .refKey(DEFAULT_REF_KEY)
             .ref(DEFAULT_REF)
             .message(DEFAULT_MESSAGE)
             .amount(DEFAULT_AMOUNT)
@@ -117,7 +112,6 @@ class SponsoringResourceIT {
      */
     public static Sponsoring createUpdatedEntity(EntityManager em) {
         Sponsoring sponsoring = new Sponsoring()
-            .refKey(UPDATED_REF_KEY)
             .ref(UPDATED_REF)
             .message(UPDATED_MESSAGE)
             .amount(UPDATED_AMOUNT)
@@ -158,7 +152,6 @@ class SponsoringResourceIT {
                 assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore + 1);
             });
         Sponsoring testSponsoring = sponsoringList.get(sponsoringList.size() - 1);
-        assertThat(testSponsoring.getRefKey()).isEqualTo(DEFAULT_REF_KEY);
         assertThat(testSponsoring.getRef()).isEqualTo(DEFAULT_REF);
         assertThat(testSponsoring.getMessage()).isEqualTo(DEFAULT_MESSAGE);
         assertThat(testSponsoring.getAmount()).isEqualTo(DEFAULT_AMOUNT);
@@ -184,26 +177,6 @@ class SponsoringResourceIT {
         // Validate the Sponsoring in the database
         List<Sponsoring> sponsoringList = sponsoringRepository.findAll();
         assertThat(sponsoringList).hasSize(databaseSizeBeforeCreate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(sponsoringSearchRepository.findAll());
-        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
-    }
-
-    @Test
-    @Transactional
-    void checkRefKeyIsRequired() throws Exception {
-        int databaseSizeBeforeTest = sponsoringRepository.findAll().size();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(sponsoringSearchRepository.findAll());
-        // set the field null
-        sponsoring.setRefKey(null);
-
-        // Create the Sponsoring, which fails.
-
-        restSponsoringMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(sponsoring)))
-            .andExpect(status().isBadRequest());
-
-        List<Sponsoring> sponsoringList = sponsoringRepository.findAll();
-        assertThat(sponsoringList).hasSize(databaseSizeBeforeTest);
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(sponsoringSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
@@ -260,7 +233,6 @@ class SponsoringResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(sponsoring.getId().intValue())))
-            .andExpect(jsonPath("$.[*].refKey").value(hasItem(DEFAULT_REF_KEY.toString())))
             .andExpect(jsonPath("$.[*].ref").value(hasItem(DEFAULT_REF)))
             .andExpect(jsonPath("$.[*].message").value(hasItem(DEFAULT_MESSAGE.toString())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.doubleValue())))
@@ -298,7 +270,6 @@ class SponsoringResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(sponsoring.getId().intValue()))
-            .andExpect(jsonPath("$.refKey").value(DEFAULT_REF_KEY.toString()))
             .andExpect(jsonPath("$.ref").value(DEFAULT_REF))
             .andExpect(jsonPath("$.message").value(DEFAULT_MESSAGE.toString()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.doubleValue()))
@@ -329,7 +300,6 @@ class SponsoringResourceIT {
         // Disconnect from session so that the updates on updatedSponsoring are not directly saved in db
         em.detach(updatedSponsoring);
         updatedSponsoring
-            .refKey(UPDATED_REF_KEY)
             .ref(UPDATED_REF)
             .message(UPDATED_MESSAGE)
             .amount(UPDATED_AMOUNT)
@@ -349,7 +319,6 @@ class SponsoringResourceIT {
         List<Sponsoring> sponsoringList = sponsoringRepository.findAll();
         assertThat(sponsoringList).hasSize(databaseSizeBeforeUpdate);
         Sponsoring testSponsoring = sponsoringList.get(sponsoringList.size() - 1);
-        assertThat(testSponsoring.getRefKey()).isEqualTo(UPDATED_REF_KEY);
         assertThat(testSponsoring.getRef()).isEqualTo(UPDATED_REF);
         assertThat(testSponsoring.getMessage()).isEqualTo(UPDATED_MESSAGE);
         assertThat(testSponsoring.getAmount()).isEqualTo(UPDATED_AMOUNT);
@@ -363,7 +332,6 @@ class SponsoringResourceIT {
                 assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
                 List<Sponsoring> sponsoringSearchList = IterableUtils.toList(sponsoringSearchRepository.findAll());
                 Sponsoring testSponsoringSearch = sponsoringSearchList.get(searchDatabaseSizeAfter - 1);
-                assertThat(testSponsoringSearch.getRefKey()).isEqualTo(UPDATED_REF_KEY);
                 assertThat(testSponsoringSearch.getRef()).isEqualTo(UPDATED_REF);
                 assertThat(testSponsoringSearch.getMessage()).isEqualTo(UPDATED_MESSAGE);
                 assertThat(testSponsoringSearch.getAmount()).isEqualTo(UPDATED_AMOUNT);
@@ -450,7 +418,7 @@ class SponsoringResourceIT {
         Sponsoring partialUpdatedSponsoring = new Sponsoring();
         partialUpdatedSponsoring.setId(sponsoring.getId());
 
-        partialUpdatedSponsoring.refKey(UPDATED_REF_KEY).ref(UPDATED_REF).amount(UPDATED_AMOUNT).endDate(UPDATED_END_DATE);
+        partialUpdatedSponsoring.ref(UPDATED_REF).message(UPDATED_MESSAGE).startDate(UPDATED_START_DATE).isAlways(UPDATED_IS_ALWAYS);
 
         restSponsoringMockMvc
             .perform(
@@ -464,13 +432,12 @@ class SponsoringResourceIT {
         List<Sponsoring> sponsoringList = sponsoringRepository.findAll();
         assertThat(sponsoringList).hasSize(databaseSizeBeforeUpdate);
         Sponsoring testSponsoring = sponsoringList.get(sponsoringList.size() - 1);
-        assertThat(testSponsoring.getRefKey()).isEqualTo(UPDATED_REF_KEY);
         assertThat(testSponsoring.getRef()).isEqualTo(UPDATED_REF);
-        assertThat(testSponsoring.getMessage()).isEqualTo(DEFAULT_MESSAGE);
-        assertThat(testSponsoring.getAmount()).isEqualTo(UPDATED_AMOUNT);
-        assertThat(testSponsoring.getStartDate()).isEqualTo(DEFAULT_START_DATE);
-        assertThat(testSponsoring.getEndDate()).isEqualTo(UPDATED_END_DATE);
-        assertThat(testSponsoring.getIsAlways()).isEqualTo(DEFAULT_IS_ALWAYS);
+        assertThat(testSponsoring.getMessage()).isEqualTo(UPDATED_MESSAGE);
+        assertThat(testSponsoring.getAmount()).isEqualTo(DEFAULT_AMOUNT);
+        assertThat(testSponsoring.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testSponsoring.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testSponsoring.getIsAlways()).isEqualTo(UPDATED_IS_ALWAYS);
     }
 
     @Test
@@ -486,7 +453,6 @@ class SponsoringResourceIT {
         partialUpdatedSponsoring.setId(sponsoring.getId());
 
         partialUpdatedSponsoring
-            .refKey(UPDATED_REF_KEY)
             .ref(UPDATED_REF)
             .message(UPDATED_MESSAGE)
             .amount(UPDATED_AMOUNT)
@@ -506,7 +472,6 @@ class SponsoringResourceIT {
         List<Sponsoring> sponsoringList = sponsoringRepository.findAll();
         assertThat(sponsoringList).hasSize(databaseSizeBeforeUpdate);
         Sponsoring testSponsoring = sponsoringList.get(sponsoringList.size() - 1);
-        assertThat(testSponsoring.getRefKey()).isEqualTo(UPDATED_REF_KEY);
         assertThat(testSponsoring.getRef()).isEqualTo(UPDATED_REF);
         assertThat(testSponsoring.getMessage()).isEqualTo(UPDATED_MESSAGE);
         assertThat(testSponsoring.getAmount()).isEqualTo(UPDATED_AMOUNT);
@@ -619,7 +584,6 @@ class SponsoringResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(sponsoring.getId().intValue())))
-            .andExpect(jsonPath("$.[*].refKey").value(hasItem(DEFAULT_REF_KEY.toString())))
             .andExpect(jsonPath("$.[*].ref").value(hasItem(DEFAULT_REF)))
             .andExpect(jsonPath("$.[*].message").value(hasItem(DEFAULT_MESSAGE.toString())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.doubleValue())))

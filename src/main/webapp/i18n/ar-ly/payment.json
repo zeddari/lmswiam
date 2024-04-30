@@ -25,7 +25,6 @@
       "proof": "Proof",
       "paidAt": "Paid At",
       "type": "Type",
-      "side": "Side",
       "validityStartTime": "Validity Start Time",
       "validityEndTime": "Validity End Time",
       "details": "Details",

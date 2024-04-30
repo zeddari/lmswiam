@@ -175,7 +175,7 @@ public class CountryResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the country, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Country> getCountry(@PathVariable("id") Long id) {
+    public ResponseEntity<Country> getCountry(@PathVariable Long id) {
         log.debug("REST request to get Country : {}", id);
         Optional<Country> country = countryRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(country);
@@ -188,7 +188,7 @@ public class CountryResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCountry(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteCountry(@PathVariable Long id) {
         log.debug("REST request to delete Country : {}", id);
         countryRepository.deleteById(id);
         countrySearchRepository.deleteFromIndexById(id);
@@ -206,7 +206,7 @@ public class CountryResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Country> searchCountries(@RequestParam("query") String query) {
+    public List<Country> searchCountries(@RequestParam String query) {
         log.debug("REST request to search Countries for query {}", query);
         try {
             return StreamSupport.stream(countrySearchRepository.search(query).spliterator(), false).toList();

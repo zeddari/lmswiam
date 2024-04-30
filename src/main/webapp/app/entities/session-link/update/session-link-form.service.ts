@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type SessionLinkFormGroupInput = ISessionLink | PartialWithRequiredKeyOf<NewSessionLink>;
 
-type SessionLinkFormDefaults = Pick<NewSessionLink, 'id'>;
+type SessionLinkFormDefaults = Pick<NewSessionLink, 'id' | 'sessions4s' | 'sessions7s'>;
 
 type SessionLinkFormGroupContent = {
   id: FormControl<ISessionLink['id'] | NewSessionLink['id']>;
@@ -23,6 +23,8 @@ type SessionLinkFormGroupContent = {
   description: FormControl<ISessionLink['description']>;
   link: FormControl<ISessionLink['link']>;
   site15: FormControl<ISessionLink['site15']>;
+  sessions4s: FormControl<ISessionLink['sessions4s']>;
+  sessions7s: FormControl<ISessionLink['sessions7s']>;
 };
 
 export type SessionLinkFormGroup = FormGroup<SessionLinkFormGroupContent>;
@@ -51,6 +53,8 @@ export class SessionLinkFormService {
         validators: [Validators.maxLength(500)],
       }),
       site15: new FormControl(sessionLinkRawValue.site15),
+      sessions4s: new FormControl(sessionLinkRawValue.sessions4s ?? []),
+      sessions7s: new FormControl(sessionLinkRawValue.sessions7s ?? []),
     });
   }
 
@@ -71,6 +75,8 @@ export class SessionLinkFormService {
   private getFormDefaults(): SessionLinkFormDefaults {
     return {
       id: null,
+      sessions4s: [],
+      sessions7s: [],
     };
   }
 }
