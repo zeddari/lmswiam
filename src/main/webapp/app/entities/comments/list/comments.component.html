@@ -1,0 +1,186 @@
+<div>
+  <h2 id="page-heading" data-cy="CommentsHeading">
+    <span jhiTranslate="lmswiamApp.comments.home.title">Comments</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="lmswiamApp.comments.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-comments"
+        [routerLink]="['/comments/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down" jhiTranslate="lmswiamApp.comments.home.createLabel">Create a new Comments</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch" jhiTranslate="lmswiamApp.comments.home.search">Search for Comments</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="{{ 'lmswiamApp.comments.home.search' | translate }}"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  @if (comments?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="lmswiamApp.comments.home.notFound">No Comments found</span>
+    </div>
+  }
+
+  @if (comments && comments.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="pseudoName">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.comments.pseudoName">Pseudo Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="type">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.comments.type">Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="title">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.comments.title">Title</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="message">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.comments.message">Message</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="like">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.comments.like">Like</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="disLike">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.comments.disLike">Dis Like</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdAt">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.comments.createdAt">Created At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="updatedAt">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.comments.updatedAt">Updated At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="sessions8.title">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.comments.sessions8">Sessions 8</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (comments of comments; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/comments', comments.id, 'view']">{{ comments.id }}</a>
+              </td>
+              <td>{{ comments.pseudoName }}</td>
+              <td jhiTranslate="{{ 'lmswiamApp.CommentType.' + comments.type }}">{{ comments.type }}</td>
+              <td>{{ comments.title }}</td>
+              <td>{{ comments.message }}</td>
+              <td>{{ comments.like }}</td>
+              <td>{{ comments.disLike }}</td>
+              <td>{{ comments.createdAt | formatMediumDatetime }}</td>
+              <td>{{ comments.updatedAt | formatMediumDatetime }}</td>
+              <td>
+                @for (sessions8 of comments.sessions8s; track $index; let last = $last) {
+                  <span>
+                    <a class="form-control-static" [routerLink]="['/session', sessions8.id, 'view']">{{ sessions8.title }}</a
+                    >{{ last ? '' : ', ' }}
+                  </span>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/comments', comments.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/comments', comments.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(comments)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

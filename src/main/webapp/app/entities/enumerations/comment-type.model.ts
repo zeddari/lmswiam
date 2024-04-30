@@ -1,0 +1,11 @@
+export enum CommentType {
+  GOOD_TEACHER = 'GOOD_TEACHER',
+
+  BAD_TEACHER = 'BAD_TEACHER',
+
+  COMMITEMENT = 'COMMITEMENT',
+
+  ABSENCE = 'ABSENCE',
+
+  OTHERS = 'OTHERS',
+}
