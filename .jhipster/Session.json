@@ -186,6 +186,14 @@
       "relationshipName": "site14",
       "relationshipSide": "right",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "comments",
+      "otherEntityRelationshipName": "sessions8",
+      "relationshipName": "comment",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
     }
   ]
 }

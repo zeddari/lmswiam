@@ -4,6 +4,7 @@ import com.wiam.lms.domain.Ayahs;
 import com.wiam.lms.domain.Surahs;
 import com.wiam.lms.repository.AyahsRepository;
 import com.wiam.lms.repository.SurahsRepository;
+import com.wiam.lms.repository.custom.AyahsCustomRepository;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,10 @@ public class QuranController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProgressionResource.class);
 
-    private final AyahsRepository ayahsRepository;
+    private final AyahsCustomRepository ayahsRepository;
     private final SurahsRepository surahsRepository;
 
-    public QuranController(SurahsRepository surahsRepository, AyahsRepository ayahsRepository) {
+    public QuranController(SurahsRepository surahsRepository, AyahsCustomRepository ayahsRepository) {
         this.surahsRepository = surahsRepository;
         this.ayahsRepository = ayahsRepository;
     }

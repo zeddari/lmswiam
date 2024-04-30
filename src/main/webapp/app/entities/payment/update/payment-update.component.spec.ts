@@ -132,10 +132,10 @@ describe('Payment Management Update Component', () => {
 
     it('Should call Session query and add missing value', () => {
       const payment: IPayment = { id: 456 };
-      const session: ISession = { id: 24380 };
+      const session: ISession = { id: 18337 };
       payment.session = session;
 
-      const sessionCollection: ISession[] = [{ id: 3406 }];
+      const sessionCollection: ISession[] = [{ id: 22355 }];
       jest.spyOn(sessionService, 'query').mockReturnValue(of(new HttpResponse({ body: sessionCollection })));
       const additionalSessions = [session];
       const expectedCollection: ISession[] = [...additionalSessions, ...sessionCollection];
@@ -182,7 +182,7 @@ describe('Payment Management Update Component', () => {
       payment.enrolment = enrolment;
       const sponsoring: ISponsoring = { id: 11141 };
       payment.sponsoring = sponsoring;
-      const session: ISession = { id: 24241 };
+      const session: ISession = { id: 2393 };
       payment.session = session;
       const currency: ICurrency = { id: 17416 };
       payment.currency = currency;

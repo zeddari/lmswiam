@@ -33,10 +33,6 @@ public class Ayahs implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String textdesc;
 
-    @Lob
-    @Column(name = "textdesc_normalized", nullable = false)
-    private String textdescNormalized;
-
     @Column(name = "number_in_surah")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer numberInSurah;
@@ -106,19 +102,6 @@ public class Ayahs implements Serializable {
 
     public void setTextdesc(String textdesc) {
         this.textdesc = textdesc;
-    }
-
-    public String getTextdescNormalized() {
-        return textdescNormalized;
-    }
-
-    public Ayahs textdescNormalized(String textdescNormalized) {
-        this.setTextdescNormalized(textdescNormalized);
-        return this;
-    }
-
-    public void setTextdescNormalized(String textdescNormalized) {
-        this.textdescNormalized = textdescNormalized;
     }
 
     public Integer getNumberInSurah() {

@@ -287,6 +287,11 @@ public class Session implements Serializable {
     )
     private Site site14;
 
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "sessions8s")
+    @org.springframework.data.annotation.Transient
+    @JsonIgnoreProperties(value = { "sessions8s" }, allowSetters = true)
+    private Set<Comments> comments = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -801,6 +806,37 @@ public class Session implements Serializable {
 
     public Session site14(Site site) {
         this.setSite14(site);
+        return this;
+    }
+
+    public Set<Comments> getComments() {
+        return this.comments;
+    }
+
+    public void setComments(Set<Comments> comments) {
+        if (this.comments != null) {
+            this.comments.forEach(i -> i.removeSessions8(this));
+        }
+        if (comments != null) {
+            comments.forEach(i -> i.addSessions8(this));
+        }
+        this.comments = comments;
+    }
+
+    public Session comments(Set<Comments> comments) {
+        this.setComments(comments);
+        return this;
+    }
+
+    public Session addComment(Comments comments) {
+        this.comments.add(comments);
+        comments.getSessions8s().add(this);
+        return this;
+    }
+
+    public Session removeComment(Comments comments) {
+        this.comments.remove(comments);
+        comments.getSessions8s().remove(this);
         return this;
     }
 

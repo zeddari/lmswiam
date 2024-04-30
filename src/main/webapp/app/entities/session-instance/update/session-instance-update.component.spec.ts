@@ -102,10 +102,10 @@ describe('SessionInstance Management Update Component', () => {
 
     it('Should call Session query and add missing value', () => {
       const sessionInstance: ISessionInstance = { id: 456 };
-      const session1: ISession = { id: 7703 };
+      const session1: ISession = { id: 12292 };
       sessionInstance.session1 = session1;
 
-      const sessionCollection: ISession[] = [{ id: 3875 }];
+      const sessionCollection: ISession[] = [{ id: 10283 }];
       jest.spyOn(sessionService, 'query').mockReturnValue(of(new HttpResponse({ body: sessionCollection })));
       const additionalSessions = [session1];
       const expectedCollection: ISession[] = [...additionalSessions, ...sessionCollection];
@@ -128,7 +128,7 @@ describe('SessionInstance Management Update Component', () => {
       sessionInstance.links = [links];
       const site16: ISite = { id: 28851 };
       sessionInstance.site16 = site16;
-      const session1: ISession = { id: 30878 };
+      const session1: ISession = { id: 17591 };
       sessionInstance.session1 = session1;
 
       activatedRoute.data = of({ sessionInstance });

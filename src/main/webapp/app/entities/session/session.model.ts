@@ -6,6 +6,7 @@ import { IGroup } from 'app/entities/group/group.model';
 import { IUserCustom } from 'app/entities/user-custom/user-custom.model';
 import { ISessionLink } from 'app/entities/session-link/session-link.model';
 import { ISite } from 'app/entities/site/site.model';
+import { IComments } from 'app/entities/comments/comments.model';
 import { SessionMode } from 'app/entities/enumerations/session-mode.model';
 import { SessionType } from 'app/entities/enumerations/session-type.model';
 import { SessionJoinMode } from 'app/entities/enumerations/session-join-mode.model';
@@ -45,6 +46,7 @@ export interface ISession {
   employees?: IUserCustom[] | null;
   links?: ISessionLink[] | null;
   site14?: ISite | null;
+  comments?: IComments[] | null;
 }
 
 export type NewSession = Omit<ISession, 'id'> & { id: null };
