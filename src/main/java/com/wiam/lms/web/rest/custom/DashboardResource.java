@@ -13,6 +13,8 @@ import jakarta.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URISyntaxException;
 import java.util.List;
 import org.slf4j.Logger;
@@ -69,5 +71,63 @@ public class DashboardResource {
             .deltaLastMonthPercent(deltaPercent)
             .build();
         return ResponseEntity.ok(chartData);
+    }
+
+    /**
+     *
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
+     * @throws DocumentException
+     */
+    @GetMapping("/income/data")
+    public ResponseEntity<ChartData> getIncomeData() throws URISyntaxException, IOException, DocumentException {
+        log.debug("REST request to getIncomeData");
+        List<Long> incomePerDay = dashboardRepository.getIncomeListPerDay();
+        Long currentIncome = dashboardRepository.getIncomeCurrentMonth();
+        Long lastMonthIncome = dashboardRepository.getIncomeLastMonth();
+        Double deltaPercent = (lastMonthIncome != 0) ? (((double) currentIncome - lastMonthIncome) / (lastMonthIncome)) * 100 : null;
+        ChartSeries chartSeries = ChartSeries.builder().data(incomePerDay).build();
+        ChartData chartData = ChartData
+            .builder()
+            .chartSeries(chartSeries)
+            .countItems(currentIncome)
+            .deltaLastMonthPercent(percentPrecision(deltaPercent))
+            .build();
+        return ResponseEntity.ok(chartData);
+    }
+
+    /**
+     *
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
+     * @throws DocumentException
+     */
+    @GetMapping("/expenses/data")
+    public ResponseEntity<ChartData> getExpensesData() throws URISyntaxException, IOException, DocumentException {
+        log.debug("REST request to getExpensesData");
+        List<Long> expensesPerDay = dashboardRepository.getExpensesListPerDay();
+        Long currentExpenses = dashboardRepository.getExpensesCurrentMonth();
+        Long lastMonthExpenses = dashboardRepository.getExpensesLastMonth();
+        Double deltaPercent = (lastMonthExpenses != 0)
+            ? (((double) currentExpenses - lastMonthExpenses) / (lastMonthExpenses)) * 100
+            : null;
+        ChartSeries chartSeries = ChartSeries.builder().data(expensesPerDay).build();
+        ChartData chartData = ChartData
+            .builder()
+            .chartSeries(chartSeries)
+            .countItems(currentExpenses)
+            .deltaLastMonthPercent(percentPrecision(deltaPercent))
+            .build();
+        return ResponseEntity.ok(chartData);
+    }
+
+    private Double percentPrecision(Double val) {
+        if (val != null) {
+            return new BigDecimal(val.toString()).setScale(2, RoundingMode.HALF_DOWN).doubleValue();
+        } else {
+            return null;
+        }
     }
 }

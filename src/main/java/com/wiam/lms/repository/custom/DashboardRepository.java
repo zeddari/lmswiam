@@ -46,4 +46,54 @@ public interface DashboardRepository extends JpaRepository<Progression, Long> {
         nativeQuery = true
     )
     Long getAbsenceRowCountMonthBefore();
+
+    @Query(
+        value = "select COALESCE(floor(sum(amount)),0) yaxis from payment where side in ('IN')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE())" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())",
+        nativeQuery = true
+    )
+    Long getIncomeCurrentMonth();
+
+    @Query(
+        value = "select COALESCE(floor(sum(amount)),0) yaxis from payment where side in ('IN')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())",
+        nativeQuery = true
+    )
+    Long getIncomeLastMonth();
+
+    @Query(
+        value = "select floor(sum(amount)) yaxis from payment where side in ('IN')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE())" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())" +
+        " group by day(paid_at)",
+        nativeQuery = true
+    )
+    List<Long> getIncomeListPerDay();
+
+    @Query(
+        value = "select COALESCE(floor(sum(amount)),0) yaxis from payment where side in ('OUT')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE())" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())",
+        nativeQuery = true
+    )
+    Long getExpensesCurrentMonth();
+
+    @Query(
+        value = "select COALESCE(floor(sum(amount)),0) yaxis from payment where side in ('OUT')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())",
+        nativeQuery = true
+    )
+    Long getExpensesLastMonth();
+
+    @Query(
+        value = "select floor(sum(amount)) yaxis from payment where side in ('OUT')" +
+        " AND MONTH(paid_at) = MONTH(CURRENT_DATE())" +
+        " AND YEAR(paid_at) = YEAR(CURRENT_DATE())" +
+        " group by day(paid_at)",
+        nativeQuery = true
+    )
+    List<Long> getExpensesListPerDay();
 }
