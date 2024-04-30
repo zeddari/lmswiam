@@ -1,13 +1,16 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.Role;
+import com.wiam.lms.domain.enumeration.Sex;
 import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.UserCustomSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.websocket.server.PathParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -221,14 +224,15 @@ public class UserCustomResource {
     }
 
     @GetMapping("/{role}/role")
-    public List<UserCustom> getAllUserCustomsByUserType(@PathVariable String role) {
-        List<UserCustom> usersbyrole = new ArrayList<UserCustom>();
-        List<UserCustom> users = userCustomRepository.findAll();
-
-        for (UserCustom user : users) {
-            if (user.getRole().name().equals(role)) usersbyrole.add(user);
-        }
-        return usersbyrole;
+    public List<UserCustom> getAllUserCustomsByUserType(
+        @PathVariable Role role,
+        @RequestParam Long siteId,
+        @RequestParam AccountStatus accountStatus,
+        @RequestParam Sex sex
+    ) {
+        List<UserCustom> users = new ArrayList<UserCustom>();
+        users = userCustomRepository.getUsers(role, siteId, accountStatus, sex);
+        return users;
     }
 
     /**

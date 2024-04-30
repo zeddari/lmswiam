@@ -126,6 +126,11 @@ public class Progression implements Serializable {
     private Boolean taskDone;
 
     @NotNull
+    @Column(name = "is_for_attendance", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
+    private Boolean isForAttendance;
+
+    @NotNull
     @Min(value = 1)
     @Max(value = 5)
     @Column(name = "tajweed_score", nullable = false)
@@ -215,6 +220,10 @@ public class Progression implements Serializable {
     private UserCustom student;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Boolean getIsForAttendance() {
+        return isForAttendance;
+    }
 
     public Long getId() {
         return this.id;
@@ -559,5 +568,9 @@ public class Progression implements Serializable {
             ", adaeScore=" + getAdaeScore() +
             ", observation='" + getObservation() + "'" +
             "}";
+    }
+
+    public void setIsForAttendance(Boolean isForAttendance) {
+        this.isForAttendance = isForAttendance;
     }
 }
