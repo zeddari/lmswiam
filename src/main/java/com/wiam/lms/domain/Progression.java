@@ -31,6 +31,15 @@ public class Progression implements Serializable {
     private Long id;
 
     @NotNull
+    @Column(name = "is_for_attendance", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
+    private Boolean isForAttendance;
+
+    public Boolean getIsForAttendance() {
+        return isForAttendance;
+    }
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "attendance", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
@@ -537,5 +546,9 @@ public class Progression implements Serializable {
             ", adaeScore=" + getAdaeScore() +
             ", observation='" + getObservation() + "'" +
             "}";
+    }
+
+    public void setIsForAttendance(Boolean isForAttendance) {
+        this.isForAttendance = isForAttendance;
     }
 }

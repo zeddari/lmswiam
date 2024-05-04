@@ -237,6 +237,13 @@ public class SessionInstance implements Serializable {
         this.justifRef = justifRef;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Group group;
+
+    public Group getGroup() {
+        return group;
+    }
+
     public Boolean getIsActive() {
         return this.isActive;
     }
@@ -386,5 +393,9 @@ public class SessionInstance implements Serializable {
             ", justifRef='" + getJustifRef() + "'" +
             ", isActive='" + getIsActive() + "'" +
             "}";
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }

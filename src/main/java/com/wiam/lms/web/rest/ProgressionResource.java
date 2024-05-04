@@ -1,7 +1,16 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Progression;
+import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.enumeration.Attendance;
+import com.wiam.lms.domain.enumeration.ExamType;
+import com.wiam.lms.domain.enumeration.Riwayats;
+import com.wiam.lms.domain.enumeration.Tilawa;
+import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.ProgressionRepository;
+import com.wiam.lms.repository.SessionInstanceRepository;
 import com.wiam.lms.repository.search.ProgressionSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
@@ -42,11 +51,22 @@ public class ProgressionResource {
 
     private final ProgressionRepository progressionRepository;
 
+    private final SessionInstanceRepository sessionInstanceRepository;
+
     private final ProgressionSearchRepository progressionSearchRepository;
 
-    public ProgressionResource(ProgressionRepository progressionRepository, ProgressionSearchRepository progressionSearchRepository) {
+    private final GroupRepository groupRepository;
+
+    public ProgressionResource(
+        GroupRepository groupRepository,
+        SessionInstanceRepository sessionInstanceRepository,
+        ProgressionRepository progressionRepository,
+        ProgressionSearchRepository progressionSearchRepository
+    ) {
         this.progressionRepository = progressionRepository;
         this.progressionSearchRepository = progressionSearchRepository;
+        this.sessionInstanceRepository = sessionInstanceRepository;
+        this.groupRepository = groupRepository;
     }
 
     /**

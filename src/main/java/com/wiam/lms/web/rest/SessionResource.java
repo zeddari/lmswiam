@@ -154,12 +154,12 @@ public class SessionResource {
                 if (session.getPeriodeEndDate() != null) {
                     existingSession.setPeriodeEndDate(session.getPeriodeEndDate());
                 }
-                if (session.getSessionStartTime() != null) {
+                /* if (session.getSessionStartTime() != null) {
                     existingSession.setSessionStartTime(session.getSessionStartTime());
                 }
                 if (session.getSessionEndTime() != null) {
                     existingSession.setSessionEndTime(session.getSessionEndTime());
-                }
+                }*/
                 if (session.getSessionSize() != null) {
                     existingSession.setSessionSize(session.getSessionSize());
                 }
