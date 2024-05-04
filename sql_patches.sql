@@ -19,6 +19,8 @@ END; //
 
 DELIMITER ;
 
+
+
 --- remove_accents function end --------
 
 alter table ayahs drop INDEX ayahs_FULLTEXT_index;
