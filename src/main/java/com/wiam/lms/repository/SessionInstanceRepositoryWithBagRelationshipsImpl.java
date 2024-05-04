@@ -21,7 +21,7 @@ public class SessionInstanceRepositoryWithBagRelationshipsImpl implements Sessio
 
     @Override
     public Optional<SessionInstance> fetchBagRelationships(Optional<SessionInstance> sessionInstance) {
-        return sessionInstance.map(this::fetchLinks);
+        return sessionInstance.map(this::fetchLinks).map(this::fetchCourses);
     }
 
     @Override
@@ -35,13 +35,13 @@ public class SessionInstanceRepositoryWithBagRelationshipsImpl implements Sessio
 
     @Override
     public List<SessionInstance> fetchBagRelationships(List<SessionInstance> sessionInstances) {
-        return Optional.of(sessionInstances).map(this::fetchLinks).orElse(Collections.emptyList());
+        return Optional.of(sessionInstances).map(this::fetchLinks).map(this::fetchCourses).orElse(Collections.emptyList());
     }
 
     SessionInstance fetchLinks(SessionInstance result) {
         return entityManager
             .createQuery(
-                "select sessionInstance from SessionInstance sessionInstance  where sessionInstance.id = :id",
+                "select sessionInstance from SessionInstance sessionInstance left join fetch sessionInstance.links where sessionInstance.id = :id",
                 SessionInstance.class
             )
             .setParameter("id", result.getId())
@@ -53,7 +53,31 @@ public class SessionInstanceRepositoryWithBagRelationshipsImpl implements Sessio
         IntStream.range(0, sessionInstances.size()).forEach(index -> order.put(sessionInstances.get(index).getId(), index));
         List<SessionInstance> result = entityManager
             .createQuery(
-                "select sessionInstance from SessionInstance sessionInstance  where sessionInstance in :sessionInstances",
+                "select sessionInstance from SessionInstance sessionInstance left join fetch sessionInstance.links where sessionInstance in :sessionInstances",
+                SessionInstance.class
+            )
+            .setParameter("sessionInstances", sessionInstances)
+            .getResultList();
+        Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
+        return result;
+    }
+
+    SessionInstance fetchCourses(SessionInstance result) {
+        return entityManager
+            .createQuery(
+                "select sessionInstance from SessionInstance sessionInstance left join fetch sessionInstance.courses where sessionInstance.id = :id",
+                SessionInstance.class
+            )
+            .setParameter("id", result.getId())
+            .getSingleResult();
+    }
+
+    List<SessionInstance> fetchCourses(List<SessionInstance> sessionInstances) {
+        HashMap<Object, Integer> order = new HashMap<>();
+        IntStream.range(0, sessionInstances.size()).forEach(index -> order.put(sessionInstances.get(index).getId(), index));
+        List<SessionInstance> result = entityManager
+            .createQuery(
+                "select sessionInstance from SessionInstance sessionInstance left join fetch sessionInstance.courses where sessionInstance in :sessionInstances",
                 SessionInstance.class
             )
             .setParameter("sessionInstances", sessionInstances)

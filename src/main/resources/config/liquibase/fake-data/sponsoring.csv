@@ -1,11 +1,11 @@
-id;ref;message;amount;start_date;end_date;is_always
-1;afterwards;../fake-data/blob/hipster.txt;14771.64;2024-01-09;2024-01-08;false
-2;why furthermore fatten;../fake-data/blob/hipster.txt;21255.44;2024-01-09;2024-01-09;false
-3;drench next fine;../fake-data/blob/hipster.txt;4412.68;2024-01-09;2024-01-08;true
-4;once;../fake-data/blob/hipster.txt;28653.15;2024-01-09;2024-01-09;true
-5;boohoo;../fake-data/blob/hipster.txt;23969.57;2024-01-09;2024-01-08;true
-6;fatten pricey;../fake-data/blob/hipster.txt;7450.47;2024-01-09;2024-01-09;false
-7;fight certainly coolly;../fake-data/blob/hipster.txt;31829.62;2024-01-09;2024-01-09;false
-8;colorfully;../fake-data/blob/hipster.txt;27315.57;2024-01-08;2024-01-09;true
-9;scream what;../fake-data/blob/hipster.txt;12204.9;2024-01-09;2024-01-09;true
-10;nod ack;../fake-data/blob/hipster.txt;11001.87;2024-01-09;2024-01-09;false
+id;ref_key;ref;message;amount;start_date;end_date;is_always
+1;RENT;meanwhile for;../fake-data/blob/hipster.txt;393.03;2024-01-09;2024-01-09;false
+2;OTHERS;knife-edge;../fake-data/blob/hipster.txt;11198.24;2024-01-08;2024-01-08;false
+3;INTERNET;sleepily reflecting;../fake-data/blob/hipster.txt;9445.4;2024-01-08;2024-01-09;false
+4;KHATM_ACTIVITY;miserably however;../fake-data/blob/hipster.txt;5020.07;2024-01-08;2024-01-09;false
+5;INTERNET;offensively;../fake-data/blob/hipster.txt;22026.86;2024-01-09;2024-01-09;false
+6;INTERNAL_ACTIVITY;heavy;../fake-data/blob/hipster.txt;11029.09;2024-01-09;2024-01-09;true
+7;INTERNAL_ACTIVITY;sweltering fight;../fake-data/blob/hipster.txt;1813.2;2024-01-09;2024-01-09;false
+8;SALARY;huzzah eviction;../fake-data/blob/hipster.txt;29946.48;2024-01-09;2024-01-08;true
+9;STUDENT;when;../fake-data/blob/hipster.txt;19660.96;2024-01-08;2024-01-09;true
+10;EXTERNAL_ACTIVITY;yahoo for;../fake-data/blob/hipster.txt;14880.58;2024-01-09;2024-01-09;false

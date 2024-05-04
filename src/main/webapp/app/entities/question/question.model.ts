@@ -1,3 +1,4 @@
+import { IAnswer } from 'app/entities/answer/answer.model';
 import { ISite } from 'app/entities/site/site.model';
 import { IQuiz } from 'app/entities/quiz/quiz.model';
 
@@ -14,8 +15,9 @@ export interface IQuestion {
   a4?: string | null;
   a4v?: boolean | null;
   isActive?: boolean | null;
-  site5?: Pick<ISite, 'id' | 'nameAr'> | null;
-  quizzes?: Pick<IQuiz, 'id' | 'quizTitle'>[] | null;
+  answers?: IAnswer[] | null;
+  site5?: ISite | null;
+  quizzes?: IQuiz[] | null;
 }
 
 export type NewQuestion = Omit<IQuestion, 'id'> & { id: null };

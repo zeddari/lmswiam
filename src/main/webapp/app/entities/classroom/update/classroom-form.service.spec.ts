@@ -24,7 +24,6 @@ describe('Classroom Form Service', () => {
             nameLat: expect.any(Object),
             description: expect.any(Object),
             site: expect.any(Object),
-            sessions6s: expect.any(Object),
           }),
         );
       });
@@ -39,7 +38,6 @@ describe('Classroom Form Service', () => {
             nameLat: expect.any(Object),
             description: expect.any(Object),
             site: expect.any(Object),
-            sessions6s: expect.any(Object),
           }),
         );
       });

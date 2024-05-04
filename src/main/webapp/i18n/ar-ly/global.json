@@ -8,7 +8,11 @@
       "entities": {
         "main": "الكيانات",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "sessionCourses": "Session Courses",
         "departement": "Departement",
+        "comments": "Comments",
+        "depense": "Depense",
+        "studentSponsoring": "Student Sponsoring",
         "country": "Country",
         "nationality": "Nationality",
         "language": "Language",

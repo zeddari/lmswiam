@@ -271,7 +271,22 @@ entity Session {
 	isPeriodic Boolean required /*Periodic, once*/
 	isMinorAllowed Boolean required
 	isActive Boolean required
-       		 }
+}
+entity Comments {
+    pseudoName String required
+    type CommentType required
+    title String required
+    message TextBlob
+    like Boolean
+    disLike Boolean
+    createdAt ZonedDateTime
+    updatedAt ZonedDateTime
+}
+
+enum CommentType{
+    GOOD_TEACHER, BAD_TEACHER, COMMITEMENT, ABSENCE, OTHERS
+}
+
 entity SessionInstance {
     title String required maxlength(TITLE_MAX_LENGTH)
     sessionDate LocalDate required
@@ -568,5 +583,5 @@ relationship ManyToMany {
 
     SessionInstance{links(title)} to SessionLink{sessions4(title)}
     Session{links(title)} to SessionLink{sessions7(title)}
-
+    Comments{sessions8(title)} to Session{comment(title)}
 }

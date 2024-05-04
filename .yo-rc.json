@@ -16,7 +16,11 @@
     "enableSwaggerCodegen": false,
     "enableTranslation": true,
     "entities": [
+      "SessionCourses",
       "Departement",
+      "Comments",
+      "Depense",
+      "StudentSponsoring",
       "Country",
       "Nationality",
       "Language",

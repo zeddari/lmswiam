@@ -1,6 +1,7 @@
 package com.wiam.lms.domain;
 
 import static com.wiam.lms.domain.ProgressionTestSamples.*;
+import static com.wiam.lms.domain.SessionCoursesTestSamples.*;
 import static com.wiam.lms.domain.SessionInstanceTestSamples.*;
 import static com.wiam.lms.domain.SessionLinkTestSamples.*;
 import static com.wiam.lms.domain.SessionTestSamples.*;
@@ -54,17 +55,36 @@ class SessionInstanceTest {
     void linksTest() throws Exception {
         SessionInstance sessionInstance = getSessionInstanceRandomSampleGenerator();
         SessionLink sessionLinkBack = getSessionLinkRandomSampleGenerator();
-        //        sessionInstance.addLinks(sessionLinkBack);
-        //        assertThat(sessionInstance.getLinks()).containsOnly(sessionLinkBack);
-        //
-        //        sessionInstance.removeLinks(sessionLinkBack);
-        //        assertThat(sessionInstance.getLinks()).doesNotContain(sessionLinkBack);
-        //
-        //        sessionInstance.links(new HashSet<>(Set.of(sessionLinkBack)));
-        //        assertThat(sessionInstance.getLinks()).containsOnly(sessionLinkBack);
-        //
-        //        sessionInstance.setLinks(new HashSet<>());
-        //        assertThat(sessionInstance.getLinks()).doesNotContain(sessionLinkBack);
+
+        sessionInstance.addLinks(sessionLinkBack);
+        assertThat(sessionInstance.getLinks()).containsOnly(sessionLinkBack);
+
+        sessionInstance.removeLinks(sessionLinkBack);
+        assertThat(sessionInstance.getLinks()).doesNotContain(sessionLinkBack);
+
+        sessionInstance.links(new HashSet<>(Set.of(sessionLinkBack)));
+        assertThat(sessionInstance.getLinks()).containsOnly(sessionLinkBack);
+
+        sessionInstance.setLinks(new HashSet<>());
+        assertThat(sessionInstance.getLinks()).doesNotContain(sessionLinkBack);
+    }
+
+    @Test
+    void courseTest() throws Exception {
+        SessionInstance sessionInstance = getSessionInstanceRandomSampleGenerator();
+        SessionCourses sessionCoursesBack = getSessionCoursesRandomSampleGenerator();
+
+        sessionInstance.addCourse(sessionCoursesBack);
+        assertThat(sessionInstance.getCourses()).containsOnly(sessionCoursesBack);
+
+        sessionInstance.removeCourse(sessionCoursesBack);
+        assertThat(sessionInstance.getCourses()).doesNotContain(sessionCoursesBack);
+
+        sessionInstance.courses(new HashSet<>(Set.of(sessionCoursesBack)));
+        assertThat(sessionInstance.getCourses()).containsOnly(sessionCoursesBack);
+
+        sessionInstance.setCourses(new HashSet<>());
+        assertThat(sessionInstance.getCourses()).doesNotContain(sessionCoursesBack);
     }
 
     @Test

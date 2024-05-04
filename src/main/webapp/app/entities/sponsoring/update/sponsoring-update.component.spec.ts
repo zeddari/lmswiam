@@ -84,10 +84,10 @@ describe('Sponsoring Management Update Component', () => {
 
     it('Should call UserCustom query and add missing value', () => {
       const sponsoring: ISponsoring = { id: 456 };
-      const sponsor: IUserCustom = { id: 17635 };
+      const sponsor: IUserCustom = { id: 27117 };
       sponsoring.sponsor = sponsor;
 
-      const userCustomCollection: IUserCustom[] = [{ id: 18923 }];
+      const userCustomCollection: IUserCustom[] = [{ id: 4572 }];
       jest.spyOn(userCustomService, 'query').mockReturnValue(of(new HttpResponse({ body: userCustomCollection })));
       const additionalUserCustoms = [sponsor];
       const expectedCollection: IUserCustom[] = [...additionalUserCustoms, ...userCustomCollection];
@@ -152,7 +152,7 @@ describe('Sponsoring Management Update Component', () => {
       const sponsoring: ISponsoring = { id: 456 };
       const site10: ISite = { id: 6611 };
       sponsoring.site10 = site10;
-      const sponsor: IUserCustom = { id: 23430 };
+      const sponsor: IUserCustom = { id: 23851 };
       sponsoring.sponsor = sponsor;
       const project: IProject = { id: 4223 };
       sponsoring.project = project;

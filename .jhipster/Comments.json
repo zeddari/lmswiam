@@ -1,0 +1,57 @@
+{
+  "annotations": {
+    "changelogDate": "20240109174831"
+  },
+  "applications": "*",
+  "entityTableName": "comments",
+  "fields": [
+    {
+      "fieldName": "pseudoName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "CommentType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "GOOD_TEACHER,BAD_TEACHER,COMMITEMENT,ABSENCE,OTHERS"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "message",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "like",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "disLike",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "ZonedDateTime"
+    }
+  ],
+  "name": "Comments",
+  "relationships": [
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "session",
+      "otherEntityRelationshipName": "comment",
+      "relationshipName": "sessions8",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ]
+}

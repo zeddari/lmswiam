@@ -1,6 +1,7 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.repository.ProgressionRepository;
+import com.wiam.lms.repository.custom.ProgressionCustomRepository;
 import com.wiam.lms.service.dto.FollowupAvgDTO;
 import com.wiam.lms.service.dto.FollowupListDTO;
 import java.time.LocalDate;
@@ -22,9 +23,9 @@ public class FollowupController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProgressionResource.class);
 
-    private final ProgressionRepository progressionRepository;
+    private final ProgressionCustomRepository progressionRepository;
 
-    public FollowupController(ProgressionRepository progressionRepository) {
+    public FollowupController(ProgressionCustomRepository progressionRepository) {
         this.progressionRepository = progressionRepository;
     }
 

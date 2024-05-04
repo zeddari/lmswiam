@@ -8,6 +8,8 @@ import { of, Subject, from } from 'rxjs';
 
 import { ISessionLink } from 'app/entities/session-link/session-link.model';
 import { SessionLinkService } from 'app/entities/session-link/service/session-link.service';
+import { ISessionCourses } from 'app/entities/session-courses/session-courses.model';
+import { SessionCoursesService } from 'app/entities/session-courses/service/session-courses.service';
 import { ISite } from 'app/entities/site/site.model';
 import { SiteService } from 'app/entities/site/service/site.service';
 import { ISession } from 'app/entities/session/session.model';
@@ -25,6 +27,7 @@ describe('SessionInstance Management Update Component', () => {
   let sessionInstanceFormService: SessionInstanceFormService;
   let sessionInstanceService: SessionInstanceService;
   let sessionLinkService: SessionLinkService;
+  let sessionCoursesService: SessionCoursesService;
   let siteService: SiteService;
   let sessionService: SessionService;
 
@@ -49,6 +52,7 @@ describe('SessionInstance Management Update Component', () => {
     sessionInstanceFormService = TestBed.inject(SessionInstanceFormService);
     sessionInstanceService = TestBed.inject(SessionInstanceService);
     sessionLinkService = TestBed.inject(SessionLinkService);
+    sessionCoursesService = TestBed.inject(SessionCoursesService);
     siteService = TestBed.inject(SiteService);
     sessionService = TestBed.inject(SessionService);
 
@@ -78,6 +82,28 @@ describe('SessionInstance Management Update Component', () => {
       expect(comp.sessionLinksSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call SessionCourses query and add missing value', () => {
+      const sessionInstance: ISessionInstance = { id: 456 };
+      const courses: ISessionCourses[] = [{ id: 21362 }];
+      sessionInstance.courses = courses;
+
+      const sessionCoursesCollection: ISessionCourses[] = [{ id: 9077 }];
+      jest.spyOn(sessionCoursesService, 'query').mockReturnValue(of(new HttpResponse({ body: sessionCoursesCollection })));
+      const additionalSessionCourses = [...courses];
+      const expectedCollection: ISessionCourses[] = [...additionalSessionCourses, ...sessionCoursesCollection];
+      jest.spyOn(sessionCoursesService, 'addSessionCoursesToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ sessionInstance });
+      comp.ngOnInit();
+
+      expect(sessionCoursesService.query).toHaveBeenCalled();
+      expect(sessionCoursesService.addSessionCoursesToCollectionIfMissing).toHaveBeenCalledWith(
+        sessionCoursesCollection,
+        ...additionalSessionCourses.map(expect.objectContaining),
+      );
+      expect(comp.sessionCoursesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call Site query and add missing value', () => {
       const sessionInstance: ISessionInstance = { id: 456 };
       const site16: ISite = { id: 18573 };
@@ -102,10 +128,10 @@ describe('SessionInstance Management Update Component', () => {
 
     it('Should call Session query and add missing value', () => {
       const sessionInstance: ISessionInstance = { id: 456 };
-      const session1: ISession = { id: 7703 };
+      const session1: ISession = { id: 12292 };
       sessionInstance.session1 = session1;
 
-      const sessionCollection: ISession[] = [{ id: 3875 }];
+      const sessionCollection: ISession[] = [{ id: 10283 }];
       jest.spyOn(sessionService, 'query').mockReturnValue(of(new HttpResponse({ body: sessionCollection })));
       const additionalSessions = [session1];
       const expectedCollection: ISession[] = [...additionalSessions, ...sessionCollection];
@@ -126,15 +152,18 @@ describe('SessionInstance Management Update Component', () => {
       const sessionInstance: ISessionInstance = { id: 456 };
       const links: ISessionLink = { id: 28667 };
       sessionInstance.links = [links];
+      const course: ISessionCourses = { id: 24329 };
+      sessionInstance.courses = [course];
       const site16: ISite = { id: 28851 };
       sessionInstance.site16 = site16;
-      const session1: ISession = { id: 30878 };
+      const session1: ISession = { id: 17591 };
       sessionInstance.session1 = session1;
 
       activatedRoute.data = of({ sessionInstance });
       comp.ngOnInit();
 
       expect(comp.sessionLinksSharedCollection).toContain(links);
+      expect(comp.sessionCoursesSharedCollection).toContain(course);
       expect(comp.sitesSharedCollection).toContain(site16);
       expect(comp.sessionsSharedCollection).toContain(session1);
       expect(comp.sessionInstance).toEqual(sessionInstance);
@@ -217,6 +246,16 @@ describe('SessionInstance Management Update Component', () => {
         jest.spyOn(sessionLinkService, 'compareSessionLink');
         comp.compareSessionLink(entity, entity2);
         expect(sessionLinkService.compareSessionLink).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareSessionCourses', () => {
+      it('Should forward to sessionCoursesService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(sessionCoursesService, 'compareSessionCourses');
+        comp.compareSessionCourses(entity, entity2);
+        expect(sessionCoursesService.compareSessionCourses).toHaveBeenCalledWith(entity, entity2);
       });
     });
 

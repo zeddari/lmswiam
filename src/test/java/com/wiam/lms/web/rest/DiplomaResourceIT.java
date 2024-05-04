@@ -16,6 +16,7 @@ import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -36,7 +37,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link DiplomaResource} REST controller.
@@ -267,7 +267,7 @@ class DiplomaResourceIT {
             .andExpect(jsonPath("$.[*].graduationDate").value(hasItem(DEFAULT_GRADUATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].school").value(hasItem(DEFAULT_SCHOOL.toString())))
             .andExpect(jsonPath("$.[*].attachmentContentType").value(hasItem(DEFAULT_ATTACHMENT_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].attachment").value(hasItem(Base64Utils.encodeToString(DEFAULT_ATTACHMENT))));
+            .andExpect(jsonPath("$.[*].attachment").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_ATTACHMENT))));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -308,7 +308,7 @@ class DiplomaResourceIT {
             .andExpect(jsonPath("$.graduationDate").value(DEFAULT_GRADUATION_DATE.toString()))
             .andExpect(jsonPath("$.school").value(DEFAULT_SCHOOL.toString()))
             .andExpect(jsonPath("$.attachmentContentType").value(DEFAULT_ATTACHMENT_CONTENT_TYPE))
-            .andExpect(jsonPath("$.attachment").value(Base64Utils.encodeToString(DEFAULT_ATTACHMENT)));
+            .andExpect(jsonPath("$.attachment").value(Base64.getEncoder().encodeToString(DEFAULT_ATTACHMENT)));
     }
 
     @Test
@@ -653,6 +653,6 @@ class DiplomaResourceIT {
             .andExpect(jsonPath("$.[*].graduationDate").value(hasItem(DEFAULT_GRADUATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].school").value(hasItem(DEFAULT_SCHOOL.toString())))
             .andExpect(jsonPath("$.[*].attachmentContentType").value(hasItem(DEFAULT_ATTACHMENT_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].attachment").value(hasItem(Base64Utils.encodeToString(DEFAULT_ATTACHMENT))));
+            .andExpect(jsonPath("$.[*].attachment").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_ATTACHMENT))));
     }
 }

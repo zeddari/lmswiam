@@ -41,109 +41,128 @@
           <fa-icon icon="search"></fa-icon>
         </button>
 
-        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-          <fa-icon icon="trash-alt"></fa-icon>
-        </button>
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
       </div>
     </div>
   </form>
 
-  <div class="alert alert-warning" id="no-result" *ngIf="reviews?.length === 0">
-    <span jhiTranslate="lmswiamApp.review.home.notFound">No Reviews found</span>
-  </div>
+  @if (reviews?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="lmswiamApp.review.home.notFound">No Reviews found</span>
+    </div>
+  }
 
-  <div class="table-responsive table-entities" id="entities" *ngIf="reviews && reviews.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id">ID</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="body">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.review.body">Body</span>
-              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="rating">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.review.rating">Rating</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="reviewDate">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.review.reviewDate">Review Date</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="site3.nameAr">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.review.site3">Site 3</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="part2.titleAr">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.review.part2">Part 2</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="userCustom3.id">
-            <div class="d-flex">
-              <span jhiTranslate="lmswiamApp.review.userCustom3">User Custom 3</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let review of reviews; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/review', review.id, 'view']">{{ review.id }}</a>
-          </td>
-          <td>{{ review.body }}</td>
-          <td>{{ review.rating }}</td>
-          <td>{{ review.reviewDate | formatMediumDatetime }}</td>
-          <td>
-            <div *ngIf="review.site3">
-              <a [routerLink]="['/site', review.site3.id, 'view']">{{ review.site3.nameAr }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="review.part2">
-              <a [routerLink]="['/part', review.part2.id, 'view']">{{ review.part2.titleAr }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="review.userCustom3">
-              <a [routerLink]="['/user-custom', review.userCustom3.id, 'view']">{{ review.userCustom3.id }}</a>
-            </div>
-          </td>
-          <td class="text-end">
-            <div class="btn-group">
-              <a [routerLink]="['/review', review.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </a>
+  @if (reviews && reviews.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
 
-              <a [routerLink]="['/review', review.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </a>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="body">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.review.body">Body</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="rating">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.review.rating">Rating</span>
 
-              <button type="submit" (click)="delete(review)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="reviewDate">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.review.reviewDate">Review Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="site3.nameAr">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.review.site3">Site 3</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="part2.titleAr">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.review.part2">Part 2</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="userCustom3.id">
+              <div class="d-flex">
+                <span jhiTranslate="lmswiamApp.review.userCustom3">User Custom 3</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (review of reviews; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/review', review.id, 'view']">{{ review.id }}</a>
+              </td>
+              <td>{{ review.body }}</td>
+              <td>{{ review.rating }}</td>
+              <td>{{ review.reviewDate | formatMediumDatetime }}</td>
+              <td>
+                @if (review.site3) {
+                  <div>
+                    <a [routerLink]="['/site', review.site3.id, 'view']">{{ review.site3.nameAr }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (review.part2) {
+                  <div>
+                    <a [routerLink]="['/part', review.part2.id, 'view']">{{ review.part2.titleAr }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (review.userCustom3) {
+                  <div>
+                    <a [routerLink]="['/user-custom', review.userCustom3.id, 'view']">{{ review.userCustom3.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/review', review.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/review', review.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(review)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </div>

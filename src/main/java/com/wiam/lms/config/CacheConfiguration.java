@@ -165,6 +165,15 @@ public class CacheConfiguration {
             createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".tickets");
             createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".certificates");
             createCache(cm, com.wiam.lms.domain.Site.class.getName() + ".diplomas");
+            createCache(cm, com.wiam.lms.domain.Comments.class.getName());
+            createCache(cm, com.wiam.lms.domain.Comments.class.getName() + ".sessions8s");
+            createCache(cm, com.wiam.lms.domain.Depense.class.getName());
+            createCache(cm, com.wiam.lms.domain.StudentSponsoring.class.getName());
+            createCache(cm, com.wiam.lms.domain.UserCustom.class.getName() + ".depenses");
+            createCache(cm, com.wiam.lms.domain.Session.class.getName() + ".comments");
+            createCache(cm, com.wiam.lms.domain.SessionCourses.class.getName());
+            createCache(cm, com.wiam.lms.domain.SessionCourses.class.getName() + ".sessionsInstance5s");
+            createCache(cm, com.wiam.lms.domain.SessionInstance.class.getName() + ".courses");
             // jhipster-needle-ehcache-add-entry
         };
     }

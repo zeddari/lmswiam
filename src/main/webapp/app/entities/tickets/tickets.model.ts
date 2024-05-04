@@ -18,8 +18,8 @@ export interface ITickets {
   from?: dayjs.Dayjs | null;
   toDate?: dayjs.Dayjs | null;
   decisionDetail?: string | null;
-  site18?: Pick<ISite, 'id' | 'nameAr'> | null;
-  userCustom5?: Pick<IUserCustom, 'id' | 'firstName'> | null;
+  site18?: ISite | null;
+  userCustom5?: IUserCustom | null;
 }
 
 export type NewTickets = Omit<ITickets, 'id'> & { id: null };

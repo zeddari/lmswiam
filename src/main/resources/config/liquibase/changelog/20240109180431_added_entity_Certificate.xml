@@ -26,7 +26,7 @@
             <column name="miqdar" type="integer">
                 <constraints nullable="false" />
             </column>
-            <column name="observation" type="varchar(500)">
+            <column name="observation" type="${clobType}">
                 <constraints nullable="false" />
             </column>
             <column name="site19_id" type="bigint">

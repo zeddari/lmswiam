@@ -1,50 +1,54 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <div *ngIf="sessionLink">
-      <h2 data-cy="sessionLinkDetailsHeading"><span jhiTranslate="lmswiamApp.sessionLink.detail.title">Session Link</span></h2>
+    @if (sessionLink) {
+      <div>
+        <h2 data-cy="sessionLinkDetailsHeading"><span jhiTranslate="lmswiamApp.sessionLink.detail.title">Session Link</span></h2>
 
-      <hr />
+        <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+        <jhi-alert-error></jhi-alert-error>
 
-      <jhi-alert></jhi-alert>
+        <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ sessionLink.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionLink.provider">Provider</span></dt>
-        <dd>
-          <span jhiTranslate="{{ 'lmswiamApp.SessionProvider.' + sessionLink.provider }}">{{ sessionLink.provider }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionLink.title">Title</span></dt>
-        <dd>
-          <span>{{ sessionLink.title }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionLink.description">Description</span></dt>
-        <dd>
-          <span>{{ sessionLink.description }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionLink.link">Link</span></dt>
-        <dd>
-          <span>{{ sessionLink.link }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.sessionLink.site15">Site 15</span></dt>
-        <dd>
-          <div *ngIf="sessionLink.site15">
-            <a [routerLink]="['/site', sessionLink.site15.id, 'view']">{{ sessionLink.site15.nameAr }}</a>
-          </div>
-        </dd>
-      </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ sessionLink.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionLink.provider">Provider</span></dt>
+          <dd>
+            <span jhiTranslate="{{ 'lmswiamApp.SessionProvider.' + sessionLink.provider }}">{{ sessionLink.provider }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionLink.title">Title</span></dt>
+          <dd>
+            <span>{{ sessionLink.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionLink.description">Description</span></dt>
+          <dd>
+            <span>{{ sessionLink.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionLink.link">Link</span></dt>
+          <dd>
+            <span>{{ sessionLink.link }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionLink.site15">Site 15</span></dt>
+          <dd>
+            @if (sessionLink.site15) {
+              <div>
+                <a [routerLink]="['/site', sessionLink.site15.id, 'view']">{{ sessionLink.site15.nameAr }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
 
-      <button type="button" [routerLink]="['/session-link', sessionLink.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
-    </div>
+        <button type="button" [routerLink]="['/session-link', sessionLink.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
   </div>
 </div>

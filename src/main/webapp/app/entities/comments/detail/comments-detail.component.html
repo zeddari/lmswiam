@@ -1,0 +1,71 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (comments) {
+      <div>
+        <h2 data-cy="commentsDetailsHeading"><span jhiTranslate="lmswiamApp.comments.detail.title">Comments</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ comments.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.comments.pseudoName">Pseudo Name</span></dt>
+          <dd>
+            <span>{{ comments.pseudoName }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.comments.type">Type</span></dt>
+          <dd>
+            <span jhiTranslate="{{ 'lmswiamApp.CommentType.' + comments.type }}">{{ comments.type }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.comments.title">Title</span></dt>
+          <dd>
+            <span>{{ comments.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.comments.message">Message</span></dt>
+          <dd>
+            <span>{{ comments.message }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.comments.like">Like</span></dt>
+          <dd>
+            <span>{{ comments.like }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.comments.disLike">Dis Like</span></dt>
+          <dd>
+            <span>{{ comments.disLike }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.comments.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ comments.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.comments.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ comments.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.comments.sessions8">Sessions 8</span></dt>
+          <dd>
+            @for (sessions8 of comments.sessions8s; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/session', sessions8.id, 'view']">{{ sessions8.title }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/comments', comments.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

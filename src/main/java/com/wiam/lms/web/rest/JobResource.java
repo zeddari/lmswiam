@@ -171,7 +171,7 @@ public class JobResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the job, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Job> getJob(@PathVariable Long id) {
+    public ResponseEntity<Job> getJob(@PathVariable("id") Long id) {
         log.debug("REST request to get Job : {}", id);
         Optional<Job> job = jobRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(job);
@@ -184,7 +184,7 @@ public class JobResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteJob(@PathVariable("id") Long id) {
         log.debug("REST request to delete Job : {}", id);
         jobRepository.deleteById(id);
         jobSearchRepository.deleteFromIndexById(id);
@@ -202,7 +202,7 @@ public class JobResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Job> searchJobs(@RequestParam String query) {
+    public List<Job> searchJobs(@RequestParam("query") String query) {
         log.debug("REST request to search Jobs for query {}", query);
         try {
             return StreamSupport.stream(jobSearchRepository.search(query).spliterator(), false).toList();

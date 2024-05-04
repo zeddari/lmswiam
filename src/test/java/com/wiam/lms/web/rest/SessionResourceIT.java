@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -43,8 +44,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-//import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link SessionResource} REST controller.
@@ -165,8 +164,8 @@ class SessionResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .periodStartDate(DEFAULT_PERIOD_START_DATE)
             .periodeEndDate(DEFAULT_PERIODE_END_DATE)
-            //            .sessionStartTime(DEFAULT_SESSION_START_TIME)
-            //            .sessionEndTime(DEFAULT_SESSION_END_TIME)
+            .sessionStartTime(DEFAULT_SESSION_START_TIME)
+            .sessionEndTime(DEFAULT_SESSION_END_TIME)
             .sessionSize(DEFAULT_SESSION_SIZE)
             .targetedGender(DEFAULT_TARGETED_GENDER)
             .price(DEFAULT_PRICE)
@@ -200,8 +199,8 @@ class SessionResourceIT {
             .description(UPDATED_DESCRIPTION)
             .periodStartDate(UPDATED_PERIOD_START_DATE)
             .periodeEndDate(UPDATED_PERIODE_END_DATE)
-            //            .sessionStartTime(UPDATED_SESSION_START_TIME)
-            //            .sessionEndTime(UPDATED_SESSION_END_TIME)
+            .sessionStartTime(UPDATED_SESSION_START_TIME)
+            .sessionEndTime(UPDATED_SESSION_END_TIME)
             .sessionSize(UPDATED_SESSION_SIZE)
             .targetedGender(UPDATED_TARGETED_GENDER)
             .price(UPDATED_PRICE)
@@ -258,8 +257,8 @@ class SessionResourceIT {
         assertThat(testSession.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testSession.getPeriodStartDate()).isEqualTo(DEFAULT_PERIOD_START_DATE);
         assertThat(testSession.getPeriodeEndDate()).isEqualTo(DEFAULT_PERIODE_END_DATE);
-        //        assertThat(testSession.getSessionStartTime()).isEqualTo(DEFAULT_SESSION_START_TIME);
-        //        assertThat(testSession.getSessionEndTime()).isEqualTo(DEFAULT_SESSION_END_TIME);
+        assertThat(testSession.getSessionStartTime()).isEqualTo(DEFAULT_SESSION_START_TIME);
+        assertThat(testSession.getSessionEndTime()).isEqualTo(DEFAULT_SESSION_END_TIME);
         assertThat(testSession.getSessionSize()).isEqualTo(DEFAULT_SESSION_SIZE);
         assertThat(testSession.getTargetedGender()).isEqualTo(DEFAULT_TARGETED_GENDER);
         assertThat(testSession.getPrice()).isEqualTo(DEFAULT_PRICE);
@@ -384,7 +383,7 @@ class SessionResourceIT {
         int databaseSizeBeforeTest = sessionRepository.findAll().size();
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(sessionSearchRepository.findAll());
         // set the field null
-        //        session.setSessionStartTime(null);
+        session.setSessionStartTime(null);
 
         // Create the Session, which fails.
 
@@ -404,7 +403,7 @@ class SessionResourceIT {
         int databaseSizeBeforeTest = sessionRepository.findAll().size();
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(sessionSearchRepository.findAll());
         // set the field null
-        //        session.setSessionEndTime(null);
+        session.setSessionEndTime(null);
 
         // Create the Session, which fails.
 
@@ -537,11 +536,13 @@ class SessionResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].periodStartDate").value(hasItem(DEFAULT_PERIOD_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].periodeEndDate").value(hasItem(DEFAULT_PERIODE_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].sessionStartTime").value(hasItem(sameInstant(DEFAULT_SESSION_START_TIME))))
+            .andExpect(jsonPath("$.[*].sessionEndTime").value(hasItem(sameInstant(DEFAULT_SESSION_END_TIME))))
             .andExpect(jsonPath("$.[*].sessionSize").value(hasItem(DEFAULT_SESSION_SIZE)))
             .andExpect(jsonPath("$.[*].targetedGender").value(hasItem(DEFAULT_TARGETED_GENDER.toString())))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].thumbnailContentType").value(hasItem(DEFAULT_THUMBNAIL_CONTENT_TYPE)))
-            //            .andExpect(jsonPath("$.[*].thumbnail").value(hasItem(Base64Utils.encodeToString(DEFAULT_THUMBNAIL))))
+            .andExpect(jsonPath("$.[*].thumbnail").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_THUMBNAIL))))
             .andExpect(jsonPath("$.[*].monday").value(hasItem(DEFAULT_MONDAY.booleanValue())))
             .andExpect(jsonPath("$.[*].tuesday").value(hasItem(DEFAULT_TUESDAY.booleanValue())))
             .andExpect(jsonPath("$.[*].wednesday").value(hasItem(DEFAULT_WEDNESDAY.booleanValue())))
@@ -590,11 +591,13 @@ class SessionResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.periodStartDate").value(DEFAULT_PERIOD_START_DATE.toString()))
             .andExpect(jsonPath("$.periodeEndDate").value(DEFAULT_PERIODE_END_DATE.toString()))
+            .andExpect(jsonPath("$.sessionStartTime").value(sameInstant(DEFAULT_SESSION_START_TIME)))
+            .andExpect(jsonPath("$.sessionEndTime").value(sameInstant(DEFAULT_SESSION_END_TIME)))
             .andExpect(jsonPath("$.sessionSize").value(DEFAULT_SESSION_SIZE))
             .andExpect(jsonPath("$.targetedGender").value(DEFAULT_TARGETED_GENDER.toString()))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()))
             .andExpect(jsonPath("$.thumbnailContentType").value(DEFAULT_THUMBNAIL_CONTENT_TYPE))
-            //            .andExpect(jsonPath("$.thumbnail").value(Base64Utils.encodeToString(DEFAULT_THUMBNAIL)))
+            .andExpect(jsonPath("$.thumbnail").value(Base64.getEncoder().encodeToString(DEFAULT_THUMBNAIL)))
             .andExpect(jsonPath("$.monday").value(DEFAULT_MONDAY.booleanValue()))
             .andExpect(jsonPath("$.tuesday").value(DEFAULT_TUESDAY.booleanValue()))
             .andExpect(jsonPath("$.wednesday").value(DEFAULT_WEDNESDAY.booleanValue()))
@@ -636,8 +639,8 @@ class SessionResourceIT {
             .description(UPDATED_DESCRIPTION)
             .periodStartDate(UPDATED_PERIOD_START_DATE)
             .periodeEndDate(UPDATED_PERIODE_END_DATE)
-            //            .sessionStartTime(UPDATED_SESSION_START_TIME)
-            //            .sessionEndTime(UPDATED_SESSION_END_TIME)
+            .sessionStartTime(UPDATED_SESSION_START_TIME)
+            .sessionEndTime(UPDATED_SESSION_END_TIME)
             .sessionSize(UPDATED_SESSION_SIZE)
             .targetedGender(UPDATED_TARGETED_GENDER)
             .price(UPDATED_PRICE)
@@ -673,8 +676,8 @@ class SessionResourceIT {
         assertThat(testSession.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testSession.getPeriodStartDate()).isEqualTo(UPDATED_PERIOD_START_DATE);
         assertThat(testSession.getPeriodeEndDate()).isEqualTo(UPDATED_PERIODE_END_DATE);
-        //        assertThat(testSession.getSessionStartTime()).isEqualTo(UPDATED_SESSION_START_TIME);
-        //        assertThat(testSession.getSessionEndTime()).isEqualTo(UPDATED_SESSION_END_TIME);
+        assertThat(testSession.getSessionStartTime()).isEqualTo(UPDATED_SESSION_START_TIME);
+        assertThat(testSession.getSessionEndTime()).isEqualTo(UPDATED_SESSION_END_TIME);
         assertThat(testSession.getSessionSize()).isEqualTo(UPDATED_SESSION_SIZE);
         assertThat(testSession.getTargetedGender()).isEqualTo(UPDATED_TARGETED_GENDER);
         assertThat(testSession.getPrice()).isEqualTo(UPDATED_PRICE);
@@ -704,8 +707,8 @@ class SessionResourceIT {
                 assertThat(testSessionSearch.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
                 assertThat(testSessionSearch.getPeriodStartDate()).isEqualTo(UPDATED_PERIOD_START_DATE);
                 assertThat(testSessionSearch.getPeriodeEndDate()).isEqualTo(UPDATED_PERIODE_END_DATE);
-                //                assertThat(testSessionSearch.getSessionStartTime()).isEqualTo(UPDATED_SESSION_START_TIME);
-                //                assertThat(testSessionSearch.getSessionEndTime()).isEqualTo(UPDATED_SESSION_END_TIME);
+                assertThat(testSessionSearch.getSessionStartTime()).isEqualTo(UPDATED_SESSION_START_TIME);
+                assertThat(testSessionSearch.getSessionEndTime()).isEqualTo(UPDATED_SESSION_END_TIME);
                 assertThat(testSessionSearch.getSessionSize()).isEqualTo(UPDATED_SESSION_SIZE);
                 assertThat(testSessionSearch.getTargetedGender()).isEqualTo(UPDATED_TARGETED_GENDER);
                 assertThat(testSessionSearch.getPrice()).isEqualTo(UPDATED_PRICE);
@@ -805,7 +808,7 @@ class SessionResourceIT {
             .sessionType(UPDATED_SESSION_TYPE)
             .periodStartDate(UPDATED_PERIOD_START_DATE)
             .periodeEndDate(UPDATED_PERIODE_END_DATE)
-            //            .sessionStartTime(UPDATED_SESSION_START_TIME)
+            .sessionStartTime(UPDATED_SESSION_START_TIME)
             .thumbnail(UPDATED_THUMBNAIL)
             .thumbnailContentType(UPDATED_THUMBNAIL_CONTENT_TYPE)
             .tuesday(UPDATED_TUESDAY)
@@ -833,8 +836,8 @@ class SessionResourceIT {
         assertThat(testSession.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testSession.getPeriodStartDate()).isEqualTo(UPDATED_PERIOD_START_DATE);
         assertThat(testSession.getPeriodeEndDate()).isEqualTo(UPDATED_PERIODE_END_DATE);
-        //        assertThat(testSession.getSessionStartTime()).isEqualTo(UPDATED_SESSION_START_TIME);
-        //        assertThat(testSession.getSessionEndTime()).isEqualTo(DEFAULT_SESSION_END_TIME);
+        assertThat(testSession.getSessionStartTime()).isEqualTo(UPDATED_SESSION_START_TIME);
+        assertThat(testSession.getSessionEndTime()).isEqualTo(DEFAULT_SESSION_END_TIME);
         assertThat(testSession.getSessionSize()).isEqualTo(DEFAULT_SESSION_SIZE);
         assertThat(testSession.getTargetedGender()).isEqualTo(DEFAULT_TARGETED_GENDER);
         assertThat(testSession.getPrice()).isEqualTo(DEFAULT_PRICE);
@@ -872,8 +875,8 @@ class SessionResourceIT {
             .description(UPDATED_DESCRIPTION)
             .periodStartDate(UPDATED_PERIOD_START_DATE)
             .periodeEndDate(UPDATED_PERIODE_END_DATE)
-            //            .sessionStartTime(UPDATED_SESSION_START_TIME)
-            //            .sessionEndTime(UPDATED_SESSION_END_TIME)
+            .sessionStartTime(UPDATED_SESSION_START_TIME)
+            .sessionEndTime(UPDATED_SESSION_END_TIME)
             .sessionSize(UPDATED_SESSION_SIZE)
             .targetedGender(UPDATED_TARGETED_GENDER)
             .price(UPDATED_PRICE)
@@ -909,8 +912,8 @@ class SessionResourceIT {
         assertThat(testSession.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testSession.getPeriodStartDate()).isEqualTo(UPDATED_PERIOD_START_DATE);
         assertThat(testSession.getPeriodeEndDate()).isEqualTo(UPDATED_PERIODE_END_DATE);
-        //        assertThat(testSession.getSessionStartTime()).isEqualTo(UPDATED_SESSION_START_TIME);
-        //        assertThat(testSession.getSessionEndTime()).isEqualTo(UPDATED_SESSION_END_TIME);
+        assertThat(testSession.getSessionStartTime()).isEqualTo(UPDATED_SESSION_START_TIME);
+        assertThat(testSession.getSessionEndTime()).isEqualTo(UPDATED_SESSION_END_TIME);
         assertThat(testSession.getSessionSize()).isEqualTo(UPDATED_SESSION_SIZE);
         assertThat(testSession.getTargetedGender()).isEqualTo(UPDATED_TARGETED_GENDER);
         assertThat(testSession.getPrice()).isEqualTo(UPDATED_PRICE);
@@ -1037,11 +1040,13 @@ class SessionResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].periodStartDate").value(hasItem(DEFAULT_PERIOD_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].periodeEndDate").value(hasItem(DEFAULT_PERIODE_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].sessionStartTime").value(hasItem(sameInstant(DEFAULT_SESSION_START_TIME))))
+            .andExpect(jsonPath("$.[*].sessionEndTime").value(hasItem(sameInstant(DEFAULT_SESSION_END_TIME))))
             .andExpect(jsonPath("$.[*].sessionSize").value(hasItem(DEFAULT_SESSION_SIZE)))
             .andExpect(jsonPath("$.[*].targetedGender").value(hasItem(DEFAULT_TARGETED_GENDER.toString())))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].thumbnailContentType").value(hasItem(DEFAULT_THUMBNAIL_CONTENT_TYPE)))
-            //            .andExpect(jsonPath("$.[*].thumbnail").value(hasItem(Base64Utils.encodeToString(DEFAULT_THUMBNAIL))))
+            .andExpect(jsonPath("$.[*].thumbnail").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_THUMBNAIL))))
             .andExpect(jsonPath("$.[*].monday").value(hasItem(DEFAULT_MONDAY.booleanValue())))
             .andExpect(jsonPath("$.[*].tuesday").value(hasItem(DEFAULT_TUESDAY.booleanValue())))
             .andExpect(jsonPath("$.[*].wednesday").value(hasItem(DEFAULT_WEDNESDAY.booleanValue())))

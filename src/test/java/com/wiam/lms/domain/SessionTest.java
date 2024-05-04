@@ -1,6 +1,7 @@
 package com.wiam.lms.domain;
 
 import static com.wiam.lms.domain.ClassroomTestSamples.*;
+import static com.wiam.lms.domain.CommentsTestSamples.*;
 import static com.wiam.lms.domain.GroupTestSamples.*;
 import static com.wiam.lms.domain.PaymentTestSamples.*;
 import static com.wiam.lms.domain.SessionInstanceTestSamples.*;
@@ -175,5 +176,27 @@ class SessionTest {
 
         session.site14(null);
         assertThat(session.getSite14()).isNull();
+    }
+
+    @Test
+    void commentTest() throws Exception {
+        Session session = getSessionRandomSampleGenerator();
+        Comments commentsBack = getCommentsRandomSampleGenerator();
+
+        session.addComment(commentsBack);
+        assertThat(session.getComments()).containsOnly(commentsBack);
+        assertThat(commentsBack.getSessions8s()).containsOnly(session);
+
+        session.removeComment(commentsBack);
+        assertThat(session.getComments()).doesNotContain(commentsBack);
+        assertThat(commentsBack.getSessions8s()).doesNotContain(session);
+
+        session.comments(new HashSet<>(Set.of(commentsBack)));
+        assertThat(session.getComments()).containsOnly(commentsBack);
+        assertThat(commentsBack.getSessions8s()).containsOnly(session);
+
+        session.setComments(new HashSet<>());
+        assertThat(session.getComments()).doesNotContain(commentsBack);
+        assertThat(commentsBack.getSessions8s()).doesNotContain(session);
     }
 }

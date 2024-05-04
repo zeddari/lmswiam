@@ -142,6 +142,7 @@ public class Site implements Serializable {
             "progressions",
             "tickets",
             "sponsorings",
+            "depenses",
             "diplomas",
             "languages",
             "site13",
@@ -162,7 +163,7 @@ public class Site implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(
-        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links", "site14" },
+        value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links", "site14", "comments" },
         allowSetters = true
     )
     private Set<Session> sessions = new HashSet<>();
@@ -176,7 +177,7 @@ public class Site implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "site16")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
-    @JsonIgnoreProperties(value = { "progressions", "links", "site16", "session1" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "progressions", "links", "courses", "site16", "session1" }, allowSetters = true)
     private Set<SessionInstance> sessionInstances = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "site17")

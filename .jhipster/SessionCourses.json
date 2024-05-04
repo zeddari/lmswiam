@@ -1,0 +1,42 @@
+{
+  "annotations": {
+    "changelogDate": "20240109174831"
+  },
+  "applications": "*",
+  "entityTableName": "session_courses",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "resourceLink",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "resourceFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "name": "SessionCourses",
+  "relationships": [
+    {
+      "otherEntityField": "title",
+      "otherEntityName": "sessionInstance",
+      "otherEntityRelationshipName": "course",
+      "relationshipName": "sessionsInstance5",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ]
+}

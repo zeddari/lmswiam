@@ -133,6 +133,9 @@ public class SponsoringResource {
         Optional<Sponsoring> result = sponsoringRepository
             .findById(sponsoring.getId())
             .map(existingSponsoring -> {
+                if (sponsoring.getRefKey() != null) {
+                    existingSponsoring.setRefKey(sponsoring.getRefKey());
+                }
                 if (sponsoring.getRef() != null) {
                     existingSponsoring.setRef(sponsoring.getRef());
                 }
@@ -173,7 +176,9 @@ public class SponsoringResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sponsorings in body.
      */
     @GetMapping("")
-    public List<Sponsoring> getAllSponsorings(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
+    public List<Sponsoring> getAllSponsorings(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+    ) {
         log.debug("REST request to get all Sponsorings");
         if (eagerload) {
             return sponsoringRepository.findAllWithEagerRelationships();
@@ -189,7 +194,7 @@ public class SponsoringResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sponsoring, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Sponsoring> getSponsoring(@PathVariable Long id) {
+    public ResponseEntity<Sponsoring> getSponsoring(@PathVariable("id") Long id) {
         log.debug("REST request to get Sponsoring : {}", id);
         Optional<Sponsoring> sponsoring = sponsoringRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(sponsoring);
@@ -202,7 +207,7 @@ public class SponsoringResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSponsoring(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSponsoring(@PathVariable("id") Long id) {
         log.debug("REST request to delete Sponsoring : {}", id);
         sponsoringRepository.deleteById(id);
         sponsoringSearchRepository.deleteFromIndexById(id);
@@ -220,7 +225,7 @@ public class SponsoringResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Sponsoring> searchSponsorings(@RequestParam String query) {
+    public List<Sponsoring> searchSponsorings(@RequestParam("query") String query) {
         log.debug("REST request to search Sponsorings for query {}", query);
         try {
             return StreamSupport.stream(sponsoringSearchRepository.search(query).spliterator(), false).toList();

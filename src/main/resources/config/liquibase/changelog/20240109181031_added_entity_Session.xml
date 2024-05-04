@@ -26,7 +26,7 @@
             <column name="title" type="varchar(100)">
                 <constraints nullable="false" />
             </column>
-            <column name="description" type="varchar(500)">
+            <column name="description" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="period_start_date" type="date">
@@ -50,7 +50,7 @@
             <column name="price" type="double">
                 <constraints nullable="true" />
             </column>
-            <column name="thumbnail" type="varchar(500)">
+            <column name="thumbnail" type="${blobType}">
                 <constraints nullable="true" />
             </column>
             <column name="thumbnail_content_type" type="varchar(255)">
