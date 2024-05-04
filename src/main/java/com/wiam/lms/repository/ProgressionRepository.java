@@ -79,4 +79,13 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
         @Param("startDate") LocalDate startDate,
         @Param("endDate") LocalDate endDate
     );
+    /*@Query(
+        "select progression from Progression progression where progression.site17.id=:siteId and progression.sessionInstance.sessionDate BETWEEN :fromDate AND :toDate where progression.isForAttendance=true group by progression.student"
+    )
+    List<Progression> findAllByAttendanceCount(
+        @Param("siteId") Long siteId,
+        @Param("fromDate") LocalDate fromDate,
+        @Param("toDate") LocalDate toDate
+    );*/
+
 }

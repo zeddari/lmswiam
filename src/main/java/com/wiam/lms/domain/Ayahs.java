@@ -67,7 +67,31 @@ public class Ayahs implements Serializable {
     @Column(name = "updated_at")
     private ZonedDateTime updatedAt;
 
+    @Column(name = "Timecode_In", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String TimecodeIn;
+
+    @Column(name = "Timecode_Out", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String TimecodeOut;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public void setTimecodeIn(String timecodeIn) {
+        TimecodeIn = timecodeIn;
+    }
+
+    public void setTimecodeOut(String timecodeOut) {
+        TimecodeOut = timecodeOut;
+    }
+
+    public String getTimecodeIn() {
+        return TimecodeIn;
+    }
+
+    public String getTimecodeOut() {
+        return TimecodeOut;
+    }
 
     public Integer getId() {
         return this.id;

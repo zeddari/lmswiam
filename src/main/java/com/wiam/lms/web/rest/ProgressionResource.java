@@ -19,6 +19,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -326,7 +327,7 @@ public class ProgressionResource {
                             Progression progression = new Progression();
                             progression.setLateArrival(false);
                             progression.setEarlyDeparture(false);
-                            //progression.setIsForAttendance(true);
+                            progression.setIsForAttendance(true);
                             progression.setTaskDone(true);
                             progression.setHifdScore(0);
                             progression.setTajweedScore(0);
@@ -356,6 +357,13 @@ public class ProgressionResource {
         log.debug("REST request to get the Progressions by student : {}", id);
         return progressionRepository.findAllByStudent(id);
     }
+
+    /*@GetMapping("/studentAttendanceCount")
+    List<Progression> getForAttendanceProgressions(@RequestParam LocalDate fromDate,
+    @RequestParam LocalDate toDate) {
+        log.debug("REST request to get the Progressions used to store the attendance od students : {}");
+        return progressionRepository.findAllByAttendanceCount(fromDate,toDate);
+    } */
 
     /**
      * {@code DELETE  /progressions/:id} : delete the "id" progression.
