@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (sessionCourses) {
+      <div>
+        <h2 data-cy="sessionCoursesDetailsHeading"><span jhiTranslate="lmswiamApp.sessionCourses.detail.title">Session Courses</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ sessionCourses.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionCourses.title">Title</span></dt>
+          <dd>
+            <span>{{ sessionCourses.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionCourses.description">Description</span></dt>
+          <dd>
+            <span>{{ sessionCourses.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionCourses.resourceLink">Resource Link</span></dt>
+          <dd>
+            <span>{{ sessionCourses.resourceLink }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.sessionCourses.resourceFile">Resource File</span></dt>
+          <dd>
+            @if (sessionCourses.resourceFile) {
+              <div>
+                <a (click)="openFile(sessionCourses.resourceFile, sessionCourses.resourceFileContentType)" jhiTranslate="entity.action.open"
+                  >Open</a
+                >
+                {{ sessionCourses.resourceFileContentType }}, {{ byteSize(sessionCourses.resourceFile) }}
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/session-courses', sessionCourses.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

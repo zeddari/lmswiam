@@ -175,7 +175,13 @@ public class UserCustom implements Serializable {
     @JsonIgnoreProperties(value = { "payments", "site10", "sponsor", "project", "currency" }, allowSetters = true)
     private Set<Sponsoring> sponsorings = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "resource")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @org.springframework.data.annotation.Transient
+    @JsonIgnoreProperties(value = { "resource" }, allowSetters = true)
+    private Set<Depense> depenses = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_user_custom__diplomas",
         joinColumns = @JoinColumn(name = "user_custom_id"),
@@ -185,7 +191,7 @@ public class UserCustom implements Serializable {
     @JsonIgnoreProperties(value = { "site20", "userCustom7s" }, allowSetters = true)
     private Set<Diploma> diplomas = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_user_custom__languages",
         joinColumns = @JoinColumn(name = "user_custom_id"),
@@ -209,7 +215,7 @@ public class UserCustom implements Serializable {
             "quizResults",
             "payments",
             "sponsorings",
-            //"groups",
+            "groups",
             "projects",
             "userCustoms",
             "sessions",
@@ -229,19 +235,19 @@ public class UserCustom implements Serializable {
     @JsonIgnoreProperties(value = { "userCustoms" }, allowSetters = true)
     private Country country;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "userCustoms" }, allowSetters = true)
     private Nationality nationality;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "userCustoms" }, allowSetters = true)
     private Job job;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "departements", "userCustoms", "departement1" }, allowSetters = true)
     private Departement departement2;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "elements")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "elements")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(
@@ -781,6 +787,37 @@ public class UserCustom implements Serializable {
     public UserCustom removeSponsoring(Sponsoring sponsoring) {
         this.sponsorings.remove(sponsoring);
         sponsoring.setSponsor(null);
+        return this;
+    }
+
+    public Set<Depense> getDepenses() {
+        return this.depenses;
+    }
+
+    public void setDepenses(Set<Depense> depenses) {
+        if (this.depenses != null) {
+            this.depenses.forEach(i -> i.setResource(null));
+        }
+        if (depenses != null) {
+            depenses.forEach(i -> i.setResource(this));
+        }
+        this.depenses = depenses;
+    }
+
+    public UserCustom depenses(Set<Depense> depenses) {
+        this.setDepenses(depenses);
+        return this;
+    }
+
+    public UserCustom addDepense(Depense depense) {
+        this.depenses.add(depense);
+        depense.setResource(this);
+        return this;
+    }
+
+    public UserCustom removeDepense(Depense depense) {
+        this.depenses.remove(depense);
+        depense.setResource(null);
         return this;
     }
 

@@ -66,6 +66,14 @@
       "relationshipType": "many-to-many"
     },
     {
+      "otherEntityField": "title",
+      "otherEntityName": "sessionCourses",
+      "otherEntityRelationshipName": "sessionsInstance5",
+      "relationshipName": "course",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
       "otherEntityField": "nameAr",
       "otherEntityName": "site",
       "relationshipName": "site16",

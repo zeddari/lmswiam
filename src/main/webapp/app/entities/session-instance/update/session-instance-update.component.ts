@@ -12,6 +12,8 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { ISessionLink } from 'app/entities/session-link/session-link.model';
 import { SessionLinkService } from 'app/entities/session-link/service/session-link.service';
+import { ISessionCourses } from 'app/entities/session-courses/session-courses.model';
+import { SessionCoursesService } from 'app/entities/session-courses/service/session-courses.service';
 import { ISite } from 'app/entities/site/site.model';
 import { SiteService } from 'app/entities/site/service/site.service';
 import { ISession } from 'app/entities/session/session.model';
@@ -33,6 +35,7 @@ export class SessionInstanceUpdateComponent implements OnInit {
   attendanceValues = Object.keys(Attendance);
 
   sessionLinksSharedCollection: ISessionLink[] = [];
+  sessionCoursesSharedCollection: ISessionCourses[] = [];
   sitesSharedCollection: ISite[] = [];
   sessionsSharedCollection: ISession[] = [];
 
@@ -44,12 +47,16 @@ export class SessionInstanceUpdateComponent implements OnInit {
     protected sessionInstanceService: SessionInstanceService,
     protected sessionInstanceFormService: SessionInstanceFormService,
     protected sessionLinkService: SessionLinkService,
+    protected sessionCoursesService: SessionCoursesService,
     protected siteService: SiteService,
     protected sessionService: SessionService,
     protected activatedRoute: ActivatedRoute,
   ) {}
 
   compareSessionLink = (o1: ISessionLink | null, o2: ISessionLink | null): boolean => this.sessionLinkService.compareSessionLink(o1, o2);
+
+  compareSessionCourses = (o1: ISessionCourses | null, o2: ISessionCourses | null): boolean =>
+    this.sessionCoursesService.compareSessionCourses(o1, o2);
 
   compareSite = (o1: ISite | null, o2: ISite | null): boolean => this.siteService.compareSite(o1, o2);
 
@@ -122,6 +129,10 @@ export class SessionInstanceUpdateComponent implements OnInit {
       this.sessionLinksSharedCollection,
       ...(sessionInstance.links ?? []),
     );
+    this.sessionCoursesSharedCollection = this.sessionCoursesService.addSessionCoursesToCollectionIfMissing<ISessionCourses>(
+      this.sessionCoursesSharedCollection,
+      ...(sessionInstance.courses ?? []),
+    );
     this.sitesSharedCollection = this.siteService.addSiteToCollectionIfMissing<ISite>(this.sitesSharedCollection, sessionInstance.site16);
     this.sessionsSharedCollection = this.sessionService.addSessionToCollectionIfMissing<ISession>(
       this.sessionsSharedCollection,
@@ -139,6 +150,19 @@ export class SessionInstanceUpdateComponent implements OnInit {
         ),
       )
       .subscribe((sessionLinks: ISessionLink[]) => (this.sessionLinksSharedCollection = sessionLinks));
+
+    this.sessionCoursesService
+      .query()
+      .pipe(map((res: HttpResponse<ISessionCourses[]>) => res.body ?? []))
+      .pipe(
+        map((sessionCourses: ISessionCourses[]) =>
+          this.sessionCoursesService.addSessionCoursesToCollectionIfMissing<ISessionCourses>(
+            sessionCourses,
+            ...(this.sessionInstance?.courses ?? []),
+          ),
+        ),
+      )
+      .subscribe((sessionCourses: ISessionCourses[]) => (this.sessionCoursesSharedCollection = sessionCourses));
 
     this.siteService
       .query()

@@ -165,7 +165,7 @@ public class SiteResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sites in body.
      */
     @GetMapping("")
-    public List<Site> getAllSites(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
+    public List<Site> getAllSites(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Sites");
         if (eagerload) {
             return siteRepository.findAllWithEagerRelationships();
@@ -181,7 +181,7 @@ public class SiteResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the site, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Site> getSite(@PathVariable Long id) {
+    public ResponseEntity<Site> getSite(@PathVariable("id") Long id) {
         log.debug("REST request to get Site : {}", id);
         Optional<Site> site = siteRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(site);
@@ -194,7 +194,7 @@ public class SiteResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSite(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSite(@PathVariable("id") Long id) {
         log.debug("REST request to delete Site : {}", id);
         siteRepository.deleteById(id);
         siteSearchRepository.deleteFromIndexById(id);
@@ -212,7 +212,7 @@ public class SiteResource {
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public List<Site> searchSites(@RequestParam String query) {
+    public List<Site> searchSites(@RequestParam("query") String query) {
         log.debug("REST request to search Sites for query {}", query);
         try {
             return StreamSupport.stream(siteSearchRepository.search(query).spliterator(), false).toList();

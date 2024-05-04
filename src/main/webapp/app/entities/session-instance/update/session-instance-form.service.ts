@@ -27,7 +27,7 @@ type SessionInstanceFormRawValue = FormValueOf<ISessionInstance>;
 
 type NewSessionInstanceFormRawValue = FormValueOf<NewSessionInstance>;
 
-type SessionInstanceFormDefaults = Pick<NewSessionInstance, 'id' | 'startTime' | 'isActive' | 'links'>;
+type SessionInstanceFormDefaults = Pick<NewSessionInstance, 'id' | 'startTime' | 'isActive' | 'links' | 'courses'>;
 
 type SessionInstanceFormGroupContent = {
   id: FormControl<SessionInstanceFormRawValue['id'] | NewSessionInstance['id']>;
@@ -40,6 +40,7 @@ type SessionInstanceFormGroupContent = {
   justifRef: FormControl<SessionInstanceFormRawValue['justifRef']>;
   isActive: FormControl<SessionInstanceFormRawValue['isActive']>;
   links: FormControl<SessionInstanceFormRawValue['links']>;
+  courses: FormControl<SessionInstanceFormRawValue['courses']>;
   site16: FormControl<SessionInstanceFormRawValue['site16']>;
   session1: FormControl<SessionInstanceFormRawValue['session1']>;
 };
@@ -82,6 +83,7 @@ export class SessionInstanceFormService {
         validators: [Validators.required],
       }),
       links: new FormControl(sessionInstanceRawValue.links ?? []),
+      courses: new FormControl(sessionInstanceRawValue.courses ?? []),
       site16: new FormControl(sessionInstanceRawValue.site16),
       session1: new FormControl(sessionInstanceRawValue.session1),
     });
@@ -111,6 +113,7 @@ export class SessionInstanceFormService {
       startTime: currentTime,
       isActive: false,
       links: [],
+      courses: [],
     };
   }
 
@@ -130,6 +133,7 @@ export class SessionInstanceFormService {
       ...sessionInstance,
       startTime: sessionInstance.startTime ? sessionInstance.startTime.format(DATE_TIME_FORMAT) : undefined,
       links: sessionInstance.links ?? [],
+      courses: sessionInstance.courses ?? [],
     };
   }
 }

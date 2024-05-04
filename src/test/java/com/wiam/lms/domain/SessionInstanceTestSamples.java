@@ -12,17 +12,18 @@ public class SessionInstanceTestSamples {
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + (2 * Short.MAX_VALUE));
 
     public static SessionInstance getSessionInstanceSample1() {
-        return new SessionInstance().id(1L).title("title1").justifRef("justifRef1");
+        return new SessionInstance().id(1L).title("title1").duration(1).justifRef("justifRef1");
     }
 
     public static SessionInstance getSessionInstanceSample2() {
-        return new SessionInstance().id(2L).title("title2").justifRef("justifRef2");
+        return new SessionInstance().id(2L).title("title2").duration(2).justifRef("justifRef2");
     }
 
     public static SessionInstance getSessionInstanceRandomSampleGenerator() {
         return new SessionInstance()
             .id(longCount.incrementAndGet())
             .title(UUID.randomUUID().toString())
+            .duration(intCount.incrementAndGet())
             .justifRef(UUID.randomUUID().toString());
     }
 }

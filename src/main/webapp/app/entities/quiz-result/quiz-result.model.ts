@@ -7,9 +7,9 @@ export interface IQuizResult {
   id: number;
   result?: number | null;
   submittedAT?: dayjs.Dayjs | null;
-  site8?: Pick<ISite, 'id' | 'nameAr'> | null;
-  quiz?: Pick<IQuiz, 'id'> | null;
-  userCustom2?: Pick<IUserCustom, 'id' | 'firstName'> | null;
+  site8?: ISite | null;
+  quiz?: IQuiz | null;
+  userCustom2?: IUserCustom | null;
 }
 
 export type NewQuizResult = Omit<IQuizResult, 'id'> & { id: null };

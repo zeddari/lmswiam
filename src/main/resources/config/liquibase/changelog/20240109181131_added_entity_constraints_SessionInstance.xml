@@ -22,6 +22,20 @@
                                  referencedTableName="session_link"
                                  />
 
+        <addForeignKeyConstraint baseColumnNames="session_instance_id"
+                                 baseTableName="rel_session_instance__course"
+                                 constraintName="fk_rel_session_instance__course__session_instance_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="session_instance"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="course_id"
+                                 baseTableName="rel_session_instance__course"
+                                 constraintName="fk_rel_session_instance__course__course_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="session_courses"
+                                 />
+
         <addForeignKeyConstraint baseColumnNames="site16_id"
                                  baseTableName="session_instance"
                                  constraintName="fk_session_instance__site16_id"

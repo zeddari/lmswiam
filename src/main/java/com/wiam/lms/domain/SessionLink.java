@@ -81,6 +81,12 @@ public class SessionLink implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "links")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
+    @JsonIgnoreProperties(value = { "progressions", "links", "courses", "site16", "session1" }, allowSetters = true)
+    private Set<SessionInstance> sessions4s = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "links")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(
         value = { "sessionInstances", "payments", "classrooms", "groups", "professors", "employees", "links", "site14", "comments" },
         allowSetters = true
@@ -164,6 +170,37 @@ public class SessionLink implements Serializable {
 
     public SessionLink site15(Site site) {
         this.setSite15(site);
+        return this;
+    }
+
+    public Set<SessionInstance> getSessions4s() {
+        return this.sessions4s;
+    }
+
+    public void setSessions4s(Set<SessionInstance> sessionInstances) {
+        if (this.sessions4s != null) {
+            this.sessions4s.forEach(i -> i.removeLinks(this));
+        }
+        if (sessionInstances != null) {
+            sessionInstances.forEach(i -> i.addLinks(this));
+        }
+        this.sessions4s = sessionInstances;
+    }
+
+    public SessionLink sessions4s(Set<SessionInstance> sessionInstances) {
+        this.setSessions4s(sessionInstances);
+        return this;
+    }
+
+    public SessionLink addSessions4(SessionInstance sessionInstance) {
+        this.sessions4s.add(sessionInstance);
+        sessionInstance.getLinks().add(this);
+        return this;
+    }
+
+    public SessionLink removeSessions4(SessionInstance sessionInstance) {
+        this.sessions4s.remove(sessionInstance);
+        sessionInstance.getLinks().remove(this);
         return this;
     }
 

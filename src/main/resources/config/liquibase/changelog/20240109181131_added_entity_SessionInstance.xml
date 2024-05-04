@@ -26,7 +26,7 @@
             <column name="duration" type="integer">
                 <constraints nullable="false" />
             </column>
-            <column name="info" type="varchar(500)">
+            <column name="info" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="attendance" type="varchar(255)">
@@ -61,6 +61,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="session_instance_id, links_id" tableName="rel_session_instance__links"/>
+
+        <createTable tableName="rel_session_instance__course">
+            <column name="course_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="session_instance_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="session_instance_id, course_id" tableName="rel_session_instance__course"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

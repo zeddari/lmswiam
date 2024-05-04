@@ -168,6 +168,13 @@
       "relationshipType": "one-to-many"
     },
     {
+      "otherEntityName": "depense",
+      "otherEntityRelationshipName": "resource",
+      "relationshipName": "depense",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
       "otherEntityField": "title",
       "otherEntityName": "diploma",
       "otherEntityRelationshipName": "userCustom7",

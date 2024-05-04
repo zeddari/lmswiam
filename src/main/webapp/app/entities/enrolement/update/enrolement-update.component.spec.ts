@@ -80,10 +80,10 @@ describe('Enrolement Management Update Component', () => {
 
     it('Should call UserCustom query and add missing value', () => {
       const enrolement: IEnrolement = { id: 456 };
-      const userCustom4: IUserCustom = { id: 23279 };
+      const userCustom4: IUserCustom = { id: 30255 };
       enrolement.userCustom4 = userCustom4;
 
-      const userCustomCollection: IUserCustom[] = [{ id: 1962 }];
+      const userCustomCollection: IUserCustom[] = [{ id: 31298 }];
       jest.spyOn(userCustomService, 'query').mockReturnValue(of(new HttpResponse({ body: userCustomCollection })));
       const additionalUserCustoms = [userCustom4];
       const expectedCollection: IUserCustom[] = [...additionalUserCustoms, ...userCustomCollection];
@@ -126,7 +126,7 @@ describe('Enrolement Management Update Component', () => {
       const enrolement: IEnrolement = { id: 456 };
       const site4: ISite = { id: 31378 };
       enrolement.site4 = site4;
-      const userCustom4: IUserCustom = { id: 13744 };
+      const userCustom4: IUserCustom = { id: 8498 };
       enrolement.userCustom4 = userCustom4;
       const course: ICourse = { id: 9732 };
       enrolement.course = course;

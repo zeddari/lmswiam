@@ -1,0 +1,29 @@
+{
+  "lmswiamApp": {
+    "sessionCourses": {
+      "home": {
+        "title": "Session Courses",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Session Courses",
+        "createOrEditLabel": "Create or edit a Session Courses",
+        "search": "Search for Session Courses",
+        "notFound": "No Session Courses found"
+      },
+      "created": "A new Session Courses is created with identifier {{ param }}",
+      "updated": "A Session Courses is updated with identifier {{ param }}",
+      "deleted": "A Session Courses is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Session Courses {{ id }}?"
+      },
+      "detail": {
+        "title": "Session Courses"
+      },
+      "id": "ID",
+      "title": "Title",
+      "description": "Description",
+      "resourceLink": "Resource Link",
+      "resourceFile": "Resource File",
+      "sessionsInstance5": "Sessions Instance 5"
+    }
+  }
+}

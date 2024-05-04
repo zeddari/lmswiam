@@ -1,54 +1,62 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <div *ngIf="quizResult">
-      <h2 data-cy="quizResultDetailsHeading"><span jhiTranslate="lmswiamApp.quizResult.detail.title">Quiz Result</span></h2>
+    @if (quizResult) {
+      <div>
+        <h2 data-cy="quizResultDetailsHeading"><span jhiTranslate="lmswiamApp.quizResult.detail.title">Quiz Result</span></h2>
 
-      <hr />
+        <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+        <jhi-alert-error></jhi-alert-error>
 
-      <jhi-alert></jhi-alert>
+        <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ quizResult.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.quizResult.result">Result</span></dt>
-        <dd>
-          <span>{{ quizResult.result }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.quizResult.submittedAT">Submitted AT</span></dt>
-        <dd>
-          <span>{{ quizResult.submittedAT | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.quizResult.site8">Site 8</span></dt>
-        <dd>
-          <div *ngIf="quizResult.site8">
-            <a [routerLink]="['/site', quizResult.site8.id, 'view']">{{ quizResult.site8.nameAr }}</a>
-          </div>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.quizResult.quiz">Quiz</span></dt>
-        <dd>
-          <div *ngIf="quizResult.quiz">
-            <a [routerLink]="['/quiz', quizResult.quiz.id, 'view']">{{ quizResult.quiz.id }}</a>
-          </div>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.quizResult.userCustom2">User Custom 2</span></dt>
-        <dd>
-          <div *ngIf="quizResult.userCustom2">
-            <a [routerLink]="['/user-custom', quizResult.userCustom2.id, 'view']">{{ quizResult.userCustom2.firstName }}</a>
-          </div>
-        </dd>
-      </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ quizResult.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quizResult.result">Result</span></dt>
+          <dd>
+            <span>{{ quizResult.result }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quizResult.submittedAT">Submitted AT</span></dt>
+          <dd>
+            <span>{{ quizResult.submittedAT | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quizResult.site8">Site 8</span></dt>
+          <dd>
+            @if (quizResult.site8) {
+              <div>
+                <a [routerLink]="['/site', quizResult.site8.id, 'view']">{{ quizResult.site8.nameAr }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quizResult.quiz">Quiz</span></dt>
+          <dd>
+            @if (quizResult.quiz) {
+              <div>
+                <a [routerLink]="['/quiz', quizResult.quiz.id, 'view']">{{ quizResult.quiz.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.quizResult.userCustom2">User Custom 2</span></dt>
+          <dd>
+            @if (quizResult.userCustom2) {
+              <div>
+                <a [routerLink]="['/user-custom', quizResult.userCustom2.id, 'view']">{{ quizResult.userCustom2.firstName }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
 
-      <button type="button" [routerLink]="['/quiz-result', quizResult.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
-    </div>
+        <button type="button" [routerLink]="['/quiz-result', quizResult.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
   </div>
 </div>

@@ -1,52 +1,54 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <div *ngIf="ayahEdition">
-      <h2 data-cy="ayahEditionDetailsHeading"><span jhiTranslate="lmswiamApp.ayahEdition.detail.title">Ayah Edition</span></h2>
+    @if (ayahEdition) {
+      <div>
+        <h2 data-cy="ayahEditionDetailsHeading"><span jhiTranslate="lmswiamApp.ayahEdition.detail.title">Ayah Edition</span></h2>
 
-      <hr />
+        <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+        <jhi-alert-error></jhi-alert-error>
 
-      <jhi-alert></jhi-alert>
+        <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="lmswiamApp.ayahEdition.id">Id</span></dt>
-        <dd>
-          <span>{{ ayahEdition.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.ayahEdition.ayahId">Ayah Id</span></dt>
-        <dd>
-          <span>{{ ayahEdition.ayahId }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.ayahEdition.editionId">Edition Id</span></dt>
-        <dd>
-          <span>{{ ayahEdition.editionId }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.ayahEdition.data">Data</span></dt>
-        <dd>
-          <span>{{ ayahEdition.data }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.ayahEdition.isAudio">Is Audio</span></dt>
-        <dd>
-          <span>{{ ayahEdition.isAudio }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.ayahEdition.createdAt">Created At</span></dt>
-        <dd>
-          <span>{{ ayahEdition.createdAt | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="lmswiamApp.ayahEdition.updatedAt">Updated At</span></dt>
-        <dd>
-          <span>{{ ayahEdition.updatedAt | formatMediumDatetime }}</span>
-        </dd>
-      </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="lmswiamApp.ayahEdition.id">Id</span></dt>
+          <dd>
+            <span>{{ ayahEdition.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.ayahEdition.ayahId">Ayah Id</span></dt>
+          <dd>
+            <span>{{ ayahEdition.ayahId }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.ayahEdition.editionId">Edition Id</span></dt>
+          <dd>
+            <span>{{ ayahEdition.editionId }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.ayahEdition.data">Data</span></dt>
+          <dd>
+            <span>{{ ayahEdition.data }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.ayahEdition.isAudio">Is Audio</span></dt>
+          <dd>
+            <span>{{ ayahEdition.isAudio }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.ayahEdition.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ ayahEdition.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="lmswiamApp.ayahEdition.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ ayahEdition.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
 
-      <button type="button" [routerLink]="['/ayah-edition', ayahEdition.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
-    </div>
+        <button type="button" [routerLink]="['/ayah-edition', ayahEdition.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
   </div>
 </div>

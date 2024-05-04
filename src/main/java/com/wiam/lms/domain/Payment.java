@@ -2,6 +2,7 @@ package com.wiam.lms.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wiam.lms.domain.enumeration.PaymentMode;
+import com.wiam.lms.domain.enumeration.PaymentSide;
 import com.wiam.lms.domain.enumeration.PaymentType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -59,6 +60,12 @@ public class Payment implements Serializable {
     @Column(name = "type", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private PaymentType type;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "side", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+    private PaymentSide side;
 
     @NotNull
     @Column(name = "validity_start_time", nullable = false)
@@ -228,6 +235,19 @@ public class Payment implements Serializable {
         this.type = type;
     }
 
+    public PaymentSide getSide() {
+        return this.side;
+    }
+
+    public Payment side(PaymentSide side) {
+        this.setSide(side);
+        return this;
+    }
+
+    public void setSide(PaymentSide side) {
+        this.side = side;
+    }
+
     public ZonedDateTime getValidityStartTime() {
         return this.validityStartTime;
     }
@@ -363,6 +383,7 @@ public class Payment implements Serializable {
             ", proofContentType='" + getProofContentType() + "'" +
             ", paidAt='" + getPaidAt() + "'" +
             ", type='" + getType() + "'" +
+            ", side='" + getSide() + "'" +
             ", validityStartTime='" + getValidityStartTime() + "'" +
             ", validityEndTime='" + getValidityEndTime() + "'" +
             ", details='" + getDetails() + "'" +

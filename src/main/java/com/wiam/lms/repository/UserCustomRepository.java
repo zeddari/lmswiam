@@ -1,9 +1,6 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.UserCustom;
-import com.wiam.lms.domain.enumeration.AccountStatus;
-import com.wiam.lms.domain.enumeration.Role;
-import com.wiam.lms.domain.enumeration.Sex;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -47,14 +44,4 @@ public interface UserCustomRepository extends UserCustomRepositoryWithBagRelatio
         "select userCustom from UserCustom userCustom left join fetch userCustom.user left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.id =:id"
     )
     Optional<UserCustom> findOneWithToOneRelationships(@Param("id") Long id);
-
-    @Query(
-        "select userCustom from UserCustom userCustom left join fetch userCustom.user left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.role =:role and userCustom.sex =:sex and userCustom.accountStatus =:accountStatus and userCustom.site13.id =:siteId"
-    )
-    List<UserCustom> getUsers(
-        @Param("role") Role role,
-        @Param("siteId") Long siteId,
-        @Param("accountStatus") AccountStatus accountStatus,
-        @Param("sex") Sex sex
-    );
 }

@@ -12,10 +12,12 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
-          <label class="form-label" jhiTranslate="lmswiamApp.ayahEdition.id" for="field_id">Id</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="lmswiamApp.ayahEdition.id" for="field_id">Id</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.ayahEdition.ayahId" for="field_ayahId">Ayah Id</label>
@@ -30,11 +32,13 @@
         <div class="mb-3">
           <label class="form-label" jhiTranslate="lmswiamApp.ayahEdition.data" for="field_data">Data</label>
           <textarea class="form-control" name="data" id="field_data" data-cy="data" formControlName="data"></textarea>
-          <div *ngIf="editForm.get('data')!.invalid && (editForm.get('data')!.dirty || editForm.get('data')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('data')?.errors?.required" jhiTranslate="entity.validation.required"
-              >This field is required.</small
-            >
-          </div>
+          @if (editForm.get('data')!.invalid && (editForm.get('data')!.dirty || editForm.get('data')!.touched)) {
+            <div>
+              @if (editForm.get('data')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
         </div>
 
         <div class="mb-3">

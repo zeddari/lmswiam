@@ -146,8 +146,8 @@ class ProgressionResourceIT {
             .progressionMode(DEFAULT_PROGRESSION_MODE)
             .examType(DEFAULT_EXAM_TYPE)
             .riwaya(DEFAULT_RIWAYA)
-            //            .fromSourate(DEFAULT_FROM_SOURATE)
-            //            .toSourate(DEFAULT_TO_SOURATE)
+            .fromSourate(DEFAULT_FROM_SOURATE)
+            .toSourate(DEFAULT_TO_SOURATE)
             .fromAyaNum(DEFAULT_FROM_AYA_NUM)
             .toAyaNum(DEFAULT_TO_AYA_NUM)
             .fromAyaVerset(DEFAULT_FROM_AYA_VERSET)
@@ -176,8 +176,8 @@ class ProgressionResourceIT {
             .progressionMode(UPDATED_PROGRESSION_MODE)
             .examType(UPDATED_EXAM_TYPE)
             .riwaya(UPDATED_RIWAYA)
-            //            .fromSourate(UPDATED_FROM_SOURATE)
-            //            .toSourate(UPDATED_TO_SOURATE)
+            .fromSourate(UPDATED_FROM_SOURATE)
+            .toSourate(UPDATED_TO_SOURATE)
             .fromAyaNum(UPDATED_FROM_AYA_NUM)
             .toAyaNum(UPDATED_TO_AYA_NUM)
             .fromAyaVerset(UPDATED_FROM_AYA_VERSET)
@@ -229,6 +229,8 @@ class ProgressionResourceIT {
         assertThat(testProgression.getProgressionMode()).isEqualTo(DEFAULT_PROGRESSION_MODE);
         assertThat(testProgression.getExamType()).isEqualTo(DEFAULT_EXAM_TYPE);
         assertThat(testProgression.getRiwaya()).isEqualTo(DEFAULT_RIWAYA);
+        assertThat(testProgression.getFromSourate()).isEqualTo(DEFAULT_FROM_SOURATE);
+        assertThat(testProgression.getToSourate()).isEqualTo(DEFAULT_TO_SOURATE);
         assertThat(testProgression.getFromAyaNum()).isEqualTo(DEFAULT_FROM_AYA_NUM);
         assertThat(testProgression.getToAyaNum()).isEqualTo(DEFAULT_TO_AYA_NUM);
         assertThat(testProgression.getFromAyaVerset()).isEqualTo(DEFAULT_FROM_AYA_VERSET);
@@ -421,6 +423,8 @@ class ProgressionResourceIT {
             .andExpect(jsonPath("$.[*].progressionMode").value(hasItem(DEFAULT_PROGRESSION_MODE.toString())))
             .andExpect(jsonPath("$.[*].examType").value(hasItem(DEFAULT_EXAM_TYPE.toString())))
             .andExpect(jsonPath("$.[*].riwaya").value(hasItem(DEFAULT_RIWAYA.toString())))
+            .andExpect(jsonPath("$.[*].fromSourate").value(hasItem(DEFAULT_FROM_SOURATE.toString())))
+            .andExpect(jsonPath("$.[*].toSourate").value(hasItem(DEFAULT_TO_SOURATE.toString())))
             .andExpect(jsonPath("$.[*].fromAyaNum").value(hasItem(DEFAULT_FROM_AYA_NUM)))
             .andExpect(jsonPath("$.[*].toAyaNum").value(hasItem(DEFAULT_TO_AYA_NUM)))
             .andExpect(jsonPath("$.[*].fromAyaVerset").value(hasItem(DEFAULT_FROM_AYA_VERSET.toString())))
@@ -469,6 +473,8 @@ class ProgressionResourceIT {
             .andExpect(jsonPath("$.progressionMode").value(DEFAULT_PROGRESSION_MODE.toString()))
             .andExpect(jsonPath("$.examType").value(DEFAULT_EXAM_TYPE.toString()))
             .andExpect(jsonPath("$.riwaya").value(DEFAULT_RIWAYA.toString()))
+            .andExpect(jsonPath("$.fromSourate").value(DEFAULT_FROM_SOURATE.toString()))
+            .andExpect(jsonPath("$.toSourate").value(DEFAULT_TO_SOURATE.toString()))
             .andExpect(jsonPath("$.fromAyaNum").value(DEFAULT_FROM_AYA_NUM))
             .andExpect(jsonPath("$.toAyaNum").value(DEFAULT_TO_AYA_NUM))
             .andExpect(jsonPath("$.fromAyaVerset").value(DEFAULT_FROM_AYA_VERSET.toString()))
@@ -510,8 +516,8 @@ class ProgressionResourceIT {
             .progressionMode(UPDATED_PROGRESSION_MODE)
             .examType(UPDATED_EXAM_TYPE)
             .riwaya(UPDATED_RIWAYA)
-            //            .fromSourate(UPDATED_FROM_SOURATE)
-            //            .toSourate(UPDATED_TO_SOURATE)
+            .fromSourate(UPDATED_FROM_SOURATE)
+            .toSourate(UPDATED_TO_SOURATE)
             .fromAyaNum(UPDATED_FROM_AYA_NUM)
             .toAyaNum(UPDATED_TO_AYA_NUM)
             .fromAyaVerset(UPDATED_FROM_AYA_VERSET)
@@ -542,6 +548,8 @@ class ProgressionResourceIT {
         assertThat(testProgression.getProgressionMode()).isEqualTo(UPDATED_PROGRESSION_MODE);
         assertThat(testProgression.getExamType()).isEqualTo(UPDATED_EXAM_TYPE);
         assertThat(testProgression.getRiwaya()).isEqualTo(UPDATED_RIWAYA);
+        assertThat(testProgression.getFromSourate()).isEqualTo(UPDATED_FROM_SOURATE);
+        assertThat(testProgression.getToSourate()).isEqualTo(UPDATED_TO_SOURATE);
         assertThat(testProgression.getFromAyaNum()).isEqualTo(UPDATED_FROM_AYA_NUM);
         assertThat(testProgression.getToAyaNum()).isEqualTo(UPDATED_TO_AYA_NUM);
         assertThat(testProgression.getFromAyaVerset()).isEqualTo(UPDATED_FROM_AYA_VERSET);
@@ -566,6 +574,8 @@ class ProgressionResourceIT {
                 assertThat(testProgressionSearch.getProgressionMode()).isEqualTo(UPDATED_PROGRESSION_MODE);
                 assertThat(testProgressionSearch.getExamType()).isEqualTo(UPDATED_EXAM_TYPE);
                 assertThat(testProgressionSearch.getRiwaya()).isEqualTo(UPDATED_RIWAYA);
+                assertThat(testProgressionSearch.getFromSourate()).isEqualTo(UPDATED_FROM_SOURATE);
+                assertThat(testProgressionSearch.getToSourate()).isEqualTo(UPDATED_TO_SOURATE);
                 assertThat(testProgressionSearch.getFromAyaNum()).isEqualTo(UPDATED_FROM_AYA_NUM);
                 assertThat(testProgressionSearch.getToAyaNum()).isEqualTo(UPDATED_TO_AYA_NUM);
                 assertThat(testProgressionSearch.getFromAyaVerset()).isEqualTo(UPDATED_FROM_AYA_VERSET);
@@ -662,7 +672,7 @@ class ProgressionResourceIT {
             .progressionMode(UPDATED_PROGRESSION_MODE)
             .examType(UPDATED_EXAM_TYPE)
             .riwaya(UPDATED_RIWAYA)
-            //            .toSourate(UPDATED_TO_SOURATE)
+            .toSourate(UPDATED_TO_SOURATE)
             .fromAyaNum(UPDATED_FROM_AYA_NUM)
             .toAyaNum(UPDATED_TO_AYA_NUM)
             .taskDone(UPDATED_TASK_DONE)
@@ -687,6 +697,8 @@ class ProgressionResourceIT {
         assertThat(testProgression.getProgressionMode()).isEqualTo(UPDATED_PROGRESSION_MODE);
         assertThat(testProgression.getExamType()).isEqualTo(UPDATED_EXAM_TYPE);
         assertThat(testProgression.getRiwaya()).isEqualTo(UPDATED_RIWAYA);
+        assertThat(testProgression.getFromSourate()).isEqualTo(DEFAULT_FROM_SOURATE);
+        assertThat(testProgression.getToSourate()).isEqualTo(UPDATED_TO_SOURATE);
         assertThat(testProgression.getFromAyaNum()).isEqualTo(UPDATED_FROM_AYA_NUM);
         assertThat(testProgression.getToAyaNum()).isEqualTo(UPDATED_TO_AYA_NUM);
         assertThat(testProgression.getFromAyaVerset()).isEqualTo(DEFAULT_FROM_AYA_VERSET);
@@ -719,8 +731,8 @@ class ProgressionResourceIT {
             .progressionMode(UPDATED_PROGRESSION_MODE)
             .examType(UPDATED_EXAM_TYPE)
             .riwaya(UPDATED_RIWAYA)
-            //            .fromSourate(UPDATED_FROM_SOURATE)
-            //            .toSourate(UPDATED_TO_SOURATE)
+            .fromSourate(UPDATED_FROM_SOURATE)
+            .toSourate(UPDATED_TO_SOURATE)
             .fromAyaNum(UPDATED_FROM_AYA_NUM)
             .toAyaNum(UPDATED_TO_AYA_NUM)
             .fromAyaVerset(UPDATED_FROM_AYA_VERSET)
@@ -751,7 +763,8 @@ class ProgressionResourceIT {
         assertThat(testProgression.getProgressionMode()).isEqualTo(UPDATED_PROGRESSION_MODE);
         assertThat(testProgression.getExamType()).isEqualTo(UPDATED_EXAM_TYPE);
         assertThat(testProgression.getRiwaya()).isEqualTo(UPDATED_RIWAYA);
-
+        assertThat(testProgression.getFromSourate()).isEqualTo(UPDATED_FROM_SOURATE);
+        assertThat(testProgression.getToSourate()).isEqualTo(UPDATED_TO_SOURATE);
         assertThat(testProgression.getFromAyaNum()).isEqualTo(UPDATED_FROM_AYA_NUM);
         assertThat(testProgression.getToAyaNum()).isEqualTo(UPDATED_TO_AYA_NUM);
         assertThat(testProgression.getFromAyaVerset()).isEqualTo(UPDATED_FROM_AYA_VERSET);
@@ -875,6 +888,8 @@ class ProgressionResourceIT {
             .andExpect(jsonPath("$.[*].progressionMode").value(hasItem(DEFAULT_PROGRESSION_MODE.toString())))
             .andExpect(jsonPath("$.[*].examType").value(hasItem(DEFAULT_EXAM_TYPE.toString())))
             .andExpect(jsonPath("$.[*].riwaya").value(hasItem(DEFAULT_RIWAYA.toString())))
+            .andExpect(jsonPath("$.[*].fromSourate").value(hasItem(DEFAULT_FROM_SOURATE.toString())))
+            .andExpect(jsonPath("$.[*].toSourate").value(hasItem(DEFAULT_TO_SOURATE.toString())))
             .andExpect(jsonPath("$.[*].fromAyaNum").value(hasItem(DEFAULT_FROM_AYA_NUM)))
             .andExpect(jsonPath("$.[*].toAyaNum").value(hasItem(DEFAULT_TO_AYA_NUM)))
             .andExpect(jsonPath("$.[*].fromAyaVerset").value(hasItem(DEFAULT_FROM_AYA_VERSET.toString())))

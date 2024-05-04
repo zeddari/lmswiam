@@ -14,31 +14,31 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="question" type="varchar(500)">
+            <column name="question" type="${clobType}">
                 <constraints nullable="false" />
             </column>
-            <column name="details" type="varchar(500)">
+            <column name="details" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="a_1" type="varchar(500)">
+            <column name="a_1" type="${clobType}">
                 <constraints nullable="false" />
             </column>
             <column name="a_1_v" type="boolean">
                 <constraints nullable="false" />
             </column>
-            <column name="a_2" type="varchar(500)">
+            <column name="a_2" type="${clobType}">
                 <constraints nullable="false" />
             </column>
             <column name="a_2_v" type="boolean">
                 <constraints nullable="false" />
             </column>
-            <column name="a_3" type="varchar(500)">
+            <column name="a_3" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="a_3_v" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="a_4" type="varchar(500)">
+            <column name="a_4" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="a_4_v" type="boolean">

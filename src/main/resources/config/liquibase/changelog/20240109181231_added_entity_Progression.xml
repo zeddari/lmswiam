@@ -47,10 +47,10 @@
             <column name="to_aya_num" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="from_aya_verset" type="varchar(500)">
+            <column name="from_aya_verset" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="to_aya_verset" type="varchar(500)">
+            <column name="to_aya_verset" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="tilawa_type" type="varchar(255)">
@@ -68,7 +68,7 @@
             <column name="adae_score" type="integer">
                 <constraints nullable="false" />
             </column>
-            <column name="observation" type="varchar(500)">
+            <column name="observation" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="site17_id" type="bigint">
