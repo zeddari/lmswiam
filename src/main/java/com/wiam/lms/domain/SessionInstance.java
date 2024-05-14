@@ -68,13 +68,13 @@ public class SessionInstance implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
     private Boolean isActive;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sessionInstance")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "sessionInstance")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(value = { "site17", "sessionInstance", "student" }, allowSetters = true)
     private Set<Progression> progressions = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_session_instance__links",
         joinColumns = @JoinColumn(name = "session_instance_id"),
@@ -84,7 +84,7 @@ public class SessionInstance implements Serializable {
     @JsonIgnoreProperties(value = { "site15", "sessions4s", "sessions7s" }, allowSetters = true)
     private Set<SessionLink> links = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_session_instance__course",
         joinColumns = @JoinColumn(name = "session_instance_id"),
