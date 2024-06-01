@@ -7,7 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.wiam.lms.IntegrationTest;
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.UserRepository;
 import com.wiam.lms.repository.search.UserSearchRepository;
 import java.time.Instant;
@@ -65,11 +65,11 @@ class UserServiceIT {
     @MockBean
     private DateTimeProvider dateTimeProvider;
 
-    private User user;
+    private UserCustom user;
 
     @BeforeEach
     public void init() {
-        user = new User();
+        user = new UserCustom();
         user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
         user.setActivated(true);
@@ -87,7 +87,7 @@ class UserServiceIT {
     @Transactional
     void assertThatUserMustExistToResetPassword() {
         userRepository.saveAndFlush(user);
-        Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@localhost");
+        Optional<UserCustom> maybeUser = userService.requestPasswordReset("invalid.login@localhost");
         assertThat(maybeUser).isNotPresent();
 
         maybeUser = userService.requestPasswordReset(user.getEmail());
@@ -103,7 +103,7 @@ class UserServiceIT {
         user.setActivated(false);
         userRepository.saveAndFlush(user);
 
-        Optional<User> maybeUser = userService.requestPasswordReset(user.getLogin());
+        Optional<UserCustom> maybeUser = userService.requestPasswordReset(user.getLogin());
         assertThat(maybeUser).isNotPresent();
         userRepository.delete(user);
     }
@@ -118,7 +118,7 @@ class UserServiceIT {
         user.setResetKey(resetKey);
         userRepository.saveAndFlush(user);
 
-        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+        Optional<UserCustom> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
         assertThat(maybeUser).isNotPresent();
         userRepository.delete(user);
     }
@@ -132,7 +132,7 @@ class UserServiceIT {
         user.setResetKey("1234");
         userRepository.saveAndFlush(user);
 
-        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+        Optional<UserCustom> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
         assertThat(maybeUser).isNotPresent();
         userRepository.delete(user);
     }
@@ -148,7 +148,7 @@ class UserServiceIT {
         user.setResetKey(resetKey);
         userRepository.saveAndFlush(user);
 
-        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+        Optional<UserCustom> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
         assertThat(maybeUser).isPresent();
         assertThat(maybeUser.orElse(null).getResetDate()).isNull();
         assertThat(maybeUser.orElse(null).getResetKey()).isNull();
@@ -164,11 +164,11 @@ class UserServiceIT {
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
         user.setActivated(false);
         user.setActivationKey(RandomStringUtils.random(20));
-        User dbUser = userRepository.saveAndFlush(user);
+        UserCustom dbUser = userRepository.saveAndFlush(user);
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.saveAndFlush(user);
         Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
-        List<User> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo);
+        List<UserCustom> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo);
         assertThat(users).isNotEmpty();
         userService.removeNotActivatedUsers();
         users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo);
@@ -184,14 +184,14 @@ class UserServiceIT {
         Instant now = Instant.now();
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
         user.setActivated(false);
-        User dbUser = userRepository.saveAndFlush(user);
+        UserCustom dbUser = userRepository.saveAndFlush(user);
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.saveAndFlush(user);
         Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
-        List<User> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo);
+        List<UserCustom> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo);
         assertThat(users).isEmpty();
         userService.removeNotActivatedUsers();
-        Optional<User> maybeDbUser = userRepository.findById(dbUser.getId());
+        Optional<UserCustom> maybeDbUser = userRepository.findById(dbUser.getId());
         assertThat(maybeDbUser).contains(dbUser);
 
         // Verify Elasticsearch mock

@@ -1,6 +1,6 @@
 package com.wiam.lms.web.rest;
 
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.Role;
@@ -74,22 +74,10 @@ public class AccountResource {
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        if (user != null) {
-            System.out.println("HHHHHHHHHHHHHHHHHHHHH" + user.getFirstName() + " " + user.getLastName());
-            UserCustom userCustom = new UserCustom();
-            userCustom.setAccountName(user.getLogin());
-            userCustom.setFirstName(user.getFirstName());
-            userCustom.setLastName(user.getLastName());
-            userCustom.setPhoneNumber1("00000000");
-            userCustom.setSex(Sex.MALE);
-            userCustom.setAccountStatus(AccountStatus.ACTIVATED);
-            userCustom.setBirthdate(LocalDate.now());
-            userCustom.setRole(Role.STUDENT);
-
-            userCustomRepository.save(userCustom);
-        }
+        UserCustom user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
+        // to delete this ligne
+        userService.activateRegistration(user.getActivationKey());
     }
 
     /**
@@ -100,7 +88,7 @@ public class AccountResource {
      */
     @GetMapping("/activate")
     public void activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> user = userService.activateRegistration(key);
+        Optional<UserCustom> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
@@ -132,11 +120,11 @@ public class AccountResource {
         String userLogin = SecurityUtils
             .getCurrentUserLogin()
             .orElseThrow(() -> new AccountResourceException("Current user login not found"));
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<UserCustom> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.orElseThrow().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
-        Optional<User> user = userRepository.findOneByLogin(userLogin);
+        Optional<UserCustom> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
@@ -170,7 +158,7 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
+        Optional<UserCustom> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.orElseThrow());
         } else {
@@ -192,7 +180,7 @@ public class AccountResource {
         if (isPasswordLengthInvalid(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-        Optional<User> user = userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
+        Optional<UserCustom> user = userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this reset key");

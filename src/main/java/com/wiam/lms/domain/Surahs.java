@@ -12,7 +12,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "surahs")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "surahs")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "surahs", createIndex = false)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Surahs implements Serializable {
 
@@ -53,7 +53,15 @@ public class Surahs implements Serializable {
     @Column(name = "updated_at")
     private ZonedDateTime updatedAt;
 
+    @Column(name = "ayahsCount")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
+    private Integer ayahsCount;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Integer getAyahsCount() {
+        return ayahsCount;
+    }
 
     public Integer getId() {
         return this.id;
@@ -191,5 +199,9 @@ public class Surahs implements Serializable {
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             "}";
+    }
+
+    public void setAyahsCount(Integer ayahsCount) {
+        this.ayahsCount = ayahsCount;
     }
 }

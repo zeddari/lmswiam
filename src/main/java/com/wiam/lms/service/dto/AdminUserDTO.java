@@ -2,10 +2,20 @@ package com.wiam.lms.service.dto;
 
 import com.wiam.lms.config.Constants;
 import com.wiam.lms.domain.Authority;
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.City;
+import com.wiam.lms.domain.Country;
+import com.wiam.lms.domain.Job;
+import com.wiam.lms.domain.Language;
+import com.wiam.lms.domain.Nationality;
+import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.enumeration.AccountStatus;
+import com.wiam.lms.domain.enumeration.Role;
+import com.wiam.lms.domain.enumeration.Sex;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,11 +61,43 @@ public class AdminUserDTO implements Serializable {
 
     private Set<String> authorities;
 
+    private Role role;
+    private String phoneNumber1;
+    private String phoneNumver2;
+    private Sex sex;
+    private LocalDate birthdate;
+    private String address;
+    private String biography;
+    private String code;
+
+    private Country country;
+    private City city;
+    private Nationality nationality;
+    private Job job;
+    private Set<Language> languages = new HashSet<>();
+    private AccountStatus accountStatus;
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setAccountStatus(AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public AccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
     public AdminUserDTO() {
         // Empty constructor needed for Jackson.
     }
 
-    public AdminUserDTO(User user) {
+    public AdminUserDTO(UserCustom user) {
         this.id = user.getId();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
@@ -69,6 +111,113 @@ public class AdminUserDTO implements Serializable {
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
+
+        this.role = user.getRole();
+        this.phoneNumber1 = user.getPhoneNumber1();
+        this.phoneNumver2 = user.getPhoneNumver2();
+        this.sex = user.getSex();
+        this.birthdate = user.getBirthdate();
+        this.address = user.getAddress();
+        this.biography = user.getBiography();
+        this.country = user.getCountry();
+        this.city = user.getCity();
+        this.nationality = user.getNationality();
+        this.job = user.getJob();
+        this.languages = user.getLanguages();
+        this.accountStatus = user.getAccountStatus();
+        this.code = user.getCode();
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public String getPhoneNumber1() {
+        return phoneNumber1;
+    }
+
+    public String getPhoneNumver2() {
+        return phoneNumver2;
+    }
+
+    public Sex getSex() {
+        return sex;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public Nationality getNationality() {
+        return nationality;
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public Set<Language> getLanguages() {
+        return languages;
+    }
+
+    public void setPhoneNumber1(String phoneNumber1) {
+        this.phoneNumber1 = phoneNumber1;
+    }
+
+    public void setPhoneNumver2(String phoneNumver2) {
+        this.phoneNumver2 = phoneNumver2;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public void setNationality(Nationality nationality) {
+        this.nationality = nationality;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
+
+    public void setLanguages(Set<Language> languages) {
+        this.languages = languages;
     }
 
     public Long getId() {
@@ -192,5 +341,13 @@ public class AdminUserDTO implements Serializable {
             ", lastModifiedDate=" + lastModifiedDate +
             ", authorities=" + authorities +
             "}";
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

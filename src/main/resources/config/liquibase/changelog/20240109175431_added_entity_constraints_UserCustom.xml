@@ -9,71 +9,71 @@
     <changeSet id="20240109175431-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="user_custom"
-                                 constraintName="fk_user_custom__user_id"
+                                 baseTableName="user_custom1"
+                                 constraintName="fk_user_custom1__user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"
                                  />
 
-        <addForeignKeyConstraint baseColumnNames="user_custom_id"
-                                 baseTableName="rel_user_custom__diplomas"
-                                 constraintName="fk_rel_user_custom__diplomas__user_custom_id"
+        <addForeignKeyConstraint baseColumnNames="user_custom1_id"
+                                 baseTableName="rel_user_custom1__diplomas"
+                                 constraintName="fk_rel_user_custom1__diplomas__user_custom1_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="user_custom"
+                                 referencedTableName="user_custom1"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="diplomas_id"
-                                 baseTableName="rel_user_custom__diplomas"
-                                 constraintName="fk_rel_user_custom__diplomas__diplomas_id"
+                                 baseTableName="rel_user_custom1__diplomas"
+                                 constraintName="fk_rel_user_custom1__diplomas__diplomas_id"
                                  referencedColumnNames="id"
                                  referencedTableName="diploma"
                                  />
 
-        <addForeignKeyConstraint baseColumnNames="user_custom_id"
-                                 baseTableName="rel_user_custom__languages"
-                                 constraintName="fk_rel_user_custom__languages__user_custom_id"
+        <addForeignKeyConstraint baseColumnNames="user_custom1_id"
+                                 baseTableName="rel_user_custom1__languages"
+                                 constraintName="fk_rel_user_custom1__languages__user_custom1_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="user_custom"
+                                 referencedTableName="user_custom1"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="languages_id"
-                                 baseTableName="rel_user_custom__languages"
-                                 constraintName="fk_rel_user_custom__languages__languages_id"
+                                 baseTableName="rel_user_custom1__languages"
+                                 constraintName="fk_rel_user_custom1__languages__languages_id"
                                  referencedColumnNames="id"
                                  referencedTableName="language"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="site13_id"
-                                 baseTableName="user_custom"
-                                 constraintName="fk_user_custom__site13_id"
+                                 baseTableName="user_custom1"
+                                 constraintName="fk_user_custom1__site13_id"
                                  referencedColumnNames="id"
                                  referencedTableName="site"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="country_id"
-                                 baseTableName="user_custom"
-                                 constraintName="fk_user_custom__country_id"
+                                 baseTableName="user_custom1"
+                                 constraintName="fk_user_custom1__country_id"
                                  referencedColumnNames="id"
                                  referencedTableName="country"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="nationality_id"
-                                 baseTableName="user_custom"
-                                 constraintName="fk_user_custom__nationality_id"
+                                 baseTableName="user_custom1"
+                                 constraintName="fk_user_custom1__nationality_id"
                                  referencedColumnNames="id"
                                  referencedTableName="nationality"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="job_id"
-                                 baseTableName="user_custom"
-                                 constraintName="fk_user_custom__job_id"
+                                 baseTableName="user_custom1"
+                                 constraintName="fk_user_custom1__job_id"
                                  referencedColumnNames="id"
                                  referencedTableName="job"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="departement2_id"
-                                 baseTableName="user_custom"
-                                 constraintName="fk_user_custom__departement2_id"
+                                 baseTableName="user_custom1"
+                                 constraintName="fk_user_custom1__departement2_id"
                                  referencedColumnNames="id"
                                  referencedTableName="departement"
                                  />

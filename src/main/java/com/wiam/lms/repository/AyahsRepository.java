@@ -1,7 +1,12 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Ayahs;
+import com.wiam.lms.domain.Progression;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +14,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AyahsRepository extends JpaRepository<Ayahs, Integer> {}
+public interface AyahsRepository extends JpaRepository<Ayahs, Integer> {
+    @Query("select ayahs from Ayahs ayahs where ayahs.numberInSurah=:ayahNumber and ayahs.surahId=:surahNumber")
+    Optional<Ayahs> findByAyaSurah(@Param("ayahNumber") Integer ayahNumber, @Param("surahNumber") Integer surahNumber);
+}

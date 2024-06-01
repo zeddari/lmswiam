@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.wiam.lms.IntegrationTest;
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.UserRepository;
 import com.wiam.lms.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ class AuthenticateControllerIT {
     @Test
     @Transactional
     void testAuthorize() throws Exception {
-        User user = new User();
+        UserCustom user = new UserCustom();
         user.setLogin("user-jwt-controller");
         user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
@@ -63,7 +63,7 @@ class AuthenticateControllerIT {
     @Test
     @Transactional
     void testAuthorizeWithRememberMe() throws Exception {
-        User user = new User();
+        UserCustom user = new UserCustom();
         user.setLogin("user-jwt-controller-remember-me");
         user.setEmail("user-jwt-controller-remember-me@example.com");
         user.setActivated(true);

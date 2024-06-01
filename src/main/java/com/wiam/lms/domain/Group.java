@@ -16,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "jhi_group")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "group")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "group", createIndex = false)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Group implements Serializable {
 

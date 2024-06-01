@@ -45,9 +45,9 @@ public class CacheConfiguration {
         return cm -> {
             createCache(cm, com.wiam.lms.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, com.wiam.lms.repository.UserRepository.USERS_BY_EMAIL_CACHE);
-            createCache(cm, com.wiam.lms.domain.User.class.getName());
+            createCache(cm, com.wiam.lms.domain.UserCustom.class.getName());
             createCache(cm, com.wiam.lms.domain.Authority.class.getName());
-            createCache(cm, com.wiam.lms.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.wiam.lms.domain.UserCustom.class.getName() + ".authorities");
             createCache(cm, com.wiam.lms.domain.Departement.class.getName());
             createCache(cm, com.wiam.lms.domain.Departement.class.getName() + ".departements");
             createCache(cm, com.wiam.lms.domain.Departement.class.getName() + ".userCustoms");

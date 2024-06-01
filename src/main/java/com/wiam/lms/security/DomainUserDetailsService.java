@@ -1,7 +1,7 @@
 package com.wiam.lms.security;
 
 import com.wiam.lms.domain.Authority;
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.UserRepository;
 import java.util.*;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
@@ -47,7 +47,7 @@ public class DomainUserDetailsService implements UserDetailsService {
             .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, UserCustom user) {
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }

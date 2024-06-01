@@ -1,45 +1,60 @@
 package com.wiam.lms.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.wiam.lms.config.Constants;
 import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.Sex;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A UserCustom.
+ * A usercustom.
  */
 @Entity
 @Table(name = "user_custom")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "usercustom")
-@SuppressWarnings("common-java:DuplicatedBlocks")
-public class UserCustom implements Serializable {
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "usercustom", createIndex = false)
+public class UserCustom extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @NotNull
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Size(min = 1, max = 50)
+    @Column(length = 50, unique = true, nullable = false)
+    private String login;
+
+    @JsonIgnore
+    @NotNull
+    @Size(min = 60, max = 60)
+    @Column(name = "password_hash", length = 60, nullable = false)
+    private String password;
+
     @Size(max = 50)
-    @Column(name = "first_name", length = 50, nullable = false)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    @Column(name = "first_name", length = 50)
     private String firstName;
 
-    @NotNull
     @Size(max = 50)
-    @Column(name = "last_name", length = 50, nullable = false)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    @Column(name = "last_name", length = 50)
     private String lastName;
 
     @Size(max = 100)
@@ -47,56 +62,18 @@ public class UserCustom implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String code;
 
-    @NotNull
-    @Size(max = 50)
-    @Column(name = "account_name", length = 50, nullable = false)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
-    private String accountName;
-
-    @NotNull
+    //@NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
-    private Role role;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "account_status", nullable = false)
+    @Column(name = "account_status", nullable = true)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private AccountStatus accountStatus;
 
-    @NotNull
-    @Size(max = 50)
-    @Column(name = "phone_number_1", length = 50, nullable = false)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
-    private String phoneNumber1;
-
-    @Size(max = 50)
-    @Column(name = "phone_numver_2", length = 50)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
-    private String phoneNumver2;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "sex", nullable = false)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
-    private Sex sex;
-
-    @NotNull
-    @Column(name = "birthdate", nullable = false)
-    private LocalDate birthdate;
-
     @Lob
-    @Column(name = "photo")
+    @Column(name = "photo", columnDefinition = "LONGBLOB")
     private byte[] photo;
 
     @Column(name = "photo_content_type")
     private String photoContentType;
-
-    @Lob
-    @Column(name = "address")
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
-    private String address;
 
     @Column(name = "facebook")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
@@ -111,18 +88,39 @@ public class UserCustom implements Serializable {
     private String telegramUserCustomName;
 
     @Lob
-    @Column(name = "biography")
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
-    private String biography;
-
-    @Lob
     @Column(name = "bank_account_details")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String bankAccountDetails;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
-    private User user;
+    @Email
+    @Size(min = 5, max = 254)
+    @Column(length = 254, unique = true)
+    private String email;
+
+    @NotNull
+    @Column(nullable = false)
+    private boolean activated = false;
+
+    @Size(min = 2, max = 10)
+    @Column(name = "lang_key", length = 10)
+    private String langKey;
+
+    @Size(max = 256)
+    @Column(name = "image_url", length = 256)
+    private String imageUrl;
+
+    @Size(max = 20)
+    @Column(name = "activation_key", length = 20)
+    @JsonIgnore
+    private String activationKey;
+
+    @Size(max = 20)
+    @Column(name = "reset_key", length = 20)
+    @JsonIgnore
+    private String resetKey;
+
+    @Column(name = "reset_date")
+    private Instant resetDate = null;
 
     /**
      * /
@@ -191,16 +189,6 @@ public class UserCustom implements Serializable {
     @JsonIgnoreProperties(value = { "site20", "userCustom7s" }, allowSetters = true)
     private Set<Diploma> diplomas = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "rel_user_custom__languages",
-        joinColumns = @JoinColumn(name = "user_custom_id"),
-        inverseJoinColumns = @JoinColumn(name = "languages_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "userCustom8s" }, allowSetters = true)
-    private Set<Language> languages = new HashSet<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
         value = {
@@ -230,18 +218,6 @@ public class UserCustom implements Serializable {
         allowSetters = true
     )
     private Site site13;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "userCustoms" }, allowSetters = true)
-    private Country country;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = { "userCustoms" }, allowSetters = true)
-    private Nationality nationality;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = { "userCustoms" }, allowSetters = true)
-    private Job job;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "departements", "userCustoms", "departement1" }, allowSetters = true)
@@ -279,6 +255,80 @@ public class UserCustom implements Serializable {
         allowSetters = true
     )
     private Set<Session> sessions3s = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "user_custom_authority",
+        joinColumns = { @JoinColumn(name = "user_custom_id", referencedColumnName = "id") },
+        inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
+    )
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @BatchSize(size = 20)
+    private Set<Authority> authorities = new HashSet<>();
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+    private Role role;
+
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "phone_number_1", length = 50, nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String phoneNumber1;
+
+    @Size(max = 50)
+    @Column(name = "phone_numver_2", length = 50)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String phoneNumver2;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sex", nullable = false)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+    private Sex sex;
+
+    @NotNull
+    @Column(name = "birthdate", nullable = false)
+    private LocalDate birthdate;
+
+    @Lob
+    @Column(name = "address")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String address;
+
+    @Lob
+    @Column(name = "biography")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String biography;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "usercustom" }, allowSetters = true)
+    private Country country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "usercustom" }, allowSetters = true)
+    private City city;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "usercustom" }, allowSetters = true)
+    private Nationality nationality;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "usercustom" }, allowSetters = true)
+    private Job job;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "rel_usercustom__languages",
+        joinColumns = @JoinColumn(name = "usercustom_id"),
+        inverseJoinColumns = @JoinColumn(name = "languages_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "usercustom8s" }, allowSetters = true)
+    private Set<Language> languages = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -332,19 +382,6 @@ public class UserCustom implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getAccountName() {
-        return this.accountName;
-    }
-
-    public UserCustom accountName(String accountName) {
-        this.setAccountName(accountName);
-        return this;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
     }
 
     public Role getRole() {
@@ -527,19 +564,6 @@ public class UserCustom implements Serializable {
 
     public void setBankAccountDetails(String bankAccountDetails) {
         this.bankAccountDetails = bankAccountDetails;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public UserCustom user(User user) {
-        this.setUser(user);
-        return this;
     }
 
     public Set<Certificate> getCertificates() {
@@ -1083,8 +1107,8 @@ public class UserCustom implements Serializable {
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
             ", code='" + getCode() + "'" +
-            ", accountName='" + getAccountName() + "'" +
-            ", role='" + getRole() + "'" +
+
+            //", role='" + getRole().toString() + "'" +
             ", accountStatus='" + getAccountStatus() + "'" +
             ", phoneNumber1='" + getPhoneNumber1() + "'" +
             ", phoneNumver2='" + getPhoneNumver2() + "'" +
@@ -1099,5 +1123,93 @@ public class UserCustom implements Serializable {
             ", biography='" + getBiography() + "'" +
             ", bankAccountDetails='" + getBankAccountDetails() + "'" +
             "}";
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public String getLangKey() {
+        return langKey;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getActivationKey() {
+        return activationKey;
+    }
+
+    public String getResetKey() {
+        return resetKey;
+    }
+
+    public Instant getResetDate() {
+        return resetDate;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+    public void setLangKey(String langKey) {
+        this.langKey = langKey;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setActivationKey(String activationKey) {
+        this.activationKey = activationKey;
+    }
+
+    public void setResetKey(String resetKey) {
+        this.resetKey = resetKey;
+    }
+
+    public void setResetDate(Instant resetDate) {
+        this.resetDate = resetDate;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 }

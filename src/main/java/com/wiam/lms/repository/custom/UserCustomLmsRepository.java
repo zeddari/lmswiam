@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserCustomLmsRepository extends UserCustomRepositoryWithBagRelationships, JpaRepository<UserCustom, Long> {
     @Query(
-        "select userCustom from UserCustom userCustom left join fetch userCustom.user left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.role =:role and userCustom.sex =:sex and userCustom.accountStatus =:accountStatus and userCustom.site13.id =:siteId"
+        "select userCustom from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.role =:role and userCustom.sex =:sex and userCustom.accountStatus =:accountStatus and userCustom.site13.id =:siteId"
     )
     List<UserCustom> getUsers(
         @Param("role") Role role,

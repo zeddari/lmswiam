@@ -15,7 +15,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "certificate")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "certificate")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "certificate", createIndex = false)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Certificate implements Serializable {
 

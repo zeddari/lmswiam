@@ -1,6 +1,6 @@
 package com.wiam.lms.service;
 
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
@@ -82,11 +82,11 @@ public class MailService {
     }
 
     @Async
-    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
+    public void sendEmailFromTemplate(UserCustom user, String templateName, String titleKey) {
         this.sendEmailFromTemplateSync(user, templateName, titleKey);
     }
 
-    private void sendEmailFromTemplateSync(User user, String templateName, String titleKey) {
+    private void sendEmailFromTemplateSync(UserCustom user, String templateName, String titleKey) {
         if (user.getEmail() == null) {
             log.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
@@ -101,19 +101,19 @@ public class MailService {
     }
 
     @Async
-    public void sendActivationEmail(User user) {
+    public void sendActivationEmail(UserCustom user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         this.sendEmailFromTemplateSync(user, "mail/activationEmail", "email.activation.title");
     }
 
     @Async
-    public void sendCreationEmail(User user) {
+    public void sendCreationEmail(UserCustom user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
         this.sendEmailFromTemplateSync(user, "mail/creationEmail", "email.activation.title");
     }
 
     @Async
-    public void sendPasswordResetMail(User user) {
+    public void sendPasswordResetMail(UserCustom user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         this.sendEmailFromTemplateSync(user, "mail/passwordResetEmail", "email.reset.title");
     }

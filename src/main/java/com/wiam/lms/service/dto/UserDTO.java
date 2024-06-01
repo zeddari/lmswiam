@@ -1,6 +1,6 @@
 package com.wiam.lms.service.dto;
 
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
 import java.io.Serializable;
 
 /**
@@ -18,7 +18,7 @@ public class UserDTO implements Serializable {
         // Empty constructor needed for Jackson.
     }
 
-    public UserDTO(User user) {
+    public UserDTO(UserCustom user) {
         this.id = user.getId();
         // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();

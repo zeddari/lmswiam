@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 
 import com.wiam.lms.IntegrationTest;
 import com.wiam.lms.config.Constants;
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
 import jakarta.mail.Multipart;
 import jakarta.mail.Session;
 import jakarta.mail.internet.MimeBodyPart;
@@ -126,7 +126,7 @@ class MailServiceIT {
 
     @Test
     void testSendEmailFromTemplate() throws Exception {
-        User user = new User();
+        UserCustom user = new UserCustom();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -142,7 +142,7 @@ class MailServiceIT {
 
     @Test
     void testSendActivationEmail() throws Exception {
-        User user = new User();
+        UserCustom user = new UserCustom();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -157,7 +157,7 @@ class MailServiceIT {
 
     @Test
     void testCreationEmail() throws Exception {
-        User user = new User();
+        UserCustom user = new UserCustom();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -172,7 +172,7 @@ class MailServiceIT {
 
     @Test
     void testSendPasswordResetMail() throws Exception {
-        User user = new User();
+        UserCustom user = new UserCustom();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -197,7 +197,7 @@ class MailServiceIT {
 
     @Test
     void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
-        User user = new User();
+        UserCustom user = new UserCustom();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         for (String langKey : languages) {

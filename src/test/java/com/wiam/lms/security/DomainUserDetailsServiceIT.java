@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import com.wiam.lms.IntegrationTest;
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.UserRepository;
 import java.util.Locale;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -39,7 +39,7 @@ class DomainUserDetailsServiceIT {
 
     @BeforeEach
     public void init() {
-        User userOne = new User();
+        UserCustom userOne = new UserCustom();
         userOne.setLogin(USER_ONE_LOGIN);
         userOne.setPassword(RandomStringUtils.randomAlphanumeric(60));
         userOne.setActivated(true);
@@ -49,7 +49,7 @@ class DomainUserDetailsServiceIT {
         userOne.setLangKey("en");
         userRepository.save(userOne);
 
-        User userTwo = new User();
+        UserCustom userTwo = new UserCustom();
         userTwo.setLogin(USER_TWO_LOGIN);
         userTwo.setPassword(RandomStringUtils.randomAlphanumeric(60));
         userTwo.setActivated(true);
@@ -59,7 +59,7 @@ class DomainUserDetailsServiceIT {
         userTwo.setLangKey("en");
         userRepository.save(userTwo);
 
-        User userThree = new User();
+        UserCustom userThree = new UserCustom();
         userThree.setLogin(USER_THREE_LOGIN);
         userThree.setPassword(RandomStringUtils.randomAlphanumeric(60));
         userThree.setActivated(false);

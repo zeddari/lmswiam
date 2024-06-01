@@ -16,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "session_link")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "sessionlink")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "sessionlink", createIndex = false)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class SessionLink implements Serializable {
 

@@ -14,7 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "quiz_result")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "quizresult")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "quizresult", createIndex = false)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class QuizResult implements Serializable {
 
