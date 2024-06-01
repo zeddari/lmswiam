@@ -244,7 +244,7 @@ public class Session implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
     private Boolean isActive;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "session1")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "session1")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(value = { "progressions", "links", "site16", "session1" }, allowSetters = true)

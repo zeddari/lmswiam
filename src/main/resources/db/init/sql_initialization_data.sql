@@ -1,4 +1,5 @@
-SET FOREIGN_KEY_CHECKS=1;
+SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE TABLE city;
 INSERT INTO `city` (`id`, `name_ar`, `name_lat`) VALUES
 (1, 'سلا', 'Sale'),
 (2, 'الرباط', 'Rabat'),
@@ -7,12 +8,14 @@ INSERT INTO `city` (`id`, `name_ar`, `name_lat`) VALUES
 (5, 'مكناس', 'Meknes'),
 (6, 'الرشيدية', 'Errachidia');
 
+TRUNCATE TABLE site;
 INSERT INTO `site` (`city_id`, `id`, `name_ar`, `name_lat`, `localisation`, `description`) VALUES
 (1, 1, 'مركز تابريكت - المغرب', 'tabriquet', NULL, NULL),
 (2, 2, 'مركز النهضة - المغرب', 'nahda', NULL, NULL),
 (2, 3, 'مقرأتي - المغرب', 'maqraati', NULL, NULL),
 (2, 4, 'طبيب حافظ - المغرب', 'tabibhafid', NULL, NULL);
 
+TRUNCATE TABLE jhi_user;
 INSERT INTO `jhi_user` (`activated`, `created_date`, `id`, `last_modified_date`, `reset_date`, `lang_key`, `activation_key`, `reset_key`, `created_by`, `first_name`, `last_modified_by`, `last_name`, `login`, `password_hash`, `email`, `image_url`) VALUES
 (b'1', '2024-04-24 09:41:55.000000', 4, '2024-04-24 09:41:55.000000', NULL, 'ar', 'G1XZRfsA8E4pH5lekCFt', NULL, 'anonymousUser', NULL, 'anonymousUser', NULL, 'admin', '$2a$10$1XdwgPrsvhYKYlv5PhUaJumxqmtSwJr.MRFn4ouOj2Om0HP8xm2xG', 'admin@admin.com', NULL),
 (b'1', '2024-04-24 12:47:31.000000', 11, '2024-04-24 12:47:31.000000', NULL, 'ar', 'gVpOWffVQeGjuuQ3zrIr', NULL, 'anonymousUser', NULL, 'anonymousUser', NULL, 'truc', '$2a$10$iore9DMsIZ7CP8SR.Tmor.k0JYekJwXOdZRkda5AM4w2gqunmiT8a', 'truc@gmail.com', NULL),
@@ -1132,7 +1135,7 @@ INSERT INTO `jhi_user` (`activated`, `created_date`, `id`, `last_modified_date`,
 (b'0', NULL, 7646, NULL, NULL, NULL, NULL, NULL, '', 'طارق', NULL, 'التوكي', 'teacher440888', '', NULL, NULL);
 
 
-
+TRUNCATE TABLE user_custom;
 INSERT INTO `user_custom` (`birthdate`, `country_id`, `departement2_id`, `id`, `job_id`, `nationality_id`, `site13_id`, `user_id`, `account_name`, `first_name`, `last_name`, `phone_number_1`, `phone_numver_2`, `code`, `facebook`, `photo_content_type`, `telegram_user_custom_id`, `telegram_user_custom_name`, `account_status`, `address`, `bank_account_details`, `biography`, `photo`, `role`, `sex`) VALUES
 ('2017-07-16', NULL, NULL, 5, NULL, NULL, NULL, 6208, 'student10365249', 'آدم', 'بلعبار', '', NULL, NULL, NULL, NULL, NULL, NULL, 'ACTIVATED', NULL, NULL, NULL, NULL, 'STUDENT', 'MALE'),
 ('2017-12-11', NULL, NULL, 6, NULL, NULL, NULL, 6209, 'student9331445181', 'أنير', 'بنعمر', '', '212615216401', NULL, NULL, NULL, NULL, NULL, 'ACTIVATED', 'Route tetouan, residance Al Assil, imm7, n°25 طنجة المغرب', NULL, NULL, NULL, 'STUDENT', 'MALE'),
@@ -2244,3 +2247,5 @@ INSERT INTO `user_custom` (`birthdate`, `country_id`, `departement2_id`, `id`, `
 ('2017-12-11', NULL, NULL, 1111, NULL, NULL, 3, 7634, 'teacher10217129', 'سفيان', 'مسدة		', '', NULL, NULL, NULL, NULL, NULL, NULL, 'ACTIVATED', NULL, NULL, NULL, NULL, 'INSTRUCTOR', 'MALE'),
 ('2017-12-11', NULL, NULL, 1112, NULL, NULL, 3, 7635, 'maqraaty', 'مشرف', 'مقرأتي	', '', NULL, NULL, NULL, NULL, NULL, NULL, 'ACTIVATED', NULL, NULL, NULL, NULL, 'INSTRUCTOR', 'MALE'),
 ('2017-12-11', NULL, NULL, 1113, NULL, NULL, 3, 7636, 'teacher10592477', 'لطيفة', 'الخصال	', '', NULL, NULL, NULL, NULL, NULL, NULL, 'ACTIVATED', NULL, NULL, NULL, NULL, 'INSTRUCTOR', 'FEMALE');
+
+SET FOREIGN_KEY_CHECKS=1;
