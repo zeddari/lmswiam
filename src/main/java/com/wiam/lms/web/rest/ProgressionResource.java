@@ -4,6 +4,7 @@ import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.custom.ProgressionQuery;
 import com.wiam.lms.domain.enumeration.Attendance;
 import com.wiam.lms.domain.enumeration.ExamType;
 import com.wiam.lms.domain.enumeration.Riwayats;
@@ -323,6 +324,13 @@ public class ProgressionResource {
         log.debug("REST request to get the Progressions by student : {}", id);
         return progressionRepository.findAllByStudent(id);
     }
+
+    /**
+     * {@code GET  /progressions/:id} : get the "id" progression.
+     *
+     * @param the id of the progression to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the progression, or with status {@code 404 (Not Found)}.
+     */
 
     /*@GetMapping("/studentAttendanceCount")
     List<Progression> getForAttendanceProgressions(@RequestParam LocalDate fromDate,

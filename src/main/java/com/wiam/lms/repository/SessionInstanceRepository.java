@@ -1,6 +1,7 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.SessionInstance;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,12 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
     default Optional<SessionInstance> findOneWithEagerRelationships(Long id) {
         return this.fetchBagRelationships(this.findOneWithToOneRelationships(id));
     }
+
+    List<SessionInstance> findByIdInAndStartTimeBetween(
+        List<Long> ids,
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate
+    );
 
     default List<SessionInstance> findAllWithEagerRelationships() {
         return this.fetchBagRelationships(this.findAllWithToOneRelationships());

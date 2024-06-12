@@ -26,3 +26,11 @@ DELIMITER ;
 alter table ayahs drop INDEX ayahs_FULLTEXT_index;
 alter table ayahs add FULLTEXT KEY `ayahs_FULLTEXT_index` (`textdesc_normalized`);
 update ayahs set textdesc_normalized = remove_accents(textdesc);
+
+
+ALTER TABLE `lmswiam`.`user_custom`
+CHANGE COLUMN `photo` `photo` LONGBLOB NULL DEFAULT NULL ;
+
+ALTER TABLE `lmswiam`.`user_custom`
+CHANGE COLUMN `biography` `biography` LONGTEXT NULL DEFAULT NULL ;
+
