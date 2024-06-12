@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.wiam.lms.IntegrationTest;
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.UserRepository;
 import com.wiam.lms.repository.search.UserSearchRepository;
 import com.wiam.lms.security.AuthoritiesConstants;
@@ -51,7 +51,7 @@ class PublicUserResourceIT {
     @Autowired
     private MockMvc restUserMockMvc;
 
-    private User user;
+    private UserCustom user;
 
     @BeforeEach
     public void setup() {

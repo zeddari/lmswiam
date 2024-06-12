@@ -202,6 +202,13 @@ public class AyahsResource {
         return ResponseUtil.wrapOrNotFound(ayahs);
     }
 
+    @GetMapping("/getAya")
+    public ResponseEntity<Ayahs> getAya(@RequestParam("ayahNumber") Integer ayahNumber, @RequestParam("surahNumber") Integer surahNumber) {
+        //log.debug("REST request to get Ayahs : {}", id);
+        Optional<Ayahs> ayahs = ayahsRepository.findByAyaSurah(ayahNumber, surahNumber);
+        return ResponseUtil.wrapOrNotFound(ayahs);
+    }
+
     /**
      * {@code DELETE  /ayahs/:id} : delete the "id" ayahs.
      *

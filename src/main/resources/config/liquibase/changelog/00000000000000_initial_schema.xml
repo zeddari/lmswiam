@@ -11,7 +11,7 @@
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000001" author="jhipster">
-        <createTable tableName="jhi_user">
+        <createTable tableName="user_custom">
             <column name="id" type="bigint" autoIncrement="true" startWith="1050">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -48,7 +48,7 @@
             </column>
         </createTable>
 
-        <createTable tableName="jhi_user_authority">
+        <createTable tableName="user_custom_authority">
             <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -57,23 +57,23 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="user_custom_authority"/>
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
-                                 baseTableName="jhi_user_authority"
+                                 baseTableName="user_custom_authority"
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
                                  referencedTableName="jhi_authority"/>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="jhi_user_authority"
+                                 baseTableName="user_custom_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
+                                 referencedTableName="user_custom"/>
 
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
-                                tableName="jhi_user"/>
+                                tableName="user_custom"/>
         <loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
@@ -84,7 +84,7 @@
         <loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
-                  tableName="jhi_user"
+                  tableName="user_custom"
                   usePreparedStatements="true">
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
@@ -92,11 +92,11 @@
         <loadData
                   file="config/liquibase/data/user_authority.csv"
                   separator=";"
-                  tableName="jhi_user_authority"
+                  tableName="user_custom_authority"
                   usePreparedStatements="true">
             <column name="user_id" type="numeric"/>
         </loadData>
-        <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="user_custom" columnName="created_date" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <changeSet author="jhipster" id="00000000000002" context="test">

@@ -17,7 +17,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "comments")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "comments")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "comments", createIndex = false)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Comments implements Serializable {
 

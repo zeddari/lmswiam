@@ -19,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "progression")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "progression")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "progression", createIndex = false)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Progression implements Serializable {
 

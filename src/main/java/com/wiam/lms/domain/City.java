@@ -15,7 +15,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "city")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "city")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "city", createIndex = false)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class City implements Serializable {
 
@@ -25,6 +25,19 @@ public class City implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Size(max = 10)
+    @Column(name = "code", length = 10)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
 
     @NotNull
     @Size(max = 100)

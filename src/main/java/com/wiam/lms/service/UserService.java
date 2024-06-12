@@ -2,7 +2,12 @@ package com.wiam.lms.service;
 
 import com.wiam.lms.config.Constants;
 import com.wiam.lms.domain.Authority;
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.City;
+import com.wiam.lms.domain.Country;
+import com.wiam.lms.domain.Language;
+import com.wiam.lms.domain.Nationality;
+import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.enumeration.Sex;
 import com.wiam.lms.repository.AuthorityRepository;
 import com.wiam.lms.repository.UserRepository;
 import com.wiam.lms.repository.search.UserSearchRepository;
@@ -11,6 +16,7 @@ import com.wiam.lms.security.SecurityUtils;
 import com.wiam.lms.service.dto.AdminUserDTO;
 import com.wiam.lms.service.dto.UserDTO;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -58,7 +64,7 @@ public class UserService {
         this.cacheManager = cacheManager;
     }
 
-    public Optional<User> activateRegistration(String key) {
+    public Optional<UserCustom> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         return userRepository
             .findOneByActivationKey(key)
@@ -73,7 +79,7 @@ public class UserService {
             });
     }
 
-    public Optional<User> completePasswordReset(String newPassword, String key) {
+    public Optional<UserCustom> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userRepository
             .findOneByResetKey(key)
@@ -87,10 +93,10 @@ public class UserService {
             });
     }
 
-    public Optional<User> requestPasswordReset(String mail) {
+    public Optional<UserCustom> requestPasswordReset(String mail) {
         return userRepository
             .findOneByEmailIgnoreCase(mail)
-            .filter(User::isActivated)
+            .filter(UserCustom::isActivated)
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
@@ -99,7 +105,7 @@ public class UserService {
             });
     }
 
-    public User registerUser(AdminUserDTO userDTO, String password) {
+    public UserCustom registerUser(AdminUserDTO userDTO, String password) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(existingUser -> {
@@ -116,13 +122,29 @@ public class UserService {
                     throw new EmailAlreadyUsedException();
                 }
             });
-        User newUser = new User();
+        UserCustom newUser = new UserCustom();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
+
+        newUser.setSex(userDTO.getSex());
+        newUser.setCode(userDTO.getCode());
+        newUser.setPhoneNumber1(userDTO.getPhoneNumber1());
+        newUser.setPhoneNumver2(userDTO.getPhoneNumver2());
+        newUser.setBiography(userDTO.getBiography());
+        newUser.setAddress(userDTO.getAddress());
+        newUser.setBirthdate(userDTO.getBirthdate());
+        newUser.setRole(userDTO.getRole());
+        newUser.setCity(userDTO.getCity());
+        newUser.setCountry(userDTO.getCountry());
+        newUser.setNationality(userDTO.getNationality());
+        newUser.setJob(userDTO.getJob());
+        newUser.setLanguages(userDTO.getLanguages());
+        newUser.setAccountStatus(userDTO.getAccountStatus());
+
         if (userDTO.getEmail() != null) {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
         }
@@ -142,7 +164,7 @@ public class UserService {
         return newUser;
     }
 
-    private boolean removeNonActivatedUser(User existingUser) {
+    private boolean removeNonActivatedUser(UserCustom existingUser) {
         if (existingUser.isActivated()) {
             return false;
         }
@@ -152,8 +174,8 @@ public class UserService {
         return true;
     }
 
-    public User createUser(AdminUserDTO userDTO) {
-        User user = new User();
+    public UserCustom createUser(AdminUserDTO userDTO) {
+        UserCustom user = new UserCustom();
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -295,12 +317,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
+    public Optional<UserCustom> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneWithAuthoritiesByLogin(login);
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities() {
+    public Optional<UserCustom> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
@@ -330,7 +352,7 @@ public class UserService {
         return authorityRepository.findAll().stream().map(Authority::getName).toList();
     }
 
-    private void clearUserCaches(User user) {
+    private void clearUserCaches(UserCustom user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());

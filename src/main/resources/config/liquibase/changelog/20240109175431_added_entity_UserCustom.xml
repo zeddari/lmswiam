@@ -10,7 +10,7 @@
         Added the entity UserCustom.
     -->
     <changeSet id="20240109175431-1" author="jhipster">
-        <createTable tableName="user_custom">
+        <createTable tableName="user_custom1">
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -21,7 +21,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="code" type="varchar(100)">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_user_custom__code" />
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_user_custom1__code" />
             </column>
             <column name="account_name" type="varchar(50)">
                 <constraints nullable="false" />
@@ -44,7 +44,7 @@
             <column name="birthdate" type="date">
                 <constraints nullable="false" />
             </column>
-            <column name="photo" type="${blobType}">
+            <column name="photo" type="${BINARY(16)Type}">
                 <constraints nullable="true" />
             </column>
             <column name="photo_content_type" type="varchar(255)">
@@ -56,10 +56,10 @@
             <column name="facebook" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="telegram_user_custom_id" type="varchar(255)">
+            <column name="telegram_user_custom1_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="telegram_user_custom_name" type="varchar(255)">
+            <column name="telegram_user_custom1_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="biography" type="${clobType}">
@@ -69,7 +69,7 @@
                 <constraints nullable="true" />
             </column>
             <column name="user_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_user_custom__user_id" />
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_user_custom1__user_id" />
             </column>
             <column name="site13_id" type="bigint">
                 <constraints nullable="true" />
@@ -92,27 +92,27 @@
 
     <changeSet id="20240109175431-1-relations" author="jhipster">
 
-        <createTable tableName="rel_user_custom__diplomas">
+        <createTable tableName="rel_user_custom1__diplomas">
             <column name="diplomas_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_custom_id" type="bigint">
+            <column name="user_custom1_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="user_custom_id, diplomas_id" tableName="rel_user_custom__diplomas"/>
+        <addPrimaryKey columnNames="user_custom1_id, diplomas_id" tableName="rel_user_custom1__diplomas"/>
 
-        <createTable tableName="rel_user_custom__languages">
+        <createTable tableName="rel_user_custom1__languages">
             <column name="languages_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_custom_id" type="bigint">
+            <column name="user_custom1_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="user_custom_id, languages_id" tableName="rel_user_custom__languages"/>
+        <addPrimaryKey columnNames="user_custom1_id, languages_id" tableName="rel_user_custom1__languages"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -127,9 +127,9 @@
     -->
     <changeSet id="20240109175431-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/user_custom.csv"
+                  file="config/liquibase/fake-data/user_custom1.csv"
                   separator=";"
-                  tableName="user_custom"
+                  tableName="user_custom1"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="first_name" type="string"/>
@@ -142,12 +142,12 @@
             <column name="phone_numver_2" type="string"/>
             <column name="sex" type="string"/>
             <column name="birthdate" type="date"/>
-            <column name="photo" type="blob"/>
+            <column name="photo" type="BINARY(16)"/>
             <column name="photo_content_type" type="string"/>
             <column name="address" type="clob"/>
             <column name="facebook" type="string"/>
-            <column name="telegram_user_custom_id" type="string"/>
-            <column name="telegram_user_custom_name" type="string"/>
+            <column name="telegram_user_custom1_id" type="string"/>
+            <column name="telegram_user_custom1_name" type="string"/>
             <column name="biography" type="clob"/>
             <column name="bank_account_details" type="clob"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->

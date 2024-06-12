@@ -1,7 +1,7 @@
 package com.wiam.lms.repository.search;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
-import com.wiam.lms.domain.User;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.UserRepository;
 import java.util.stream.Stream;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
@@ -14,18 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Spring Data Elasticsearch repository for the User entity.
  */
-public interface UserSearchRepository extends ElasticsearchRepository<User, Long>, UserSearchRepositoryInternal {}
+public interface UserSearchRepository extends ElasticsearchRepository<UserCustom, Long>, UserSearchRepositoryInternal {}
 
 interface UserSearchRepositoryInternal {
-    Stream<User> search(String query);
+    Stream<UserCustom> search(String query);
 
     @Async
     @Transactional
-    void index(User entity);
+    void index(UserCustom entity);
 
     @Async
     @Transactional
-    void deleteFromIndex(User entity);
+    void deleteFromIndex(UserCustom entity);
 }
 
 class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
@@ -39,18 +39,18 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     }
 
     @Override
-    public Stream<User> search(String query) {
+    public Stream<UserCustom> search(String query) {
         NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
-        return elasticsearchTemplate.search(nativeQuery, User.class).map(SearchHit::getContent).stream();
+        return elasticsearchTemplate.search(nativeQuery, UserCustom.class).map(SearchHit::getContent).stream();
     }
 
     @Override
-    public void index(User entity) {
+    public void index(UserCustom entity) {
         repository.findById(entity.getId()).ifPresent(elasticsearchTemplate::save);
     }
 
     @Override
-    public void deleteFromIndex(User entity) {
+    public void deleteFromIndex(UserCustom entity) {
         elasticsearchTemplate.delete(entity);
     }
 }

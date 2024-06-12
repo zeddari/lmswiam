@@ -1,7 +1,9 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.Diploma;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.DiplomaRepository;
+import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.DiplomaSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
@@ -39,11 +41,18 @@ public class DiplomaResource {
 
     private final DiplomaRepository diplomaRepository;
 
+    private final UserCustomRepository userCustomRepository;
+
     private final DiplomaSearchRepository diplomaSearchRepository;
 
-    public DiplomaResource(DiplomaRepository diplomaRepository, DiplomaSearchRepository diplomaSearchRepository) {
+    public DiplomaResource(
+        DiplomaRepository diplomaRepository,
+        DiplomaSearchRepository diplomaSearchRepository,
+        UserCustomRepository userCustomRepository
+    ) {
         this.diplomaRepository = diplomaRepository;
         this.diplomaSearchRepository = diplomaSearchRepository;
+        this.userCustomRepository = userCustomRepository;
     }
 
     /**
@@ -53,13 +62,19 @@ public class DiplomaResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new diploma, or with status {@code 400 (Bad Request)} if the diploma has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+
     @PostMapping("")
-    public ResponseEntity<Diploma> createDiploma(@Valid @RequestBody Diploma diploma) throws URISyntaxException {
+    public ResponseEntity<Diploma> createDiploma(@Valid @RequestBody Diploma diploma, @RequestParam Long id) throws URISyntaxException {
         log.debug("REST request to save Diploma : {}", diploma);
         if (diploma.getId() != null) {
             throw new BadRequestAlertException("A new diploma cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Diploma result = diplomaRepository.save(diploma);
+        UserCustom userCustom = userCustomRepository.findById(id).get();
+        if (userCustom != null && result != null) {
+            userCustom.getDiplomas().add(result);
+            userCustomRepository.save(userCustom);
+        }
         diplomaSearchRepository.index(result);
         return ResponseEntity
             .created(new URI("/api/diplomas/" + result.getId()))

@@ -95,6 +95,7 @@ public class UserCustomResource {
         }
 
         UserCustom result = userCustomRepository.save(userCustom);
+
         userCustomSearchRepository.index(result);
         return ResponseEntity
             .ok()
@@ -142,9 +143,7 @@ public class UserCustomResource {
                 if (userCustom.getCode() != null) {
                     existingUserCustom.setCode(userCustom.getCode());
                 }
-                if (userCustom.getAccountName() != null) {
-                    existingUserCustom.setAccountName(userCustom.getAccountName());
-                }
+
                 if (userCustom.getRole() != null) {
                     existingUserCustom.setRole(userCustom.getRole());
                 }
@@ -186,6 +185,37 @@ public class UserCustomResource {
                 }
                 if (userCustom.getBankAccountDetails() != null) {
                     existingUserCustom.setBankAccountDetails(userCustom.getBankAccountDetails());
+                }
+
+                if (userCustom.getSite13() != null) {
+                    existingUserCustom.setSite13(userCustom.getSite13());
+                }
+                if (userCustom.getLanguages() != null) {
+                    existingUserCustom.setLanguages(userCustom.getLanguages());
+                }
+                if (userCustom.getCity() != null) {
+                    existingUserCustom.setCity(userCustom.getCity());
+                }
+                if (userCustom.getNationality() != null) {
+                    existingUserCustom.setNationality(userCustom.getNationality());
+                }
+                if (userCustom.getCountry() != null) {
+                    existingUserCustom.setCountry(userCustom.getCountry());
+                }
+                if (userCustom.getJob() != null) {
+                    existingUserCustom.setJob(userCustom.getJob());
+                }
+                if (userCustom.getDepartement2() != null) {
+                    existingUserCustom.setDepartement2(userCustom.getDepartement2());
+                }
+                if (userCustom.getEmail() != null) {
+                    existingUserCustom.setEmail(userCustom.getEmail());
+                }
+                if (userCustom.getLangKey() != null) {
+                    existingUserCustom.setLangKey(userCustom.getLangKey());
+                }
+                if (userCustom.getLogin() != null) {
+                    existingUserCustom.setLogin(userCustom.getLogin());
                 }
 
                 return existingUserCustom;
@@ -230,6 +260,13 @@ public class UserCustomResource {
     public ResponseEntity<UserCustom> getUserCustom(@PathVariable("id") Long id) {
         log.debug("REST request to get UserCustom : {}", id);
         Optional<UserCustom> userCustom = userCustomRepository.findOneWithEagerRelationships(id);
+        return ResponseUtil.wrapOrNotFound(userCustom);
+    }
+
+    @GetMapping("/account/{login}")
+    public ResponseEntity<UserCustom> getUserCustomByLogin(@PathVariable("login") String login) {
+        log.debug("REST request to get UserCustom by its Login: {}", login);
+        Optional<UserCustom> userCustom = userCustomRepository.findUserCustomByLogin(login);
         return ResponseUtil.wrapOrNotFound(userCustom);
     }
 
