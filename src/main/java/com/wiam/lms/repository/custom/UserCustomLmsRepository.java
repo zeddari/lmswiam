@@ -32,5 +32,5 @@ public interface UserCustomLmsRepository extends UserCustomRepositoryWithBagRela
         @Param("sex") Sex sex
     );
 
-    public UserCustom findByAccountName(String accountName);
+    public UserCustom findByLogin(String login);
 }

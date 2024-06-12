@@ -135,17 +135,14 @@ public class AuthenticateController {
         User userPrincipal = (User)authentication.getPrincipal();
         Long userId = 0L;
         Long siteId = 0L;
-        UserCustom userCustom = userCustomLmsRepository.findByAccountName(userPrincipal.getUsername());
-        if (userCustom ==null) {
-            Optional<com.wiam.lms.domain.User> user = userRepository.findOneByLogin(userPrincipal.getUsername());
-            if (user != null) {
-                userId = user.get().getId();
-            }
+        UserCustom userCustom = userCustomLmsRepository.findByLogin(userPrincipal.getUsername());
+        if (userCustom != null) {
+            userId = userCustom.getId();
+            siteId = userCustom.getSite13().getId();
 
         }
         else {
-            userId = userCustom.getId();
-            siteId = userCustom.getSite13().getId();
+
         }
         Instant now = Instant.now();
         Instant validity;

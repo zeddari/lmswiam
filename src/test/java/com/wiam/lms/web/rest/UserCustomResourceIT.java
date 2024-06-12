@@ -137,7 +137,6 @@ class UserCustomResourceIT {
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
             .code(DEFAULT_CODE)
-            .accountName(DEFAULT_ACCOUNT_NAME)
             .role(DEFAULT_ROLE)
             .accountStatus(DEFAULT_ACCOUNT_STATUS)
             .phoneNumber1(DEFAULT_PHONE_NUMBER_1)
@@ -166,7 +165,6 @@ class UserCustomResourceIT {
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .code(UPDATED_CODE)
-            .accountName(UPDATED_ACCOUNT_NAME)
             .role(UPDATED_ROLE)
             .accountStatus(UPDATED_ACCOUNT_STATUS)
             .phoneNumber1(UPDATED_PHONE_NUMBER_1)
@@ -218,7 +216,6 @@ class UserCustomResourceIT {
         assertThat(testUserCustom.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testUserCustom.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testUserCustom.getCode()).isEqualTo(DEFAULT_CODE);
-        assertThat(testUserCustom.getAccountName()).isEqualTo(DEFAULT_ACCOUNT_NAME);
         assertThat(testUserCustom.getRole()).isEqualTo(DEFAULT_ROLE);
         assertThat(testUserCustom.getAccountStatus()).isEqualTo(DEFAULT_ACCOUNT_STATUS);
         assertThat(testUserCustom.getPhoneNumber1()).isEqualTo(DEFAULT_PHONE_NUMBER_1);
@@ -302,7 +299,6 @@ class UserCustomResourceIT {
         int databaseSizeBeforeTest = userCustomRepository.findAll().size();
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(userCustomSearchRepository.findAll());
         // set the field null
-        userCustom.setAccountName(null);
 
         // Create the UserCustom, which fails.
 
@@ -522,7 +518,6 @@ class UserCustomResourceIT {
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .code(UPDATED_CODE)
-            .accountName(UPDATED_ACCOUNT_NAME)
             .role(UPDATED_ROLE)
             .accountStatus(UPDATED_ACCOUNT_STATUS)
             .phoneNumber1(UPDATED_PHONE_NUMBER_1)
@@ -553,7 +548,6 @@ class UserCustomResourceIT {
         assertThat(testUserCustom.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testUserCustom.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testUserCustom.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testUserCustom.getAccountName()).isEqualTo(UPDATED_ACCOUNT_NAME);
         assertThat(testUserCustom.getRole()).isEqualTo(UPDATED_ROLE);
         assertThat(testUserCustom.getAccountStatus()).isEqualTo(UPDATED_ACCOUNT_STATUS);
         assertThat(testUserCustom.getPhoneNumber1()).isEqualTo(UPDATED_PHONE_NUMBER_1);
@@ -578,7 +572,6 @@ class UserCustomResourceIT {
                 assertThat(testUserCustomSearch.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
                 assertThat(testUserCustomSearch.getLastName()).isEqualTo(UPDATED_LAST_NAME);
                 assertThat(testUserCustomSearch.getCode()).isEqualTo(UPDATED_CODE);
-                assertThat(testUserCustomSearch.getAccountName()).isEqualTo(UPDATED_ACCOUNT_NAME);
                 assertThat(testUserCustomSearch.getRole()).isEqualTo(UPDATED_ROLE);
                 assertThat(testUserCustomSearch.getAccountStatus()).isEqualTo(UPDATED_ACCOUNT_STATUS);
                 assertThat(testUserCustomSearch.getPhoneNumber1()).isEqualTo(UPDATED_PHONE_NUMBER_1);
@@ -676,7 +669,6 @@ class UserCustomResourceIT {
         partialUpdatedUserCustom
             .lastName(UPDATED_LAST_NAME)
             .code(UPDATED_CODE)
-            .accountName(UPDATED_ACCOUNT_NAME)
             .role(UPDATED_ROLE)
             .phoneNumber1(UPDATED_PHONE_NUMBER_1)
             .sex(UPDATED_SEX)
@@ -703,7 +695,6 @@ class UserCustomResourceIT {
         assertThat(testUserCustom.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testUserCustom.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testUserCustom.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testUserCustom.getAccountName()).isEqualTo(UPDATED_ACCOUNT_NAME);
         assertThat(testUserCustom.getRole()).isEqualTo(UPDATED_ROLE);
         assertThat(testUserCustom.getAccountStatus()).isEqualTo(DEFAULT_ACCOUNT_STATUS);
         assertThat(testUserCustom.getPhoneNumber1()).isEqualTo(UPDATED_PHONE_NUMBER_1);
@@ -736,7 +727,6 @@ class UserCustomResourceIT {
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .code(UPDATED_CODE)
-            .accountName(UPDATED_ACCOUNT_NAME)
             .role(UPDATED_ROLE)
             .accountStatus(UPDATED_ACCOUNT_STATUS)
             .phoneNumber1(UPDATED_PHONE_NUMBER_1)
@@ -767,7 +757,6 @@ class UserCustomResourceIT {
         assertThat(testUserCustom.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testUserCustom.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testUserCustom.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testUserCustom.getAccountName()).isEqualTo(UPDATED_ACCOUNT_NAME);
         assertThat(testUserCustom.getRole()).isEqualTo(UPDATED_ROLE);
         assertThat(testUserCustom.getAccountStatus()).isEqualTo(UPDATED_ACCOUNT_STATUS);
         assertThat(testUserCustom.getPhoneNumber1()).isEqualTo(UPDATED_PHONE_NUMBER_1);
