@@ -1,5 +1,6 @@
 package com.wiam.lms.repository;
 
+import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.UserCustom;
 import java.util.List;
 import java.util.Optional;
@@ -49,4 +50,7 @@ public interface UserCustomRepository extends UserCustomRepositoryWithBagRelatio
         "select userCustom from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.login =:login"
     )
     Optional<UserCustom> findUserCustomByLogin(@Param("login") String login);
+
+    @Query("select userCustom from UserCustom userCustom  left join fetch userCustom.groups where userCustom.id=:id")
+    Optional<UserCustom> findByIdforGroup(Long id);
 }

@@ -1,7 +1,10 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.Group;
+import com.wiam.lms.domain.Session;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.GroupRepository;
+import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.GroupSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
@@ -9,6 +12,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,10 +42,16 @@ public class GroupResource {
     private String applicationName;
 
     private final GroupRepository groupRepository;
+    private final UserCustomRepository userCustomRepository;
 
     private final GroupSearchRepository groupSearchRepository;
 
-    public GroupResource(GroupRepository groupRepository, GroupSearchRepository groupSearchRepository) {
+    public GroupResource(
+        UserCustomRepository userCustomRepository,
+        GroupRepository groupRepository,
+        GroupSearchRepository groupSearchRepository
+    ) {
+        this.userCustomRepository = userCustomRepository;
         this.groupRepository = groupRepository;
         this.groupSearchRepository = groupSearchRepository;
     }
@@ -172,6 +182,28 @@ public class GroupResource {
         } else {
             return groupRepository.findAll();
         }
+    }
+
+    /**
+     * {@code GET  /groups} : get all the groups.
+     *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of groups in body.
+     */
+    @GetMapping("/abstract")
+    public List<Group> getAllGroupsAbstract() {
+        log.debug("REST request to get all Groups abstract");
+        return groupRepository.findAllAbstract(1L);
+    }
+
+    @GetMapping("{id}/myGroups")
+    public List<Group> getmyGroups(@PathVariable Long id) {
+        log.debug("REST request to get all groups for the given student id");
+        // getting the list of the student groups
+        UserCustom userCustom = userCustomRepository.findByIdforGroup(id).get();
+        List<Group> myGroups = new ArrayList<Group>();
+        for (Group group : userCustom.getGroups()) myGroups.add(group);
+        return myGroups;
     }
 
     /**

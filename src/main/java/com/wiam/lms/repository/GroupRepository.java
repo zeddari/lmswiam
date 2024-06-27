@@ -40,4 +40,7 @@ public interface GroupRepository extends GroupRepositoryWithBagRelationships, Jp
 
     @Query("select jhiGroup from Group jhiGroup left join fetch jhiGroup.site11 left join fetch jhiGroup.group1 where jhiGroup.id =:id")
     Optional<Group> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query("select jhiGroup from Group jhiGroup")
+    List<Group> findAllAbstract(@Param("id") Long id);
 }
