@@ -368,6 +368,13 @@ public class ProgressionResource {
         return progressionRepository.findAllByStudent(id);
     }
 
+    /**
+     * {@code GET  /progressions/:id} : get the "id" progression.
+     *
+     * @param the id of the progression to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the progression, or with status {@code 404 (Not Found)}.
+     */
+
     /*@GetMapping("/studentAttendanceCount")
     List<Progression> getForAttendanceProgressions(@RequestParam LocalDate fromDate,
     @RequestParam LocalDate toDate) {

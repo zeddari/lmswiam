@@ -1,9 +1,11 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Progression;
+import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesWithLabelData;
 import com.wiam.lms.service.dto.FollowupAvgDTO;
 import com.wiam.lms.service.dto.FollowupListDTO;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -49,6 +51,11 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     List<Progression> findAllByStudent(@Param("id") Long id);
 
     @Query(
+        "select Progression from Progression progression where progression.tilawaType = 'HIFD' and progression.student.id = :studentId and progression.sessionInstance.startTime = (select max(progression1.sessionInstance.startTime) from Progression progression1 where progression1.tilawaType = 'HIFD' and progression1.student.id = :studentId) union select Progression from Progression progression where progression.tilawaType = 'TILAWA' and progression.student.id = :studentId and progression.sessionInstance.startTime = (select max(progression.sessionInstance.startTime) from Progression progression2 where progression2.tilawaType = 'TILAWA' and progression2.student.id = :studentId) union select Progression from Progression progression where progression.tilawaType = 'MORAJA3A' and progression.student.id = :studentId and progression.sessionInstance.startTime = (select max(progression.sessionInstance.startTime) from Progression progression3 where progression3.tilawaType = 'MORAJA3A' and progression3.student.id = :studentId)"
+    )
+    List<Progression> findAllLastByStudent(@Param("studentId") Long id);
+
+    @Query(
         "select progression from Progression progression where progression.examType <> ExamType.NONE and progression.isForAttendance = false and progression.student.id=:id"
     )
     List<Progression> findExams(@Param("id") Long id);
@@ -78,13 +85,23 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
         @Param("startDate") LocalDate startDate,
         @Param("endDate") LocalDate endDate
     );
-    /*@Query(
-        "select progression from Progression progression where progression.site17.id=:siteId and progression.sessionInstance.sessionDate BETWEEN :fromDate AND :toDate where progression.isForAttendance=true group by progression.student"
-    )
-    List<Progression> findAllByAttendanceCount(
-        @Param("siteId") Long siteId,
-        @Param("fromDate") LocalDate fromDate,
-        @Param("toDate") LocalDate toDate
-    );*/
 
+    @Query(
+        "select progression from Progression progression where progression.site17.id=:siteId and progression.student.id=:studentId and progression.sessionInstance.sessionDate BETWEEN :fromDate AND :toDate and progression.isForAttendance=true group by progression.student"
+    )
+    List<Progression> findAllByStudentIdAndSessionInstanceBetween(
+        @Param("siteId") Long siteId,
+        @Param("studentId") Long studentId,
+        @Param("fromDate") Date fromDate,
+        @Param("toDate") Date toDate
+    );
+
+    @Query(
+        "select attendance attendanceLabel, count(*) attendanceCount from Progression progression where progression.student.id = :id and progression.sessionInstance.sessionDate BETWEEN :fromDate AND :toDate group by progression.attendance"
+    )
+    List<RowSeriesWithLabelData> getStudentAbsenceData(
+        @Param("id") Long id,
+        @Param("fromDate") Date startDate,
+        @Param("toDate") Date endDate
+    );
 }
