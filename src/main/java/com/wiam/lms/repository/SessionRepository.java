@@ -1,6 +1,10 @@
 package com.wiam.lms.repository;
 
+import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Session;
+import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.enumeration.SessionType;
+import com.wiam.lms.domain.enumeration.TargetedGender;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -40,4 +44,21 @@ public interface SessionRepository extends SessionRepositoryWithBagRelationships
 
     @Query("select session from Session session left join fetch session.site14 where session.id =:id")
     Optional<Session> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query(
+        "select session from Session session left join fetch session.site14 where session.site14.id =:siteId and session.sessionType=:sessionType and session.targetedGender=:gender"
+    )
+    List<Session> findFilteredSessions(
+        @Param("siteId") Long siteId,
+        @Param("sessionType") SessionType sessionType,
+        @Param("gender") TargetedGender gender
+    );
+
+    @Query("select session from Session session where session.site14.id =:id")
+    List<Session> findBySite(Long id);
+
+    @Query(
+        "select session from Session session left join fetch session.groups r  where r in (:mygroups) and session.sessionType=SessionType.HALAQA and session.sessionMode=SessionMode.ONLINE"
+    )
+    List<Session> findSessions(@Param("mygroups") List<Group> mygroups);
 }

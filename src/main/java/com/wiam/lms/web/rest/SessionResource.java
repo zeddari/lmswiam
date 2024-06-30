@@ -1,7 +1,13 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Session;
+import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.RemoteSessionDto;
+import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.SessionRepository;
+import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.SessionSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
@@ -9,6 +15,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,12 +45,21 @@ public class SessionResource {
     private String applicationName;
 
     private final SessionRepository sessionRepository;
+    private final UserCustomRepository userCustomRepository;
+    private final GroupRepository groupRepository;
 
     private final SessionSearchRepository sessionSearchRepository;
 
-    public SessionResource(SessionRepository sessionRepository, SessionSearchRepository sessionSearchRepository) {
+    public SessionResource(
+        SessionRepository sessionRepository,
+        SessionSearchRepository sessionSearchRepository,
+        UserCustomRepository userCustomRepository,
+        GroupRepository groupRepository
+    ) {
         this.sessionRepository = sessionRepository;
         this.sessionSearchRepository = sessionSearchRepository;
+        this.userCustomRepository = userCustomRepository;
+        this.groupRepository = groupRepository;
     }
 
     /**
@@ -234,6 +250,29 @@ public class SessionResource {
         } else {
             return sessionRepository.findAll();
         }
+    }
+
+    @GetMapping("/{id}/bysite")
+    public List<Session> getAllSessions(@PathVariable("id") Long id) {
+        return sessionRepository.findBySite(id);
+    }
+
+    @GetMapping("{id}/mySessions")
+    public List<Session> getRemoteSessions(@PathVariable Long id) {
+        log.debug("REST request to get all Sessions for the given student id");
+        // getting the list of the student groups
+        UserCustom userCustom = userCustomRepository.findByIdforGroup(id).get();
+        List<Group> myGroups = new ArrayList<Group>();
+        for (Group group : userCustom.getGroups()) myGroups.add(group);
+
+        List<Session> mySessions = new ArrayList<Session>();
+        List<Session> myNewSessions = new ArrayList<Session>();
+        mySessions = sessionRepository.findSessions(myGroups);
+        /*for (Session session : mySessions) {
+            for(Group group: myGroups)
+            if(session.getGroups().contains(group)) myNewSessions.add(session);
+        }*/
+        return mySessions;
     }
 
     /**
