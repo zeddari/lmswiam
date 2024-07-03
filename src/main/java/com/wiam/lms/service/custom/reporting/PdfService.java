@@ -4,6 +4,7 @@ import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import com.wiam.lms.domain.custom.projection.dto.PeriodicReportPdfDetail;
 import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
+import com.wiam.lms.service.custom.reporting.request.CertificatePdfRequest;
 import com.wiam.lms.service.custom.reporting.request.PeriodicReportPdfRequest;
 import io.woo.htmltopdf.HtmlToPdf;
 import io.woo.htmltopdf.HtmlToPdfObject;
@@ -33,7 +34,8 @@ public class PdfService {
         this.templateEngine = templateEngine;
     }
 
-    private TemplateEngine createTemplateEngine() {
+
+    private SpringTemplateEngine createTemplateEngine() {
         ClassLoaderTemplateResolver pdfTemplateResolver = new ClassLoaderTemplateResolver();
         pdfTemplateResolver.setPrefix("templates/");
         pdfTemplateResolver.setSuffix(".html");
@@ -41,7 +43,7 @@ public class PdfService {
         pdfTemplateResolver.setCharacterEncoding("UTF-8");
         pdfTemplateResolver.setOrder(1);
 
-        TemplateEngine templateEngine = new TemplateEngine();
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(pdfTemplateResolver);
         return templateEngine;
     }
@@ -61,6 +63,12 @@ public class PdfService {
         return renderPdfEnhanced(html, pdfRequest.getFileName());
     }
 
+    public File generateCertificatePdf(String studentName, CertificatePdfRequest pdfRequest)
+        throws IOException, DocumentException {
+        Context context = getContext(studentName, "studentName");
+        String html = loadAndFillTemplate(context, "report/certificates/" + pdfRequest.getTemplateName());
+        return renderPdfEnhanced(html, pdfRequest.getFileName());
+    }
     /**
      *
      * @param html
@@ -122,7 +130,6 @@ public class PdfService {
     }
 
     public String loadAndFillTemplate(Context context, String templateName) {
-        TemplateEngine templateEngineLocal = createTemplateEngine();
-        return templateEngineLocal.process(templateName, context);
+        return createTemplateEngine().process(templateName, context);
     }
 }
