@@ -5,6 +5,7 @@ import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.ExamDto;
+import com.wiam.lms.domain.dto.RemoteSessionDto;
 import com.wiam.lms.domain.dto.SessionInstanceUniqueDto;
 import com.wiam.lms.domain.enumeration.Attendance;
 import com.wiam.lms.domain.enumeration.ExamType;
@@ -13,6 +14,7 @@ import com.wiam.lms.domain.enumeration.Tilawa;
 import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.SessionInstanceRepository;
+import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.ProgressionSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
@@ -59,7 +61,10 @@ public class ProgressionResource {
 
     private final GroupRepository groupRepository;
 
+    private final UserCustomRepository userCustomRepository;
+
     public ProgressionResource(
+        UserCustomRepository userCustomRepository,
         GroupRepository groupRepository,
         SessionInstanceRepository sessionInstanceRepository,
         ProgressionRepository progressionRepository,
@@ -69,11 +74,33 @@ public class ProgressionResource {
         this.progressionSearchRepository = progressionSearchRepository;
         this.sessionInstanceRepository = sessionInstanceRepository;
         this.groupRepository = groupRepository;
+        this.userCustomRepository = userCustomRepository;
     }
 
-    @PostMapping("/unique")
-    public Optional<SessionInstance> getSessionInstanceUnique(@Valid @RequestBody SessionInstanceUniqueDto siuDto) {
-        return sessionInstanceRepository.findOne(siuDto.getSessionId(), siuDto.getSessionDate(), siuDto.getGroupId());
+    @GetMapping("/{id}/myProgressions")
+    public List<Progression> getmyProgressions(@PathVariable Long id) {
+        log.debug("REST request to get all progressions for the given student id");
+        List<Progression> progressions = progressionRepository.findProgressions(id);
+        return progressions;
+    }
+
+    @GetMapping("/{id}/myAttendance")
+    public List<Progression> getmyAttendance(@PathVariable Long id) {
+        log.debug("REST request to get all progressions for the given student id");
+        List<Progression> progressions = progressionRepository.findAttendanceProgressions(id);
+        return progressions;
+    }
+
+    @GetMapping("/attendance")
+    public List<Progression> getAttendance(
+        @RequestParam Long siteId,
+        @RequestParam Long sessionId,
+        @RequestParam Long groupId,
+        @RequestParam LocalDate sessionDate
+    ) {
+        log.debug("REST request to get all progressions by site, session, group and date");
+        List<Progression> progressions = progressionRepository.findAttendanceAllProgressions(siteId, sessionId, groupId, sessionDate);
+        return progressions;
     }
 
     /**

@@ -74,17 +74,10 @@ public class SessionInstanceResource {
     public List<RemoteSessionDto> getRemoteSessions(@PathVariable Long id) {
         log.debug("REST request to get all Session instances for the given student id");
         // getting the list of the student groups
-        List<Group> groups = groupRepository.findAll();
+        UserCustom userCustom = userCustomRepository.findByIdforGroup(id).get();
         List<Group> myGroups = new ArrayList<Group>();
-        UserCustom userCustom = userCustomRepository.findById(id).get();
-        for (Group g : groups) {
-            if (g.getElements() != null && g.getElements().size() > 0) {
-                if (g.getElements().contains(userCustom)) {
-                    myGroups.add(g);
-                }
-                //groups.remove(g);
-            }
-        }
+        for (Group group : userCustom.getGroups()) myGroups.add(group);
+
         List<RemoteSessionDto> remoteSessionDtos = new ArrayList<RemoteSessionDto>();
         List<SessionInstance> remotSessions = sessionInstanceRepository.findRemoteSessionInstances(myGroups);
         for (SessionInstance sessionInstance : remotSessions) {

@@ -1,7 +1,9 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.Tickets;
+import com.wiam.lms.domain.enumeration.TicketStatus;
 import com.wiam.lms.repository.TicketsRepository;
+import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.TicketsSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
@@ -9,9 +11,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +47,16 @@ public class TicketsResource {
     private final TicketsRepository ticketsRepository;
 
     private final TicketsSearchRepository ticketsSearchRepository;
+    private final UserCustomRepository userCustomRepository;
 
-    public TicketsResource(TicketsRepository ticketsRepository, TicketsSearchRepository ticketsSearchRepository) {
+    public TicketsResource(
+        TicketsRepository ticketsRepository,
+        TicketsSearchRepository ticketsSearchRepository,
+        UserCustomRepository userCustomRepository
+    ) {
         this.ticketsRepository = ticketsRepository;
         this.ticketsSearchRepository = ticketsSearchRepository;
+        this.userCustomRepository = userCustomRepository;
     }
 
     /**
@@ -54,11 +67,19 @@ public class TicketsResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<Tickets> createTickets(@Valid @RequestBody Tickets tickets) throws URISyntaxException {
+    public ResponseEntity<Tickets> createTickets(@Valid @RequestBody Tickets tickets, Principal principal) throws URISyntaxException {
         log.debug("REST request to save Tickets : {}", tickets);
         if (tickets.getId() != null) {
             throw new BadRequestAlertException("A new tickets cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        UUID uuid = UUID.randomUUID();
+        tickets.setReference(uuid.toString());
+        tickets.setDateTicket(ZonedDateTime.now());
+        tickets.setProcessed(TicketStatus.PENDING);
+        if (userCustomRepository.findUserCustomByLogin(principal.getName()).get() != null) tickets.setUserCustom5(
+            userCustomRepository.findUserCustomByLogin(principal.getName()).get()
+        );
         Tickets result = ticketsRepository.save(tickets);
         ticketsSearchRepository.index(result);
         return ResponseEntity
@@ -93,7 +114,10 @@ public class TicketsResource {
         if (!ticketsRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-
+        if (
+            tickets.getProcessed() == TicketStatus.PROCESSED &&
+            tickets.getProcessed() != ticketsRepository.findById(id).get().getProcessed()
+        ) tickets.setDateProcess(ZonedDateTime.now());
         Tickets result = ticketsRepository.save(tickets);
         ticketsSearchRepository.index(result);
         return ResponseEntity

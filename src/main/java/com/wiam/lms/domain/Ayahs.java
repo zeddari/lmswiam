@@ -28,10 +28,13 @@ public class Ayahs implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer number;
 
-    @Lob
-    @Column(name = "textdesc", nullable = false)
+    @Column(name = "textdesc", nullable = false, columnDefinition = "TEXT")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String textdesc;
+
+    @Column(name = "textdescNormalized", nullable = false, columnDefinition = "TEXT")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String textdescNormalized;
 
     @Column(name = "number_in_surah")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
@@ -57,6 +60,22 @@ public class Ayahs implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
     private Boolean sajda;
 
+    @Column(name = "line_start")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
+    private Integer lineStart;
+
+    @Column(name = "line_end")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
+    private Integer lineEnd;
+
+    @Column(name = "sura_name_ar")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
+    private String suraNameAr;
+
+    @Column(name = "sura_name_en")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
+    private String suraNameEn;
+
     @Column(name = "created_at")
     private ZonedDateTime createdAt;
 
@@ -72,6 +91,38 @@ public class Ayahs implements Serializable {
     private String TimecodeOut;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public void setSuraNameAr(String suraNameAr) {
+        this.suraNameAr = suraNameAr;
+    }
+
+    public void setSuraNameEn(String suraNameEn) {
+        this.suraNameEn = suraNameEn;
+    }
+
+    public String getSuraNameAr() {
+        return suraNameAr;
+    }
+
+    public String getSuraNameEn() {
+        return suraNameEn;
+    }
+
+    public void setLineStart(Integer lineStart) {
+        this.lineStart = lineStart;
+    }
+
+    public void setLineEnd(Integer lineEnd) {
+        this.lineEnd = lineEnd;
+    }
+
+    public Integer getLineStart() {
+        return lineStart;
+    }
+
+    public Integer getLineEnd() {
+        return lineEnd;
+    }
 
     public void setTimecodeIn(String timecodeIn) {
         TimecodeIn = timecodeIn;
@@ -96,6 +147,10 @@ public class Ayahs implements Serializable {
     public Ayahs id(Integer id) {
         this.setId(id);
         return this;
+    }
+
+    public String getTextdescNormalized() {
+        return textdescNormalized;
     }
 
     public void setId(Integer id) {
@@ -267,5 +322,13 @@ public class Ayahs implements Serializable {
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             "}";
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public void setTextdescNormalized(String textdescNormalized) {
+        this.textdescNormalized = textdescNormalized;
     }
 }

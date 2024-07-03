@@ -84,6 +84,14 @@ public class Progression implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private Sourate toSourate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+    private Ayahs fromAyahs;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+    private Ayahs toAyahs;
+
     @Column(name = "from_aya_num")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer fromAyaNum;
@@ -167,6 +175,22 @@ public class Progression implements Serializable {
         allowSetters = true
     )
     private Site site17;
+
+    public void setFromAyahs(Ayahs fromAyahs) {
+        this.fromAyahs = fromAyahs;
+    }
+
+    public void setToAyahs(Ayahs toAyahs) {
+        this.toAyahs = toAyahs;
+    }
+
+    public Ayahs getFromAyahs() {
+        return fromAyahs;
+    }
+
+    public Ayahs getToAyahs() {
+        return toAyahs;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "progressions", "links", "courses", "site16", "session1" }, allowSetters = true)

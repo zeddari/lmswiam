@@ -264,14 +264,7 @@ public class SessionResource {
         UserCustom userCustom = userCustomRepository.findByIdforGroup(id).get();
         List<Group> myGroups = new ArrayList<Group>();
         for (Group group : userCustom.getGroups()) myGroups.add(group);
-
         List<Session> mySessions = new ArrayList<Session>();
-        List<Session> myNewSessions = new ArrayList<Session>();
-        mySessions = sessionRepository.findSessions(myGroups);
-        /*for (Session session : mySessions) {
-            for(Group group: myGroups)
-            if(session.getGroups().contains(group)) myNewSessions.add(session);
-        }*/
         return mySessions;
     }
 

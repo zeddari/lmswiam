@@ -32,13 +32,13 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     }
 
     @Query(
-        value = "select progression from Progression progression left join fetch progression.site17 left join fetch progression.sessionInstance left join fetch progression.student",
+        value = "select progression from Progression progression left join fetch progression.site17 left join fetch progression.fromAyahs left join fetch progression.toAyahs left join fetch progression.sessionInstance left join fetch progression.student",
         countQuery = "select count(progression) from Progression progression"
     )
     Page<Progression> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select progression from Progression progression left join fetch progression.site17 left join fetch progression.sessionInstance left join fetch progression.student"
+        "select progression from Progression progression left join fetch progression.fromAyahs left join fetch progression.toAyahs left join fetch progression.site17 left join fetch progression.sessionInstance left join fetch progression.student"
     )
     List<Progression> findAllWithToOneRelationships();
 
@@ -65,7 +65,9 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     )
     Progression isAlreadyExists(@Param("id1") Long id1, @Param("id2") Long id2);
 
-    @Query("select progression from Progression progression left join fetch progression.student where progression.sessionInstance.id=:id")
+    @Query(
+        "select progression from Progression progression left join fetch progression.fromAyahs left join fetch progression.toAyahs  left join fetch progression.student where progression.sessionInstance.id=:id"
+    )
     List<Progression> findAllBySessionInstance(@Param("id") Long id);
 
     @Query(
@@ -104,4 +106,17 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
         @Param("fromDate") Date startDate,
         @Param("toDate") Date endDate
     );
+
+    @Query("select progression from Progression progression where progression.isForAttendance = false and progression.student.id=:id")
+    List<Progression> findProgressions(Long id);
+
+    @Query(
+        "select progression from Progression progression left join fetch progression.sessionInstance where progression.isForAttendance = true and progression.student.id=:id"
+    )
+    List<Progression> findAttendanceProgressions(Long id);
+
+    @Query(
+        "select progression from Progression progression left join fetch progression.sessionInstance left join fetch progression.student left join fetch progression.site17 where progression.isForAttendance = true and progression.site17.id=:siteId and progression.sessionInstance.session1.id=:sessionId and progression.sessionInstance.group.id=:groupId and progression.sessionInstance.sessionDate=:sessionDate"
+    )
+    List<Progression> findAttendanceAllProgressions(Long siteId, Long sessionId, Long groupId, LocalDate sessionDate);
 }
