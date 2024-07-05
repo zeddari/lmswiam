@@ -14,34 +14,34 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DashboardRepository extends JpaRepository<Progression, Long> {
     @Query(
-        value = "SELECT  day(start_time) xaxis, count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') \n" +
-        "and MONTH(start_time) = MONTH(CURRENT_DATE())\n" +
-        "AND YEAR(start_time) = YEAR(CURRENT_DATE())\n" +
+        value = "SELECT  day(start_time) xaxis, count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') " +
+        "and MONTH(start_time) = MONTH(CURRENT_DATE()) " +
+        "AND YEAR(start_time) = YEAR(CURRENT_DATE()) " +
         "group by day(start_time)",
         nativeQuery = true
     )
     List<RowSeriesData> getAbsenceRowSeries();
 
     @Query(
-        value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') \n" +
-        "and MONTH(start_time) = MONTH(CURRENT_DATE())\n" +
-        "AND YEAR(start_time) = YEAR(CURRENT_DATE())\n" +
+        value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') " +
+        "and MONTH(start_time) = MONTH(CURRENT_DATE()) " +
+        "AND YEAR(start_time) = YEAR(CURRENT_DATE()) " +
         "group by day(start_time)",
         nativeQuery = true
     )
     List<Long> getAbsenceRowCountPerDay();
 
     @Query(
-        value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') \n" +
-        "and MONTH(start_time) = MONTH(CURRENT_DATE())\n" +
+        value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') " +
+        "and MONTH(start_time) = MONTH(CURRENT_DATE()) " +
         "AND YEAR(start_time) = YEAR(CURRENT_DATE())",
         nativeQuery = true
     )
     Long getAbsenceRowCount();
 
     @Query(
-        value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') \n" +
-        "and MONTH(start_time) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)\n" +
+        value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') " +
+        "and MONTH(start_time) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH) " +
         "AND YEAR(start_time) = YEAR(CURRENT_DATE())",
         nativeQuery = true
     )
@@ -96,4 +96,28 @@ public interface DashboardRepository extends JpaRepository<Progression, Long> {
         nativeQuery = true
     )
     List<Long> getExpensesListPerDay();
+
+    @Query(
+        value = "select COALESCE(floor(sum(amount)),0) yaxis from sponsoring where " +
+        "CURRENT_DATE()>=CAST(DATE_FORMAT(start_date ,'%Y-%m-01') as DATE) " +
+        "And CAST(DATE_FORMAT(CURRENT_DATE() ,'%Y-%m-01') as DATE) <=end_date AND is_always",
+        nativeQuery = true
+    )
+    Long getSponsorshipCurrentMonth();
+
+    @Query(
+        value = "select COALESCE(floor(sum(amount)),0) yaxis from sponsoring where " +
+        "(CURRENT_DATE() - INTERVAL 1 MONTH)>=CAST(DATE_FORMAT(start_date ,'%Y-%m-01') as DATE) " +
+        "And CAST(DATE_FORMAT((CURRENT_DATE() - INTERVAL 1 MONTH) ,'%Y-%m-01') as DATE) <=end_date AND is_always",
+        nativeQuery = true
+    )
+    Long getSponsorshipLastMonth();
+
+    @Query(
+        value = "select floor(amount) yaxis from sponsoring where " +
+        "CURRENT_DATE()>=CAST(DATE_FORMAT(start_date ,'%Y-%m-01') as DATE) " +
+        "And CAST(DATE_FORMAT(CURRENT_DATE() ,'%Y-%m-01') as DATE) <=end_date AND is_always",
+        nativeQuery = true
+    )
+    List<Long> getSponsorshipList();
 }

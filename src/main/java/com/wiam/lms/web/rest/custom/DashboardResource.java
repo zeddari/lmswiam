@@ -1,6 +1,7 @@
 package com.wiam.lms.web.rest.custom;
 
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.DocumentException;
 import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesData;
@@ -8,11 +9,15 @@ import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesWithLabelData;
 import com.wiam.lms.domain.dto.custom.ProgressionQuery;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.custom.DashboardRepository;
+import com.wiam.lms.repository.custom.DashboardRepository;
 import com.wiam.lms.repository.custom.ReportingRepository;
 import com.wiam.lms.service.custom.dashboard.dto.ChartAdaeData;
 import com.wiam.lms.service.custom.dashboard.dto.ChartAdaeSeries;
 import com.wiam.lms.service.custom.dashboard.dto.ChartData;
+import com.wiam.lms.service.custom.dashboard.dto.ChartData;
 import com.wiam.lms.service.custom.dashboard.dto.ChartSeries;
+import com.wiam.lms.service.custom.dashboard.dto.ChartSeries;
+import com.wiam.lms.service.custom.reporting.PdfService;
 import com.wiam.lms.service.custom.reporting.PdfService;
 import com.wiam.lms.service.custom.reporting.request.PeriodicReportPdfRequest;
 import jakarta.validation.Valid;
@@ -29,12 +34,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing {Dashboard}.
@@ -97,13 +102,13 @@ public class DashboardResource {
         List<Long> incomePerDay = dashboardRepository.getIncomeListPerDay();
         Long currentIncome = dashboardRepository.getIncomeCurrentMonth();
         Long lastMonthIncome = dashboardRepository.getIncomeLastMonth();
-        Double deltaPercent = (lastMonthIncome != 0) ? (((double) currentIncome - lastMonthIncome) / (lastMonthIncome)) * 100 : null;
+        Double deltaPercent = extractDeltaPercent(currentIncome, lastMonthIncome);
         ChartSeries chartSeries = ChartSeries.builder().data(incomePerDay).build();
         ChartData chartData = ChartData
             .builder()
             .chartSeries(chartSeries)
             .countItems(currentIncome)
-            .deltaLastMonthPercent(percentPrecision(deltaPercent))
+            .deltaLastMonthPercent(deltaPercent)
             .build();
         return ResponseEntity.ok(chartData);
     }
@@ -121,15 +126,44 @@ public class DashboardResource {
         List<Long> expensesPerDay = dashboardRepository.getExpensesListPerDay();
         Long currentExpenses = dashboardRepository.getExpensesCurrentMonth();
         Long lastMonthExpenses = dashboardRepository.getExpensesLastMonth();
-        Double deltaPercent = (lastMonthExpenses != 0)
-            ? (((double) currentExpenses - lastMonthExpenses) / (lastMonthExpenses)) * 100
-            : null;
+        Double deltaPercent = extractDeltaPercent(currentExpenses, lastMonthExpenses);
         ChartSeries chartSeries = ChartSeries.builder().data(expensesPerDay).build();
         ChartData chartData = ChartData
             .builder()
             .chartSeries(chartSeries)
             .countItems(currentExpenses)
-            .deltaLastMonthPercent(percentPrecision(deltaPercent))
+            .deltaLastMonthPercent(deltaPercent)
+            .build();
+        return ResponseEntity.ok(chartData);
+    }
+
+    private Double extractDeltaPercent(Long currentExpenses, Long lastMonthExpenses) {
+        Double deltaPercent = (lastMonthExpenses != 0)
+            ? (((double) currentExpenses - lastMonthExpenses) / (lastMonthExpenses)) * 100
+            : null;
+        return percentPrecision(deltaPercent);
+    }
+
+    /**
+     *
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
+     * @throws DocumentException
+     */
+    @GetMapping("/sponsorship/data")
+    public ResponseEntity<ChartData> getSponsorshipData() throws URISyntaxException, IOException, DocumentException {
+        log.debug("REST request to getSponsorshipData");
+        List<Long> sponsorships = dashboardRepository.getSponsorshipList();
+        Long currentSponsorship = dashboardRepository.getSponsorshipCurrentMonth();
+        Long lastMonthSponsorship = dashboardRepository.getSponsorshipLastMonth();
+        Double deltaPercent = extractDeltaPercent(currentSponsorship, lastMonthSponsorship);
+        ChartSeries chartSeries = ChartSeries.builder().data(sponsorships).build();
+        ChartData chartData = ChartData
+            .builder()
+            .chartSeries(chartSeries)
+            .countItems(currentSponsorship)
+            .deltaLastMonthPercent(deltaPercent)
             .build();
         return ResponseEntity.ok(chartData);
     }
