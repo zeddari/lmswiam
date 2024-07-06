@@ -16,7 +16,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -33,7 +32,6 @@ public class PdfService {
     public PdfService(SpringTemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
-
 
     private SpringTemplateEngine createTemplateEngine() {
         ClassLoaderTemplateResolver pdfTemplateResolver = new ClassLoaderTemplateResolver();
@@ -63,12 +61,13 @@ public class PdfService {
         return renderPdfEnhanced(html, pdfRequest.getFileName());
     }
 
-    public File generateCertificatePdf(String studentName, CertificatePdfRequest pdfRequest)
+    public File generateCertificatePdf(CertificatePdfRequest certificatePdfRequest, CertificatePdfRequest pdfRequest)
         throws IOException, DocumentException {
-        Context context = getContext(studentName, "studentName");
+        Context context = getContext(certificatePdfRequest, "certificatePdfRequest");
         String html = loadAndFillTemplate(context, "report/certificates/" + pdfRequest.getTemplateName());
         return renderPdfEnhanced(html, pdfRequest.getFileName());
     }
+
     /**
      *
      * @param html
