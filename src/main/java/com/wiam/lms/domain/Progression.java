@@ -74,15 +74,13 @@ public class Progression implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private Riwayats riwaya;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "from_sourate")
+    @ManyToOne(fetch = FetchType.LAZY)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
-    private Sourate fromSourate;
+    private Surahs fromSourate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "to_sourate")
+    @ManyToOne(fetch = FetchType.LAZY)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
-    private Sourate toSourate;
+    private Surahs toSourate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
@@ -175,6 +173,22 @@ public class Progression implements Serializable {
         allowSetters = true
     )
     private Site site17;
+
+    public void setFromSourate(Surahs fromSourate) {
+        this.fromSourate = fromSourate;
+    }
+
+    public void setToSourate(Surahs toSourate) {
+        this.toSourate = toSourate;
+    }
+
+    public Surahs getFromSourate() {
+        return fromSourate;
+    }
+
+    public Surahs getToSourate() {
+        return toSourate;
+    }
 
     public void setFromAyahs(Ayahs fromAyahs) {
         this.fromAyahs = fromAyahs;
@@ -329,32 +343,6 @@ public class Progression implements Serializable {
 
     public void setRiwaya(Riwayats riwaya) {
         this.riwaya = riwaya;
-    }
-
-    public Sourate getFromSourate() {
-        return this.fromSourate;
-    }
-
-    public Progression fromSourate(Sourate fromSourate) {
-        this.setFromSourate(fromSourate);
-        return this;
-    }
-
-    public void setFromSourate(Sourate fromSourate) {
-        this.fromSourate = fromSourate;
-    }
-
-    public Sourate getToSourate() {
-        return this.toSourate;
-    }
-
-    public Progression toSourate(Sourate toSourate) {
-        this.setToSourate(toSourate);
-        return this;
-    }
-
-    public void setToSourate(Sourate toSourate) {
-        this.toSourate = toSourate;
     }
 
     public Integer getFromAyaNum() {
@@ -574,5 +562,9 @@ public class Progression implements Serializable {
 
     public void setIsForAttendance(Boolean isForAttendance) {
         this.isForAttendance = isForAttendance;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 }
