@@ -10,7 +10,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
+ *
  * A Nationality.
+ *
  */
 @Entity
 @Table(name = "nationality")

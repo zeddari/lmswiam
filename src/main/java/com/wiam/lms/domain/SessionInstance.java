@@ -131,10 +131,33 @@ public class SessionInstance implements Serializable {
     )
     private Session session1;
 
+    // Linking with id professor
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserCustom professor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private SessionLink sessionLink;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
+    }
+
+    public void setProfessor(UserCustom professor) {
+        this.professor = professor;
+    }
+
+    public void setSessionLink(SessionLink sessionLink) {
+        this.sessionLink = sessionLink;
+    }
+
+    public UserCustom getProfessor() {
+        return professor;
+    }
+
+    public SessionLink getSessionLink() {
+        return sessionLink;
     }
 
     public SessionInstance id(Long id) {

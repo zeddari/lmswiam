@@ -330,6 +330,7 @@ public class ProgressionResource {
         if (!progressionRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+
         Progression progression = progressionRepository.findById(id).get();
         if (progression.getAttendance().equals(Attendance.PRESENT)) progression.setAttendance(Attendance.ABSENT); else if (
             progression.getAttendance().equals(Attendance.ABSENT)
