@@ -1,9 +1,6 @@
 package com.wiam.lms.domain.custom.projection.interfaces;
 
-import lombok.Builder;
-import lombok.Data;
-
-public interface PeriodicReportPdfDetailInterface {
+public interface PeriodicReportDetailInterface {
     public String getSchoolName();
 
     public String getSchoolNameLat();

@@ -1,7 +1,7 @@
 package com.wiam.lms.web.rest.custom;
 
 import com.lowagie.text.DocumentException;
-import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
+import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportDetailInterface;
 import com.wiam.lms.repository.custom.ReportingRepository;
 import com.wiam.lms.service.custom.reporting.PdfService;
 import com.wiam.lms.service.custom.reporting.request.PeriodicReportPdfRequest;
@@ -54,7 +54,11 @@ public class ReportingResource {
     public ResponseEntity<byte[]> generatePdfReport(@Valid @RequestBody PeriodicReportPdfRequest pdfRequest)
         throws URISyntaxException, IOException, DocumentException {
         log.debug("REST request to generate pdf report : {}", pdfRequest);
-        List<PeriodicReportPdfDetailInterface> pdfDetails = reportingRepository.getNativePeriodicReport();
+        List<PeriodicReportDetailInterface> pdfDetails = reportingRepository.getNativePeriodicReport(
+            pdfRequest.getSessionInstanceId(),
+            pdfRequest.getStart(),
+            pdfRequest.getEnd()
+        );
         File pdfReportFile = pdfService.generatePdf(pdfDetails, pdfRequest);
         FileInputStream fileStream = new FileInputStream(pdfReportFile);
         byte contents[] = new byte[(int) pdfReportFile.length()];

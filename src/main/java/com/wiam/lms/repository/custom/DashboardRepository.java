@@ -1,7 +1,6 @@
 package com.wiam.lms.repository.custom;
 
 import com.wiam.lms.domain.Progression;
-import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesData;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

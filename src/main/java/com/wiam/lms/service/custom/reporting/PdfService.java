@@ -3,7 +3,7 @@ package com.wiam.lms.service.custom.reporting;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import com.wiam.lms.domain.custom.projection.dto.PeriodicReportPdfDetail;
-import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
+import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportDetailInterface;
 import com.wiam.lms.service.custom.reporting.request.CertificatePdfRequest;
 import com.wiam.lms.service.custom.reporting.request.PeriodicReportPdfRequest;
 import io.woo.htmltopdf.HtmlToPdf;
@@ -16,7 +16,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -33,7 +32,6 @@ public class PdfService {
     public PdfService(SpringTemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
-
 
     private SpringTemplateEngine createTemplateEngine() {
         ClassLoaderTemplateResolver pdfTemplateResolver = new ClassLoaderTemplateResolver();
@@ -56,19 +54,19 @@ public class PdfService {
      * @throws IOException
      * @throws DocumentException
      */
-    public File generatePdf(List<PeriodicReportPdfDetailInterface> details, PeriodicReportPdfRequest pdfRequest)
+    public File generatePdf(List<PeriodicReportDetailInterface> details, PeriodicReportPdfRequest pdfRequest)
         throws IOException, DocumentException {
         Context context = getContext(details, "pdfDetails");
         String html = loadAndFillTemplate(context, "report/" + pdfRequest.getTemplateName());
         return renderPdfEnhanced(html, pdfRequest.getFileName());
     }
 
-    public File generateCertificatePdf(String studentName, CertificatePdfRequest pdfRequest)
-        throws IOException, DocumentException {
+    public File generateCertificatePdf(String studentName, CertificatePdfRequest pdfRequest) throws IOException, DocumentException {
         Context context = getContext(studentName, "studentName");
         String html = loadAndFillTemplate(context, "report/certificates/" + pdfRequest.getTemplateName());
         return renderPdfEnhanced(html, pdfRequest.getFileName());
     }
+
     /**
      *
      * @param html
