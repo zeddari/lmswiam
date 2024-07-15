@@ -2,16 +2,9 @@ package com.wiam.lms.web.rest.custom;
 
 import com.lowagie.text.DocumentException;
 import com.wiam.lms.domain.UserCustom;
-import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
-import com.wiam.lms.domain.enumeration.AccountStatus;
-import com.wiam.lms.domain.enumeration.Role;
-import com.wiam.lms.domain.enumeration.Sex;
 import com.wiam.lms.repository.custom.ReportingRepository;
-import com.wiam.lms.repository.custom.UserCustomLmsRepository;
-import com.wiam.lms.repository.search.UserCustomSearchRepository;
 import com.wiam.lms.service.custom.reporting.PdfService;
 import com.wiam.lms.service.custom.reporting.request.CertificatePdfRequest;
-import com.wiam.lms.service.custom.reporting.request.PeriodicReportPdfRequest;
 import jakarta.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;

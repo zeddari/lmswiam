@@ -3,7 +3,7 @@ package com.wiam.lms.service.custom.reporting;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import com.wiam.lms.domain.custom.projection.dto.PeriodicReportPdfDetail;
-import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
+import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportDetailInterface;
 import com.wiam.lms.service.custom.reporting.request.CertificatePdfRequest;
 import com.wiam.lms.service.custom.reporting.request.PeriodicReportPdfRequest;
 import io.woo.htmltopdf.HtmlToPdf;
@@ -54,15 +54,14 @@ public class PdfService {
      * @throws IOException
      * @throws DocumentException
      */
-    public File generatePdf(List<PeriodicReportPdfDetailInterface> details, PeriodicReportPdfRequest pdfRequest)
+    public File generatePdf(List<PeriodicReportDetailInterface> details, PeriodicReportPdfRequest pdfRequest)
         throws IOException, DocumentException {
         Context context = getContext(details, "pdfDetails");
         String html = loadAndFillTemplate(context, "report/" + pdfRequest.getTemplateName());
         return renderPdfEnhanced(html, pdfRequest.getFileName());
     }
 
-    public File generateCertificatePdf(CertificatePdfRequest certificatePdfRequest, CertificatePdfRequest pdfRequest)
-        throws IOException, DocumentException {
+    public File generateCertificatePdf(CertificatePdfRequest certificatePdfRequest, CertificatePdfRequest pdfRequest) throws IOException, DocumentException {
         Context context = getContext(certificatePdfRequest, "certificatePdfRequest");
         String html = loadAndFillTemplate(context, "report/certificates/" + pdfRequest.getTemplateName());
         return renderPdfEnhanced(html, pdfRequest.getFileName());
