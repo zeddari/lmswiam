@@ -5,6 +5,7 @@ import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.ExamDto;
+import com.wiam.lms.domain.dto.ProgressionDto;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
 import com.wiam.lms.domain.dto.SessionInstanceUniqueDto;
 import com.wiam.lms.domain.enumeration.Attendance;
@@ -101,6 +102,33 @@ public class ProgressionResource {
         log.debug("REST request to get all progressions by site, session, group and date");
         List<Progression> progressions = progressionRepository.findAttendanceAllProgressions(siteId, sessionId, groupId, sessionDate);
         return progressions;
+    }
+
+    @GetMapping("/progressionStats")
+    public List<ProgressionDto> getProgressionStats() {
+        List<ProgressionDto> progressionDtos = new ArrayList<>();
+        List<Progression> progressions = progressionRepository.findAll();
+        for (Progression progression : progressions) {
+            ProgressionDto p = new ProgressionDto();
+            p.setId(progression.getId());
+            p.setAdaeScore(progression.getAdaeScore());
+            p.setHifdScore(progression.getHifdScore());
+            p.setTajweedScore(progression.getTajweedScore());
+            p.setExamType(progression.getExamType());
+            p.setTilawaType(progression.getTilawaType());
+            p.setRiwaya(progression.getRiwaya());
+            if (progression.getToAyahs() != null && progression.getFromAyahs() != null) p.setAyahsCount(
+                progression.getToAyahs().getId() - progression.getFromAyahs().getId() + 1
+            ); else p.setAyahsCount(0);
+            if (progression.getSessionInstance() != null) p.setSessionDate(progression.getSessionInstance().getSessionDate());
+            p.setForAttendance(progression.getIsForAttendance());
+            p.setAttendance(progression.getAttendance());
+            if (progression.getStudent() != null) p.setStudentId(progression.getStudent().getId());
+            p.setEarlyDeparture(progression.getEarlyDeparture());
+            p.setLateArrival(progression.getLateArrival());
+            progressionDtos.add(p);
+        }
+        return progressionDtos;
     }
 
     /**
