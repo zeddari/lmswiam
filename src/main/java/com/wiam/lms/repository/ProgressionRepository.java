@@ -99,7 +99,7 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     );
 
     @Query(
-        "select attendance attendanceLabel, count(*) attendanceCount from Progression progression where progression.student.id = :id and progression.sessionInstance.sessionDate BETWEEN :fromDate AND :toDate group by progression.attendance"
+        "select attendance attendanceLabel, count(*) attendanceCount from Progression progression where progression.student.id = :id and progression.sessionInstance.sessionDate BETWEEN :fromDate AND :toDate AND isForAttendance = true group by progression.attendance"
     )
     List<RowSeriesWithLabelData> getStudentAbsenceData(
         @Param("id") Long id,
