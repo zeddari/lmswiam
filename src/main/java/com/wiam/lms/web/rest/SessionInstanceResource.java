@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -275,6 +276,18 @@ public class SessionInstanceResource {
     ) {
         log.debug("REST request to get SessionInstance by session : {}", id);
         return sessionInstanceRepository.findOneBySessionId(id, month, year);
+    }
+
+    /**
+     * {@code GET  /session-instances/:id} : get the "id" sessionInstance.
+     *
+     * @param id the id of the sessionInstance to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sessionInstance, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/{id}/bySite")
+    public List<SessionInstance> getSessionInstanceBySite(@PathVariable("id") Long id, @RequestParam("sessionDate") LocalDate sessionDate) {
+        log.debug("REST request to get SessionInstance by siteId and sessionDate : {}", id);
+        return sessionInstanceRepository.findOneBySiteId(id, sessionDate);
     }
 
     /**
