@@ -7,4 +7,5 @@ public enum Tilawa {
     HIFD,
     MORAJA3A,
     TILAWA,
+    NONE,
 }

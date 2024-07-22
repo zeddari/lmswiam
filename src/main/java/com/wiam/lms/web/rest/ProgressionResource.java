@@ -25,10 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,6 +143,7 @@ public class ProgressionResource {
         } /*if (progressionRepository.isAlreadyExists(progression.getSessionInstance().getId(), progression.getStudent().getId()) != null) {
             throw new BadRequestAlertException("A progression exists already for the student in this session", ENTITY_NAME, "");
         } */else {
+            progression.setCreatedAt(new Date());
             Progression result = progressionRepository.save(progression);
             progressionSearchRepository.index(result);
             return ResponseEntity
@@ -181,7 +179,7 @@ public class ProgressionResource {
         if (!progressionRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-
+        progression.setUpdatedAt(new Date());
         Progression result = progressionRepository.save(progression);
         progressionSearchRepository.index(result);
         return ResponseEntity
@@ -306,7 +304,7 @@ public class ProgressionResource {
                 if (progression.getObservation() != null) {
                     existingProgression.setObservation(progression.getObservation());
                 }
-
+                existingProgression.setUpdatedAt(new Date());
                 return existingProgression;
             })
             .map(progressionRepository::save)
@@ -394,8 +392,8 @@ public class ProgressionResource {
                             progression.setAdaeScore(1);
                             progression.setAttendance(Attendance.PRESENT);
                             progression.setExamType(ExamType.NONE);
-                            progression.setRiwaya(Riwayats.WARSHS_NARRATION_ON_THE_AUTHORITY_OF_NAFI_THROUGH_TAYYIBAH);
-                            progression.setTilawaType(Tilawa.HIFD);
+                            progression.setRiwaya(Riwayats.NONE);
+                            progression.setTilawaType(Tilawa.NONE);
                             progression.setSessionInstance(instance);
                             progression.setStudent(student);
                             progression.setSite17(instance.getSite16());

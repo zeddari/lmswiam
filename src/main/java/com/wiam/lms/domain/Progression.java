@@ -10,6 +10,8 @@ import com.wiam.lms.domain.enumeration.Tilawa;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -143,6 +145,12 @@ public class Progression implements Serializable {
     @Column(name = "observation")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String observation;
+
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
@@ -566,5 +574,29 @@ public class Progression implements Serializable {
 
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    public Boolean getForAttendance() {
+        return isForAttendance;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setForAttendance(Boolean forAttendance) {
+        isForAttendance = forAttendance;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

@@ -1,6 +1,7 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.Group;
+import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
@@ -16,7 +17,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -102,6 +105,40 @@ public class SessionInstanceResource {
             remoteSessionDtos.add(remoteSessionDto);
         }
         return remoteSessionDtos;
+    }
+
+    @GetMapping("{id}/all")
+    public List<RemoteSessionDto> getAllSessionsInstances(@PathVariable Long id) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:MM:SS");
+        log.debug("REST request to get all Session instances for the given student id");
+        // getting the list of the student groups
+        UserCustom userCustom = userCustomRepository.findByIdforGroup(id).get();
+        List<Group> myGroups = new ArrayList<Group>();
+        for (Group group : userCustom.getGroups()) myGroups.add(group);
+
+        List<RemoteSessionDto> allSessionDtos = new ArrayList<RemoteSessionDto>();
+        List<SessionInstance> allSessions = sessionInstanceRepository.findRemoteSessionInstances(myGroups);
+        for (SessionInstance sessionInstance : allSessions) {
+            RemoteSessionDto allSessionDto = new RemoteSessionDto();
+            if (sessionInstance.getSession1() != null) {
+                allSessionDto.setGender(sessionInstance.getSession1().getTargetedGender().name());
+            }
+            allSessionDto.setTitle(sessionInstance.getTitle());
+            allSessionDto.setSessionDate(sessionInstance.getSessionDate());
+            allSessionDto.setDay(sessionInstance.getSessionDate().getDayOfWeek().getValue());
+            if (sessionInstance.getGroup() != null) allSessionDto.setGroupName(sessionInstance.getGroup().getNameAr());
+            allSessionDto.setIsActive(sessionInstance.getIsActive());
+            allSessionDto.setInfo(sessionInstance.getInfo());
+
+            if (sessionInstance.getSessionLink() != null) {
+                allSessionDto.setLink(sessionInstance.getSessionLink().getLink());
+            }
+
+            allSessionDto.setSessionStartTime(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS").format(sessionInstance.getStartTime()));
+            allSessionDto.setDuration(sessionInstance.getDuration());
+            allSessionDtos.add(allSessionDto);
+        }
+        return allSessionDtos;
     }
 
     /**
@@ -288,6 +325,28 @@ public class SessionInstanceResource {
     public List<SessionInstance> getSessionInstanceBySite(@PathVariable("id") Long id, @RequestParam("sessionDate") LocalDate sessionDate) {
         log.debug("REST request to get SessionInstance by siteId and sessionDate : {}", id);
         return sessionInstanceRepository.findOneBySiteId(id, sessionDate);
+    }
+
+    /**
+     * {@code GET  /session-instances/:id} : get the "id" sessionInstance.
+     *
+     * @param id the id of the sessionInstance to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sessionInstance, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/{id}/byStudent")
+    public List<SessionInstance> getSessionInstanceByStudent(@PathVariable("id") Long id) {
+        log.debug("REST request to get all SessionsInstances for the given student id: {}", id);
+        // getting the list of the student groups
+        UserCustom userCustom = userCustomRepository.findByIdforGroup(id).get();
+        List<Group> myGroups = new ArrayList<Group>();
+        List<SessionInstance> sessionInstancesUser = new ArrayList<>();
+        for (Group group : userCustom.getGroups()) myGroups.add(group);
+        myGroups.forEach(group -> {
+            List<SessionInstance> sessionInstances = sessionInstanceRepository.findByGroupId(group.getId());
+            sessionInstancesUser.addAll(sessionInstances);
+        });
+
+        return sessionInstancesUser;
     }
 
     /**

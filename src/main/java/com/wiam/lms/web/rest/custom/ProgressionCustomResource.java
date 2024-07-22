@@ -5,6 +5,7 @@ import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.custom.ProgressionQuery;
+import com.wiam.lms.domain.dto.custom.ProgressionRepresentation;
 import com.wiam.lms.domain.enumeration.Attendance;
 import com.wiam.lms.domain.enumeration.ExamType;
 import com.wiam.lms.domain.enumeration.Riwayats;
@@ -13,6 +14,7 @@ import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.SessionInstanceRepository;
 import com.wiam.lms.repository.search.ProgressionSearchRepository;
+import com.wiam.lms.service.custom.progression.ProgressionCustomService;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
 import jakarta.validation.Valid;
@@ -25,6 +27,7 @@ import java.util.Optional;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +58,9 @@ public class ProgressionCustomResource {
 
     private final GroupRepository groupRepository;
 
+    @Autowired
+    private ProgressionCustomService progressionCustomService;
+
     public ProgressionCustomResource(
         GroupRepository groupRepository,
         SessionInstanceRepository sessionInstanceRepository,
@@ -75,17 +81,21 @@ public class ProgressionCustomResource {
     }
 
     @GetMapping("/{id}/byStudent/last")
-    public List<Progression> getLastProgressionsByStudent(@PathVariable Long id) {
+    public ProgressionRepresentation getLastProgressionsByStudent(@PathVariable Long id) {
         log.debug("REST request to get the Progressions by student : {}", id);
         List<Progression> progressions = progressionRepository.findAllLastByStudent(id);
-        return progressions;
+        ProgressionRepresentation progressionRepresentation = ProgressionRepresentation
+            .builder()
+            .studentProgressionLabel(progressionCustomService.calculateProgressLabel(progressions))
+            .progression(progressions)
+            .build();
+        return progressionRepresentation;
     }
 
-    @GetMapping("/{id}/byStudent/byDateRange")
+    @PostMapping("/byStudent/byDateRange")
     public List<Progression> getProgressionsByStudent(@RequestBody ProgressionQuery progressionQuery) {
         log.debug("REST request to get the Progressions by student by date range : {}", progressionQuery.getStartDate());
         List<Progression> progressions = progressionRepository.findAllByStudentIdAndSessionInstanceBetween(
-            progressionQuery.getSiteId(),
             progressionQuery.getStudentId(),
             progressionQuery.getStartDate(),
             progressionQuery.getEndDate()

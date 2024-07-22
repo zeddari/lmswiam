@@ -51,7 +51,7 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     List<Progression> findAllByStudent(@Param("id") Long id);
 
     @Query(
-        "select Progression from Progression progression where progression.tilawaType = 'HIFD' and progression.student.id = :studentId and progression.sessionInstance.startTime = (select max(progression1.sessionInstance.startTime) from Progression progression1 where progression1.tilawaType = 'HIFD' and progression1.student.id = :studentId) union select Progression from Progression progression where progression.tilawaType = 'TILAWA' and progression.student.id = :studentId and progression.sessionInstance.startTime = (select max(progression.sessionInstance.startTime) from Progression progression2 where progression2.tilawaType = 'TILAWA' and progression2.student.id = :studentId) union select Progression from Progression progression where progression.tilawaType = 'MORAJA3A' and progression.student.id = :studentId and progression.sessionInstance.startTime = (select max(progression.sessionInstance.startTime) from Progression progression3 where progression3.tilawaType = 'MORAJA3A' and progression3.student.id = :studentId)"
+        "select progression from Progression progression where progression.tilawaType = 'HIFD' and progression.student.id = :studentId and progression.createdAt = (select max(progression1.createdAt) from Progression progression1 where progression1.tilawaType = 'HIFD' and progression1.student.id = :studentId) union select progression from Progression progression where progression.tilawaType = 'TILAWA' and progression.student.id = :studentId and progression.createdAt = (select max(progression.createdAt) from Progression progression2 where progression2.tilawaType = 'TILAWA' and progression2.student.id = :studentId) union select progression from Progression progression where progression.tilawaType = 'MORAJA3A' and progression.student.id = :studentId and progression.createdAt = (select max(progression.createdAt) from Progression progression3 where progression3.tilawaType = 'MORAJA3A' and progression3.student.id = :studentId)"
     )
     List<Progression> findAllLastByStudent(@Param("studentId") Long id);
 
@@ -89,19 +89,27 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     );
 
     @Query(
-        "select progression from Progression progression where progression.site17.id=:siteId and progression.student.id=:studentId and progression.sessionInstance.sessionDate BETWEEN :fromDate AND :toDate and progression.isForAttendance=true group by progression.student"
+        "select progression from Progression progression where progression.student.id=:studentId and progression.sessionInstance.sessionDate BETWEEN :fromDate AND :toDate and progression.isForAttendance=false group by progression.id"
     )
     List<Progression> findAllByStudentIdAndSessionInstanceBetween(
-        @Param("siteId") Long siteId,
         @Param("studentId") Long studentId,
-        @Param("fromDate") Date fromDate,
-        @Param("toDate") Date toDate
+        @Param("fromDate") LocalDate fromDate,
+        @Param("toDate") LocalDate toDate
     );
 
     @Query(
-        "select attendance attendanceLabel, count(*) attendanceCount from Progression progression where progression.student.id = :id and progression.sessionInstance.sessionDate BETWEEN :fromDate AND :toDate AND isForAttendance = true group by progression.attendance"
+        "select attendance attendanceLabel, count(*) attendanceCount from Progression progression where progression.student.id = :id and progression.createdAt BETWEEN :fromDate AND :toDate AND isForAttendance = true group by progression.attendance"
     )
     List<RowSeriesWithLabelData> getStudentAbsenceData(
+        @Param("id") Long id,
+        @Param("fromDate") LocalDate startDate,
+        @Param("toDate") LocalDate endDate
+    );
+
+    @Query(
+        "select attendance xaxis, count(*) yaxis from Progression progression where progression.student.id = :id and progression.createdAt BETWEEN :fromDate AND :toDate AND isForAttendance = true group by progression.attendance"
+    )
+    List<RowSeriesWithLabelData> getStudentAbsenceDataDate(
         @Param("id") Long id,
         @Param("fromDate") Date startDate,
         @Param("toDate") Date endDate

@@ -74,7 +74,14 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
     List<SessionInstance> findRemoteSessionInstances(@Param("mygroups") List<Group> mygroups);
 
     @Query(
+        "select sessionInstance from SessionInstance sessionInstance  where sessionInstance.group in (:mygroups) and sessionInstance.session1.sessionType=SessionType.HALAQA"
+    )
+    List<SessionInstance> findAllSessionInstances(@Param("mygroups") List<Group> mygroups);
+
+    @Query(
         "select sessionInstance from SessionInstance sessionInstance left join fetch sessionInstance.professor where sessionInstance.sessionDate=:sessionDate and sessionInstance.site16.id=:id"
     )
     List<SessionInstance> findOneBySiteId(@Param("id") Long id, @Param("sessionDate") LocalDate sessionDate);
+
+    List<SessionInstance> findByGroupId(Long id);
 }

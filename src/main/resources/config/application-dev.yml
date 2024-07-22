@@ -54,7 +54,7 @@ spring:
     password: changeme
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev, faker
+    contexts: de
   mail:
     host: localhost
     port: 25

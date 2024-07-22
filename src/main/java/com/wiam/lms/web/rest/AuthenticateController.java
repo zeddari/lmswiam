@@ -138,7 +138,9 @@ public class AuthenticateController {
         UserCustom userCustom = userCustomLmsRepository.findByLogin(userPrincipal.getUsername());
         if (userCustom != null) {
             userId = userCustom.getId();
-            siteId = userCustom.getSite13().getId();
+            if (userCustom.getSite13() != null) {
+                siteId = userCustom.getSite13().getId();
+            }
 
         }
         else {

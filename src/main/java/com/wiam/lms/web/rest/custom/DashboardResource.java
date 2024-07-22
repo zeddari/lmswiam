@@ -7,6 +7,7 @@ import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailI
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesData;
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesWithLabelData;
 import com.wiam.lms.domain.dto.custom.ProgressionQuery;
+import com.wiam.lms.domain.enumeration.Tilawa;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.custom.DashboardRepository;
 import com.wiam.lms.repository.custom.DashboardRepository;
@@ -27,8 +28,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URISyntaxException;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,7 +184,6 @@ public class DashboardResource {
         throws URISyntaxException, IOException, DocumentException {
         log.debug("REST request to getAbsenceData");
         List<Progression> progressions = progressionRepository.findAllByStudentIdAndSessionInstanceBetween(
-            progressionQuery.getSiteId(),
             progressionQuery.getStudentId(),
             progressionQuery.getStartDate(),
             progressionQuery.getEndDate()
@@ -189,18 +191,28 @@ public class DashboardResource {
         List<Integer> hifz = new ArrayList<>();
         List<Integer> tilawa = new ArrayList<>();
         List<Integer> moraja3a = new ArrayList<>();
-        List<ZonedDateTime> dateXAxis = new ArrayList<>();
+        List<ZonedDateTime> dateXAxisTilawa = new ArrayList<>();
+        List<ZonedDateTime> dateXAxisHifz = new ArrayList<>();
+        List<ZonedDateTime> dateXAxisMoraja3a = new ArrayList<>();
         if (progressions != null) {
             progressions.forEach(progression -> {
-                if (progression.getTilawaType().equals("HIFD")) hifz.add(progression.getHifdScore());
-                if (progression.getTilawaType().equals("TILAWA")) tilawa.add(progression.getTajweedScore());
-                if (progression.getTilawaType().equals("MORAJA3A")) moraja3a.add(progression.getAdaeScore());
-                dateXAxis.add(progression.getSessionInstance().getStartTime());
+                if (progression.getTilawaType().equals(Tilawa.HIFD)) {
+                    hifz.add(progression.getHifdScore());
+                    dateXAxisHifz.add(progression.getSessionInstance().getStartTime());
+                }
+                if (progression.getTilawaType().equals(Tilawa.TILAWA)) {
+                    tilawa.add(progression.getTajweedScore());
+                    dateXAxisTilawa.add(progression.getSessionInstance().getStartTime());
+                }
+                if (progression.getTilawaType().equals(Tilawa.MORAJA3A)) {
+                    moraja3a.add(progression.getAdaeScore());
+                    dateXAxisMoraja3a.add(progression.getSessionInstance().getStartTime());
+                }
             });
         }
-        ChartAdaeSeries chartHifdSeries = ChartAdaeSeries.builder().name("HIFD").data(hifz).date(dateXAxis).build();
-        ChartAdaeSeries chartMoraja3aSeries = ChartAdaeSeries.builder().name("MORAJA3A").data(moraja3a).date(dateXAxis).build();
-        ChartAdaeSeries chartTilawaSeries = ChartAdaeSeries.builder().name("TILAWA").data(tilawa).date(dateXAxis).build();
+        ChartAdaeSeries chartHifdSeries = ChartAdaeSeries.builder().name("HIFD").data(hifz).date(dateXAxisHifz).build();
+        ChartAdaeSeries chartMoraja3aSeries = ChartAdaeSeries.builder().name("MORAJA3A").data(moraja3a).date(dateXAxisMoraja3a).build();
+        ChartAdaeSeries chartTilawaSeries = ChartAdaeSeries.builder().name("TILAWA").data(tilawa).date(dateXAxisTilawa).build();
 
         ChartAdaeData chartData = ChartAdaeData
             .builder()
@@ -215,10 +227,10 @@ public class DashboardResource {
     public List<RowSeriesWithLabelData> getAbsenceStudentData(@RequestBody ProgressionQuery progressionQuery)
         throws URISyntaxException, IOException, DocumentException {
         log.debug("REST request to getAbsenceData");
-        return progressionRepository.getStudentAbsenceData(
+        return progressionRepository.getStudentAbsenceDataDate(
             progressionQuery.getStudentId(),
-            progressionQuery.getStartDate(),
-            progressionQuery.getEndDate()
+            Date.from(progressionQuery.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+            Date.from(progressionQuery.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
         );
     }
 }

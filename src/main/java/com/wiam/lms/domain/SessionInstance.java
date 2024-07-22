@@ -68,21 +68,11 @@ public class SessionInstance implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
     private Boolean isActive;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "sessionInstance")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sessionInstance", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(value = { "site17", "sessionInstance", "student" }, allowSetters = true)
     private Set<Progression> progressions = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "rel_session_instance__links",
-        joinColumns = @JoinColumn(name = "session_instance_id"),
-        inverseJoinColumns = @JoinColumn(name = "links_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "site15", "sessions4s", "sessions7s" }, allowSetters = true)
-    private Set<SessionLink> links = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -308,29 +298,6 @@ public class SessionInstance implements Serializable {
     public SessionInstance removeProgression(Progression progression) {
         this.progressions.remove(progression);
         progression.setSessionInstance(null);
-        return this;
-    }
-
-    public Set<SessionLink> getLinks() {
-        return this.links;
-    }
-
-    public void setLinks(Set<SessionLink> sessionLinks) {
-        this.links = sessionLinks;
-    }
-
-    public SessionInstance links(Set<SessionLink> sessionLinks) {
-        this.setLinks(sessionLinks);
-        return this;
-    }
-
-    public SessionInstance addLinks(SessionLink sessionLink) {
-        this.links.add(sessionLink);
-        return this;
-    }
-
-    public SessionInstance removeLinks(SessionLink sessionLink) {
-        this.links.remove(sessionLink);
         return this;
     }
 
