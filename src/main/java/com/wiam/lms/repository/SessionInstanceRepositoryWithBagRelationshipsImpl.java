@@ -41,7 +41,7 @@ public class SessionInstanceRepositoryWithBagRelationshipsImpl implements Sessio
     SessionInstance fetchLinks(SessionInstance result) {
         return entityManager
             .createQuery(
-                "select sessionInstance from SessionInstance sessionInstance left join fetch sessionInstance.links where sessionInstance.id = :id",
+                "select sessionInstance from SessionInstance sessionInstance where sessionInstance.id = :id",
                 SessionInstance.class
             )
             .setParameter("id", result.getId())
@@ -53,7 +53,7 @@ public class SessionInstanceRepositoryWithBagRelationshipsImpl implements Sessio
         IntStream.range(0, sessionInstances.size()).forEach(index -> order.put(sessionInstances.get(index).getId(), index));
         List<SessionInstance> result = entityManager
             .createQuery(
-                "select sessionInstance from SessionInstance sessionInstance left join fetch sessionInstance.links where sessionInstance in :sessionInstances",
+                "select sessionInstance from SessionInstance sessionInstance where sessionInstance in :sessionInstances",
                 SessionInstance.class
             )
             .setParameter("sessionInstances", sessionInstances)

@@ -6,7 +6,7 @@ import com.wiam.lms.domain.enumeration.TicketSubjects;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -59,10 +59,10 @@ public class Tickets implements Serializable {
 
     @NotNull
     @Column(name = "date_ticket", nullable = false)
-    private ZonedDateTime dateTicket;
+    private LocalDateTime dateTicket;
 
     @Column(name = "date_process")
-    private ZonedDateTime dateProcess;
+    private LocalDateTime dateProcess;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -71,10 +71,10 @@ public class Tickets implements Serializable {
     private TicketStatus processed;
 
     @Column(name = "jhi_from")
-    private ZonedDateTime from;
+    private LocalDateTime from;
 
     @Column(name = "to_date")
-    private ZonedDateTime toDate;
+    private LocalDateTime toDate;
 
     @Lob
     @Column(name = "decision_detail")
@@ -233,29 +233,29 @@ public class Tickets implements Serializable {
         this.justifDocContentType = justifDocContentType;
     }
 
-    public ZonedDateTime getDateTicket() {
+    public LocalDateTime getDateTicket() {
         return this.dateTicket;
     }
 
-    public Tickets dateTicket(ZonedDateTime dateTicket) {
+    public Tickets dateTicket(LocalDateTime dateTicket) {
         this.setDateTicket(dateTicket);
         return this;
     }
 
-    public void setDateTicket(ZonedDateTime dateTicket) {
+    public void setDateTicket(LocalDateTime dateTicket) {
         this.dateTicket = dateTicket;
     }
 
-    public ZonedDateTime getDateProcess() {
+    public LocalDateTime getDateProcess() {
         return this.dateProcess;
     }
 
-    public Tickets dateProcess(ZonedDateTime dateProcess) {
+    public Tickets dateProcess(LocalDateTime dateProcess) {
         this.setDateProcess(dateProcess);
         return this;
     }
 
-    public void setDateProcess(ZonedDateTime dateProcess) {
+    public void setDateProcess(LocalDateTime dateProcess) {
         this.dateProcess = dateProcess;
     }
 
@@ -272,29 +272,29 @@ public class Tickets implements Serializable {
         this.processed = processed;
     }
 
-    public ZonedDateTime getFrom() {
+    public LocalDateTime getFrom() {
         return this.from;
     }
 
-    public Tickets from(ZonedDateTime from) {
+    public Tickets from(LocalDateTime from) {
         this.setFrom(from);
         return this;
     }
 
-    public void setFrom(ZonedDateTime from) {
+    public void setFrom(LocalDateTime from) {
         this.from = from;
     }
 
-    public ZonedDateTime getToDate() {
+    public LocalDateTime getToDate() {
         return this.toDate;
     }
 
-    public Tickets toDate(ZonedDateTime toDate) {
+    public Tickets toDate(LocalDateTime toDate) {
         this.setToDate(toDate);
         return this;
     }
 
-    public void setToDate(ZonedDateTime toDate) {
+    public void setToDate(LocalDateTime toDate) {
         this.toDate = toDate;
     }
 

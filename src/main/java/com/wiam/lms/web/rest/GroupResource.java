@@ -1,7 +1,9 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Authority;
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Session;
+import com.wiam.lms.domain.Tickets;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.UserCustomRepository;
@@ -12,6 +14,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +23,10 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -70,7 +77,7 @@ public class GroupResource {
             throw new BadRequestAlertException("A new group cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Group result = groupRepository.save(group);
-        groupSearchRepository.index(result);
+        //groupSearchRepository.index(result);
         return ResponseEntity
             .created(new URI("/api/groups/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -103,7 +110,7 @@ public class GroupResource {
         }
 
         Group result = groupRepository.save(group);
-        groupSearchRepository.index(result);
+        //groupSearchRepository.index(result);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, group.getId().toString()))
@@ -177,11 +184,12 @@ public class GroupResource {
     @GetMapping("")
     public List<Group> getAllGroups(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Groups");
-        if (eagerload) {
+        /*if (eagerload) {
             return groupRepository.findAllWithEagerRelationships();
         } else {
             return groupRepository.findAll();
-        }
+        }*/
+        return groupRepository.findAll();
     }
 
     /**
@@ -190,20 +198,41 @@ public class GroupResource {
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of groups in body.
      */
-    @GetMapping("/abstract")
-    public List<Group> getAllGroupsAbstract() {
+    @GetMapping("/{siteId}/abstract")
+    public List<Group> getAllGroupsAbstract(@PathVariable Long siteId) {
         log.debug("REST request to get all Groups abstract");
-        return groupRepository.findAllAbstract(1L);
+        return groupRepository.findAllAbstract(siteId);
     }
 
-    @GetMapping("{id}/myGroups")
-    public List<Group> getmyGroups(@PathVariable Long id) {
-        log.debug("REST request to get all groups for the given student id");
-        // getting the list of the student groups
-        UserCustom userCustom = userCustomRepository.findByIdforGroup(id).get();
-        List<Group> myGroups = new ArrayList<Group>();
-        for (Group group : userCustom.getGroups()) myGroups.add(group);
-        return myGroups;
+    @GetMapping("/myGroups")
+    public ResponseEntity<List<Group>> getmyGroups(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
+        Pageable pageable,
+        Principal principal
+    ) {
+        UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName()).get();
+        List<Group> groupList = new ArrayList<Group>();
+        long totalElements = 0;
+        Authority a = new Authority();
+        a.setName("ROLE_ADMIN");
+        if (userCustom != null) {
+            if (!userCustom.getAuthorities().contains(a)) {
+                if (userCustom.getGroups() != null) {
+                    for (Group group : userCustom.getGroups()) groupList.add(group);
+                    totalElements = userCustom.getGroups().size();
+                }
+            } else {
+                Page<Group> groups = groupRepository.findAllWithEagerRelationships(pageable);
+                if (groups != null) {
+                    groupList = groups.getContent();
+                    totalElements = groups.getTotalElements();
+                }
+            }
+        }
+        log.debug("REST request to get all Tickets");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", "" + totalElements);
+        return new ResponseEntity<>(groupList, headers, HttpStatus.OK);
     }
 
     /**

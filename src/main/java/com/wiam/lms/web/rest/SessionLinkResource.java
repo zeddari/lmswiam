@@ -171,11 +171,12 @@ public class SessionLinkResource {
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
     ) {
         log.debug("REST request to get all SessionLinks");
-        if (eagerload) {
+        /*if (eagerload) {
             return sessionLinkRepository.findAllWithEagerRelationships();
         } else {
             return sessionLinkRepository.findAll();
-        }
+        }*/
+        return sessionLinkRepository.findAll();
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Authority;
+import com.wiam.lms.domain.Diploma;
 import com.wiam.lms.domain.Diploma;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.DiplomaRepository;
@@ -11,6 +13,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -18,6 +22,10 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -64,13 +72,13 @@ public class DiplomaResource {
      */
 
     @PostMapping("")
-    public ResponseEntity<Diploma> createDiploma(@Valid @RequestBody Diploma diploma, @RequestParam Long id) throws URISyntaxException {
+    public ResponseEntity<Diploma> createDiploma(@Valid @RequestBody Diploma diploma, Principal principal) throws URISyntaxException {
         log.debug("REST request to save Diploma : {}", diploma);
         if (diploma.getId() != null) {
             throw new BadRequestAlertException("A new diploma cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Diploma result = diplomaRepository.save(diploma);
-        UserCustom userCustom = userCustomRepository.findById(id).get();
+        UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName()).get();
         if (userCustom != null && result != null) {
             userCustom.getDiplomas().add(result);
             userCustomRepository.save(userCustom);
@@ -207,6 +215,35 @@ public class DiplomaResource {
         } else {
             return diplomaRepository.findAll();
         }
+    }
+
+    @GetMapping("/byRole")
+    public ResponseEntity<List<Diploma>> getAllDiplomasByRole(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
+        Pageable pageable,
+        Principal principal
+    ) {
+        UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName()).get();
+        List<Diploma> diplomaList = new ArrayList<Diploma>();
+        long totalElements = 0;
+        Authority a = new Authority();
+        a.setName("ROLE_ADMIN");
+        if (userCustom != null) {
+            if (!userCustom.getAuthorities().contains(a)) {
+                for (Diploma diploma : userCustom.getDiplomas()) diplomaList.add(diploma);
+                totalElements = diplomaList.size();
+            } else {
+                Page<Diploma> diploma = diplomaRepository.findAll(pageable);
+                if (diploma != null) {
+                    diplomaList = diploma.getContent();
+                    totalElements = diploma.getTotalElements();
+                }
+            }
+        }
+        log.debug("REST request to get all Diploma");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", "" + totalElements);
+        return new ResponseEntity<>(diplomaList, headers, HttpStatus.OK);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Progression;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesWithLabelData;
 import com.wiam.lms.service.dto.FollowupAvgDTO;
 import com.wiam.lms.service.dto.FollowupListDTO;
@@ -69,6 +70,11 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
         "select progression from Progression progression left join fetch progression.fromAyahs left join fetch progression.toAyahs  left join fetch progression.student where progression.sessionInstance.id=:id"
     )
     List<Progression> findAllBySessionInstance(@Param("id") Long id);
+
+    @Query(
+        "select progression from Progression progression left join fetch progression.fromAyahs left join fetch progression.toAyahs  left join fetch progression.student where progression.sessionInstance.id=:id and progression.student.id=:userCustomId"
+    )
+    List<Progression> findAllByRole(@Param("id") Long id, @Param("userCustomId") Long userCustomId);
 
     @Query(
         "select new com.wiam.lms.service.dto.FollowupAvgDTO(progression.tilawaType,AVG(progression.hifdScore)) from Progression progression where progression.student.id=:id and progression.sessionInstance.sessionDate BETWEEN :startDate AND :endDate group by progression.tilawaType"

@@ -1,5 +1,6 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Authority;
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.SessionInstance;
@@ -23,6 +24,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -392,8 +394,8 @@ public class ProgressionResource {
                             progression.setAdaeScore(1);
                             progression.setAttendance(Attendance.PRESENT);
                             progression.setExamType(ExamType.NONE);
-                            progression.setRiwaya(Riwayats.NONE);
-                            progression.setTilawaType(Tilawa.NONE);
+                            progression.setRiwaya(Riwayats.WARSHS_NARRATION_ON_THE_AUTHORITY_OF_NAFI_THROUGH_TAYYIBAH);
+                            progression.setTilawaType(Tilawa.TILAWA);
                             progression.setSessionInstance(instance);
                             progression.setStudent(student);
                             progression.setSite17(instance.getSite16());
@@ -414,6 +416,23 @@ public class ProgressionResource {
     public List<Progression> getAllProgressionsBySessionInstance(@PathVariable Long id) {
         log.debug("REST request to get all Progressions for a given sessionInstance id");
         return progressionRepository.findAllBySessionInstance(id);
+    }
+
+    @GetMapping("/{id}/byRole")
+    public List<Progression> getAllProgressionsByRole(@PathVariable Long id, Principal principal) {
+        log.debug("REST request to get all Progressions for a given sessionInstance id and role");
+        UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName()).get();
+        Authority a = new Authority();
+        a.setName("ROLE_ADMIN");
+        List<Progression> progressions = new ArrayList<Progression>();
+        if (userCustom != null) {
+            if (!userCustom.getAuthorities().contains(a)) {
+                progressions = progressionRepository.findAllByRole(id, userCustom.getId());
+            } else {
+                progressions = progressionRepository.findAllBySessionInstance(id);
+            }
+        }
+        return progressions;
     }
 
     @GetMapping("/{id}/byStudent")

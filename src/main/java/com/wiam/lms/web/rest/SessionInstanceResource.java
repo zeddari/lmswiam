@@ -1,7 +1,9 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Authority;
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Session;
+import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
@@ -17,6 +19,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +31,10 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -284,6 +291,41 @@ public class SessionInstanceResource {
         } else {
             return sessionInstanceRepository.findAll();
         }
+    }
+
+    @GetMapping("/byRole")
+    public ResponseEntity<List<SessionInstance>> getAllSessionInstancesByRole(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
+        Pageable pageable,
+        Principal principal
+    ) {
+        UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName()).get();
+        List<SessionInstance> sessioninstanceList = new ArrayList<SessionInstance>();
+        long totalElements = 0;
+        Authority a = new Authority();
+        a.setName("ROLE_ADMIN");
+        if (userCustom != null) {
+            if (!userCustom.getAuthorities().contains(a)) {
+                List<Group> myGroups = new ArrayList<Group>();
+                for (Group group : userCustom.getGroups()) myGroups.add(group);
+                System.out.println("HHHHHHHHHHHHHHH:" + myGroups.size());
+                Page<SessionInstance> sessioninstance = sessionInstanceRepository.findRemoteSessionInstancesByRole(myGroups, pageable);
+                if (sessioninstance != null) {
+                    sessioninstanceList = sessioninstance.getContent();
+                    totalElements = sessioninstance.getTotalElements();
+                }
+            } else {
+                Page<SessionInstance> sessioninstance = sessionInstanceRepository.findAll(pageable);
+                if (sessioninstance != null) {
+                    sessioninstanceList = sessioninstance.getContent();
+                    totalElements = sessioninstance.getTotalElements();
+                }
+            }
+        }
+        log.debug("REST request to get all SessionInstance");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", "" + totalElements);
+        return new ResponseEntity<>(sessioninstanceList, headers, HttpStatus.OK);
     }
 
     /**
