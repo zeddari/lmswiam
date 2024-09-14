@@ -1,6 +1,7 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Tickets;
+import com.wiam.lms.domain.UserCustom;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -37,4 +38,19 @@ public interface TicketsRepository extends JpaRepository<Tickets, Long> {
 
     @Query("select tickets from Tickets tickets left join fetch tickets.site18 left join fetch tickets.userCustom5 where tickets.id =:id")
     Optional<Tickets> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query("select tickets from Tickets tickets left join fetch tickets.userCustom5 where tickets.userCustom5.id =:id")
+    List<Tickets> findByCustomUser(@Param("id") Long id);
+
+    @Query(
+        value = "select tickets from Tickets tickets left join fetch tickets.site18 left join fetch tickets.userCustom5 where tickets.userCustom5=:userCustom"
+    )
+    Page<Tickets> findAllWithEagerRelationshipsByUserCustom(Pageable pageable, @Param("userCustom") UserCustom userCustom);
+
+    Page<Tickets> findBySubjectContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String subject, String description, Pageable pageable);
+
+    @Query(
+        value = "select tickets from Tickets tickets left join fetch tickets.site18 left join fetch tickets.userCustom5 where tickets.userCustom5=:userCustom and LOWER(tickets.subject) LIKE LOWER(CONCAT('%', :query, '%'))"
+    )
+    Page<Tickets> search(@Param("query") String query, @Param("userCustom") UserCustom userCustom, Pageable pageable);
 }

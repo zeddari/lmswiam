@@ -1,6 +1,11 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Authority;
+import com.wiam.lms.domain.Ayahs;
+import com.wiam.lms.domain.Group;
+import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.Tickets;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.enumeration.TicketStatus;
 import com.wiam.lms.repository.TicketsRepository;
 import com.wiam.lms.repository.UserCustomRepository;
@@ -13,7 +18,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -23,10 +30,17 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -75,11 +89,15 @@ public class TicketsResource {
 
         UUID uuid = UUID.randomUUID();
         tickets.setReference(uuid.toString());
-        tickets.setDateTicket(ZonedDateTime.now());
+        tickets.setDateTicket(LocalDateTime.now());
         tickets.setProcessed(TicketStatus.PENDING);
-        if (userCustomRepository.findUserCustomByLogin(principal.getName()).get() != null) tickets.setUserCustom5(
-            userCustomRepository.findUserCustomByLogin(principal.getName()).get()
-        );
+
+        UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName()).get();
+
+        if (userCustom != null) {
+            tickets.setUserCustom5(userCustom);
+            tickets.setSite18(userCustom.getSite13());
+        }
         Tickets result = ticketsRepository.save(tickets);
         ticketsSearchRepository.index(result);
         return ResponseEntity
@@ -117,7 +135,7 @@ public class TicketsResource {
         if (
             tickets.getProcessed() == TicketStatus.PROCESSED &&
             tickets.getProcessed() != ticketsRepository.findById(id).get().getProcessed()
-        ) tickets.setDateProcess(ZonedDateTime.now());
+        ) tickets.setDateProcess(LocalDateTime.now());
         Tickets result = ticketsRepository.save(tickets);
         ticketsSearchRepository.index(result);
         return ResponseEntity
@@ -215,13 +233,45 @@ public class TicketsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tickets in body.
      */
     @GetMapping("")
-    public List<Tickets> getAllTickets(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
-        log.debug("REST request to get all Tickets");
-        if (eagerload) {
-            return ticketsRepository.findAllWithEagerRelationships();
-        } else {
-            return ticketsRepository.findAll();
+    public ResponseEntity<List<Tickets>> getAllTickets(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
+        Pageable pageable,
+        Principal principal
+    ) {
+        UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName()).get();
+        List<Tickets> ticketsList = new ArrayList<Tickets>();
+        long totalElements = 0;
+        Authority a = new Authority();
+        a.setName("ROLE_ADMIN");
+        if (userCustom != null) {
+            if (!userCustom.getAuthorities().contains(a)) {
+                Page<Tickets> tickets = ticketsRepository.findAllWithEagerRelationshipsByUserCustom(pageable, userCustom);
+                if (tickets != null) {
+                    ticketsList = tickets.getContent();
+                    totalElements = tickets.getTotalElements();
+                }
+            } else {
+                Page<Tickets> tickets = ticketsRepository.findAllWithEagerRelationships(pageable);
+                if (tickets != null) {
+                    ticketsList = tickets.getContent();
+                    totalElements = tickets.getTotalElements();
+                }
+            }
         }
+        log.debug("REST request to get all Tickets");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", "" + totalElements);
+        return new ResponseEntity<>(ticketsList, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("{id}/myTickets")
+    public List<Tickets> getRemoteSessions(@PathVariable Long id) {
+        log.debug("REST request to get all tickets for the given user id");
+        // getting the list of the student groups
+        UserCustom userCustom = userCustomRepository.findById(id).get();
+        Authority a = new Authority();
+        a.setName("ROLE_ADMIN");
+        if (userCustom.getAuthorities().contains(a)) return ticketsRepository.findAll(); else return ticketsRepository.findByCustomUser(id);
     }
 
     /**
@@ -261,7 +311,7 @@ public class TicketsResource {
      * @param query the query of the tickets search.
      * @return the result of the search.
      */
-    @GetMapping("/_search")
+    /*@GetMapping("/_search")
     public List<Tickets> searchTickets(@RequestParam("query") String query) {
         log.debug("REST request to search Tickets for query {}", query);
         try {
@@ -269,5 +319,35 @@ public class TicketsResource {
         } catch (RuntimeException e) {
             throw ElasticsearchExceptionMapper.mapException(e);
         }
+    }*/
+
+    @GetMapping(value = "/_search", produces = "application/json;charset=utf-8")
+    public ResponseEntity<List<Tickets>> searchTickets(@RequestParam("query") String query, Pageable pageable) {
+        query = "%" + query + "%"; // if we use like
+        log.debug("REST request to search Tickets for query {}", query);
+        UserCustom userCustom = userCustomRepository.findUserCustomByLogin("admin").get();
+        List<Tickets> ticketsList = new ArrayList<Tickets>();
+        long totalElements = 0;
+        Authority a = new Authority();
+        a.setName("ROLE_ADMIN");
+        if (userCustom != null) {
+            if (!userCustom.getAuthorities().contains(a)) {
+                Page<Tickets> tickets = ticketsRepository.search(query, userCustom, pageable);
+                if (tickets != null) {
+                    ticketsList = tickets.getContent();
+                    totalElements = tickets.getTotalElements();
+                }
+            } else {
+                Page<Tickets> tickets = ticketsRepository.findAllWithEagerRelationships(pageable);
+                if (tickets != null) {
+                    ticketsList = tickets.getContent();
+                    totalElements = tickets.getTotalElements();
+                }
+            }
+        }
+        log.debug("REST request to get all Tickets");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", "" + totalElements);
+        return new ResponseEntity<>(ticketsList, headers, HttpStatus.OK);
     }
 }

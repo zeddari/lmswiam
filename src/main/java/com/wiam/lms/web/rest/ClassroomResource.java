@@ -166,11 +166,12 @@ public class ClassroomResource {
     @GetMapping("")
     public List<Classroom> getAllClassrooms(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Classrooms");
-        if (eagerload) {
+        /*if (eagerload) {
             return classroomRepository.findAllWithEagerRelationships();
         } else {
             return classroomRepository.findAll();
-        }
+        }*/
+        return classroomRepository.findAll();
     }
 
     /**

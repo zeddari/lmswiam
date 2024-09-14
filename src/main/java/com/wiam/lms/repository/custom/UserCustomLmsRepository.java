@@ -1,5 +1,6 @@
 package com.wiam.lms.repository.custom;
 
+import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.Role;
@@ -22,10 +23,16 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserCustomLmsRepository extends UserCustomRepositoryWithBagRelationships, JpaRepository<UserCustom, Long> {
+    /*@Query(
+        value="select userCustom from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.role =:role and userCustom.sex =:sex and userCustom.accountStatus =:accountStatus and userCustom.site13.id =:siteId",
+        countQuery="select count(*) from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.role =:role and userCustom.sex =:sex and userCustom.accountStatus =:accountStatus and userCustom.site13.id =:siteId",
+        nativeQuery = true
+    )*/
     @Query(
         "select userCustom from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.role =:role and userCustom.sex =:sex and userCustom.accountStatus =:accountStatus and userCustom.site13.id =:siteId"
     )
-    List<UserCustom> getUsers(
+    Page<UserCustom> getUsers(
+        Pageable pageable,
         @Param("role") Role role,
         @Param("siteId") Long siteId,
         @Param("accountStatus") AccountStatus accountStatus,
@@ -33,4 +40,10 @@ public interface UserCustomLmsRepository extends UserCustomRepositoryWithBagRela
     );
 
     public UserCustom findByLogin(String login);
+
+    @Query("select userCustom from UserCustom userCustom where userCustom.role =:role")
+    public List<UserCustom> findByRole(@Param("role") Role role);
+
+    @Query("select userCustom from UserCustom userCustom where userCustom.role =:role and userCustom.site13.id=:siteId")
+    public List<UserCustom> findByRoleSite(@Param("role") Role role, @Param("siteId") Long siteId);
 }

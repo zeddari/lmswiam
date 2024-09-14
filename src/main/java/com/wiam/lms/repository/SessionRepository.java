@@ -54,6 +54,16 @@ public interface SessionRepository extends SessionRepositoryWithBagRelationships
         @Param("gender") TargetedGender gender
     );
 
+    @Query(
+        "select session from Session session left join fetch session.site14 where session.site14.id =:siteId and session.sessionType=:sessionType and session.targetedGender=:gender"
+    )
+    Page<Session> findFilteredSessions(
+        Pageable pageable,
+        @Param("siteId") Long siteId,
+        @Param("sessionType") SessionType sessionType,
+        @Param("gender") TargetedGender gender
+    );
+
     @Query("select session from Session session where session.site14.id =:id")
     List<Session> findBySite(Long id);
 
