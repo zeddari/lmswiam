@@ -169,6 +169,7 @@ public class AuthenticateController {
         userCustomDto.setStudentId(userId);
         userCustomDto.setSiteId(siteId);
         userCustomDto.setRoles(authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+        userCustomDto.setUserCustom(userCustom);
         return userCustomDto;
     }
 
