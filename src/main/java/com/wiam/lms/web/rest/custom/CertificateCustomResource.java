@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +46,7 @@ public class CertificateCustomResource {
     public ResponseEntity<byte[]> generatePdfReport(@Valid @RequestBody CertificatePdfRequest pdfRequest)
         throws URISyntaxException, IOException, DocumentException {
         log.debug("REST request to generate certificate pdf report : {}", pdfRequest);
-        File pdfReportFile = pdfService.generateCertificatePdf(pdfRequest, pdfRequest);
+        File pdfReportFile = pdfService.generateCertificatePdf(pdfRequest.getStudentName(), pdfRequest);
         FileInputStream fileStream = new FileInputStream(pdfReportFile);
         byte contents[] = new byte[(int) pdfReportFile.length()];
         fileStream.read(contents);
