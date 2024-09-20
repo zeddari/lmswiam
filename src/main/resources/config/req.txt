@@ -1,0 +1,3 @@
+replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace
+	(replace(replace(replace(replace(textdesc, 'ىٰ','ى'), 'ٰ ',''), ' ۚ ',''), 'ۗ ',''), 'آ','ا'), 'آ','ا'), 'ٱ','ا'), 'أ','ا'), 'إ','ا'),'ا۟','ا'),'لآ','لا'), 'ؤ','و'), 'وٓ','و'), 'ٍ',''), 'ِ',''), 'ً',''), 'َ',''), 'ّ',''), 'ْ',''), 'ۖ',''), 'ٌ','')
+    , 'ُ','')
