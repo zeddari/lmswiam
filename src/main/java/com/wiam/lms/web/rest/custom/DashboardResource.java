@@ -1,33 +1,26 @@
 package com.wiam.lms.web.rest.custom;
 
 import com.lowagie.text.DocumentException;
-import com.lowagie.text.DocumentException;
 import com.wiam.lms.domain.Progression;
-import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
-import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesData;
+import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesWithLabelData;
 import com.wiam.lms.domain.dto.custom.ProgressionQuery;
 import com.wiam.lms.domain.enumeration.Tilawa;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.custom.DashboardRepository;
-import com.wiam.lms.repository.custom.DashboardRepository;
-import com.wiam.lms.repository.custom.ReportingRepository;
+import com.wiam.lms.service.custom.dashboard.dto.AbsencesProfessorsYearData;
 import com.wiam.lms.service.custom.dashboard.dto.ChartAdaeData;
 import com.wiam.lms.service.custom.dashboard.dto.ChartAdaeSeries;
 import com.wiam.lms.service.custom.dashboard.dto.ChartData;
-import com.wiam.lms.service.custom.dashboard.dto.ChartData;
 import com.wiam.lms.service.custom.dashboard.dto.ChartSeries;
-import com.wiam.lms.service.custom.dashboard.dto.ChartSeries;
+import com.wiam.lms.service.custom.dashboard.dto.LastAbsencesData;
 import com.wiam.lms.service.custom.reporting.PdfService;
-import com.wiam.lms.service.custom.reporting.PdfService;
-import com.wiam.lms.service.custom.reporting.request.PeriodicReportPdfRequest;
-import jakarta.validation.Valid;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URISyntaxException;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -37,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -232,5 +226,43 @@ public class DashboardResource {
             Date.from(progressionQuery.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()),
             Date.from(progressionQuery.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
         );
+    }
+
+    @GetMapping("/absence/professors/lastabsences")
+    public List<LastAbsencesData> getLastAbsencesProfessorData() throws URISyntaxException, IOException, DocumentException {
+        log.debug("REST request to getLastAbsencesProfessorData");
+        List<SessionInstance> lastSessionAbsences = dashboardRepository.getLastSessionInstancesWithAbsences(PageRequest.of(0, 10));
+        //        log.debug("count number of absences "+lastSessionAbsences.size());
+        List<LastAbsencesData> result = new ArrayList<LastAbsencesData>();
+        lastSessionAbsences.forEach(sessionInstance -> {
+            UserCustom prof = sessionInstance.getSession1().getProfessors().iterator().next();
+            result.add(
+                LastAbsencesData
+                    .builder()
+                    .id(sessionInstance.getId())
+                    .name(prof.getFirstName())
+                    .title(sessionInstance.getSession1().getTitle())
+                    .date(sessionInstance.getStartTime())
+                    .build()
+            );
+        });
+        return result;
+    }
+
+    @GetMapping("/absence/professors/year")
+    public AbsencesProfessorsYearData getAbsencesProfessorYearData() throws URISyntaxException, IOException, DocumentException {
+        log.debug("REST request to getAbsencesProfessorYearData");
+        AbsencesProfessorsYearData absencesProfessorsYearData = AbsencesProfessorsYearData
+            .builder()
+            .chartSeries(ChartSeries.builder().data(new ArrayList<Long>()).build())
+            .months(new ArrayList<String>())
+            .build();
+        for (int i = 11; i >= 0; i--) {
+            YearMonth lastMonth = YearMonth.now().minusMonths(i);
+            Integer countAbsencesMonth = dashboardRepository.countAbsencesMonth(lastMonth.toString());
+            absencesProfessorsYearData.getChartSeries().getData().add((long) countAbsencesMonth);
+            absencesProfessorsYearData.getMonths().add(lastMonth.toString());
+        }
+        return absencesProfessorsYearData;
     }
 }
