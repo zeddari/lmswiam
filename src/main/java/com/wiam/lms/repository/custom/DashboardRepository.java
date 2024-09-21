@@ -1,11 +1,15 @@
 package com.wiam.lms.repository.custom;
 
 import com.wiam.lms.domain.Progression;
+import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesData;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -120,4 +124,20 @@ public interface DashboardRepository extends JpaRepository<Progression, Long> {
         nativeQuery = true
     )
     List<Long> getSponsorshipList();
+
+    @Query(
+        value = "select sessionInstance from SessionInstance sessionInstance" +
+        " where sessionInstance.attendance in ('ABSENT','ABSENT_AUTHORIZED')" +
+        " AND sessionInstance.session1.professors IS NOT EMPTY" +
+        " ORDER BY sessionInstance.sessionDate DESC"
+    )
+    List<SessionInstance> getLastSessionInstancesWithAbsences(Pageable pageable);
+
+    @Query(
+        value = "SELECT count(id) FROM SESSION_INSTANCE " +
+        "WHERE attendance in ('ABSENT','ABSENT_AUTHORIZED')" +
+        "AND DATE_FORMAT(session_date, '%Y-%m')=:month",
+        nativeQuery = true
+    )
+    Integer countAbsencesMonth(@Param("month") String month);
 }
