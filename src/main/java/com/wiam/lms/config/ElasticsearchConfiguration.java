@@ -13,7 +13,7 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.elasticsearch.config.ElasticsearchConfigurationSupport;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchCustomConversions;
 
-//@Configuration
+@Configuration
 public class ElasticsearchConfiguration extends ElasticsearchConfigurationSupport {
 
     @Bean

@@ -4,6 +4,8 @@ import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.ProgressionCriteriaDto;
+import com.wiam.lms.domain.dto.custom.ProgressionAdminRepresentation;
 import com.wiam.lms.domain.dto.custom.ProgressionQuery;
 import com.wiam.lms.domain.dto.custom.ProgressionRepresentation;
 import com.wiam.lms.domain.enumeration.Attendance;
@@ -21,9 +23,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +78,39 @@ public class ProgressionCustomResource {
         log.debug("REST request to get the Progressions by student : {}", id);
         List<Progression> progressions = progressionRepository.findAllByStudent(id);
         return progressions;
+    }
+
+    @PostMapping("/criteria/search")
+    public List<ProgressionAdminRepresentation> getProgressionsByCriterias(@RequestBody ProgressionCriteriaDto progressionCriteriaDto) {
+        log.debug("REST request to get the Progressions by criterias : {}", progressionCriteriaDto.getId());
+        List<Progression> progressions = progressionRepository.findAllBySessionIdAndDate(
+            progressionCriteriaDto.getSessionDate(),
+            progressionCriteriaDto.getId()
+        );
+        Set<String> studentsName = new HashSet<>();
+        List<Progression> myProgressions = new ArrayList<>();
+        List<ProgressionAdminRepresentation> progressionAdminRepresentations = new ArrayList<>();
+        if (progressions != null) {
+            ProgressionAdminRepresentation progressionAdminRepresentation = ProgressionAdminRepresentation.builder().build();
+            for (Progression p : progressions) {
+                if (studentsName.add(p.getStudent().getLogin())) {
+                    if (
+                        progressionAdminRepresentation.getStudentName() != null &&
+                        !progressionAdminRepresentation.getStudentName().isBlank()
+                    ) {
+                        progressionAdminRepresentation.setProgressions(myProgressions);
+                        progressionAdminRepresentations.add(progressionAdminRepresentation);
+                        myProgressions = new ArrayList<>();
+                    }
+                    progressionAdminRepresentation = ProgressionAdminRepresentation.builder().build();
+                    progressionAdminRepresentation.setStudentName(p.getStudent().getLogin());
+                    myProgressions.add(p);
+                } else {
+                    myProgressions.add(p);
+                }
+            }
+        }
+        return progressionAdminRepresentations;
     }
 
     @GetMapping("/{id}/byStudent/last")
