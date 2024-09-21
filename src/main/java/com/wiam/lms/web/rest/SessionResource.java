@@ -7,6 +7,8 @@ import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.Tickets;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
+import com.wiam.lms.domain.enumeration.SessionType;
+import com.wiam.lms.domain.enumeration.TargetedGender;
 import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.SessionRepository;
 import com.wiam.lms.repository.UserCustomRepository;
@@ -18,6 +20,7 @@ import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -83,7 +86,7 @@ public class SessionResource {
             throw new BadRequestAlertException("A new session cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Session result = sessionRepository.save(session);
-        sessionSearchRepository.index(result);
+        //sessionSearchRepository.index(result);
         return ResponseEntity
             .created(new URI("/api/sessions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -118,7 +121,7 @@ public class SessionResource {
         }
 
         Session result = sessionRepository.save(session);
-        sessionSearchRepository.index(result);
+        //sessionSearchRepository.index(result);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, session.getId().toString()))
@@ -233,7 +236,7 @@ public class SessionResource {
             })
             .map(sessionRepository::save)
             .map(savedSession -> {
-                sessionSearchRepository.index(savedSession);
+                //sessionSearchRepository.index(savedSession);
                 return savedSession;
             });
 
@@ -257,6 +260,16 @@ public class SessionResource {
         } else {
             return sessionRepository.findAll();
         }
+    }
+
+    @GetMapping("/multicriteria")
+    public List<Session> getSessionsByMulticreteria(
+        @RequestParam("siteId") Long siteId,
+        @RequestParam("gender") TargetedGender gender,
+        @RequestParam("sessionDate") LocalDate sessionDate,
+        @RequestParam("sessionType") SessionType sessionType
+    ) {
+        return sessionRepository.findSessionInstanceMulticreteria(siteId, gender, sessionDate, sessionType);
     }
 
     @GetMapping("/{id}/bysite")
@@ -298,7 +311,7 @@ public class SessionResource {
     public ResponseEntity<Void> deleteSession(@PathVariable("id") Long id) {
         log.debug("REST request to delete Session : {}", id);
         sessionRepository.deleteById(id);
-        sessionSearchRepository.deleteFromIndexById(id);
+        //sessionSearchRepository.deleteFromIndexById(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

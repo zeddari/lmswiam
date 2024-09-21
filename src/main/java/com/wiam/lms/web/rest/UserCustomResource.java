@@ -60,7 +60,8 @@ public class UserCustomResource {
             throw new BadRequestAlertException("A new userCustom cannot already have an ID", ENTITY_NAME, "idexists");
         }
         UserCustom result = userCustomRepository.save(userCustom);
-        userCustomSearchRepository.index(result);
+        // // userCustomSearchRepository.index(result);
+
         return ResponseEntity
             .created(new URI("/api/user-customs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -96,7 +97,8 @@ public class UserCustomResource {
 
         UserCustom result = userCustomRepository.save(userCustom);
 
-        userCustomSearchRepository.index(result);
+        // // userCustomSearchRepository.index(result);
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userCustom.getId().toString()))
@@ -218,11 +220,13 @@ public class UserCustomResource {
                     existingUserCustom.setLogin(userCustom.getLogin());
                 }
 
+                existingUserCustom.setActivated(userCustom.isActivated());
+
                 return existingUserCustom;
             })
             .map(userCustomRepository::save)
             .map(savedUserCustom -> {
-                userCustomSearchRepository.index(savedUserCustom);
+                // userCustomSearchRepository.index(savedUserCustom);
                 return savedUserCustom;
             });
 
@@ -280,7 +284,7 @@ public class UserCustomResource {
     public ResponseEntity<Void> deleteUserCustom(@PathVariable("id") Long id) {
         log.debug("REST request to delete UserCustom : {}", id);
         userCustomRepository.deleteById(id);
-        userCustomSearchRepository.deleteFromIndexById(id);
+        // userCustomSearchRepository.deleteFromIndexById(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

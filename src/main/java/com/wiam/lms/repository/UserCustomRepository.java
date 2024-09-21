@@ -31,26 +31,28 @@ public interface UserCustomRepository extends UserCustomRepositoryWithBagRelatio
     }
 
     @Query(
-        value = "select userCustom from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2",
+        value = "select userCustom from UserCustom userCustom  left join fetch userCustom.city left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2",
         countQuery = "select count(userCustom) from UserCustom userCustom"
     )
     Page<UserCustom> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select userCustom from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2"
+        "select userCustom from UserCustom userCustom  left join fetch userCustom.city left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2"
     )
     List<UserCustom> findAllWithToOneRelationships();
 
     @Query(
-        "select userCustom from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.id =:id"
+        "select userCustom from UserCustom userCustom  left join fetch userCustom.city left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.id =:id"
     )
     Optional<UserCustom> findOneWithToOneRelationships(@Param("id") Long id);
 
     @Query(
-        "select userCustom from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.login =:login"
+        "select userCustom from UserCustom userCustom  left join fetch userCustom.city left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.login =:login"
     )
     Optional<UserCustom> findUserCustomByLogin(@Param("login") String login);
 
-    @Query("select userCustom from UserCustom userCustom  left join fetch userCustom.groups where userCustom.id=:id")
+    @Query(
+        "select userCustom from UserCustom userCustom left join fetch userCustom.city left join fetch userCustom.groups where userCustom.id=:id"
+    )
     Optional<UserCustom> findByIdforGroup(Long id);
 }

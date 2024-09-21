@@ -98,10 +98,10 @@ public class SessionResourceLms {
                     totalElements = tickets.getTotalElements();
                 }*/
             } else {
-                Page<Session> sessions = sessionRepository.findFilteredSessions(pageable, siteId, sessionType, gender);
+                List<Session> sessions = sessionRepository.findFilteredSessions(siteId, sessionType, gender);
                 if (sessions != null) {
-                    sessionList = sessions.getContent();
-                    totalElements = sessions.getTotalElements();
+                    sessionList = sessions;
+                    totalElements = sessions.size();
                 }
             }
         }
