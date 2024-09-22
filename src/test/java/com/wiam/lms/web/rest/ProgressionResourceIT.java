@@ -14,7 +14,6 @@ import com.wiam.lms.domain.enumeration.ExamType;
 import com.wiam.lms.domain.enumeration.ProgressionMode;
 import com.wiam.lms.domain.enumeration.Riwayats;
 import com.wiam.lms.domain.enumeration.Sourate;
-import com.wiam.lms.domain.enumeration.Sourate;
 import com.wiam.lms.domain.enumeration.Tilawa;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.search.ProgressionSearchRepository;
@@ -505,7 +504,7 @@ class ProgressionResourceIT {
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(progressionSearchRepository.findAll());
 
         // Update the progression
-        Progression updatedProgression = progressionRepository.findById(progression.getId()).orElseThrow();
+        Progression updatedProgression = progressionRepository.findById(progression.getId()).get();
         // Disconnect from session so that the updates on updatedProgression are not directly saved in db
         em.detach(updatedProgression);
         updatedProgression

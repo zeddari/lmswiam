@@ -16,9 +16,13 @@ import org.springframework.stereotype.Repository;
 public interface ReportingRepository extends JpaRepository<Progression, Long> {
     @Query(
         value = "select  \n" +
+        "DATE_FORMAT(:startDate, '%Y-%m-%d') as startDate,\n" +
+        "DATE_FORMAT(:endDate, '%Y-%M-%d') as endDate,\n" +
         "st.name_ar as schoolName,\n" +
         "st.name_lat as schoolNameLat,\n" +
-        "uc.first_name as firstName,\n" +
+        "ss.title as sessionName,\n" +
+        "concat(uc.first_name, ' ', uc.last_name) as teacherName,\n" +
+        "ss.targeted_gender as groupName,\n" +
         "si.title as title,\n" +
         "ss.targeted_gender as targetedGender,\n" +
         "count(pr.student_id) nbStudentTotal,\n" +
@@ -26,13 +30,13 @@ public interface ReportingRepository extends JpaRepository<Progression, Long> {
         "  and si1.attendance = 'PRESENT'\n" +
         "  where si1.session_date between :startDate and :endDate and si1.title = 'sessionAB'\n" +
         "  )  as nbStudentTotal2,\n" +
-        " ( 4 * (DATEDIFF(:endDate, :startDate) / 7) + MID('0123444401233334012222340111123400012345001234550', 7 * WEEKDAY(:startDate) + WEEKDAY(:endDate) + 1, 1)) as nbAttendanceTotal,\n" +
-        "0 as optionalCourses,\n" +
-        "0 as tajweedCourses,\n" +
-        "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'HIFD') nbHifdAjzaeToral,\n" +
-        "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'MORAJA3A') nbMorajaaAjzaeToral,\n" +
+        " ( 4 * (DATEDIFF(:endDate, :startDate) / 7) + MID('0123444401233334012222340111123400012345001234550', 7 * WEEKDAY(:startDate) + WEEKDAY(:endDate) + 1, 1)) as nbDaysSchoolingTotal,\n" +
+        "0 as optionalLessons,\n" +
+        "0 as tajweedLessons,\n" +
+        "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'HIFD') nbAjzaeHifdTotal,\n" +
+        "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'MORAJA3A') nbAjzaeRevTotal,\n" +
         "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'TILAWA') nbTilawaAjzaeTotal,\n" +
-        "(select uc1.first_name from user_custom uc1 where uc1.id = pr.student_id) as studentName,\n" +
+        "(select concat(uc1.first_name, ' ', uc1.last_name) from user_custom uc1 where uc1.id = pr.student_id) as studentName,\n" +
         "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'HIFD' and pr2.student_id = pr.student_id) nbHifdAjzaeStudent,\n" +
         "count(pr.hifd_score) studentHifdScore,\n" +
         "(select (max(ay.page) - min(ay.page))  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'HIFD') nbHifdPageTotal,\n" +
@@ -43,7 +47,7 @@ public interface ReportingRepository extends JpaRepository<Progression, Long> {
         "\n" +
         "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'MORAJA3A' and pr2.student_id = pr.student_id) nbHomeAjzaeStudent,\n" +
         "count(pr.adae_score) studentHomeScore,\n" +
-        "(select (max(ay.page) - min(ay.page))  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'MORAJA3A') nbHomePageTotal,\n" +
+        "(select (max(ay.page) - min(ay.page))  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'MORAJA3A') nbPageHomeExam,\n" +
         "\n" +
         "(select count(pr1.student_id) from progression pr1 inner join session_instance si1 on si1.id = pr1.session_instance_id\n" +
         "  and si1.attendance = 'PRESENT'\n" +

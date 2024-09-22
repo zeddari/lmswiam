@@ -1,55 +1,61 @@
 package com.wiam.lms.domain.custom.projection.interfaces;
 
+import java.util.Optional;
+
 public interface PeriodicReportDetailInterface {
-    public String getSchoolName();
+    public Optional<String> getStartDate();
 
-    public String getSchoolNameLat();
+    public Optional<String> getEndDate();
 
-    public String getTeacherName();
+    public Optional<String> getSchoolName();
 
-    public String getSessionName();
+    public Optional<String> getSchoolNameLat();
 
-    public String getGroupName();
+    public Optional<String> getTeacherName();
 
-    public int getNbStudentTotal();
+    public Optional<String> getSessionName();
 
-    public int getNbStudentTotal2();
+    public Optional<String> getGroupName();
 
-    public int getNbDaysSchoolingTotal();
+    public Optional<Integer> getNbStudentTotal();
 
-    public int getOptionalLessons();
+    public Optional<Integer> getNbStudentTotal2();
 
-    public int getTajweedLessons();
+    public Optional<Integer> getNbDaysSchoolingTotal();
 
-    public int getNbAjzaeHifdTotal();
+    public Optional<Integer> getOptionalLessons();
 
-    public int getNbAjzaeRevTotal();
+    public Optional<Integer> getTajweedLessons();
 
-    public int getNbAjzaeHomeExamTotal();
+    public Optional<Integer> getNbAjzaeHifdTotal();
 
-    public int getNbPageGroupTalqeen();
+    public Optional<Integer> getNbAjzaeRevTotal();
 
-    public String getStudentName();
+    public Optional<Integer> getNbAjzaeHomeExamTotal();
 
-    public int getNbAjzaeHifz();
+    public Optional<Integer> getNbPageGroupTalqeen();
 
-    public int getNbPageHifz();
+    public Optional<String> getStudentName();
 
-    public int getHifzScore();
+    public Optional<Integer> getNbAjzaeHifz();
 
-    public int getNbAjzaeRev();
+    public Optional<Integer> getNbPageHifz();
 
-    public int getNbPageRev();
+    public Optional<Integer> getHifzScore();
 
-    public int getScoreRev();
+    public Optional<Integer> getNbAjzaeRev();
 
-    public int getNbAjzaeHomeExam();
+    public Optional<Integer> getNbPageRev();
 
-    public int getNbPageHomeExam();
+    public Optional<Integer> getScoreRev();
 
-    public int getHifzScoreHomeExam();
+    public Optional<Integer> getNbAjzaeHomeExam();
 
-    public int getNbDaysSchoolingStudent();
+    public Optional<Integer> getNbPageHomeExam();
 
-    public int getPercentDaysSchoolingTotal();
+    public Optional<Integer> getHifzScoreHomeExam();
+
+    public Optional<Integer> getNbDaysSchoolingStudent();
+
+    public Optional<Integer> getPercentDaysSchoolingTotal();
 }

@@ -178,6 +178,11 @@ public class Progression implements Serializable {
         this.fromSourate = fromSourate;
     }
 
+    public Progression fromSourate(Sourate fromSourate) {
+        // this.setFromSourate(fromSourate);
+        return this;
+    }
+
     public void setToSourate(Surahs toSourate) {
         this.toSourate = toSourate;
     }
@@ -566,5 +571,9 @@ public class Progression implements Serializable {
 
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    public Progression toSourate(Sourate defaultToSourate) {
+        return this;
     }
 }
