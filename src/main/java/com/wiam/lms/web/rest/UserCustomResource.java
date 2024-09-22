@@ -1,6 +1,9 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.enumeration.AccountStatus;
+import com.wiam.lms.domain.enumeration.Role;
+import com.wiam.lms.domain.enumeration.Sex;
 import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.UserCustomSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -9,6 +12,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,6 +20,9 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -306,5 +313,18 @@ public class UserCustomResource {
         } catch (RuntimeException e) {
             throw ElasticsearchExceptionMapper.mapException(e);
         }
+    }
+
+    @GetMapping("/_ssearch")
+    public ResponseEntity<List<UserCustom>> simpleSearchUserCustoms(
+        Pageable pageable,
+        @RequestParam(value = "firstName", required = false) String firstName,
+        @RequestParam(value = "lastName", required = false) String lastName
+    ) {
+        log.debug("REST request to search UserCustoms for query {}");
+        List<UserCustom> users = userCustomRepository.searchUsers(firstName, lastName);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", "" + users.size());
+        return new ResponseEntity<>(users, headers, HttpStatus.OK);
     }
 }

@@ -55,4 +55,9 @@ public interface UserCustomRepository extends UserCustomRepositoryWithBagRelatio
         "select userCustom from UserCustom userCustom left join fetch userCustom.city left join fetch userCustom.groups where userCustom.id=:id"
     )
     Optional<UserCustom> findByIdforGroup(Long id);
+
+    @Query(
+        "SELECT u FROM UserCustom u WHERE (:firstName IS NULL OR u.firstName = :firstName) AND (:lastName IS NULL OR u.lastName = :lastName)"
+    )
+    List<UserCustom> searchUsers(@Param("firstName") String firstName, @Param("lastName") String lastName);
 }
