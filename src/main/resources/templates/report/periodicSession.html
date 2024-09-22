@@ -43,7 +43,7 @@
         </tr>
         <tr>
           <td class="py-2 px-4" style="background-color: #f4f5f5">
-            <span th:text="${pdfDetails[0].schoolName.get()}"></span>
+            <span th:text="${pdfDetails[0].schoolName}"></span>
           </td>
         </tr>
       </table>
@@ -53,7 +53,7 @@
         </tr>
         <tr>
           <td class="py-2 px-4" style="background-color: #f4f5f5">
-            <span th:text="${pdfDetails[0].sessionName.get()}"></span>
+            <span th:text="${pdfDetails[0].sessionName}"></span>
           </td>
         </tr>
       </table>
@@ -73,7 +73,7 @@
         </tr>
         <tr>
           <td class="py-2 px-4" style="background-color: #f4f5f5">
-            <span th:text="${pdfDetails[0].teacherName.get()}"></span>
+            <span th:text="${pdfDetails[0].teacherName}"></span>
           </td>
         </tr>
       </table>
@@ -83,7 +83,7 @@
         </tr>
         <tr>
           <td class="py-2 px-4" style="background-color: #f4f5f5">
-            <span th:text="${pdfDetails[0].groupName.get()}"></span>
+            <span th:text="${pdfDetails[0].groupName}"></span>
           </td>
         </tr>
       </table>
@@ -93,7 +93,7 @@
         </tr>
         <tr>
           <td class="py-2 px-4" style="background-color: #f4f5f5">
-            <span th:text="'من '+ ${pdfDetails[0].startDate.get()} +'إلى '+ ${pdfDetails[0].endDate.get()}"></span>
+            <span th:text="'من '+ ${pdfDetails[0].startDate} +' إلى '+ ${pdfDetails[0].endDate}"></span>
           </td>
         </tr>
       </table>
@@ -105,39 +105,39 @@
       <tr>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">عدد الطلاب</th>
         <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
-          <span th:if="${pdfDetails[0].nbStudentTotal.isPresent()}" th:text="${pdfDetails[0].nbStudentTotal.get()}"></span>
+          <span th:text="${pdfDetails[0].nbStudentTotal2?: 'N/A'}"></span>
         </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">عدد أيام الدوام</th>
         <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
-          <span th:if="${pdfDetails[0].nbDaysSchoolingTotal.isPresent()}" th:text="${pdfDetails[0].nbDaysSchoolingTotal.get()}"></span>
+          <span th:text="${pdfDetails[0].nbDaysSchoolingTotal?: 'N/A'}"></span>
         </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">دروس المنهج المصاحب</th>
         <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
-          <span th:if="${pdfDetails[0].optionalLessons.isPresent()}" th:text="${pdfDetails[0].optionalLessons.get()}"></span>
+          <span th:text="${pdfDetails[0].optionalLessons?: 'N/A'}"></span>
         </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">عدد دروس التجويد</th>
         <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
-          <span th:if="${pdfDetails[0].tajweedLessons.isPresent()}" th:text="${pdfDetails[0].tajweedLessons.get()}"></span>
+          <span th:text="${pdfDetails[0].tajweedLessons?: 'N/A'}"></span>
         </td>
       </tr>
       <tr>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">عدد الأجزاء</th>
         <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
-          <span th:if="${pdfDetails[0].nbAjzaeHifdTotal.isPresent()}" th:text="${pdfDetails[0].nbAjzaeHifdTotal.get()}"></span>
+          <span th:text="${pdfDetails[0].nbAjzaeHifdTotal?: 'N/A'}"></span>
         </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">عدد اجزاء مراجعة</th>
         <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
-          <span th:if="${pdfDetails[0].nbAjzaeRevTotal.isPresent()}" th:text="${pdfDetails[0].nbAjzaeRevTotal.get()}"></span>
+          <span th:text="${pdfDetails[0].nbAjzaeRevTotal?: 'N/A'}"></span>
         </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">
           عدد أجزاء الواجب المنزلي
         </th>
         <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
-          <span th:if="${pdfDetails[0].nbAjzaeHomeExamTotal.isPresent()}" th:text="${pdfDetails[0].nbAjzaeHomeExamTotal.get()}"></span>
+          <span th:text="${pdfDetails[0].nbAjzaeHomeExamTotal?: 'N/A'}"></span>
         </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">صفحات التلقين الجماعي</th>
         <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
-          <span th:text="${pdfDetails[0].nbPageHomeExam.get()}"></span>
+          <span th:text="${pdfDetails[0].nbPageHomeExam?: 'N/A'}"></span>
         </td>
       </tr>
     </table>
@@ -195,40 +195,40 @@
             <span th:text="${stats.index + 1}"></span>
           </td>
           <td class="text-center" style="border: 2px solid #fff">
-            <span th:if="${student.studentName.isPresent()}" th:text="${student.studentName.get()}"></span>
+            <span th:text="${student.studentName}?: 'N/A'"></span>
           </td>
           <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">
-            <span th:if="${student.nbPageHifz.isPresent()}" th:text="${student.nbPageHifz.get()}"></span>
+            <span th:text="${student.nbPageHifz}?: 'N/A'"></span>
           </td>
           <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">
-            <span th:if="${student.nbAjzaeHifz.isPresent()}" th:text="${student.nbAjzaeHifz.get()}"></span>
+            <span th:text="${student.nbAjzaeHifz}?: 'N/A'"></span>
           </td>
           <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">
-            <span th:if="${student.hifzScore.isPresent()}" th:text="${student.hifzScore.get()}"></span>
+            <span th:text="${student.hifzScore}?: 'N/A'"></span>
           </td>
           <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622">
-            <span th:if="${student.nbPageRev.isPresent()}" th:text="${student.nbPageRev.get()}"></span>
+            <span th:text="${student.nbPageRev}?: 'N/A'"></span>
           </td>
           <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622">
-            <span th:if="${student.nbAjzaeRev.isPresent()}" th:text="${student.nbAjzaeRev.get()}"></span>
+            <span th:text="${student.nbAjzaeRev}?: 'N/A'"></span>
           </td>
           <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622">
-            <span th:if="${student.scoreRev.isPresent()}" th:text="${student.scoreRev.get()}"></span>
+            <span th:text="${student.scoreRev?: 'N/A'}"></span>
           </td>
           <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522">
-            <span th:if="${student.nbPageHomeExam.isPresent()}" th:text="${student.nbPageHomeExam.get()}"></span>
+            <span th:text="${student.nbPageHomeExam}?: 'N/A'"></span>
           </td>
           <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522">
-            <span th:if="${student.nbAjzaeHomeExam.isPresent()}" th:text="${student.nbAjzaeHomeExam.get()}"></span>
+            <span th:text="${student.nbAjzaeHomeExam}?: 'N/A'"></span>
           </td>
           <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522">
-            <span th:if="${student.hifzScoreHomeExam.isPresent()}" th:text="${student.hifzScoreHomeExam.get()}"></span>
+            <span th:text="${student.hifzScoreHomeExam}?: 'N/A'"></span>
           </td>
           <td class="text-center" style="border: 2px solid #fff">
-            <span th:if="${student.nbDaysSchoolingStudent.isPresent()}" th:text="${student.nbDaysSchoolingStudent.get()}"></span>
+            <span th:text="${student.nbDaysSchoolingStudent}?: 'N/A'"></span>
           </td>
           <td class="text-center" style="border: 2px solid #fff">
-            <span th:if="${student.percentDaysSchoolingTotal.isPresent()}" th:text="${student.percentDaysSchoolingTotal.get()}"></span>
+            <span th:text="${student.percentDaysSchoolingTotal != null ? student.percentDaysSchoolingTotal + ' %' : 'N/A'}"></span>
           </td>
         </tr>
       </div>

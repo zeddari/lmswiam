@@ -17,7 +17,7 @@ public interface ReportingRepository extends JpaRepository<Progression, Long> {
     @Query(
         value = "select  \n" +
         "DATE_FORMAT(:startDate, '%Y-%m-%d') as startDate,\n" +
-        "DATE_FORMAT(:endDate, '%Y-%M-%d') as endDate,\n" +
+        "DATE_FORMAT(:endDate, '%Y-%m-%d') as endDate,\n" +
         "st.name_ar as schoolName,\n" +
         "st.name_lat as schoolNameLat,\n" +
         "ss.title as sessionName,\n" +
@@ -28,7 +28,7 @@ public interface ReportingRepository extends JpaRepository<Progression, Long> {
         "count(pr.student_id) nbStudentTotal,\n" +
         "(select count(si1.professor_id) from progression pr1 inner join session_instance si1 on si1.id = pr1.session_instance_id\n" +
         "  and si1.attendance = 'PRESENT'\n" +
-        "  where si1.session_date between :startDate and :endDate and si1.title = 'sessionAB'\n" +
+        "  where si1.session_date between :startDate and :endDate and si1.title = si.title\n" +
         "  )  as nbStudentTotal2,\n" +
         " ( 4 * (DATEDIFF(:endDate, :startDate) / 7) + MID('0123444401233334012222340111123400012345001234550', 7 * WEEKDAY(:startDate) + WEEKDAY(:endDate) + 1, 1)) as nbDaysSchoolingTotal,\n" +
         "0 as optionalLessons,\n" +
@@ -38,31 +38,31 @@ public interface ReportingRepository extends JpaRepository<Progression, Long> {
         "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'TILAWA') nbTilawaAjzaeTotal,\n" +
         "(select concat(uc1.first_name, ' ', uc1.last_name) from user_custom uc1 where uc1.id = pr.student_id) as studentName,\n" +
         "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'HIFD' and pr2.student_id = pr.student_id) nbHifdAjzaeStudent,\n" +
-        "count(pr.hifd_score) studentHifdScore,\n" +
+        "count(pr.hifd_score) hifzScore,\n" +
         "(select (max(ay.page) - min(ay.page))  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'HIFD') nbHifdPageTotal,\n" +
         "\n" +
         "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'MORAJA3A' and pr2.student_id = pr.student_id) nbRevAjzaeStudent,\n" +
-        "count(pr.tajweed_score) studentRevScore,\n" +
+        "count(pr.tajweed_score) scoreRev,\n" +
         "(select (max(ay.page) - min(ay.page))  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'MORAJA3A') nbRevPageTotal,\n" +
         "\n" +
         "(select (max(ay.hizb_id) - min(ay.hizb_id))/2  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'MORAJA3A' and pr2.student_id = pr.student_id) nbHomeAjzaeStudent,\n" +
-        "count(pr.adae_score) studentHomeScore,\n" +
+        "count(pr.adae_score) hifzScoreHomeExam,\n" +
         "(select (max(ay.page) - min(ay.page))  from progression pr2 inner join ayahs ay on ay.number_in_surah >= from_aya_num and ay.number_in_surah <= to_aya_num where pr2.tilawa_type =  'MORAJA3A') nbPageHomeExam,\n" +
         "\n" +
         "(select count(pr1.student_id) from progression pr1 inner join session_instance si1 on si1.id = pr1.session_instance_id\n" +
         "  and si1.attendance = 'PRESENT'\n" +
         "  where si1.session_date between :startDate and :endDate and pr1.student_id = pr.student_id\n" +
-        "  )  as nbAttendanceStudent,\n" +
+        "  )  as nbDaysSchoolingStudent,\n" +
         "(\n" +
         "(select count(pr1.student_id) from progression pr1 inner join session_instance si1 on si1.id = pr1.session_instance_id\n" +
         "  and si1.attendance = 'PRESENT'\n" +
         "  where si1.session_date between :startDate and :endDate and pr1.student_id = pr.student_id\n" +
-        "  ) /\n" +
+        "  )*100 /\n" +
         "  (select count(si1.professor_id) from progression pr1 inner join session_instance si1 on si1.id = pr1.session_instance_id\n" +
         "  and si1.attendance = 'PRESENT'\n" +
-        "  where si1.session_date between :startDate and :endDate and si1.title = 'sessionAB'\n" +
+        "  where si1.session_date between :startDate and :endDate and si1.title = si.title\n" +
         "  )\n" +
-        ") as studentAttendeePercent\n" +
+        ") as percentDaysSchoolingTotal\n" +
         "from progression pr\n" +
         "inner join session_instance si on si.id = pr.session_instance_id\n" +
         "inner join session ss on ss.id = si.session1_id\n" +

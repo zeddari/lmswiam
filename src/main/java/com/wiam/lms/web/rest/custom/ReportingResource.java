@@ -59,6 +59,7 @@ public class ReportingResource {
             pdfRequest.getStart(),
             pdfRequest.getEnd()
         );
+        if (pdfDetails.size() == 0) return ResponseEntity.ok(new byte[0]);
         File pdfReportFile = pdfService.generatePdf(pdfDetails, pdfRequest);
         FileInputStream fileStream = new FileInputStream(pdfReportFile);
         byte contents[] = new byte[(int) pdfReportFile.length()];
