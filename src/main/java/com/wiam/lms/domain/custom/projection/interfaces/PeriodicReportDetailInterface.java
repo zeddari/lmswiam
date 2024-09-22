@@ -1,7 +1,5 @@
 package com.wiam.lms.domain.custom.projection.interfaces;
 
-import java.util.Optional;
-
 public interface PeriodicReportDetailInterface {
     public String getStartDate();
 
