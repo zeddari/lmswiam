@@ -23,7 +23,7 @@ logging:
 management:
   health:
     elasticsearch:
-      enabled: false
+      enabled: true
 
 spring:
   devtools:

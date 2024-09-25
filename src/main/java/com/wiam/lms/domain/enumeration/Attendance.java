@@ -7,4 +7,5 @@ public enum Attendance {
     PRESENT,
     ABSENT,
     ABSENT_AUTHORIZED,
+    RETARD,
 }

@@ -266,7 +266,7 @@ public class Session implements Serializable {
     @JsonIgnoreProperties(value = { "site", "sessions6s" }, allowSetters = true)
     private Set<Classroom> classrooms = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_session__groups",
         joinColumns = @JoinColumn(name = "session_id"),

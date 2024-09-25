@@ -18,4 +18,5 @@ public class ProgressionCriteriaDto implements Serializable {
 
     private LocalDate sessionDate;
     private Integer id;
+    private String examType;
 }

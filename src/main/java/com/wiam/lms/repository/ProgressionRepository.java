@@ -2,7 +2,9 @@ package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.custom.projection.interfaces.Row3SeriesWithLabelData;
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesWithLabelData;
+import com.wiam.lms.domain.enumeration.ExamType;
 import com.wiam.lms.service.dto.FollowupAvgDTO;
 import com.wiam.lms.service.dto.FollowupListDTO;
 import java.time.LocalDate;
@@ -57,6 +59,11 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     List<Progression> findAllLastByStudent(@Param("studentId") Long id);
 
     @Query(
+        "select progression from Progression progression where progression.tilawaType = 'HIFD' and progression.createdAt = (select max(progression1.createdAt) from Progression progression1 where progression1.tilawaType = 'HIFD') union select progression from Progression progression where progression.tilawaType = 'TILAWA' and progression.createdAt = (select max(progression.createdAt) from Progression progression2 where progression2.tilawaType = 'TILAWA' ) union select progression from Progression progression where progression.tilawaType = 'MORAJA3A' and progression.createdAt = (select max(progression.createdAt) from Progression progression3 where progression3.tilawaType = 'MORAJA3A')"
+    )
+    List<Progression> findAllLastAllStudent();
+
+    @Query(
         "select progression from Progression progression where progression.examType <> ExamType.NONE and progression.isForAttendance = false and progression.student.id=:id"
     )
     List<Progression> findExams(@Param("id") Long id);
@@ -104,9 +111,27 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     );
 
     @Query(
+        "select progression from Progression progression where progression.sessionInstance.id=:sessionInstanceId and progression.createdAt BETWEEN :fromDate AND :toDate and progression.isForAttendance=false group by progression.id"
+    )
+    List<Progression> findAllStudentIdAndSessionInstanceBetween(
+        @Param("sessionInstanceId") Long sessionInstanceId,
+        @Param("fromDate") Date fromDate,
+        @Param("toDate") Date toDate
+    );
+
+    @Query(
         "select progression from Progression progression where progression.sessionInstance.sessionDate=:sessionDate and progression.sessionInstance.session1.id=:id order by progression.student.login"
     )
     List<Progression> findAllBySessionIdAndDate(@Param("sessionDate") LocalDate sessionDate, @Param("id") Integer id);
+
+    @Query(
+        "select progression from Progression progression where progression.sessionInstance.sessionDate=:sessionDate and progression.sessionInstance.session1.id=:id and progression.examType=:examType order by progression.student.login"
+    )
+    List<Progression> findAllBySessionIdAndDateAndExamType(
+        @Param("sessionDate") LocalDate sessionDate,
+        @Param("id") Integer id,
+        @Param("examType") ExamType examType
+    );
 
     @Query(
         "select attendance attendanceLabel, count(*) attendanceCount from Progression progression where progression.student.id = :id and progression.createdAt BETWEEN :fromDate AND :toDate AND isForAttendance = true group by progression.attendance"
@@ -122,6 +147,15 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     )
     List<RowSeriesWithLabelData> getStudentAbsenceDataDate(
         @Param("id") Long id,
+        @Param("fromDate") Date startDate,
+        @Param("toDate") Date endDate
+    );
+
+    @Query(
+        "select attendance xaxis, count(*) yaxis, CONCAT(progression.student.firstName, ' ' , progression.student.lastName) zaxis from Progression progression where progression.sessionInstance.id = :sessionInstanceId and progression.createdAt BETWEEN :fromDate AND :toDate AND isForAttendance = true group by progression.attendance, progression.student.firstName, progression.student.lastName"
+    )
+    List<Row3SeriesWithLabelData> getAllStudentAbsenceDataDate(
+        @Param("sessionInstanceId") Long sessionInstanceId,
         @Param("fromDate") Date startDate,
         @Param("toDate") Date endDate
     );

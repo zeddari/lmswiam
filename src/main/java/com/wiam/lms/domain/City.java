@@ -51,6 +51,18 @@ public class City implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String nameLat;
 
+    @NotNull
+    @Size(max = 100)
+    @Column(name = "lat", length = 100, nullable = false, unique = true)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private Double lat;
+
+    @NotNull
+    @Size(max = 100)
+    @Column(name = "lng", length = 100, nullable = false, unique = true)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private Double lng;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
@@ -122,6 +134,26 @@ public class City implements Serializable {
 
     public void setNameLat(String nameLat) {
         this.nameLat = nameLat;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 
     public Set<Site> getSites() {
