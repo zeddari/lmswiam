@@ -8,12 +8,17 @@ import com.wiam.lms.repository.custom.AyahsCustomRepository;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.web.util.PaginationUtil;
 
 @RestController
 @RequestMapping("/api/quran")
@@ -65,5 +70,30 @@ public class QuranController {
     public List<Surahs> getAllSurahs() {
         LOG.debug("REST request to get all Surahs");
         return surahsRepository.findAll();
+    }
+
+    @GetMapping("/mushaf")
+    public ResponseEntity<List<Ayahs>> getAllAyahs(Pageable pageable, @RequestParam(required = false) String filter) {
+        Page<Ayahs> page = this.findAll(pageable, filter);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    public Page<Ayahs> findAll(Pageable pageable, String filter) {
+        if (filter == null || filter.isEmpty()) {
+            return ayahsRepository.findAll(pageable);
+        } else {
+            return ayahsRepository.findByFilter(filter, pageable);
+        }
+    }
+
+    @GetMapping("/ayahs/page/{pageNumber}")
+    public ResponseEntity<List<Ayahs>> getAyahsByPage(@PathVariable int pageNumber) {
+        List<Ayahs> ayahs = this.findByPage(pageNumber);
+        return ResponseEntity.ok().body(ayahs);
+    }
+
+    public List<Ayahs> findByPage(int pageNumber) {
+        return ayahsRepository.findByPage(pageNumber);
     }
 }

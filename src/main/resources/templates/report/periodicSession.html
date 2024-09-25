@@ -42,7 +42,9 @@
           <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344c6; color: #5344c6">إسم المدرسة</th>
         </tr>
         <tr>
-          <td class="py-2 px-4" style="background-color: #f4f5f5">مركز تابريكت</td>
+          <td class="py-2 px-4" style="background-color: #f4f5f5">
+            <span th:text="${pdfDetails[0].schoolName}"></span>
+          </td>
         </tr>
       </table>
       <table class="table text-center ms-4" style="font-size: 1rem">
@@ -50,7 +52,9 @@
           <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344c6; color: #5344c6">إسم الحلقة</th>
         </tr>
         <tr>
-          <td class="py-2 px-4" style="background-color: #f4f5f5">مركز تابريكت</td>
+          <td class="py-2 px-4" style="background-color: #f4f5f5">
+            <span th:text="${pdfDetails[0].sessionName}"></span>
+          </td>
         </tr>
       </table>
       <table class="table text-center" style="font-size: 1rem">
@@ -68,7 +72,9 @@
           <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344c6; color: #5344c6">إسم المعلم</th>
         </tr>
         <tr>
-          <td class="py-2 px-4" style="background-color: #f4f5f5">أبو بكر الصديق</td>
+          <td class="py-2 px-4" style="background-color: #f4f5f5">
+            <span th:text="${pdfDetails[0].teacherName}"></span>
+          </td>
         </tr>
       </table>
       <table class="table text-center ms-4" style="font-size: 1rem">
@@ -76,7 +82,9 @@
           <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344c6; color: #5344c6">الفئة</th>
         </tr>
         <tr>
-          <td class="py-2 px-4" style="background-color: #f4f5f5">ذكر</td>
+          <td class="py-2 px-4" style="background-color: #f4f5f5">
+            <span th:text="${pdfDetails[0].groupName}"></span>
+          </td>
         </tr>
       </table>
       <table class="table text-center" style="font-size: 1rem">
@@ -84,58 +92,53 @@
           <th class="py-2 px-4" style="border-bottom: 0.5rem solid #5344c6; color: #5344c6">فترة التقرير - ميلادي</th>
         </tr>
         <tr>
-          <td class="py-2 px-4" style="background-color: #f4f5f5">من 01 مارس 2024 إلى 31 مارس 2024</td>
+          <td class="py-2 px-4" style="background-color: #f4f5f5">
+            <span th:text="'من '+ ${pdfDetails[0].startDate} +' إلى '+ ${pdfDetails[0].endDate}"></span>
+          </td>
         </tr>
       </table>
     </div>
-    <!-- <table  class="table text-center" style="font-size: 16px;">
-    <tr style="border: 2px solid #fff">
-        <td style="width: 15%; background-color: #E6E3F1; color: #5344C6;">إسم المدرسة</td>
-        <td style="width: 35%; background-color: #F4F5F5;">مركز تابريكت</td>
-        <td style="width: 15%; background-color: #E6E3F1; color: #5344C6;">إسم الحلقة</td>
-        <td style="width: 35%; background-color: #F4F5F5;">أبو بكر الصديق</td>
-    </tr>
-    <tr style="border: 2px solid #fff">
-        <td style="width: 15%; background-color: #E6E3F1; color: #5344C6;">إسم المعلم</td>
-        <td style="width: 35%; background-color: #F4F5F5;"></td>
-        <td style="width: 15%;background-color: #E6E3F1; color: #5344C6;">الفئة</td>
-        <td style="width: 35%; background-color: #F4F5F5;">ذكر</td>
-    </tr>
-    <tr style="border: 2px solid #fff; border-top: 6px solid #fff;">
-        <td class="text-center align-middle" rowspan="2" style="width: 15%; background-color: #E6E3F1; color: #5344C6;">فترة التقرير</td>
-        <td class="text-center " style="width: 35%; background-color: #F4F5F5; color: #191C17; border-left: 2px solid #fff;">هجري</td>
-        <td colspan="2" class="text-center " style="width: 50%; background-color: #F4F5F5; color: #191C17;">من 20 شعبان 1445 إلى 21 رمضان 1445</td>
-    </tr>
-    <tr style="border: 2px solid #fff">
-        <td class="text-center " style="width: 35%; background-color: #F4F5F5; color: #191C17;  border-left: 2px solid #fff;">ميلادي</td>
-        <td colspan="2" class="text-center " style="width: 50%; background-color: #F4F5F5; color: #191C17;">من 01 مارس 2024 إلى 31 مارس 2024</td>
-    </tr>
-</table> -->
     <table class="table mt-4 border-table">
       <tr class="">
         <th colspan="8" class="text-center" style="color: #5344c6; border-bottom: 0.5rem solid #5344c6">التقرير الإجمالي</th>
       </tr>
       <tr>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">عدد الطلاب</th>
-        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">11</td>
+        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
+          <span th:text="${pdfDetails[0].nbStudentTotal2?: 'N/A'}"></span>
+        </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">عدد أيام الدوام</th>
-        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">22</td>
+        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
+          <span th:text="${pdfDetails[0].nbDaysSchoolingTotal?: 'N/A'}"></span>
+        </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">دروس المنهج المصاحب</th>
-        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">0</td>
+        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
+          <span th:text="${pdfDetails[0].optionalLessons?: 'N/A'}"></span>
+        </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">عدد دروس التجويد</th>
-        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">0</td>
+        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
+          <span th:text="${pdfDetails[0].tajweedLessons?: 'N/A'}"></span>
+        </td>
       </tr>
       <tr>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">عدد الأجزاء</th>
-        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">11</td>
+        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
+          <span th:text="${pdfDetails[0].nbAjzaeHifdTotal?: 'N/A'}"></span>
+        </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">عدد اجزاء مراجعة</th>
-        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">22</td>
+        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
+          <span th:text="${pdfDetails[0].nbAjzaeRevTotal?: 'N/A'}"></span>
+        </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">
           عدد أجزاء الواجب المنزلي
         </th>
-        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">0</td>
+        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
+          <span th:text="${pdfDetails[0].nbAjzaeHomeExamTotal?: 'N/A'}"></span>
+        </td>
         <th class="text-center border-left-bottom" style="width: 15%; background-color: #e6e3f1; color: #5344c6">صفحات التلقين الجماعي</th>
-        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">0</td>
+        <td class="text-center border-left-bottom" style="width: 10%; color: #191c17; background-color: #f4f5f5">
+          <span th:text="${pdfDetails[0].nbPageHomeExam?: 'N/A'}"></span>
+        </td>
       </tr>
     </table>
     <table class="table detailed-report mt-5 border-table">
@@ -186,66 +189,49 @@
         <td class="text-center" style="border: 1px solid #fff; background-color: #cb401545">عدد الأجزاء</td>
         <td class="text-center" style="border: 1px solid #fff; background-color: #cb401545">معدل الدرجة</td>
       </tr>
-      <tr>
-        <td class="text-center" style="border: 2px solid #fff">1</td>
-        <td class="text-center" style="border: 2px solid #fff">آدم الزويني</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">5.60</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">0.28</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">17</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 2px solid #fff">6</td>
-        <td class="text-center" style="border: 2px solid #fff">27.27%</td>
-      </tr>
-      <tr>
-        <td class="text-center" style="border: 2px solid #fff">2</td>
-        <td class="text-center" style="border: 2px solid #fff">أنس السباعي</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">5.60</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">0.28</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">17</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 2px solid #fff">6</td>
-        <td class="text-center" style="border: 2px solid #fff">27.27%</td>
-      </tr>
-      <tr>
-        <td class="text-center" style="border: 2px solid #fff">3</td>
-        <td class="text-center" style="border: 2px solid #fff">إسلام الزويني</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">5.60</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">0.28</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">17</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 2px solid #fff">6</td>
-        <td class="text-center" style="border: 2px solid #fff">27.27%</td>
-      </tr>
-      <tr>
-        <td class="text-center" style="border: 2px solid #fff">4</td>
-        <td class="text-center" style="border: 2px solid #fff">آدم الزويني</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">5.60</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">0.28</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">17</td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522"></td>
-        <td class="text-center" style="border: 2px solid #fff">6</td>
-        <td class="text-center" style="border: 2px solid #fff">27.27%</td>
-      </tr>
+      <div th:each="student, stats : ${pdfDetails}">
+        <tr>
+          <td class="text-center" style="border: 2px solid #fff">
+            <span th:text="${stats.index + 1}"></span>
+          </td>
+          <td class="text-center" style="border: 2px solid #fff">
+            <span th:text="${student.studentName}?: 'N/A'"></span>
+          </td>
+          <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">
+            <span th:text="${student.nbPageHifz}?: 'N/A'"></span>
+          </td>
+          <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">
+            <span th:text="${student.nbAjzaeHifz}?: 'N/A'"></span>
+          </td>
+          <td class="text-center" style="border: 1px solid #fff; background-color: #b7600822">
+            <span th:text="${student.hifzScore}?: 'N/A'"></span>
+          </td>
+          <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622">
+            <span th:text="${student.nbPageRev}?: 'N/A'"></span>
+          </td>
+          <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622">
+            <span th:text="${student.nbAjzaeRev}?: 'N/A'"></span>
+          </td>
+          <td class="text-center" style="border: 1px solid #fff; background-color: #5344c622">
+            <span th:text="${student.scoreRev?: 'N/A'}"></span>
+          </td>
+          <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522">
+            <span th:text="${student.nbPageHomeExam}?: 'N/A'"></span>
+          </td>
+          <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522">
+            <span th:text="${student.nbAjzaeHomeExam}?: 'N/A'"></span>
+          </td>
+          <td class="text-center" style="border: 1px solid #fff; background-color: #cb401522">
+            <span th:text="${student.hifzScoreHomeExam}?: 'N/A'"></span>
+          </td>
+          <td class="text-center" style="border: 2px solid #fff">
+            <span th:text="${student.nbDaysSchoolingStudent}?: 'N/A'"></span>
+          </td>
+          <td class="text-center" style="border: 2px solid #fff">
+            <span th:text="${student.percentDaysSchoolingTotal != null ? student.percentDaysSchoolingTotal + ' %' : 'N/A'}"></span>
+          </td>
+        </tr>
+      </div>
     </table>
 
     <script

@@ -57,7 +57,20 @@ public class Surahs implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer ayahsCount;
 
+    @Lob
+    @Column(name = "svg_code")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String svgCode;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public String getSvgCode() {
+        return svgCode;
+    }
+
+    public void setSvgCode(String svgCode) {
+        this.svgCode = svgCode;
+    }
 
     public Integer getAyahsCount() {
         return ayahsCount;
