@@ -214,14 +214,13 @@ public class Progression implements Serializable {
         return toAyahs;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "progressions", "links", "courses", "site16", "session1" }, allowSetters = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    //@JsonIgnoreProperties(value = { "progressions", "links", "courses", "site16", "session1" }, allowSetters = true)
     private SessionInstance sessionInstance;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(
+    @ManyToOne(fetch = FetchType.EAGER)
+    /*@JsonIgnoreProperties(
         value = {
-            "user",
             "certificates",
             "answers",
             "quizResults",
@@ -244,7 +243,7 @@ public class Progression implements Serializable {
             "sessions3s",
         },
         allowSetters = true
-    )
+    )*/
     private UserCustom student;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

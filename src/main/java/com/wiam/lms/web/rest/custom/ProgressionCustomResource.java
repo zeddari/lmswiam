@@ -4,6 +4,9 @@ import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.ProgressionCriteriaDto;
+import com.wiam.lms.domain.dto.custom.ProgressionAdminRepresentation;
+import com.wiam.lms.domain.dto.custom.ProgressionAllStudentQuery;
 import com.wiam.lms.domain.dto.custom.ProgressionQuery;
 import com.wiam.lms.domain.dto.custom.ProgressionRepresentation;
 import com.wiam.lms.domain.enumeration.Attendance;
@@ -21,9 +24,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,10 +82,56 @@ public class ProgressionCustomResource {
         return progressions;
     }
 
+    @PostMapping("/criteria/search")
+    public List<ProgressionAdminRepresentation> getProgressionsByCriterias(@RequestBody ProgressionCriteriaDto progressionCriteriaDto) {
+        log.debug("REST request to get the Progressions by criterias : {}", progressionCriteriaDto.getId());
+        List<Progression> progressions = progressionRepository.findAllBySessionIdAndDateAndExamType(
+            progressionCriteriaDto.getSessionDate(),
+            progressionCriteriaDto.getId(),
+            progressionCriteriaDto.getExamType().equals("NONE") ? ExamType.NONE : ExamType.MANDATORY
+        );
+        Set<String> studentsName = new HashSet<>();
+        List<Progression> myProgressions = new ArrayList<>();
+        List<ProgressionAdminRepresentation> progressionAdminRepresentations = new ArrayList<>();
+        if (progressions != null) {
+            ProgressionAdminRepresentation progressionAdminRepresentation = ProgressionAdminRepresentation.builder().build();
+            for (Progression p : progressions) {
+                if (studentsName.add(p.getStudent().getLogin())) {
+                    if (
+                        progressionAdminRepresentation.getStudentName() != null &&
+                        !progressionAdminRepresentation.getStudentName().isBlank()
+                    ) {
+                        progressionAdminRepresentation.setProgressions(myProgressions);
+                        progressionAdminRepresentations.add(progressionAdminRepresentation);
+                        myProgressions = new ArrayList<>();
+                    }
+                    progressionAdminRepresentation = ProgressionAdminRepresentation.builder().build();
+                    progressionAdminRepresentation.setStudentName(p.getStudent().getLogin());
+                    myProgressions.add(p);
+                } else {
+                    myProgressions.add(p);
+                }
+            }
+        }
+        return progressionAdminRepresentations;
+    }
+
     @GetMapping("/{id}/byStudent/last")
     public ProgressionRepresentation getLastProgressionsByStudent(@PathVariable Long id) {
         log.debug("REST request to get the Progressions by student : {}", id);
         List<Progression> progressions = progressionRepository.findAllLastByStudent(id);
+        ProgressionRepresentation progressionRepresentation = ProgressionRepresentation
+            .builder()
+            .studentProgressionLabel(progressionCustomService.calculateProgressLabel(progressions))
+            .progression(progressions)
+            .build();
+        return progressionRepresentation;
+    }
+
+    @GetMapping("/AllStudent/last")
+    public ProgressionRepresentation getLastProgressionsAllStudent() {
+        log.debug("REST request to get the Progressions by all student : {}");
+        List<Progression> progressions = progressionRepository.findAllLastAllStudent();
         ProgressionRepresentation progressionRepresentation = ProgressionRepresentation
             .builder()
             .studentProgressionLabel(progressionCustomService.calculateProgressLabel(progressions))
@@ -99,6 +147,17 @@ public class ProgressionCustomResource {
             progressionQuery.getStudentId(),
             progressionQuery.getStartDate(),
             progressionQuery.getEndDate()
+        );
+        return progressions;
+    }
+
+    @PostMapping("/allStudent/byDateRange")
+    public List<Progression> getProgressionsAllStudent(@RequestBody ProgressionAllStudentQuery progressionAllStudentQuery) {
+        log.debug("REST request to get the Progressions by student by date range : {}", progressionAllStudentQuery.getStartDate());
+        List<Progression> progressions = progressionRepository.findAllStudentIdAndSessionInstanceBetween(
+            progressionAllStudentQuery.getSessionInstanceId(),
+            Date.from(progressionAllStudentQuery.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+            Date.from(progressionAllStudentQuery.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
         );
         return progressions;
     }

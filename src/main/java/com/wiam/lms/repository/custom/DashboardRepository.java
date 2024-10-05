@@ -3,7 +3,6 @@ package com.wiam.lms.repository.custom;
 import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
-import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportPdfDetailInterface;
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesData;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -28,25 +27,25 @@ public interface DashboardRepository extends JpaRepository<Progression, Long> {
 
     @Query(
         value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') " +
-        "and MONTH(start_time) = MONTH(CURRENT_DATE()) " +
-        "AND YEAR(start_time) = YEAR(CURRENT_DATE()) " +
-        "group by day(start_time)",
+        "and MONTH(created_at) = MONTH(CURRENT_DATE()) " +
+        "AND YEAR(created_at) = YEAR(CURRENT_DATE()) " +
+        "group by day(created_at)",
         nativeQuery = true
     )
     List<Long> getAbsenceRowCountPerDay();
 
     @Query(
         value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') " +
-        "and MONTH(start_time) = MONTH(CURRENT_DATE()) " +
-        "AND YEAR(start_time) = YEAR(CURRENT_DATE())",
+        "and MONTH(created_at) = MONTH(CURRENT_DATE()) " +
+        "AND YEAR(created_at) = YEAR(CURRENT_DATE())",
         nativeQuery = true
     )
     Long getAbsenceRowCount();
 
     @Query(
         value = "SELECT  count(*) yaxis FROM progression where attendance in ('ABSENT_AUTHORIZED','ABSENT') " +
-        "and MONTH(start_time) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH) " +
-        "AND YEAR(start_time) = YEAR(CURRENT_DATE())",
+        "and MONTH(created_at) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH) " +
+        "AND YEAR(created_at) = YEAR(CURRENT_DATE())",
         nativeQuery = true
     )
     Long getAbsenceRowCountMonthBefore();

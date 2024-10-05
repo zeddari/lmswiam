@@ -133,16 +133,6 @@ public class CountryResource {
         Optional<Country> result = countryRepository
             .findById(country.getId())
             .map(existingCountry -> {
-                if (country.getNameAr() != null) {
-                    existingCountry.setNameAr(country.getNameAr());
-                }
-                if (country.getNameLat() != null) {
-                    existingCountry.setNameLat(country.getNameLat());
-                }
-                if (country.getCode() != null) {
-                    existingCountry.setCode(country.getCode());
-                }
-
                 return existingCountry;
             })
             .map(countryRepository::save)

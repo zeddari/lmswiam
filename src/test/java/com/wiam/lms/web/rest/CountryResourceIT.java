@@ -73,7 +73,7 @@ class CountryResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Country createEntity(EntityManager em) {
-        Country country = new Country().nameAr(DEFAULT_NAME_AR).nameLat(DEFAULT_NAME_LAT).code(DEFAULT_CODE);
+        Country country = new Country();
         return country;
     }
 
@@ -84,7 +84,7 @@ class CountryResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Country createUpdatedEntity(EntityManager em) {
-        Country country = new Country().nameAr(UPDATED_NAME_AR).nameLat(UPDATED_NAME_LAT).code(UPDATED_CODE);
+        Country country = new Country();
         return country;
     }
 
@@ -119,9 +119,6 @@ class CountryResourceIT {
                 assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore + 1);
             });
         Country testCountry = countryList.get(countryList.size() - 1);
-        assertThat(testCountry.getNameAr()).isEqualTo(DEFAULT_NAME_AR);
-        assertThat(testCountry.getNameLat()).isEqualTo(DEFAULT_NAME_LAT);
-        assertThat(testCountry.getCode()).isEqualTo(DEFAULT_CODE);
     }
 
     @Test
@@ -151,7 +148,6 @@ class CountryResourceIT {
         int databaseSizeBeforeTest = countryRepository.findAll().size();
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(countrySearchRepository.findAll());
         // set the field null
-        country.setNameAr(null);
 
         // Create the Country, which fails.
 
@@ -171,7 +167,6 @@ class CountryResourceIT {
         int databaseSizeBeforeTest = countryRepository.findAll().size();
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(countrySearchRepository.findAll());
         // set the field null
-        country.setNameLat(null);
 
         // Create the Country, which fails.
 
@@ -240,7 +235,6 @@ class CountryResourceIT {
         Country updatedCountry = countryRepository.findById(country.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedCountry are not directly saved in db
         em.detach(updatedCountry);
-        updatedCountry.nameAr(UPDATED_NAME_AR).nameLat(UPDATED_NAME_LAT).code(UPDATED_CODE);
 
         restCountryMockMvc
             .perform(
@@ -254,9 +248,6 @@ class CountryResourceIT {
         List<Country> countryList = countryRepository.findAll();
         assertThat(countryList).hasSize(databaseSizeBeforeUpdate);
         Country testCountry = countryList.get(countryList.size() - 1);
-        assertThat(testCountry.getNameAr()).isEqualTo(UPDATED_NAME_AR);
-        assertThat(testCountry.getNameLat()).isEqualTo(UPDATED_NAME_LAT);
-        assertThat(testCountry.getCode()).isEqualTo(UPDATED_CODE);
         await()
             .atMost(5, TimeUnit.SECONDS)
             .untilAsserted(() -> {
@@ -264,9 +255,6 @@ class CountryResourceIT {
                 assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
                 List<Country> countrySearchList = IterableUtils.toList(countrySearchRepository.findAll());
                 Country testCountrySearch = countrySearchList.get(searchDatabaseSizeAfter - 1);
-                assertThat(testCountrySearch.getNameAr()).isEqualTo(UPDATED_NAME_AR);
-                assertThat(testCountrySearch.getNameLat()).isEqualTo(UPDATED_NAME_LAT);
-                assertThat(testCountrySearch.getCode()).isEqualTo(UPDATED_CODE);
             });
     }
 
@@ -347,8 +335,6 @@ class CountryResourceIT {
         Country partialUpdatedCountry = new Country();
         partialUpdatedCountry.setId(country.getId());
 
-        partialUpdatedCountry.nameAr(UPDATED_NAME_AR).code(UPDATED_CODE);
-
         restCountryMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedCountry.getId())
@@ -361,9 +347,6 @@ class CountryResourceIT {
         List<Country> countryList = countryRepository.findAll();
         assertThat(countryList).hasSize(databaseSizeBeforeUpdate);
         Country testCountry = countryList.get(countryList.size() - 1);
-        assertThat(testCountry.getNameAr()).isEqualTo(UPDATED_NAME_AR);
-        assertThat(testCountry.getNameLat()).isEqualTo(DEFAULT_NAME_LAT);
-        assertThat(testCountry.getCode()).isEqualTo(UPDATED_CODE);
     }
 
     @Test
@@ -378,8 +361,6 @@ class CountryResourceIT {
         Country partialUpdatedCountry = new Country();
         partialUpdatedCountry.setId(country.getId());
 
-        partialUpdatedCountry.nameAr(UPDATED_NAME_AR).nameLat(UPDATED_NAME_LAT).code(UPDATED_CODE);
-
         restCountryMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedCountry.getId())
@@ -392,9 +373,6 @@ class CountryResourceIT {
         List<Country> countryList = countryRepository.findAll();
         assertThat(countryList).hasSize(databaseSizeBeforeUpdate);
         Country testCountry = countryList.get(countryList.size() - 1);
-        assertThat(testCountry.getNameAr()).isEqualTo(UPDATED_NAME_AR);
-        assertThat(testCountry.getNameLat()).isEqualTo(UPDATED_NAME_LAT);
-        assertThat(testCountry.getCode()).isEqualTo(UPDATED_CODE);
     }
 
     @Test

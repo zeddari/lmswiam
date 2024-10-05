@@ -12,4 +12,5 @@ public class LastAbsencesData {
     private String name;
     private String title;
     private ZonedDateTime date;
+    private String photoBase64;
 }

@@ -3,6 +3,8 @@ package com.wiam.lms.web.rest;
 import static com.wiam.lms.security.SecurityUtils.AUTHORITIES_KEY;
 import static com.wiam.lms.security.SecurityUtils.JWT_ALGORITHM;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.custom.UserCustomDto;
@@ -10,10 +12,12 @@ import com.wiam.lms.repository.UserRepository;
 import com.wiam.lms.repository.custom.UserCustomLmsRepository;
 import com.wiam.lms.service.dto.UserDTO;
 import com.wiam.lms.web.rest.vm.LoginVM;
+import com.wiam.lms.web.rest.vm.VerifyToken;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -77,6 +81,22 @@ public class AuthenticateController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+    }
+
+    @PostMapping("/verifyToken")
+    public ResponseEntity<JWTToken> verifyToken(@Valid @RequestBody VerifyToken verifyToken) {
+        DecodedJWT jwt = JWT.decode(verifyToken.getJwtToken());
+        if (jwt.getExpiresAt().before(new Date())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Optional<UserCustom> userCustom = userRepository.findOneByLogin(jwt.getSubject());
+        if (userCustom.isPresent()) {
+            LoginVM loginVM = new LoginVM();
+            loginVM.setUsername(jwt.getSubject());
+            loginVM.setPassword(userCustom.get().getPassword());
+            return authorize(loginVM);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/mobile/authenticate")
@@ -169,6 +189,7 @@ public class AuthenticateController {
         userCustomDto.setStudentId(userId);
         userCustomDto.setSiteId(siteId);
         userCustomDto.setRoles(authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+        userCustomDto.setUserCustom(userCustom);
         return userCustomDto;
     }
 
