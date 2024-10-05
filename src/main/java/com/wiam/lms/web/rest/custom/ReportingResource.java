@@ -5,12 +5,14 @@ import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportDetailInte
 import com.wiam.lms.repository.custom.ReportingRepository;
 import com.wiam.lms.service.custom.reporting.PdfService;
 import com.wiam.lms.service.custom.reporting.request.PeriodicReportPdfRequest;
+import com.wiam.lms.service.custom.reporting.request.PeriodicReportRequest;
 import jakarta.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +52,12 @@ public class ReportingResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new quiz, or with status {@code 400 (Bad Request)} if the quiz has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/student/periodic")
+    @PostMapping("/student/periodic/pdfReport")
     public ResponseEntity<byte[]> generatePdfReport(@Valid @RequestBody PeriodicReportPdfRequest pdfRequest)
         throws URISyntaxException, IOException, DocumentException {
         log.debug("REST request to generate pdf report : {}", pdfRequest);
         List<PeriodicReportDetailInterface> pdfDetails = reportingRepository.getNativePeriodicReport(
-            pdfRequest.getSessionInstanceId(),
+            pdfRequest.getSessionId(),
             pdfRequest.getStart(),
             pdfRequest.getEnd()
         );
@@ -71,5 +73,14 @@ public class ReportingResource {
         headers.setContentDispositionFormData(filename, filename);
         ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(contents, headers, HttpStatus.OK);
         return response;
+    }
+
+    @PostMapping("/student/periodic")
+    public ResponseEntity<List<PeriodicReportDetailInterface>> getPeriodicReport(@Valid @RequestBody PeriodicReportRequest request)
+        throws URISyntaxException, IOException, DocumentException {
+        log.debug("REST request to get periodic report : {}", request);
+        return ResponseEntity.of(
+            Optional.ofNullable(reportingRepository.getNativePeriodicReport(request.getSessionId(), request.getStart(), request.getEnd()))
+        );
     }
 }
