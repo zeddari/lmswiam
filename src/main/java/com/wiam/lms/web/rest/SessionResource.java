@@ -7,6 +7,7 @@ import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.Tickets;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
+import com.wiam.lms.domain.enumeration.Periodicity;
 import com.wiam.lms.domain.enumeration.SessionType;
 import com.wiam.lms.domain.enumeration.TargetedGender;
 import com.wiam.lms.repository.GroupRepository;
@@ -85,6 +86,7 @@ public class SessionResource {
         if (session.getId() != null) {
             throw new BadRequestAlertException("A new session cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (session.getSessionPeriodicity() == null) session.setSessionPeriodicity(Periodicity.WEEKLY);
         Session result = sessionRepository.save(session);
         //sessionSearchRepository.index(result);
         return ResponseEntity
@@ -119,7 +121,7 @@ public class SessionResource {
         if (!sessionRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-
+        if (session.getSessionPeriodicity() == null) session.setSessionPeriodicity(Periodicity.WEEKLY);
         Session result = sessionRepository.save(session);
         //sessionSearchRepository.index(result);
         return ResponseEntity

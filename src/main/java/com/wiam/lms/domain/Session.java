@@ -40,7 +40,7 @@ public class Session implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SessionMode sessionMode;
 
-    @NotNull
+
     @Enumerated(EnumType.STRING)
     @Column(name = "session_periodicity", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
