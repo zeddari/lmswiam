@@ -6,11 +6,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PeriodicReportPdfRequest {
+public class PeriodicReportRequest {
 
-    String fileName;
-    String templateName;
-    Date start;
-    Date end;
+    private Date start;
+    private Date end;
     private Long sessionId;
 }
