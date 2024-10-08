@@ -1,7 +1,9 @@
 package com.wiam.lms.web.rest.custom;
 
 import com.lowagie.text.DocumentException;
+import com.wiam.lms.domain.Payment;
 import com.wiam.lms.domain.custom.projection.interfaces.PeriodicReportDetailInterface;
+import com.wiam.lms.repository.PaymentRepository;
 import com.wiam.lms.repository.custom.ReportingRepository;
 import com.wiam.lms.service.custom.reporting.PdfService;
 import com.wiam.lms.service.custom.reporting.request.PeriodicReportPdfRequest;
@@ -45,6 +47,8 @@ public class ReportingResource {
     @Autowired
     private ReportingRepository reportingRepository;
 
+    @Autowired
+    private PaymentRepository paymentRepository;
     /**
      * {@code Get  /student/periodic} : generate a new report.
      *
@@ -81,6 +85,15 @@ public class ReportingResource {
         log.debug("REST request to get periodic report : {}", request);
         return ResponseEntity.of(
             Optional.ofNullable(reportingRepository.getNativePeriodicReport(request.getSessionId(), request.getStart(), request.getEnd()))
+        );
+    }
+
+    @GetMapping("/admin/payments")
+    public ResponseEntity<List<Payment>> getPayments()
+        throws URISyntaxException, IOException, DocumentException {
+        log.debug("REST request to get Payments");
+        return ResponseEntity.of(
+            Optional.ofNullable(paymentRepository.findAllWithEagerRelationships())
         );
     }
 }
