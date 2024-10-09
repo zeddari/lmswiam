@@ -1,6 +1,7 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Group;
+import com.wiam.lms.domain.enumeration.GroupType;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -46,4 +47,9 @@ public interface GroupRepository extends GroupRepositoryWithBagRelationships, Jp
 
     @Query("select jhiGroup from Group jhiGroup left join fetch jhiGroup.elements")
     Page<Group> findAllByGroup(Pageable pageable);
+
+    @Query(
+        "select jhiGroup from Group jhiGroup left join fetch jhiGroup.site11 site where site.id=:siteId and jhiGroup.groupType=:groupType"
+    )
+    Page<Group> findAllByGroupTypeAndSite(Pageable pageable, @Param("siteId") Long siteId, @Param("groupType") GroupType groupType);
 }

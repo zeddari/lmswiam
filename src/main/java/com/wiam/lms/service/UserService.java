@@ -6,6 +6,7 @@ import com.wiam.lms.domain.City;
 import com.wiam.lms.domain.Country;
 import com.wiam.lms.domain.Language;
 import com.wiam.lms.domain.Nationality;
+import com.wiam.lms.domain.Site;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.enumeration.Sex;
 import com.wiam.lms.repository.AuthorityRepository;
@@ -145,6 +146,7 @@ public class UserService {
         newUser.setJob(userDTO.getJob());
         newUser.setLanguages(userDTO.getLanguages());
         newUser.setAccountStatus(userDTO.getAccountStatus());
+        newUser.setSite13(userDTO.getSite13());
 
         if (userDTO.getEmail() != null) {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
@@ -271,13 +273,14 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, Site site13) {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
+                user.setSite13(site13);
                 if (email != null) {
                     user.setEmail(email.toLowerCase());
                 }

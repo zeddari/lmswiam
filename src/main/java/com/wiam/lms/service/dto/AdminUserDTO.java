@@ -7,6 +7,7 @@ import com.wiam.lms.domain.Country;
 import com.wiam.lms.domain.Job;
 import com.wiam.lms.domain.Language;
 import com.wiam.lms.domain.Nationality;
+import com.wiam.lms.domain.Site;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.Role;
@@ -65,6 +66,7 @@ public class AdminUserDTO implements Serializable {
     private String phoneNumber1;
     private String phoneNumver2;
     private Sex sex;
+
     private LocalDate birthdate;
     private String address;
     private String biography;
@@ -76,6 +78,8 @@ public class AdminUserDTO implements Serializable {
     private Job job;
     private Set<Language> languages = new HashSet<>();
     private AccountStatus accountStatus;
+
+    private Site site13;
 
     public void setRole(Role role) {
         this.role = role;
@@ -126,6 +130,7 @@ public class AdminUserDTO implements Serializable {
         this.languages = user.getLanguages();
         this.accountStatus = user.getAccountStatus();
         this.code = user.getCode();
+        this.site13 = user.getSite13();
     }
 
     public Role getRole() {
@@ -349,5 +354,13 @@ public class AdminUserDTO implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Site getSite13() {
+        return site13;
+    }
+
+    public void setSite13(Site site13) {
+        this.site13 = site13;
     }
 }
