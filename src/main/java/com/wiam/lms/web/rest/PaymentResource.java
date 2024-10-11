@@ -1,6 +1,8 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.Payment;
+import com.wiam.lms.domain.custom.projection.interfaces.FeesNonPaidData;
+import com.wiam.lms.domain.dto.PaymentDto;
 import com.wiam.lms.repository.PaymentRepository;
 import com.wiam.lms.repository.search.PaymentSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -197,6 +199,23 @@ public class PaymentResource {
         }
     }
 
+    @PostMapping("/criteria")
+    public List<Payment> getPaymentsByCriteria(@RequestBody PaymentDto paymentDto) {
+        log.debug("REST request to get all Payments");
+        return paymentRepository.findPaymentWithCriteria(
+            paymentDto.getSiteId(),
+            paymentDto.getPaymentSide(),
+            paymentDto.getPaymentType(),
+            paymentDto.getStartDate(),
+            paymentDto.getEndDate()
+        );
+    }
+
+    @GetMapping("/fees/nonPaid")
+    public List<FeesNonPaidData> getNonPaidFees() {
+        log.debug("REST request to get FeesNonPaidData");
+        return paymentRepository.findNonPaidFees();
+    }
     /**
      * {@code GET  /payments/:id} : get the "id" payment.
      *
