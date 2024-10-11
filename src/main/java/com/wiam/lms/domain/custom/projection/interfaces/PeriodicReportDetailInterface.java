@@ -9,11 +9,13 @@ public interface PeriodicReportDetailInterface {
 
     public String getSchoolNameLat();
 
-    public String getTeacherName();
-
     public String getSessionName();
 
+    public String getTeacherName();
+
     public String getGroupName();
+
+    public String getTargetedGender();
 
     public Integer getNbStudentTotal();
 
@@ -35,17 +37,19 @@ public interface PeriodicReportDetailInterface {
 
     public String getStudentName();
 
-    public Integer getNbAjzaeHifz();
+    public Integer getNbHifdAjzaeStudent();
 
     public Integer getNbPageHifz();
 
     public Integer getHifzScore();
+    public Integer getScoreRev();
+
+    public Integer getScoreTilawa();
 
     public Integer getNbAjzaeRev();
 
     public Integer getNbPageRev();
 
-    public Integer getScoreRev();
 
     public Integer getNbAjzaeHomeExam();
 
@@ -55,5 +59,5 @@ public interface PeriodicReportDetailInterface {
 
     public Integer getNbDaysSchoolingStudent();
 
-    public Long getPercentDaysSchoolingTotal();
+    public Double getPercentDaysSchoolingTotal();
 }

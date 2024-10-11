@@ -62,6 +62,12 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     );
 
     @Query(
+        value = "select user_id firstName, user_id lastName, month(validity_end_time) lastPaidMonth, month(now())  - month(validity_end_time) missingPaidMonth from payment where user_id is not null and type  = 'SALARY' and side  = 'OUT' group by user_id,validity_end_time having month(now())  - month(validity_end_time) > 0 union select first_Name firstName, last_Name lastName, '0' lastPaidMonth, '12' missingPaidMonth from user_custom where role not in ( 'STUDENT', 'SPONSOR') and id not in (select user_id from payment where user_id is not null)",
+        nativeQuery = true
+    )
+    List<FeesNonPaidData> findNonPaidSalary();
+
+    @Query(
         value = "select user_id firstName, user_id lastName, month(validity_end_time) lastPaidMonth, month(now())  - month(validity_end_time) missingPaidMonth from payment where user_id is not null and type  = 'MONTHLY_FEES' group by user_id,validity_end_time having month(now())  - month(validity_end_time) > 0 union select first_Name firstName, last_Name lastName, '0' lastPaidMonth, '12' missingPaidMonth from user_custom where role = 'STUDENT' and id not in (select user_id from payment where user_id is not null)",
         nativeQuery = true
     )

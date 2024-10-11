@@ -100,7 +100,7 @@ public class Course implements Serializable {
     @Column(name = "confirmed_at")
     private ZonedDateTime confirmedAt;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "course")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(value = { "parts", "reviews", "site2", "course", "part1" }, allowSetters = true)
@@ -557,4 +557,7 @@ public class Course implements Serializable {
             ", confirmedAt='" + getConfirmedAt() + "'" +
             "}";
     }
+
+
+
 }

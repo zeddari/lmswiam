@@ -216,6 +216,12 @@ public class PaymentResource {
         log.debug("REST request to get FeesNonPaidData");
         return paymentRepository.findNonPaidFees();
     }
+
+    @GetMapping("/salary/nonPaid")
+    public List<FeesNonPaidData> getNonPaidSalary() {
+        log.debug("REST request to get NonPaidSalary");
+        return paymentRepository.findNonPaidSalary();
+    }
     /**
      * {@code GET  /payments/:id} : get the "id" payment.
      *
