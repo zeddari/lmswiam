@@ -319,12 +319,21 @@ public class UserCustomResource {
     public ResponseEntity<List<UserCustom>> simpleSearchUserCustoms(
         Pageable pageable,
         @RequestParam(value = "firstName", required = false) String firstName,
-        @RequestParam(value = "lastName", required = false) String lastName
+        @RequestParam(value = "lastName", required = false) String lastName,
+        @RequestParam(value = "role", required = false) Role role,
+        @RequestParam(value = "siteId", required = false) Long siteId,
+        @RequestParam(value = "accountStatus", required = false) AccountStatus accountStatus,
+        @RequestParam(value = "sex", required = false) Sex sex
     ) {
         log.debug("REST request to search UserCustoms for query {}");
-        List<UserCustom> users = userCustomRepository.searchUsers(firstName, lastName);
+        List<UserCustom> users = userCustomRepository
+            .searchUsers(pageable, firstName, lastName, role, siteId, accountStatus, sex)
+            .getContent();
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Total-Count", "" + users.size());
+        headers.add(
+            "X-Total-Count",
+            "" + userCustomRepository.searchUsers(pageable, firstName, lastName, role, siteId, accountStatus, sex).getTotalElements()
+        );
         return new ResponseEntity<>(users, headers, HttpStatus.OK);
     }
 }

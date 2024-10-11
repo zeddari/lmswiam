@@ -2,6 +2,9 @@ package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.enumeration.AccountStatus;
+import com.wiam.lms.domain.enumeration.Role;
+import com.wiam.lms.domain.enumeration.Sex;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -57,7 +60,21 @@ public interface UserCustomRepository extends UserCustomRepositoryWithBagRelatio
     Optional<UserCustom> findByIdforGroup(Long id);
 
     @Query(
-        "SELECT u FROM UserCustom u WHERE (:firstName IS NULL OR u.firstName = :firstName) AND (:lastName IS NULL OR u.lastName = :lastName)"
+        "SELECT u FROM UserCustom u left join fetch u.site13 left join fetch u.city left join fetch u.country left join fetch u.departement2 left join fetch u.job  left join fetch u.nationality WHERE (" +
+        " (:role IS NULL OR u.role = :role)" +
+        " AND (:firstName IS NULL OR u.firstName LIKE CONCAT('%', :firstName, '%'))" +
+        " AND (:lastName IS NULL OR u.lastName LIKE CONCAT('%', :lastName, '%'))" +
+        " AND (:siteId IS NULL OR u.site13.id = :siteId)" +
+        " AND (:accountStatus IS NULL OR u.accountStatus = :accountStatus)" +
+        " AND (:sex IS NULL OR u.sex = :sex))"
     )
-    List<UserCustom> searchUsers(@Param("firstName") String firstName, @Param("lastName") String lastName);
+    Page<UserCustom> searchUsers(
+        Pageable pageable,
+        @Param("firstName") String firstName,
+        @Param("lastName") String lastName,
+        @Param("role") Role role,
+        @Param("siteId") Long siteId,
+        @Param("accountStatus") AccountStatus accountStatus,
+        @Param("sex") Sex sex
+    );
 }

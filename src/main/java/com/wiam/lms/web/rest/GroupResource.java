@@ -5,6 +5,7 @@ import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.Tickets;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.enumeration.GroupType;
 import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.GroupSearchRepository;
@@ -208,7 +209,9 @@ public class GroupResource {
     public ResponseEntity<List<Group>> getmyGroups(
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
         Pageable pageable,
-        Principal principal
+        Principal principal,
+        @RequestParam(name = "siteId", required = false) Long siteId,
+        @RequestParam(name = "groupType", required = false) GroupType groupType
     ) {
         UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName()).get();
         List<Group> groupList = new ArrayList<Group>();
@@ -218,18 +221,22 @@ public class GroupResource {
         if (userCustom != null) {
             if (!userCustom.getAuthorities().contains(a)) {
                 if (userCustom.getGroups() != null) {
-                    for (Group group : userCustom.getGroups()) groupList.add(group);
-                    totalElements = userCustom.getGroups().size();
+                    for (Group group : userCustom.getGroups()) {
+                        if (
+                            group.getSite11() != null && group.getSite11().getId() == siteId && group.getGroupType() == groupType
+                        ) groupList.add(group);
+                    }
+                    totalElements = groupList.size();
                 }
             } else {
-                Page<Group> groups = groupRepository.findAllWithEagerRelationships(pageable);
+                Page<Group> groups = groupRepository.findAllByGroupTypeAndSite(pageable, siteId, groupType);
                 if (groups != null) {
                     groupList = groups.getContent();
                     totalElements = groups.getTotalElements();
                 }
             }
         }
-        log.debug("REST request to get all Tickets");
+        log.debug("REST request to get all groups by siteId and groupType");
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", "" + totalElements);
         return new ResponseEntity<>(groupList, headers, HttpStatus.OK);
