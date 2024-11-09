@@ -16,6 +16,7 @@ import com.wiam.lms.domain.enumeration.Tilawa;
 import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.SessionInstanceRepository;
+import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.ProgressionSearchRepository;
 import com.wiam.lms.service.custom.progression.ProgressionCustomService;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -61,6 +62,9 @@ public class ProgressionCustomResource {
     private final GroupRepository groupRepository;
 
     @Autowired
+    private UserCustomRepository userCustomRepository;
+
+    @Autowired
     private ProgressionCustomService progressionCustomService;
 
     public ProgressionCustomResource(
@@ -85,6 +89,8 @@ public class ProgressionCustomResource {
     @PostMapping("/criteria/search")
     public List<ProgressionAdminRepresentation> getProgressionsByCriterias(@RequestBody ProgressionCriteriaDto progressionCriteriaDto) {
         log.debug("REST request to get the Progressions by criterias : {}", progressionCriteriaDto.getId());
+        //List<UserCustom> userCustoms = userCustomRepository.findByIdforGroup()
+
         List<Progression> progressions = progressionRepository.findAllBySessionIdAndDateAndExamType(
             progressionCriteriaDto.getSessionDate(),
             progressionCriteriaDto.getId(),
