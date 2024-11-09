@@ -129,6 +129,35 @@ public class Payment implements Serializable {
     @JsonIgnoreProperties(value = { "sponsorings", "payments" }, allowSetters = true)
     private Currency currency;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(
+        value = {
+            "user",
+            "certificates",
+            "answers",
+            "quizResults",
+            "reviews",
+            "enrolements",
+            "progressions",
+            "tickets",
+            "sponsorings",
+            "depenses",
+            "diplomas",
+            "languages",
+            "site13",
+            "country",
+            "nationality",
+            "job",
+            "departement2",
+            "groups",
+            "courses",
+            "sessions2s",
+            "sessions3s",
+        },
+        allowSetters = true
+    )
+    private UserCustom user;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -388,5 +417,13 @@ public class Payment implements Serializable {
             ", validityEndTime='" + getValidityEndTime() + "'" +
             ", details='" + getDetails() + "'" +
             "}";
+    }
+
+    public UserCustom getUser() {
+        return user;
+    }
+
+    public void setUser(UserCustom user) {
+        this.user = user;
     }
 }
