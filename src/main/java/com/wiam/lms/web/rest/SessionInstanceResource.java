@@ -8,6 +8,8 @@ import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
 import com.wiam.lms.domain.dto.SessionInstanceUniqueDto;
+import com.wiam.lms.domain.dto.custom.ChatMemberDto;
+import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.SessionType;
 import com.wiam.lms.domain.enumeration.TargetedGender;
 import com.wiam.lms.repository.GroupRepository;
@@ -341,6 +343,47 @@ public class SessionInstanceResource {
         log.debug("REST request to get SessionInstance : {}", id);
         Optional<SessionInstance> sessionInstance = sessionInstanceRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(sessionInstance);
+    }
+
+    /**
+     * {@code GET  /session-instances/:id} : get the "id" sessionInstance.
+     *
+     * @param id the id of the sessionInstance to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sessionInstance, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/{id}/chatMembers")
+    public List<ChatMemberDto> getSessionInstanceChatMembers(@PathVariable("id") Long id) {
+        log.debug("REST request to get SessionInstance Chat Memebers : {}", id);
+        Optional<SessionInstance> sessionInstance = sessionInstanceRepository.findOneWithEagerRelationships(id);
+        List<ChatMemberDto> chatMembers = new ArrayList<ChatMemberDto>();
+        if (sessionInstance.isPresent()) {
+            // professor
+            ChatMemberDto professor = new ChatMemberDto();
+            professor.setId(sessionInstance.get().getProfessor().getId());
+            professor.setFirstName(sessionInstance.get().getProfessor().getFirstName());
+            professor.setLastName(sessionInstance.get().getProfessor().getLastName());
+            professor.setRole(Role.INSTRUCTOR);
+            chatMembers.add(professor);
+            // students
+            for (UserCustom student : sessionInstance.get().getGroup().getElements()) {
+                ChatMemberDto member = new ChatMemberDto();
+                member.setId(student.getId());
+                member.setFirstName(student.getFirstName());
+                member.setLastName(student.getLastName());
+                member.setRole(Role.STUDENT);
+                chatMembers.add(member);
+            }
+            // Supervisors
+            for (UserCustom supervisor : sessionInstance.get().getSession1().getEmployees()) {
+                ChatMemberDto member = new ChatMemberDto();
+                member.setId(supervisor.getId());
+                member.setFirstName(supervisor.getFirstName());
+                member.setLastName(supervisor.getLastName());
+                member.setRole(Role.SUPERVISOR);
+                chatMembers.add(member);
+            }
+        }
+        return chatMembers;
     }
 
     /**
