@@ -371,6 +371,10 @@ public class SessionInstanceResource {
                 member.setFirstName(student.getFirstName());
                 member.setLastName(student.getLastName());
                 member.setRole(Role.STUDENT);
+                member.setFather(student.getFather());
+                member.setMother(student.getMother());
+                member.setWali(student.getWali());
+                member.setLogin(student.getLogin());
                 chatMembers.add(member);
             }
             // Supervisors
