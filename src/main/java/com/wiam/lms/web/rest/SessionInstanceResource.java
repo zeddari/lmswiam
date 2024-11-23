@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -345,18 +346,13 @@ public class SessionInstanceResource {
         return ResponseUtil.wrapOrNotFound(sessionInstance);
     }
 
-    /**
-     * {@code GET  /session-instances/:id} : get the "id" sessionInstance.
-     *
-     * @param id the id of the sessionInstance to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sessionInstance, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/{id}/chatMembers")
-    public List<ChatMemberDto> getSessionInstanceChatMembers(@PathVariable("id") Long id) {
+    @GetMapping("/{id}/chatMembers/{userId}")
+    public List<ChatMemberDto> getSessionInstanceChatMembers(@PathVariable("id") Long id, @PathVariable("userId") Long userId) {
         log.debug("REST request to get SessionInstance Chat Memebers : {}", id);
         Optional<SessionInstance> sessionInstance = sessionInstanceRepository.findOneWithEagerRelationships(id);
         List<ChatMemberDto> chatMembers = new ArrayList<ChatMemberDto>();
-        if (sessionInstance.isPresent()) {
+        Optional<UserCustom> userCustom = userCustomRepository.findById(userId);
+        if (sessionInstance.isPresent() && userCustom.isPresent()) {
             // professor
             ChatMemberDto professor = new ChatMemberDto();
             professor.setId(sessionInstance.get().getProfessor().getId());
@@ -365,13 +361,66 @@ public class SessionInstanceResource {
             professor.setRole(Role.INSTRUCTOR);
             chatMembers.add(professor);
             // students
-            for (UserCustom student : sessionInstance.get().getGroup().getElements()) {
+            if (userCustom.get().getRole() == Role.INSTRUCTOR || userCustom.get().getRole() == Role.SUPERVISOR) {
+                for (UserCustom student : sessionInstance.get().getGroup().getElements()) {
+                    ChatMemberDto member = new ChatMemberDto();
+                    member.setId(student.getId());
+                    member.setFirstName(student.getFirstName());
+                    member.setLastName(student.getLastName());
+                    member.setRole(Role.STUDENT);
+                    member.setFather(student.getFather());
+                    member.setMother(student.getMother());
+                    member.setWali(student.getWali());
+                    member.setLogin(student.getLogin());
+                    chatMembers.add(member);
+                }
+            } else if (userCustom.get().getRole() == Role.STUDENT) {
+                UserCustom student = sessionInstance
+                    .get()
+                    .getGroup()
+                    .getElements()
+                    .stream()
+                    .filter(e -> e.getId().equals(userCustom.get().getId()))
+                    .findFirst()
+                    .orElse(null); // Returns null if no match is found
+
                 ChatMemberDto member = new ChatMemberDto();
                 member.setId(student.getId());
                 member.setFirstName(student.getFirstName());
                 member.setLastName(student.getLastName());
                 member.setRole(Role.STUDENT);
+                member.setFather(student.getFather());
+                member.setMother(student.getMother());
+                member.setWali(student.getWali());
+                member.setLogin(student.getLogin());
                 chatMembers.add(member);
+            } else if (userCustom.get().getRole() == Role.PARENT) {
+                List<UserCustom> students = sessionInstance
+                    .get()
+                    .getGroup()
+                    .getElements()
+                    .stream()
+                    .filter(e ->
+                        (e.getFather() != null && userCustom.get().getId().equals(e.getFather().getId())) ||
+                        (e.getMother() != null && userCustom.get().getId().equals(e.getMother().getId())) ||
+                        (e.getWali() != null && userCustom.get().getId().equals(e.getWali().getId()))
+                    )
+                    .collect(Collectors.toList());
+
+                if (students.size() > 0) {
+                    for (UserCustom student : students) {
+                        ChatMemberDto member = new ChatMemberDto();
+                        member.setId(student.getId());
+                        member.setFirstName(student.getFirstName());
+                        member.setLastName(student.getLastName());
+                        member.setRole(Role.STUDENT);
+                        member.setFather(student.getFather());
+                        member.setMother(student.getMother());
+                        member.setWali(student.getWali());
+                        member.setLogin(student.getLogin());
+                        chatMembers.add(member);
+                    }
+                }
             }
             // Supervisors
             for (UserCustom supervisor : sessionInstance.get().getSession1().getEmployees()) {

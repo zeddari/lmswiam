@@ -68,6 +68,192 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private AccountStatus accountStatus;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "father",
+            "mother",
+            "wali",
+            "photo",
+            "createdBy",
+            "createdDate",
+            "lastModifiedBy",
+            "lastModifiedDate",
+            "accountStatus",
+            "photoContentType",
+            "facebook",
+            "telegramUserCustomId",
+            "telegramUserCustomName",
+            "bankAccountDetails",
+            "email",
+            "activated",
+            "langKey",
+            "imageUrl",
+            "resetDate",
+            "phoneNumber1",
+            "phoneNumver2",
+            "birthdate",
+            "biography",
+            "city",
+            "code",
+            "user",
+            "certificates",
+            "answers",
+            "quizResults",
+            "reviews",
+            "enrolements",
+            "progressions",
+            "tickets",
+            "sponsorings",
+            "depenses",
+            "diplomas",
+            "languages",
+            "site13",
+            "country",
+            "nationality",
+            "job",
+            "departement2",
+            "groups",
+            "courses",
+            "sessions2s",
+            "sessions3s",
+        },
+        allowSetters = true
+    )
+    private UserCustom father;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "father",
+            "mother",
+            "wali",
+            "photo",
+            "createdBy",
+            "createdDate",
+            "lastModifiedBy",
+            "lastModifiedDate",
+            "accountStatus",
+            "photoContentType",
+            "facebook",
+            "telegramUserCustomId",
+            "telegramUserCustomName",
+            "bankAccountDetails",
+            "email",
+            "activated",
+            "langKey",
+            "imageUrl",
+            "resetDate",
+            "phoneNumber1",
+            "phoneNumver2",
+            "birthdate",
+            "biography",
+            "city",
+            "code",
+            "user",
+            "certificates",
+            "answers",
+            "quizResults",
+            "reviews",
+            "enrolements",
+            "progressions",
+            "tickets",
+            "sponsorings",
+            "depenses",
+            "diplomas",
+            "languages",
+            "site13",
+            "country",
+            "nationality",
+            "job",
+            "departement2",
+            "groups",
+            "courses",
+            "sessions2s",
+            "sessions3s",
+        },
+        allowSetters = true
+    )
+    private UserCustom mother;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = {
+            "father",
+            "mother",
+            "wali",
+            "photo",
+            "createdBy",
+            "createdDate",
+            "lastModifiedBy",
+            "lastModifiedDate",
+            "accountStatus",
+            "photoContentType",
+            "facebook",
+            "telegramUserCustomId",
+            "telegramUserCustomName",
+            "bankAccountDetails",
+            "email",
+            "activated",
+            "langKey",
+            "imageUrl",
+            "resetDate",
+            "phoneNumber1",
+            "phoneNumver2",
+            "birthdate",
+            "biography",
+            "city",
+            "code",
+            "user",
+            "certificates",
+            "answers",
+            "quizResults",
+            "reviews",
+            "enrolements",
+            "progressions",
+            "tickets",
+            "sponsorings",
+            "depenses",
+            "diplomas",
+            "languages",
+            "site13",
+            "country",
+            "nationality",
+            "job",
+            "departement2",
+            "groups",
+            "courses",
+            "sessions2s",
+            "sessions3s",
+        },
+        allowSetters = true
+    )
+    private UserCustom wali;
+
+    public void setFather(UserCustom father) {
+        this.father = father;
+    }
+
+    public void setMother(UserCustom mother) {
+        this.mother = mother;
+    }
+
+    public void setWali(UserCustom wali) {
+        this.wali = wali;
+    }
+
+    public UserCustom getFather() {
+        return father;
+    }
+
+    public UserCustom getMother() {
+        return mother;
+    }
+
+    public UserCustom getWali() {
+        return wali;
+    }
+
     @Lob
     @Column(name = "photo", columnDefinition = "LONGBLOB")
     private byte[] photo;
