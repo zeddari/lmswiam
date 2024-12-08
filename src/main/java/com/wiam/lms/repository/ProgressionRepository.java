@@ -164,6 +164,18 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
     List<Progression> findProgressions(Long id);
 
     @Query(
+        "SELECT progression FROM Progression progression " +
+        "WHERE progression.isForAttendance = false " +
+        "AND progression.student.id = :id " +
+        "AND progression.sessionInstance.sessionDate BETWEEN :fromSessionDate AND :toSessionDate"
+    )
+    List<Progression> findUserProgressions(
+        @Param("id") Long id,
+        @Param("fromSessionDate") LocalDate fromSessionDate,
+        @Param("toSessionDate") LocalDate toSessionDate
+    );
+
+    @Query(
         "select progression from Progression progression left join fetch progression.sessionInstance where progression.isForAttendance = true and progression.student.id=:id"
     )
     List<Progression> findAttendanceProgressions(Long id);

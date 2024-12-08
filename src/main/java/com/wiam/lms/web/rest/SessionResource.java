@@ -7,6 +7,10 @@ import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.Tickets;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
+import com.wiam.lms.domain.dto.custom.ChatMemberDto;
+import com.wiam.lms.domain.dto.custom.SessionDto;
+import com.wiam.lms.domain.dto.custom.sessionDto;
+import com.wiam.lms.domain.enumeration.GroupType;
 import com.wiam.lms.domain.enumeration.Periodicity;
 import com.wiam.lms.domain.enumeration.SessionType;
 import com.wiam.lms.domain.enumeration.TargetedGender;
@@ -290,6 +294,26 @@ public class SessionResource {
         return mySessions;
     }
 
+    @GetMapping("{userCustomId}/UserSessions")
+    public List<SessionDto> getSessionForUserCustom(@PathVariable Long userCustomId) {
+        log.debug("REST request to get all Sessions for the given student id");
+        // getting the list of the student groups
+        UserCustom userCustom = userCustomRepository.findById(userCustomId).get();
+        List<SessionDto> mySessions = new ArrayList<>();
+        if (userCustom != null) {
+            List<Group> myGroups = new ArrayList<Group>();
+            for (Group group : userCustom.getGroups()) myGroups.add(group);
+            List<Session> sessions = sessionRepository.findSessions(myGroups);
+            for (Session session : sessions) {
+                SessionDto s = new SessionDto();
+                s.setId(session.getId());
+                s.setSessionName(session.getTitle());
+                mySessions.add(s);
+            }
+        }
+        return mySessions;
+    }
+
     /**
      * {@code GET  /sessions/:id} : get the "id" session.
      *
@@ -301,6 +325,31 @@ public class SessionResource {
         log.debug("REST request to get Session : {}", id);
         Optional<Session> session = sessionRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(session);
+    }
+
+    @GetMapping("/{id}/students")
+    public List<ChatMemberDto> getStudentsBySession(@PathVariable("id") Long id) {
+        Optional<Session> session = sessionRepository.findOneWithEagerRelationships(id);
+        List<ChatMemberDto> students = new ArrayList<>();
+        if (session.isPresent() && session.get().getGroups() != null && session.get().getGroups().size() > 0) {
+            for (Group group : session.get().getGroups()) {
+                if (group.getGroupType() == GroupType.STUDENT && group.getElements() != null && group.getElements().size() > 0) {
+                    for (UserCustom std : group.getElements()) {
+                        ChatMemberDto user = new ChatMemberDto();
+                        user.setId(std.getId());
+                        user.setLogin(std.getLogin());
+                        user.setFirstName(std.getFirstName());
+                        user.setLastName(std.getLastName());
+                        user.setFather(std.getFather());
+                        user.setMother(std.getMother());
+                        user.setWali(std.getWali());
+                        user.setRole(std.getRole());
+                        students.add(user);
+                    }
+                }
+            }
+        }
+        return students;
     }
 
     /**

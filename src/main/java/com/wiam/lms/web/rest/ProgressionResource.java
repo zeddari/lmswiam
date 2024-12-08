@@ -32,6 +32,7 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -82,6 +83,16 @@ public class ProgressionResource {
         log.debug("REST request to get all progressions for the given student id");
         List<Progression> progressions = progressionRepository.findProgressions(id);
         return progressions;
+    }
+
+    @GetMapping("/{id}/UserProgressions")
+    public List<Progression> getProgressionsForUserAndDate(
+        @PathVariable("id") Long id,
+        @RequestParam("fromSessionDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromSessionDate,
+        @RequestParam("toSessionDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toSessionDate
+    ) {
+        log.debug("REST request to get all progressions for user with id {} on date {}", id, fromSessionDate, toSessionDate);
+        return progressionRepository.findUserProgressions(id, fromSessionDate, toSessionDate);
     }
 
     @GetMapping("/{id}/myAttendance")
