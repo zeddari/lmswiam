@@ -8,4 +8,6 @@ public enum Tilawa {
     MORAJA3A,
     TILAWA,
     NONE,
+    TALQIN_JAMA3I,
+    COURSE_TAJWEED_JAMA3I
 }

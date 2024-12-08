@@ -127,6 +127,21 @@ public class Progression implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer tajweedScore;
 
+    @Lob
+    @Column(name = "tajweed_course_name")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String tajweedCourseName;
+
+    @Lob
+    @Column(name = "activity_name")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String activityName;
+
+    @Lob
+    @Column(name = "activity_course_name")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String activityCourseName;
+
     @NotNull
     @Min(value = 0)
     @Max(value = 5)
@@ -519,6 +534,30 @@ public class Progression implements Serializable {
     public Progression student(UserCustom userCustom) {
         this.setStudent(userCustom);
         return this;
+    }
+
+    public String getTajweedCourseName() {
+        return tajweedCourseName;
+    }
+
+    public void setTajweedCourseName(String tajweedCourseName) {
+        this.tajweedCourseName = tajweedCourseName;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public String getActivityCourseName() {
+        return activityCourseName;
+    }
+
+    public void setActivityCourseName(String activityCourseName) {
+        this.activityCourseName = activityCourseName;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
