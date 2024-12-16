@@ -342,11 +342,11 @@ public class SessionInstanceResource {
     @GetMapping("/{id}")
     public ResponseEntity<SessionInstance> getSessionInstance(@PathVariable("id") Long id) {
         log.debug("REST request to get SessionInstance : {}", id);
-        Optional<SessionInstance> sessionInstance = sessionInstanceRepository.findOneWithEagerRelationships(id);
+        Optional<SessionInstance> sessionInstance = sessionInstanceRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(sessionInstance);
     }
 
-    @GetMapping("/{id}/chatMembers/{userId}")
+    /*@GetMapping("/{id}/chatMembers/{userId}")
     public List<ChatMemberDto> getSessionInstanceChatMembers(@PathVariable("id") Long id, @PathVariable("userId") Long userId) {
         log.debug("REST request to get SessionInstance Chat Memebers : {}", id);
         Optional<SessionInstance> sessionInstance = sessionInstanceRepository.findOneWithEagerRelationships(id);
@@ -433,7 +433,7 @@ public class SessionInstanceResource {
             }
         }
         return chatMembers;
-    }
+    }*/
 
     /**
      * {@code GET  /session-instances/:id} : get the "id" sessionInstance.

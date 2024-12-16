@@ -40,7 +40,6 @@ public class Session implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SessionMode sessionMode;
 
-
     @Enumerated(EnumType.STRING)
     @Column(name = "session_periodicity", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
@@ -274,7 +273,7 @@ public class Session implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "certificates", "groups", "elements", "site11", "group1", "quizzes", "sessions5s" },
+        value = { "certificates", "groups"/*, "elements"*/, "site11", "group1", "quizzes", "sessions5s" },
         allowSetters = true
     )
     private Set<Group> groups = new HashSet<>();

@@ -77,4 +77,7 @@ public interface UserCustomRepository extends UserCustomRepositoryWithBagRelatio
         @Param("accountStatus") AccountStatus accountStatus,
         @Param("sex") Sex sex
     );
+
+    @Query("SELECT u FROM UserCustom u " + "WHERE u.father = :user OR u.mother = :user OR u.wali = :user")
+    List<UserCustom> findChildrenList(@Param("user") UserCustom user);
 }

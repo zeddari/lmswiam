@@ -1,6 +1,5 @@
 package com.wiam.lms.domain.dto.custom;
 
-import com.wiam.lms.domain.enumeration.Role;
 import java.io.Serializable;
 
 public class SessionDto implements Serializable {
