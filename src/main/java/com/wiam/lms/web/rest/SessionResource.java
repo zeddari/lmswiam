@@ -318,12 +318,14 @@ public class SessionResource {
     }
 
     @GetMapping("/{id}/students")
-    public List<ChatMemberDto> getStudentsBySession(@PathVariable("id") Long id) {
+    public List<UserCustom> getStudentsBySession(@PathVariable("id") Long id) {
         Optional<Session> session = sessionRepository.findOneWithEagerRelationships(id);
         List<ChatMemberDto> students = new ArrayList<>();
+        List<UserCustom> studentsFull = new ArrayList<>();
         if (session.isPresent() && session.get().getGroups() != null && session.get().getGroups().size() > 0) {
             for (Group group : session.get().getGroups()) {
                 if (group.getGroupType() == GroupType.STUDENT && group.getElements() != null && group.getElements().size() > 0) {
+                    studentsFull.addAll(group.getElements());
                     for (UserCustom std : group.getElements()) {
                         ChatMemberDto user = new ChatMemberDto();
                         user.setId(std.getId());
@@ -339,7 +341,7 @@ public class SessionResource {
                 }
             }
         }
-        return students;
+        return studentsFull;
     }
 
     /**

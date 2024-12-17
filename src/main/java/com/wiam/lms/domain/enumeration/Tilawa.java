@@ -9,5 +9,6 @@ public enum Tilawa {
     TILAWA,
     NONE,
     TALQIN_JAMA3I,
-    COURSE_TAJWEED_JAMA3I
+    COURSE_TAJWEED_JAMA3I,
+    LIQAE_TARBAWI,
 }

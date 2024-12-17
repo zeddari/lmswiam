@@ -89,10 +89,21 @@ public class ProgressionResource {
     public List<Progression> getProgressionsForUserAndDate(
         @PathVariable("id") Long id,
         @RequestParam("fromSessionDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromSessionDate,
-        @RequestParam("toSessionDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toSessionDate
+        @RequestParam("toSessionDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toSessionDate,
+        @RequestParam("examType") String examType
     ) {
-        log.debug("REST request to get all progressions for user with id {} on date {}", id, fromSessionDate, toSessionDate);
-        return progressionRepository.findUserProgressions(id, fromSessionDate, toSessionDate);
+        log.debug(
+            "REST request to get all progressions for user with id {} on date {}, examType: {}",
+            id,
+            fromSessionDate,
+            toSessionDate,
+            examType
+        );
+        ExamType examType1 = ExamType.NONE;
+        if (!examType.equals("NONE")) {
+            examType1 = ExamType.MANDATORY;
+        }
+        return progressionRepository.findUserProgressions(id, fromSessionDate, toSessionDate, examType1);
     }
 
     @GetMapping("/{id}/myAttendance")

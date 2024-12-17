@@ -167,12 +167,14 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
         "SELECT progression FROM Progression progression " +
         "WHERE progression.isForAttendance = false " +
         "AND progression.student.id = :id " +
-        "AND progression.sessionInstance.sessionDate BETWEEN :fromSessionDate AND :toSessionDate"
+        "AND progression.sessionInstance.sessionDate BETWEEN :fromSessionDate AND :toSessionDate " +
+        "AND progression.examType=:examType"
     )
     List<Progression> findUserProgressions(
         @Param("id") Long id,
         @Param("fromSessionDate") LocalDate fromSessionDate,
-        @Param("toSessionDate") LocalDate toSessionDate
+        @Param("toSessionDate") LocalDate toSessionDate,
+        @Param("examType") ExamType examType
     );
 
     @Query(
