@@ -49,7 +49,16 @@ public interface GroupRepository extends GroupRepositoryWithBagRelationships, Jp
     Page<Group> findAllByGroup(Pageable pageable);
 
     @Query(
-        "select jhiGroup from Group jhiGroup left join fetch jhiGroup.site11 site where site.id=:siteId and jhiGroup.groupType=:groupType"
+        "select jhiGroup from Group jhiGroup " +
+        "join fetch jhiGroup.site11 site " +
+        "where jhiGroup.site11.id = :siteId " +
+        "and jhiGroup.groupType = :groupType " +
+        "and (:query is null or jhiGroup.nameAr like CONCAT('%', :query, '%'))"
     )
-    Page<Group> findAllByGroupTypeAndSite(Pageable pageable, @Param("siteId") Long siteId, @Param("groupType") GroupType groupType);
+    Page<Group> findAllByGroupTypeAndSiteAndNameAr(
+        Pageable pageable,
+        @Param("siteId") Long siteId,
+        @Param("groupType") GroupType groupType,
+        @Param("query") String query
+    );
 }

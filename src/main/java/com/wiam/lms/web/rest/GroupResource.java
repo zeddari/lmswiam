@@ -11,15 +11,18 @@ import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.GroupSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -205,41 +208,100 @@ public class GroupResource {
         return groupRepository.findAllAbstract(siteId);
     }
 
-    @GetMapping("/myGroups")
-    public ResponseEntity<List<Group>> getmyGroups(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
+    /*@GetMapping("/myGroups")
+    public ResponseEntity<List<Group>> getMyGroups(
         Pageable pageable,
         Principal principal,
-        @RequestParam(name = "siteId", required = false) Long siteId,
-        @RequestParam(name = "groupType", required = false) GroupType groupType
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false) GroupType groupType
     ) {
-        UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName()).get();
-        List<Group> groupList = new ArrayList<Group>();
-        long totalElements = 0;
-        Authority a = new Authority();
-        a.setName("ROLE_ADMIN");
-        if (userCustom != null) {
-            if (!userCustom.getAuthorities().contains(a)) {
-                if (userCustom.getGroups() != null) {
-                    for (Group group : userCustom.getGroups()) {
-                        if (
-                            group.getSite11() != null && group.getSite11().getId() == siteId && group.getGroupType() == groupType
-                        ) groupList.add(group);
-                    }
-                    totalElements = groupList.size();
-                }
-            } else {
-                Page<Group> groups = groupRepository.findAllByGroupTypeAndSite(pageable, siteId, groupType);
-                if (groups != null) {
-                    groupList = groups.getContent();
-                    totalElements = groups.getTotalElements();
-                }
-            }
+        // Validate principal
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        log.debug("REST request to get all groups by siteId and groupType");
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Total-Count", "" + totalElements);
-        return new ResponseEntity<>(groupList, headers, HttpStatus.OK);
+
+        try {
+            // Find user with optional null check
+            UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            // Check if user is an admin
+            boolean isAdmin = userCustom.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
+
+            // Prepare response
+            List<Group> groupList;
+            long totalElements;
+
+            if (isAdmin) {
+                // Admin: Fetch all groups with pagination
+                Page<Group> groups = groupRepository.findAllByGroupTypeAndSite(pageable, siteId, groupType);
+                groupList = groups.getContent();
+                totalElements = groups.getTotalElements();
+            } else {
+                // Non-admin: Filter user's groups
+                List<Group> userGroups = new ArrayList<>(Optional.ofNullable(userCustom.getGroups())
+                    .orElse(Collections.emptySet())); // Convert Set<Group> to List<Group>
+
+                groupList = userGroups.stream()
+                    .filter(group ->
+                        (siteId == null || (group.getSite11() != null && group.getSite11().getId().equals(siteId))) &&
+                        (groupType == null || group.getGroupType() == groupType)
+                    )
+                    .collect(Collectors.toList());
+
+                totalElements = groupList.size();
+
+                // Implement manual pagination for non-admin user
+                int start = Math.min(pageable.getPageNumber() * pageable.getPageSize(), groupList.size());
+                int end = Math.min(start + pageable.getPageSize(), groupList.size());
+                groupList = groupList.subList(start, end);
+            }
+
+            // Log request
+            log.debug("REST request to get groups for user: {}", principal.getName());
+
+            // Create response with total count header
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("X-Total-Count", String.valueOf(totalElements));
+
+            return ResponseEntity.ok()
+                .headers(headers)
+                .body(groupList);
+
+        } catch (Exception e) {
+            log.error("Error fetching groups", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    */
+
+    @GetMapping("/myGroups")
+    public ResponseEntity<List<Group>> getMyGroups(
+        Pageable pageable,
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false) GroupType groupType,
+        @RequestParam(required = false) String query
+    ) {
+        try {
+            // Prepare response
+            List<Group> groupList;
+            long totalElements;
+
+            // Admin: Fetch all groups with pagination
+            Page<Group> groups = groupRepository.findAllByGroupTypeAndSiteAndNameAr(pageable, siteId, groupType, query);
+            groupList = groups.getContent();
+            totalElements = groups.getTotalElements();
+
+            // Create response with total count header
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("X-Total-Count", String.valueOf(totalElements));
+
+            return ResponseEntity.ok().headers(headers).body(groupList);
+        } catch (Exception e) {
+            log.error("Error fetching groups", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     /**

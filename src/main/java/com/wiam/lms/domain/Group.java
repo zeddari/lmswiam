@@ -65,7 +65,7 @@ public class Group implements Serializable {
     )
     private Set<Group> groups = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_jhi_group__elements",
         joinColumns = @JoinColumn(name = "jhi_group_id"),
