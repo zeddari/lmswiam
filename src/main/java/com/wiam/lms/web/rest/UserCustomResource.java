@@ -1,9 +1,16 @@
 package com.wiam.lms.web.rest;
 
+import com.wiam.lms.domain.Group;
+import com.wiam.lms.domain.Session;
+import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.custom.ChatMemberDto;
+import com.wiam.lms.domain.dto.custom.ChatRoomDto;
 import com.wiam.lms.domain.enumeration.AccountStatus;
+import com.wiam.lms.domain.enumeration.GroupType;
 import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.Sex;
+import com.wiam.lms.repository.SessionRepository;
 import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.UserCustomSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -13,9 +20,14 @@ import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +59,16 @@ public class UserCustomResource {
     private final UserCustomRepository userCustomRepository;
 
     private final UserCustomSearchRepository userCustomSearchRepository;
+    private final SessionRepository sessionRepository;
 
-    public UserCustomResource(UserCustomRepository userCustomRepository, UserCustomSearchRepository userCustomSearchRepository) {
+    public UserCustomResource(
+        UserCustomRepository userCustomRepository,
+        UserCustomSearchRepository userCustomSearchRepository,
+        SessionRepository sessionRepository
+    ) {
         this.userCustomRepository = userCustomRepository;
         this.userCustomSearchRepository = userCustomSearchRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     /**
@@ -241,6 +259,256 @@ public class UserCustomResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userCustom.getId().toString())
         );
+    }
+
+    /*@GetMapping("/{userId}/chatMembers")
+    public List<ChatMemberDto> getSessionInstanceChatMembers(@PathVariable("userId") Long userId) {
+        List<ChatMemberDto> chatMembers = new ArrayList<>();
+
+        // Fetch the user by ID
+        Optional<UserCustom> userCustomOpt = userCustomRepository.findById(userId);
+
+        if (userCustomOpt.isPresent()) {
+            UserCustom userCustom = userCustomOpt.get();
+            Set<Session> uniqueUserSessions = new HashSet<>();
+
+            // Determine user role and fetch relevant sessions
+            switch (userCustom.getRole()) {
+                case INSTRUCTOR:
+                    uniqueUserSessions.addAll(sessionRepository.findSessionsByProfessor(userCustom));
+                    break;
+
+                case STUDENT:
+                    Set<Group> studentGroups = userCustom.getGroups();
+                    if (studentGroups != null && !studentGroups.isEmpty()) {
+                        List<Long> sessionGroupIds = studentGroups.stream()
+                            .map(Group::getId)
+                            .toList();
+                        uniqueUserSessions.addAll(sessionRepository.findSessionsByUserGroups(sessionGroupIds));
+                    }
+                    break;
+
+                case SUPERVISOR:
+                    uniqueUserSessions.addAll(sessionRepository.findSessionsByEmployee(userCustom));
+                    break;
+
+                case PARENT:
+                    List<UserCustom> childrenList = userCustomRepository.findChildrenList(userCustom);
+                    if (!childrenList.isEmpty()) {
+                        for (UserCustom child : childrenList) {
+                            Set<Group> childrenGroups = child.getGroups();
+                            if (childrenGroups != null && !childrenGroups.isEmpty()) {
+                                List<Long> sessionGroupIds = childrenGroups.stream()
+                                    .map(Group::getId)
+                                    .toList();
+                                uniqueUserSessions.addAll(sessionRepository.findSessionsByUserGroups(sessionGroupIds));
+                            }
+                        }
+                    }
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Unsupported role: " + userCustom.getRole());
+            }
+
+            // Fetch chat members for the sessions
+            chatMembers = getSessionChatMembers(new ArrayList<>(uniqueUserSessions));
+        }
+
+        return chatMembers;
+    }
+
+    
+    private List<ChatMemberDto> getSessionChatMembers(List<Session> userSessions) {
+        Set<ChatMemberDto> uniqueChatMembers = new HashSet<>();
+    
+        for (Session session : userSessions) {
+            // Add students from session groups
+            Set<Group> studentGroups = session.getGroups();
+            if (studentGroups != null && !studentGroups.isEmpty()) {
+                for (Group group : studentGroups) {
+                    if (group.getGroupType().equals(GroupType.STUDENT)) {
+                        Set<UserCustom> students = group.getElements();
+                        if (students != null && !students.isEmpty()) {
+                            for (UserCustom student : students) {
+                                ChatMemberDto chatMemberDto = new ChatMemberDto();
+                                chatMemberDto.setId(student.getId());
+                                chatMemberDto.setFirstName(student.getFirstName());
+                                chatMemberDto.setLastName(student.getLastName());
+                                chatMemberDto.setRole(Role.STUDENT);
+                                chatMemberDto.setFather(student.getFather());
+                                chatMemberDto.setMother(student.getMother());
+                                chatMemberDto.setWali(student.getWali());
+                                uniqueChatMembers.add(chatMemberDto);
+                            }
+                        }
+                    }
+                }
+            }
+    
+            // Add employees
+            Set<UserCustom> employees = session.getEmployees();
+            if (employees != null && !employees.isEmpty()) {
+                for (UserCustom employee : employees) {
+                    ChatMemberDto chatMemberDto = new ChatMemberDto();
+                    chatMemberDto.setId(employee.getId());
+                    chatMemberDto.setFirstName(employee.getFirstName());
+                    chatMemberDto.setLastName(employee.getLastName());
+                    chatMemberDto.setRole(Role.SUPERVISOR); // Adjust role as needed
+                    uniqueChatMembers.add(chatMemberDto);
+                }
+            }
+    
+            // Add professors
+            Set<UserCustom> professors = session.getProfessors();
+            if (professors != null && !professors.isEmpty()) {
+                for (UserCustom professor : professors) {
+                    ChatMemberDto chatMemberDto = new ChatMemberDto();
+                    chatMemberDto.setId(professor.getId());
+                    chatMemberDto.setFirstName(professor.getFirstName());
+                    chatMemberDto.setLastName(professor.getLastName());
+                    chatMemberDto.setRole(Role.INSTRUCTOR); // Adjust role as needed
+                    uniqueChatMembers.add(chatMemberDto);
+                }
+            }
+        }
+    
+        // Convert the set to a list before returning
+        return new ArrayList<>(uniqueChatMembers);
+    }
+    */
+
+    @GetMapping("/{userId}/chatRooms")
+    public List<ChatRoomDto> getSessionInstanceChatRooms(@PathVariable("userId") Long userId) {
+        List<ChatRoomDto> chatRooms = new ArrayList<>();
+
+        // Fetch the user by ID
+        Optional<UserCustom> userCustomOpt = userCustomRepository.findById(userId);
+
+        if (userCustomOpt.isPresent()) {
+            UserCustom userCustom = userCustomOpt.get();
+            Set<Session> uniqueUserSessions = new HashSet<>();
+
+            // Determine user role and fetch relevant sessions
+            switch (userCustom.getRole()) {
+                case INSTRUCTOR:
+                    uniqueUserSessions.addAll(sessionRepository.findSessionsByProfessor(userCustom));
+                    break;
+                case STUDENT:
+                    Set<Group> studentGroups = userCustom.getGroups();
+                    if (studentGroups != null && !studentGroups.isEmpty()) {
+                        List<Long> sessionGroupIds = studentGroups.stream().map(Group::getId).toList();
+                        uniqueUserSessions.addAll(sessionRepository.findSessionsByUserGroups(sessionGroupIds));
+                    }
+                    break;
+                case SUPERVISOR:
+                    uniqueUserSessions.addAll(sessionRepository.findSessionsByEmployee(userCustom));
+                    break;
+                case PARENT:
+                    List<UserCustom> childrenList = userCustomRepository.findChildrenList(userCustom);
+                    if (!childrenList.isEmpty()) {
+                        for (UserCustom child : childrenList) {
+                            Set<Group> childrenGroups = child.getGroups();
+                            if (childrenGroups != null && !childrenGroups.isEmpty()) {
+                                List<Long> sessionGroupIds = childrenGroups.stream().map(Group::getId).toList();
+                                uniqueUserSessions.addAll(sessionRepository.findSessionsByUserGroups(sessionGroupIds));
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported role: " + userCustom.getRole());
+            }
+
+            // Fetch chatrooms grouped by group name
+            chatRooms = getSessionChatRooms(new ArrayList<>(uniqueUserSessions), userCustom);
+        }
+
+        return chatRooms;
+    }
+
+    private List<ChatRoomDto> getSessionChatRooms(List<Session> userSessions, UserCustom userCustom) {
+        List<ChatRoomDto> chatRooms = new ArrayList<>();
+
+        // Process each session
+        for (Session session : userSessions) {
+            String sessionName = session.getTitle(); // Assuming Session has a `getName()` method
+
+            // Process groups in the session
+            Set<Group> sessionGroups = session.getGroups();
+            if (sessionGroups != null && !sessionGroups.isEmpty()) {
+                for (Group group : sessionGroups) {
+                    String groupName = group.getNameAr(); // Assuming Group has a `getName()` method
+
+                    // Map group members to ChatMemberDto
+                    Set<UserCustom> groupMembers = group.getElements();
+                    List<ChatMemberDto> chatMembers = new ArrayList<>();
+                    if (groupMembers != null && !groupMembers.isEmpty()) {
+                        for (UserCustom member : groupMembers) {
+                            ChatMemberDto chatMemberDto = new ChatMemberDto();
+                            chatMemberDto.setId(member.getId());
+                            chatMemberDto.setFirstName(member.getFirstName());
+                            chatMemberDto.setLastName(member.getLastName());
+                            chatMemberDto.setRole(member.getRole());
+
+                            chatMemberDto.setFather(member.getFather());
+                            chatMemberDto.setMother(member.getMother());
+                            chatMemberDto.setWali(member.getWali());
+                            chatMembers.add(chatMemberDto);
+                        }
+                    }
+
+                    if (userCustom.getRole().equals(Role.PARENT)) {
+                        // Retrieve the parent's children
+                        List<UserCustom> children = userCustomRepository.findChildrenList(userCustom);
+
+                        // Extract the IDs of the parent's children for filtering
+                        Set<Long> childrenIds = children.stream().map(UserCustom::getId).collect(Collectors.toSet());
+
+                        // Filter chat members to include only those that are the parent's children
+                        chatMembers =
+                            chatMembers.stream().filter(member -> childrenIds.contains(member.getId())).collect(Collectors.toList());
+                    }
+
+                    // Add employees to chat members
+                    Set<UserCustom> employees = session.getEmployees();
+                    if (employees != null && !employees.isEmpty()) {
+                        for (UserCustom employee : employees) {
+                            ChatMemberDto chatMemberDto = new ChatMemberDto();
+                            chatMemberDto.setId(employee.getId());
+                            chatMemberDto.setFirstName(employee.getFirstName());
+                            chatMemberDto.setLastName(employee.getLastName());
+                            chatMemberDto.setRole(Role.SUPERVISOR); // Assuming employees are supervisors
+                            chatMembers.add(chatMemberDto);
+                        }
+                    }
+
+                    // Add professors to chat members
+                    Set<UserCustom> professors = session.getProfessors();
+                    if (professors != null && !professors.isEmpty()) {
+                        for (UserCustom professor : professors) {
+                            ChatMemberDto chatMemberDto = new ChatMemberDto();
+                            chatMemberDto.setId(professor.getId());
+                            chatMemberDto.setFirstName(professor.getFirstName());
+                            chatMemberDto.setLastName(professor.getLastName());
+                            chatMemberDto.setRole(Role.INSTRUCTOR);
+                            chatMembers.add(chatMemberDto);
+                        }
+                    }
+
+                    // Construct a ChatRoomDto
+                    ChatRoomDto chatRoomDto = new ChatRoomDto();
+                    chatRoomDto.setSessionName(sessionName);
+                    chatRoomDto.setGroupName(groupName);
+                    chatRoomDto.setChatMembers(chatMembers);
+
+                    // Add to the chat rooms list
+                    chatRooms.add(chatRoomDto);
+                }
+            }
+        }
+
+        return chatRooms;
     }
 
     /**

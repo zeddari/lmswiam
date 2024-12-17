@@ -3,6 +3,7 @@ package com.wiam.lms.repository;
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.enumeration.SessionType;
 import com.wiam.lms.domain.enumeration.TargetedGender;
 import java.time.LocalDate;
@@ -90,4 +91,13 @@ public interface SessionRepository extends SessionRepositoryWithBagRelationships
         @Param("sessionDate") LocalDate sessionDate,
         @Param("sessionType") SessionType sessionType
     );
+
+    @Query("SELECT DISTINCT s FROM Session s JOIN s.groups g WHERE g.id IN :groupIds")
+    List<Session> findSessionsByUserGroups(@Param("groupIds") List<Long> groupIds);
+
+    @Query("SELECT DISTINCT s FROM Session s JOIN s.employees e WHERE e = :userCustom")
+    List<Session> findSessionsByEmployee(@Param("userCustom") UserCustom userCustom);
+
+    @Query("SELECT DISTINCT s FROM Session s JOIN s.professors e WHERE e = :userCustom")
+    List<Session> findSessionsByProfessor(@Param("userCustom") UserCustom userCustom);
 }
