@@ -110,4 +110,14 @@ public class SessionResourceLms {
         headers.add("X-Total-Count", "" + totalElements);
         return new ResponseEntity<>(sessionList, headers, HttpStatus.OK);
     }
+
+    @GetMapping("/activities/halaqa")
+    public ResponseEntity<List<String>> getHalaqaActivities() {
+        List<String> halaqaActivities = new ArrayList<>();
+        halaqaActivities.add("التفسير");
+        halaqaActivities.add("العبادات");
+
+        HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<>(halaqaActivities, headers, HttpStatus.OK);
+    }
 }

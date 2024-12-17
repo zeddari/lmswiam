@@ -142,6 +142,16 @@ public class Progression implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String activityCourseName;
 
+    @Lob
+    @Column(name = "liqae_title")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String liqaeTitle;
+
+    @Lob
+    @Column(name = "liqae_object")
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String liqaeObject;
+
     @NotNull
     @Min(value = 0)
     @Max(value = 5)
@@ -636,5 +646,21 @@ public class Progression implements Serializable {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getLiqaeTitle() {
+        return liqaeTitle;
+    }
+
+    public void setLiqaeTitle(String liqaeTitle) {
+        this.liqaeTitle = liqaeTitle;
+    }
+
+    public String getLiqaeObject() {
+        return liqaeObject;
+    }
+
+    public void setLiqaeObject(String liqaeObject) {
+        this.liqaeObject = liqaeObject;
     }
 }

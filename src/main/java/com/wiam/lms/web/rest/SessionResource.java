@@ -9,7 +9,6 @@ import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
 import com.wiam.lms.domain.dto.custom.ChatMemberDto;
 import com.wiam.lms.domain.dto.custom.SessionDto;
-import com.wiam.lms.domain.dto.custom.sessionDto;
 import com.wiam.lms.domain.enumeration.GroupType;
 import com.wiam.lms.domain.enumeration.Periodicity;
 import com.wiam.lms.domain.enumeration.SessionType;
@@ -328,12 +327,14 @@ public class SessionResource {
     }
 
     @GetMapping("/{id}/students")
-    public List<ChatMemberDto> getStudentsBySession(@PathVariable("id") Long id) {
+    public List<UserCustom> getStudentsBySession(@PathVariable("id") Long id) {
         Optional<Session> session = sessionRepository.findOneWithEagerRelationships(id);
         List<ChatMemberDto> students = new ArrayList<>();
+        List<UserCustom> studentsFull = new ArrayList<>();
         if (session.isPresent() && session.get().getGroups() != null && session.get().getGroups().size() > 0) {
             for (Group group : session.get().getGroups()) {
                 if (group.getGroupType() == GroupType.STUDENT && group.getElements() != null && group.getElements().size() > 0) {
+                    studentsFull.addAll(group.getElements());
                     for (UserCustom std : group.getElements()) {
                         ChatMemberDto user = new ChatMemberDto();
                         user.setId(std.getId());
@@ -349,7 +350,7 @@ public class SessionResource {
                 }
             }
         }
-        return students;
+        return studentsFull;
     }
 
     /**
