@@ -2,6 +2,7 @@ package com.wiam.lms.repository.custom;
 
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.custom.ElementDto;
 import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.Sex;
@@ -46,4 +47,10 @@ public interface UserCustomLmsRepository extends UserCustomRepositoryWithBagRela
 
     @Query("select userCustom from UserCustom userCustom where userCustom.role =:role and userCustom.site13.id=:siteId")
     public List<UserCustom> findByRoleSite(@Param("role") Role role, @Param("siteId") Long siteId);
+
+    @Query(
+        "select new com.wiam.lms.domain.dto.custom.ElementDto(userCustom.id, concat(userCustom.firstName, ' ', userCustom.lastName)) " +
+        "from UserCustom userCustom where userCustom.role = :role and userCustom.site13.id = :siteId"
+    )
+    public List<ElementDto> findByRoleAndSite(@Param("role") Role role, @Param("siteId") Long siteId);
 }

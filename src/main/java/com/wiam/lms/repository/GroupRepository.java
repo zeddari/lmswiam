@@ -51,8 +51,8 @@ public interface GroupRepository extends GroupRepositoryWithBagRelationships, Jp
     @Query(
         "select jhiGroup from Group jhiGroup " +
         "join fetch jhiGroup.site11 site " +
-        "where jhiGroup.site11.id = :siteId " +
-        "and jhiGroup.groupType = :groupType " +
+        "where (:siteId is null or jhiGroup.site11.id = :siteId) " +
+        "and (:groupType is null or jhiGroup.groupType = :groupType) " +
         "and (:query is null or jhiGroup.nameAr like CONCAT('%', :query, '%'))"
     )
     Page<Group> findAllByGroupTypeAndSiteAndNameAr(

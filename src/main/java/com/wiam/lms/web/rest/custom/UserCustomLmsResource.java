@@ -2,6 +2,7 @@ package com.wiam.lms.web.rest.custom;
 
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.custom.ElementDto;
 import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.Sex;
@@ -78,5 +79,10 @@ public class UserCustomLmsResource {
     @GetMapping("/byRoleSite")
     public List<UserCustom> getAllUserCustomsByUserTypeSite(@RequestParam Role role, @RequestParam Long siteId) {
         return userCustomLmsRepository.findByRoleSite(role, siteId);
+    }
+
+    @GetMapping("/byRoleAndSite")
+    public List<ElementDto> getAllUserCustomsByUserRoleAndSite(@RequestParam Role role, @RequestParam Long siteId) {
+        return userCustomLmsRepository.findByRoleAndSite(role, siteId);
     }
 }
