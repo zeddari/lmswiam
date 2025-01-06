@@ -71,43 +71,23 @@ public class SessionResourceLms {
     ) {
         log.debug("REST request and filter to get all Sessions");
         List<Session> sessions = new ArrayList<Session>();
-        sessions = sessionRepository.findFilteredSessions(siteId, sessionType, gender);
+        // sessions = sessionRepository.findFilteredSessions(siteId, sessionType, gender);
         return sessions;
     }
 
     @GetMapping("/mySessions")
     public ResponseEntity<List<Session>> getSessions(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
         Pageable pageable,
-        Principal principal,
-        @RequestParam Long siteId,
-        @RequestParam SessionType sessionType,
-        @RequestParam TargetedGender gender
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false) SessionType sessionType,
+        @RequestParam(required = false) TargetedGender gender,
+        @RequestParam(required = false) String query
     ) {
-        UserCustom userCustom = userCustomRepository.findUserCustomByLogin(principal.getName()).get();
-        List<Session> sessionList = new ArrayList<Session>();
-        long totalElements = 0;
-        Authority a = new Authority();
-        a.setName("ROLE_ADMIN");
-        if (userCustom != null) {
-            if (!userCustom.getAuthorities().contains(a)) {
-                //Page<Session> sessions = sessionRepository.findAllWithEagerRelationshipsByUserCustom(pageable, userCustom);
-                /*if(sessions!=null)
-                {
-                    sessionList = tickets.getContent();
-                    totalElements = tickets.getTotalElements();
-                }*/
-            } else {
-                List<Session> sessions = sessionRepository.findFilteredSessions(siteId, sessionType, gender);
-                if (sessions != null) {
-                    sessionList = sessions;
-                    totalElements = sessions.size();
-                }
-            }
-        }
-        log.debug("REST request to get all Sessions");
+        Page<Session> sessionPage = sessionRepository.findFilteredSessions(siteId, sessionType, gender, query, pageable);
+        List<Session> sessionList = sessionRepository.findBySessionsIn(sessionPage.getContent());
+
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Total-Count", "" + totalElements);
+        headers.add("X-Total-Count", String.valueOf(sessionPage.getTotalElements()));
         return new ResponseEntity<>(sessionList, headers, HttpStatus.OK);
     }
 

@@ -33,6 +33,18 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
 
     private static final long serialVersionUID = 1L;
 
+    public UserCustom() {}
+
+    public UserCustom(Long id, String firstName, String lastName, Role role, Site site, boolean accountStatus, Sex sex) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.site13 = site;
+        this.activated = accountStatus;
+        this.sex = sex;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

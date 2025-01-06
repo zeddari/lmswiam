@@ -7,13 +7,16 @@ import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.enumeration.SessionType;
 import com.wiam.lms.domain.enumeration.TargetedGender;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -49,13 +52,31 @@ public interface SessionRepository extends SessionRepositoryWithBagRelationships
     Optional<Session> findOneWithToOneRelationships(@Param("id") Long id);
 
     @Query(
-        "select session from Session session left join fetch session.site14 left join fetch session.groups left join fetch session.employees left join fetch session.professors where session.site14.id =:siteId and session.sessionType=:sessionType and session.targetedGender=:gender"
+        "select new Session(session.id, session.title, session.site14, session.sessionType, session.targetedGender) " +
+        "from Session session " +
+        "join session.site14 site " +
+        "where (:siteId is null or session.site14.id = :siteId) " +
+        "and (:sessionType is null or session.sessionType = :sessionType) " +
+        "and (:gender is null or session.targetedGender = :gender) " +
+        "and (:query is null or session.title like CONCAT('%', :query, '%'))"
     )
-    List<Session> findFilteredSessions(
+    Page<Session> findFilteredSessions(
         @Param("siteId") Long siteId,
         @Param("sessionType") SessionType sessionType,
-        @Param("gender") TargetedGender gender
+        @Param("gender") TargetedGender gender,
+        @Param("query") String query,
+        Pageable pageable
     );
+
+    @Query(
+        "select distinct session from Session session " +
+        "join fetch session.site14 " +
+        "left join fetch session.groups " +
+        "left join fetch session.employees " +
+        "left join fetch session.professors " +
+        "where session in :sessions"
+    )
+    List<Session> findBySessionsIn(@Param("sessions") Collection<Session> sessions);
 
     /*@Query(
         "select session from Session session where session.site14.id =:siteId and session.sessionType=:sessionType and session.targetedGender=:gender"

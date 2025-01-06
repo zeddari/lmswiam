@@ -44,6 +44,12 @@ public class Country implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String code;
 
+    // Add ManyToOne relationship with Nationality
+    @ManyToOne
+    @JoinColumn(name = "nationality_id")
+    @JsonIgnoreProperties(value = { "countries" }, allowSetters = true) // Ensure to avoid circular references
+    private Nationality nationality;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
@@ -77,6 +83,22 @@ public class Country implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
+    // Getters and setters for nationality
+
+    public Nationality getNationality() {
+        return this.nationality;
+    }
+
+    public Country nationality(Nationality nationality) {
+        this.setNationality(nationality);
+        return this;
+    }
+
+    public void setNationality(Nationality nationality) {
+        this.nationality = nationality;
+    }
+
+    // Getters and setters for other fields remain unchanged
     public Long getId() {
         return this.id;
     }
@@ -160,8 +182,6 @@ public class Country implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -175,18 +195,25 @@ public class Country implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "Country{" +
-            "id=" + getId() +
-            ", nameAr='" + getNameAr() + "'" +
-            ", nameLat='" + getNameLat() + "'" +
-            ", code='" + getCode() + "'" +
-            "}";
+        return (
+            "Country{" +
+            "id=" +
+            getId() +
+            ", nameAr='" +
+            getNameAr() +
+            "'" +
+            ", nameLat='" +
+            getNameLat() +
+            "'" +
+            ", code='" +
+            getCode() +
+            "'" +
+            "}"
+        );
     }
 }

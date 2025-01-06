@@ -130,6 +130,27 @@ public class UserCustomResource {
             .body(result);
     }
 
+    @PutMapping("/{id}/{status}")
+    public ResponseEntity<UserCustom> updateActivationStatus(
+        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "status", required = false) final boolean status
+    ) throws URISyntaxException {
+        if (id == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!userCustomRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+        Optional<UserCustom> uc = userCustomRepository.findById(id);
+        uc.get().setActivated(status);
+        UserCustom result = userCustomRepository.save(uc.get());
+        // // userCustomSearchRepository.index(result);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .body(result);
+    }
+
     /**
      * {@code PATCH  /user-customs/:id} : Partial updates given fields of an existing userCustom, field will ignore if it is null
      *
@@ -542,6 +563,23 @@ public class UserCustomResource {
         return ResponseUtil.wrapOrNotFound(userCustom);
     }
 
+    @GetMapping("/check-unique/{field}")
+    public ResponseEntity<?> checkUnique(@PathVariable String field, @RequestParam String value) {
+        boolean isUnique = false;
+
+        // Check if the field is "login" or "email" and call the corresponding method in the repository
+        if ("login".equals(field)) {
+            isUnique = !userCustomRepository.existsByLogin(value); // check if login is unique
+        } else if ("email".equals(field)) {
+            isUnique = !userCustomRepository.existsByEmail(value); // check if email is unique
+        } else {
+            return ResponseEntity.badRequest().body("Invalid field name");
+        }
+
+        // Return the appropriate response based on the uniqueness check
+        return ResponseEntity.ok().body(isUnique ? "Unique" : "Not Unique");
+    }
+
     @GetMapping("/account/{login}")
     public ResponseEntity<UserCustom> getUserCustomByLogin(@PathVariable("login") String login) {
         log.debug("REST request to get UserCustom by its Login: {}", login);
@@ -590,17 +628,20 @@ public class UserCustomResource {
         @RequestParam(value = "lastName", required = false) String lastName,
         @RequestParam(value = "role", required = false) Role role,
         @RequestParam(value = "siteId", required = false) Long siteId,
-        @RequestParam(value = "accountStatus", required = false) AccountStatus accountStatus,
+        @RequestParam(value = "accountStatus", required = false) boolean accountStatus,
         @RequestParam(value = "sex", required = false) Sex sex
     ) {
         log.debug("REST request to search UserCustoms for query {}");
         List<UserCustom> users = userCustomRepository
-            .searchUsers(pageable, firstName, lastName, role, siteId, accountStatus, sex)
+            .searchUsersWithNullFields(pageable, firstName, lastName, role, siteId, accountStatus, sex)
             .getContent();
         HttpHeaders headers = new HttpHeaders();
         headers.add(
             "X-Total-Count",
-            "" + userCustomRepository.searchUsers(pageable, firstName, lastName, role, siteId, accountStatus, sex).getTotalElements()
+            "" +
+            userCustomRepository
+                .searchUsersWithNullFields(pageable, firstName, lastName, role, siteId, accountStatus, sex)
+                .getTotalElements()
         );
         return new ResponseEntity<>(users, headers, HttpStatus.OK);
     }

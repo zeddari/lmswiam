@@ -9,12 +9,14 @@ import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
 import com.wiam.lms.domain.dto.SessionInstanceUniqueDto;
 import com.wiam.lms.domain.dto.custom.ChatMemberDto;
+import com.wiam.lms.domain.enumeration.Attendance;
 import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.SessionType;
 import com.wiam.lms.domain.enumeration.TargetedGender;
 import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.SessionInstanceRepository;
+import com.wiam.lms.repository.SessionRepository;
 import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.SessionInstanceSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
@@ -25,7 +27,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,14 +71,17 @@ public class SessionInstanceResource {
     private final GroupRepository groupRepository;
     private final SessionInstanceSearchRepository sessionInstanceSearchRepository;
     private final UserCustomRepository userCustomRepository;
+    private final SessionRepository sessionRepository;
 
     public SessionInstanceResource(
         UserCustomRepository userCustomRepository,
         GroupRepository groupRepository,
         ProgressionRepository progressionRepository,
         SessionInstanceRepository sessionInstanceRepository,
-        SessionInstanceSearchRepository sessionInstanceSearchRepository
+        SessionInstanceSearchRepository sessionInstanceSearchRepository,
+        SessionRepository sessionRepository
     ) {
+        this.sessionRepository = sessionRepository;
         this.userCustomRepository = userCustomRepository;
         this.groupRepository = groupRepository;
 
@@ -160,6 +168,7 @@ public class SessionInstanceResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new sessionInstance, or with status {@code 400 (Bad Request)} if the sessionInstance has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+
     @PostMapping("")
     public ResponseEntity<SessionInstance> createSessionInstance(@Valid @RequestBody SessionInstance sessionInstance)
         throws URISyntaxException {
@@ -167,12 +176,121 @@ public class SessionInstanceResource {
         if (sessionInstance.getId() != null) {
             throw new BadRequestAlertException("A new sessionInstance cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        List<SessionInstance> sessionInstances = sessionInstanceRepository.findSessionInstanceByDateGroupProfessorSession(
+            sessionInstance.getSessionDate(),
+            sessionInstance.getSession1().getId(),
+            sessionInstance.getGroup().getId(),
+            sessionInstance.getProfessor().getId()
+        );
+        if (!sessionInstances.isEmpty()) {
+            throw new BadRequestAlertException("Already exists", ENTITY_NAME, "idexists");
+        }
         SessionInstance result = sessionInstanceRepository.save(sessionInstance);
         //sessionInstanceSearchRepository.index(result);
         return ResponseEntity
             .created(new URI("/api/session-instances/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @PostMapping("/initializeSessionInstances")
+    public ResponseEntity<List<SessionInstance>> createSessionInstances(
+        @RequestParam("sessionId") Long sessionId,
+        @RequestParam("groupId") Long groupId,
+        @RequestParam("professorId") Long professorId
+    ) {
+        Optional<Session> session = sessionRepository.findById(sessionId);
+        Optional<Group> group = groupRepository.findById(groupId);
+        Optional<UserCustom> professor = userCustomRepository.findById(professorId);
+
+        if (
+            session.isPresent() &&
+            group.isPresent() &&
+            professor.isPresent() &&
+            session.get().getPeriodStartDate() != null &&
+            session.get().getPeriodeEndDate() != null
+        ) {
+            LocalDate startDate = session.get().getPeriodStartDate();
+            LocalDate endDate = session.get().getPeriodeEndDate();
+            List<SessionInstance> createdInstances = new ArrayList<>();
+
+            // Iterate through all dates between start and end
+            LocalDate currentDate = startDate;
+            while (!currentDate.isAfter(endDate)) {
+                // Check if the session is programmed for the current day of the week
+                DayOfWeek currentDayOfWeek = currentDate.getDayOfWeek();
+
+                boolean isValidDay = false;
+                switch (currentDayOfWeek) {
+                    case MONDAY:
+                        isValidDay = (session.get().getMonday() != null) ? session.get().getMonday() : false;
+                        break;
+                    case TUESDAY:
+                        isValidDay = (session.get().getTuesday() != null) ? session.get().getTuesday() : false;
+                        break;
+                    case WEDNESDAY:
+                        isValidDay = (session.get().getWednesday() != null) ? session.get().getWednesday() : false;
+                        break;
+                    case THURSDAY:
+                        isValidDay = (session.get().getThursday() != null) ? session.get().getThursday() : false;
+                        break;
+                    case FRIDAY:
+                        isValidDay = (session.get().getFriday() != null) ? session.get().getFriday() : false;
+                        break;
+                    case SATURDAY:
+                        isValidDay = (session.get().getSaturday() != null) ? session.get().getSaturday() : false;
+                        break;
+                    case SUNDAY:
+                        isValidDay = (session.get().getSunday() != null) ? session.get().getSunday() : false;
+                        break;
+                    default:
+                        break;
+                }
+
+                // If the session is programmed for the current day, create a session instance
+                if (isValidDay) {
+                    SessionInstance si = new SessionInstance();
+                    si.setSession1(session.get());
+                    si.setGroup(group.get());
+                    si.setProfessor(professor.get());
+                    si.setSessionDate(currentDate); // Assuming you have a date field in SessionInstance
+                    si.setTitle(
+                        group.get().getNameAr() +
+                        '_' +
+                        professor.get().getFirstName() +
+                        '_' +
+                        professor.get().getLastName() +
+                        '_' +
+                        currentDate
+                    );
+                    si.setSite16(session.get().getSite14());
+                    si.setDuration(0);
+                    si.attendance(Attendance.ABSENT);
+                    si.setStartTime(null);
+                    si.isActive(false);
+                    si.startTime(ZonedDateTime.now());
+
+                    // Check if a session instance already exists for the given date, group, professor, and session
+                    List<SessionInstance> sessionInstances = sessionInstanceRepository.findSessionInstanceByDateGroupProfessorSession(
+                        currentDate,
+                        session.get().getId(),
+                        group.get().getId(),
+                        professor.get().getId()
+                    );
+                    if (sessionInstances.isEmpty()) {
+                        SessionInstance savedInstance = sessionInstanceRepository.save(si);
+                        createdInstances.add(savedInstance);
+                    }
+                }
+
+                // Move to the next day
+                currentDate = currentDate.plusDays(1);
+            }
+
+            return ResponseEntity.ok(createdInstances);
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     /**
@@ -468,15 +586,49 @@ public class SessionInstanceResource {
         @RequestParam("siteId") Long siteId,
         @RequestParam("gender") TargetedGender gender,
         @RequestParam("sessionDate") LocalDate sessionDate,
-        @RequestParam("sessionType") SessionType sessionType
+        @RequestParam("sessionType") SessionType sessionType,
+        @RequestParam("sessionId") Long sessionId
     ) {
         return sessionInstanceRepository.findSessionInstanceMulticreteria(
             siteId,
             gender,
             sessionDate.getYear(),
             sessionDate.getMonth().getValue(),
-            sessionType
+            sessionType,
+            sessionId
         );
+    }
+
+    /*@GetMapping("/unique-for-date-group-professor")
+    public List<SessionInstance> getSessionInstanceByCriteria(
+        @RequestParam("sessionDate") LocalDate sessionDate,
+        @RequestParam("sessionId") Long sessionId,
+        @RequestParam("groupId") Long groupId,
+        @RequestParam("professorId") Long professorId
+    ) {
+        return sessionInstanceRepository.findSessionInstanceByDateGroupProfessorSession(
+            sessionDate,
+            sessionId,
+            groupId,
+            professorId
+        );
+    }*/
+
+    @GetMapping("/unique-for-date-group-professor")
+    public boolean checkIfSessionInstanceExists(
+        @RequestParam("sessionDate") LocalDate sessionDate,
+        @RequestParam("sessionId") Long sessionId,
+        @RequestParam("groupId") Long groupId,
+        @RequestParam("professorId") Long professorId
+    ) {
+        List<SessionInstance> sessionInstances = sessionInstanceRepository.findSessionInstanceByDateGroupProfessorSession(
+            sessionDate,
+            sessionId,
+            groupId,
+            professorId
+        );
+
+        return !sessionInstances.isEmpty(); // Return true if sessionInstance exists, otherwise false
     }
 
     /**

@@ -60,24 +60,31 @@ public interface UserCustomRepository extends UserCustomRepositoryWithBagRelatio
     Optional<UserCustom> findByIdforGroup(Long id);
 
     @Query(
-        "SELECT u FROM UserCustom u left join fetch u.site13 left join fetch u.city left join fetch u.country left join fetch u.departement2 left join fetch u.job  left join fetch u.nationality WHERE (" +
+        "SELECT new UserCustom(u.id, u.firstName, u.lastName, u.role, u.site13, u.activated, u.sex) FROM UserCustom u " +
+        "WHERE (" +
         " (:role IS NULL OR u.role = :role)" +
         " AND (:firstName IS NULL OR u.firstName LIKE CONCAT('%', :firstName, '%'))" +
         " AND (:lastName IS NULL OR u.lastName LIKE CONCAT('%', :lastName, '%'))" +
         " AND (:siteId IS NULL OR u.site13.id = :siteId)" +
-        " AND (:accountStatus IS NULL OR u.accountStatus = :accountStatus)" +
+        " AND (:accountStatus IS NULL OR u.activated = :accountStatus)" +
         " AND (:sex IS NULL OR u.sex = :sex))"
     )
-    Page<UserCustom> searchUsers(
+    Page<UserCustom> searchUsersWithNullFields(
         Pageable pageable,
         @Param("firstName") String firstName,
         @Param("lastName") String lastName,
         @Param("role") Role role,
         @Param("siteId") Long siteId,
-        @Param("accountStatus") AccountStatus accountStatus,
+        @Param("accountStatus") boolean accountStatus,
         @Param("sex") Sex sex
     );
 
     @Query("SELECT u FROM UserCustom u " + "WHERE u.father = :user OR u.mother = :user OR u.wali = :user")
     List<UserCustom> findChildrenList(@Param("user") UserCustom user);
+
+    // Method to check if the login (username) is unique
+    boolean existsByLogin(String login);
+
+    // Method to check if the email is unique
+    boolean existsByEmail(String email);
 }

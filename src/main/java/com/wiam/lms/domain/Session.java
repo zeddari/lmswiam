@@ -2,9 +2,11 @@ package com.wiam.lms.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wiam.lms.domain.enumeration.Periodicity;
+import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.SessionJoinMode;
 import com.wiam.lms.domain.enumeration.SessionMode;
 import com.wiam.lms.domain.enumeration.SessionType;
+import com.wiam.lms.domain.enumeration.Sex;
 import com.wiam.lms.domain.enumeration.TargetedGender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -28,6 +30,16 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class Session implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public Session(Long id, String title, Site site, SessionType sessionType, TargetedGender targetedGender) {
+        this.id = id;
+        this.title = title;
+        this.site14 = site;
+        this.targetedGender = targetedGender;
+        this.sessionType = sessionType;
+    }
+
+    public Session() {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -243,7 +255,7 @@ public class Session implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
     private Boolean isActive;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "session1")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "session1")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(value = { "progressions", "links", "site16", "session1" }, allowSetters = true)
@@ -287,6 +299,7 @@ public class Session implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
+            "city",
             "user",
             "certificates",
             "answers",
@@ -321,6 +334,7 @@ public class Session implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
+            "city",
             "user",
             "certificates",
             "answers",

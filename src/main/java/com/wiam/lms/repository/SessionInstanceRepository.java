@@ -94,14 +94,16 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
         " and EXTRACT(YEAR FROM sessionInstance.sessionDate)=:year" +
         " and sessionInstance.site16.id=:siteId" +
         " and session.sessionType=:sessionType" +
-        " and session.targetedGender=:gender"
+        " and session.targetedGender=:gender" +
+        " and session.id=:sessionId"
     )
     List<SessionInstance> findSessionInstanceMulticreteria(
         @Param("siteId") Long siteId,
         @Param("gender") TargetedGender gender,
         @Param("year") int year,
         @Param("month") int month,
-        @Param("sessionType") SessionType sessionType
+        @Param("sessionType") SessionType sessionType,
+        @Param("sessionId") Long sessionId
     );
 
     List<SessionInstance> findByGroupId(Long id);
@@ -110,4 +112,18 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
         "select sessionInstance from SessionInstance sessionInstance  where sessionInstance.group in (:mygroups) and sessionInstance.session1.sessionType=SessionType.HALAQA and sessionInstance.session1.sessionMode=SessionMode.ONLINE"
     )
     Page<SessionInstance> findRemoteSessionInstancesByRole(@Param("mygroups") List<Group> mygroups, Pageable pageable);
+
+    @Query(
+        "select sessionInstance from SessionInstance sessionInstance " +
+        "where sessionInstance.sessionDate = :sessionDate " +
+        "and sessionInstance.session1.id = :sessionId " +
+        "and sessionInstance.group.id = :groupId " +
+        "and sessionInstance.professor.id = :professorId"
+    )
+    List<SessionInstance> findSessionInstanceByDateGroupProfessorSession(
+        @Param("sessionDate") LocalDate sessionDate,
+        @Param("sessionId") Long sessionId,
+        @Param("groupId") Long groupId,
+        @Param("professorId") Long professorId
+    );
 }

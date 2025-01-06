@@ -284,19 +284,25 @@ public class GroupResource {
         @RequestParam(required = false) String query
     ) {
         try {
-            // Prepare response
-            List<Group> groupList;
-            long totalElements;
-
-            // Admin: Fetch all groups with pagination
+            // Fetch groups with pagination
             Page<Group> groups = groupRepository.findAllByGroupTypeAndSiteAndNameAr(pageable, siteId, groupType, query);
-            groupList = groups.getContent();
-            totalElements = groups.getTotalElements();
 
-            // Create response with total count header
+            // Get content (list of groups)
+            List<Group> groupList = groups.getContent();
+
+            // Get total count of elements
+            long totalElements = groups.getTotalElements();
+            int totalPages = groups.getTotalPages();
+            int currentPage = groups.getNumber(); // current page number (0-indexed)
+
+            // Create response headers for pagination
             HttpHeaders headers = new HttpHeaders();
             headers.add("X-Total-Count", String.valueOf(totalElements));
+            headers.add("X-Total-Pages", String.valueOf(totalPages));
+            headers.add("X-Page", String.valueOf(currentPage + 1)); // to return 1-indexed page
+            headers.add("X-Page-Size", String.valueOf(pageable.getPageSize()));
 
+            // Return response with paginated group data
             return ResponseEntity.ok().headers(headers).body(groupList);
         } catch (Exception e) {
             log.error("Error fetching groups", e);

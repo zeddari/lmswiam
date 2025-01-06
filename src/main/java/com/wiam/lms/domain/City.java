@@ -31,14 +31,6 @@ public class City implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String code;
 
-    public String getCode() {
-        return code;
-    }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
     @NotNull
     @Size(max = 100)
     @Column(name = "name_ar", length = 100, nullable = false, unique = true)
@@ -62,6 +54,12 @@ public class City implements Serializable {
     @Column(name = "lng", length = 100, nullable = false, unique = true)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private Double lng;
+
+    // Add a ManyToOne relationship with the Country entity
+    @ManyToOne
+    @JoinColumn(name = "country_id", nullable = false) // Foreign key to the Country table
+    @JsonIgnoreProperties(value = { "cities" }, allowSetters = true) // Avoid circular references
+    private Country country;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -95,7 +93,7 @@ public class City implements Serializable {
     )
     private Set<Site> sites = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    // Getters and setters for the fields, including the new country field
 
     public Long getId() {
         return this.id;
@@ -136,12 +134,16 @@ public class City implements Serializable {
         this.nameLat = nameLat;
     }
 
+    public String getCode() {
+        return this.code;
+    }
+
     public void setCode(String code) {
         this.code = code;
     }
 
     public Double getLat() {
-        return lat;
+        return this.lat;
     }
 
     public void setLat(Double lat) {
@@ -149,11 +151,24 @@ public class City implements Serializable {
     }
 
     public Double getLng() {
-        return lng;
+        return this.lng;
     }
 
     public void setLng(Double lng) {
         this.lng = lng;
+    }
+
+    public Country getCountry() {
+        return this.country;
+    }
+
+    public City country(Country country) {
+        this.setCountry(country);
+        return this;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
     }
 
     public Set<Site> getSites() {
@@ -187,8 +202,6 @@ public class City implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -202,17 +215,24 @@ public class City implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "City{" +
-            "id=" + getId() +
-            ", nameAr='" + getNameAr() + "'" +
-            ", nameLat='" + getNameLat() + "'" +
-            "}";
+        return (
+            "City{" +
+            "id=" +
+            getId() +
+            ", nameAr='" +
+            getNameAr() +
+            "'" +
+            ", nameLat='" +
+            getNameLat() +
+            "'" +
+            ", country=" +
+            (country != null ? country.getNameLat() : null) +
+            "}"
+        );
     }
 }
