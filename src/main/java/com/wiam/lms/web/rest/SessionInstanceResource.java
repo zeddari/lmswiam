@@ -32,6 +32,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -582,21 +583,59 @@ public class SessionInstanceResource {
     }
 
     @GetMapping("/multicriteria")
-    public List<SessionInstance> getSessionInstanceByMulticreteria(
-        @RequestParam("siteId") Long siteId,
-        @RequestParam("gender") TargetedGender gender,
-        @RequestParam("sessionDate") LocalDate sessionDate,
-        @RequestParam("sessionType") SessionType sessionType,
-        @RequestParam("sessionId") Long sessionId
+    public ResponseEntity<List<SessionInstance>> getSessionInstanceByMulticreteria(
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false, defaultValue = "") String gender,
+        @RequestParam(required = false) String sessionDate,
+        @RequestParam(required = false, defaultValue = "") String sessionType,
+        @RequestParam(required = false) Long sessionId,
+        @RequestParam(required = false) Long userId // Added userId as an optional parameter
     ) {
-        return sessionInstanceRepository.findSessionInstanceMulticreteria(
+        // Convert gender string to enum if present
+        TargetedGender genderEnum = null;
+        if (gender != null && !gender.isEmpty()) {
+            try {
+                genderEnum = TargetedGender.valueOf(gender);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
+        // Convert sessionType string to enum if present
+        SessionType sessionTypeEnum = null;
+        if (sessionType != null && !sessionType.isEmpty()) {
+            try {
+                sessionTypeEnum = SessionType.valueOf(sessionType);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
+        // Parse date if present
+        Integer year = null;
+        Integer month = null;
+        if (sessionDate != null && !sessionDate.isEmpty()) {
+            try {
+                LocalDate date = LocalDate.parse(sessionDate);
+                year = date.getYear();
+                month = date.getMonthValue();
+            } catch (DateTimeParseException e) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
+        // Call the repository method, including the userId filter
+        List<SessionInstance> result = sessionInstanceRepository.findSessionInstanceMulticreteria(
             siteId,
-            gender,
-            sessionDate.getYear(),
-            sessionDate.getMonth().getValue(),
-            sessionType,
-            sessionId
+            genderEnum,
+            year,
+            month,
+            sessionTypeEnum,
+            sessionId,
+            userId // Pass userId to the repository
         );
+
+        return ResponseEntity.ok().body(result);
     }
 
     /*@GetMapping("/unique-for-date-group-professor")

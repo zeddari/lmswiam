@@ -87,23 +87,27 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
     List<SessionInstance> findOneBySiteId(@Param("id") Long id, @Param("sessionDate") LocalDate sessionDate);
 
     @Query(
-        "select sessionInstance from SessionInstance sessionInstance" +
+        "select distinct sessionInstance from SessionInstance sessionInstance" +
         " left join fetch sessionInstance.session1 session" +
-        //" left join fetch sessionInstance.professor"+
-        " where EXTRACT(MONTH FROM sessionInstance.sessionDate)=:month" +
-        " and EXTRACT(YEAR FROM sessionInstance.sessionDate)=:year" +
-        " and sessionInstance.site16.id=:siteId" +
-        " and session.sessionType=:sessionType" +
-        " and session.targetedGender=:gender" +
-        " and session.id=:sessionId"
-    )
+        " left join fetch sessionInstance.progressions progression" +
+        " where (:siteId is null or sessionInstance.site16.id = :siteId)" +
+        " and (:gender is null or session.targetedGender = :gender)" +
+        " and (:year is null or EXTRACT(YEAR FROM sessionInstance.sessionDate) = :year)" +
+        " and (:month is null or EXTRACT(MONTH FROM sessionInstance.sessionDate) = :month)" +
+        " and (:sessionType is null or session.sessionType = :sessionType)" +
+        " and (:sessionId is null or session.id = :sessionId)" +
+        " and (progression.isForAttendance = true)" +
+        " and (:userId is null or sessionInstance.professor.id = :userId" +
+        " or (progression.student.id = :userId))"
+    ) // Added condition to check for studentId in progression
     List<SessionInstance> findSessionInstanceMulticreteria(
         @Param("siteId") Long siteId,
         @Param("gender") TargetedGender gender,
-        @Param("year") int year,
-        @Param("month") int month,
+        @Param("year") Integer year,
+        @Param("month") Integer month,
         @Param("sessionType") SessionType sessionType,
-        @Param("sessionId") Long sessionId
+        @Param("sessionId") Long sessionId,
+        @Param("userId") Long userId // Added userId as a parameter
     );
 
     List<SessionInstance> findByGroupId(Long id);
