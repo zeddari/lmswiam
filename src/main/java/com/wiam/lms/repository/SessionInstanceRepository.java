@@ -87,19 +87,23 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
     List<SessionInstance> findOneBySiteId(@Param("id") Long id, @Param("sessionDate") LocalDate sessionDate);
 
     @Query(
-        "select distinct sessionInstance from SessionInstance sessionInstance" +
-        " left join fetch sessionInstance.session1 session" +
-        " left join fetch sessionInstance.progressions progression" +
-        " where (:siteId is null or sessionInstance.site16.id = :siteId)" +
-        " and (:gender is null or session.targetedGender = :gender)" +
-        " and (:year is null or EXTRACT(YEAR FROM sessionInstance.sessionDate) = :year)" +
-        " and (:month is null or EXTRACT(MONTH FROM sessionInstance.sessionDate) = :month)" +
-        " and (:sessionType is null or session.sessionType = :sessionType)" +
-        " and (:sessionId is null or session.id = :sessionId)" +
-        " and (progression.isForAttendance = true)" +
-        " and (:userId is null or sessionInstance.professor.id = :userId" +
-        " or (progression.student.id = :userId))"
-    ) // Added condition to check for studentId in progression
+        "select distinct sessionInstance from SessionInstance sessionInstance " +
+        "left join fetch sessionInstance.session1 session " +
+        "left join fetch sessionInstance.progressions progression " +
+        "left join fetch progression.fromSourate fromSourate " +
+        "left join fetch progression.toSourate toSourate " +
+        "left join fetch progression.fromAyahs fromAyahs " +
+        "left join fetch progression.toAyahs toAyahs " +
+        "where (:siteId is null or sessionInstance.site16.id = :siteId) " +
+        "and (:gender is null or session.targetedGender = :gender) " +
+        "and (:year is null or EXTRACT(YEAR FROM sessionInstance.sessionDate) = :year) " +
+        "and (:month is null or EXTRACT(MONTH FROM sessionInstance.sessionDate) = :month) " +
+        "and (:sessionType is null or session.sessionType = :sessionType) " +
+        "and (:sessionId is null or session.id = :sessionId) " +
+        "and (progression.isForAttendance = :isForAttendance) " +
+        "and (:userId is null or sessionInstance.professor.id = :userId " +
+        "or (progression.student.id = :userId))"
+    )
     List<SessionInstance> findSessionInstanceMulticreteria(
         @Param("siteId") Long siteId,
         @Param("gender") TargetedGender gender,
@@ -107,7 +111,8 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
         @Param("month") Integer month,
         @Param("sessionType") SessionType sessionType,
         @Param("sessionId") Long sessionId,
-        @Param("userId") Long userId // Added userId as a parameter
+        @Param("userId") Long userId,
+        @Param("isForAttendance") boolean isForAttendance
     );
 
     List<SessionInstance> findByGroupId(Long id);

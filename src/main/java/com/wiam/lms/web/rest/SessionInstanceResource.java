@@ -589,7 +589,8 @@ public class SessionInstanceResource {
         @RequestParam(required = false) String sessionDate,
         @RequestParam(required = false, defaultValue = "") String sessionType,
         @RequestParam(required = false) Long sessionId,
-        @RequestParam(required = false) Long userId // Added userId as an optional parameter
+        @RequestParam(required = false) Long userId, // Added userId as an optional parameter
+        @RequestParam(required = false, defaultValue = "false") boolean isForAttendance // Added the isForAttendance parameter
     ) {
         // Convert gender string to enum if present
         TargetedGender genderEnum = null;
@@ -624,7 +625,7 @@ public class SessionInstanceResource {
             }
         }
 
-        // Call the repository method, including the userId filter
+        // Call the repository method, including the isForAttendance filter
         List<SessionInstance> result = sessionInstanceRepository.findSessionInstanceMulticreteria(
             siteId,
             genderEnum,
@@ -632,7 +633,8 @@ public class SessionInstanceResource {
             month,
             sessionTypeEnum,
             sessionId,
-            userId // Pass userId to the repository
+            userId,
+            isForAttendance // Include the isForAttendance parameter in the repository query
         );
 
         return ResponseEntity.ok().body(result);
