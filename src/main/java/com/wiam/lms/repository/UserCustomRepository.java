@@ -45,12 +45,20 @@ public interface UserCustomRepository extends UserCustomRepositoryWithBagRelatio
     List<UserCustom> findAllWithToOneRelationships();
 
     @Query(
-        "select userCustom from UserCustom userCustom  left join fetch userCustom.city left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.id =:id"
+        "select userCustom from UserCustom userCustom left join fetch userCustom.authorities left join fetch userCustom.city left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.id =:id"
     )
     Optional<UserCustom> findOneWithToOneRelationships(@Param("id") Long id);
 
     @Query(
-        "select userCustom from UserCustom userCustom  left join fetch userCustom.city left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.login =:login"
+        "select userCustom from UserCustom userCustom " +
+        "left join fetch userCustom.authorities " +
+        "left join fetch userCustom.groups " +
+        "left join fetch userCustom.site13 " +
+        "left join fetch userCustom.country " +
+        "left join fetch userCustom.nationality " +
+        "left join fetch userCustom.job " +
+        "left join fetch userCustom.departement2 " +
+        "where userCustom.login = :login"
     )
     Optional<UserCustom> findUserCustomByLogin(@Param("login") String login);
 

@@ -1,5 +1,6 @@
 package com.wiam.lms.repository.custom;
 
+import com.wiam.lms.domain.Authority;
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.custom.ElementDto;
@@ -45,8 +46,15 @@ public interface UserCustomLmsRepository extends UserCustomRepositoryWithBagRela
     @Query("select userCustom from UserCustom userCustom where userCustom.role =:role")
     public List<UserCustom> findByRole(@Param("role") Role role);
 
-    @Query("select userCustom from UserCustom userCustom where userCustom.role =:role and userCustom.site13.id=:siteId")
-    public List<UserCustom> findByRoleSite(@Param("role") Role role, @Param("siteId") Long siteId);
+    @Query(
+        "select new com.wiam.lms.domain.dto.custom.ElementDto(" +
+        "userCustom.id, " +
+        "concat(userCustom.firstName, ' ', userCustom.lastName)) " +
+        "from UserCustom userCustom " +
+        "join userCustom.authorities authority " + // Join with authorities to filter by authority
+        "where authority = :authority and userCustom.site13.id = :siteId"
+    )
+    public List<ElementDto> findByRoleSite(@Param("authority") Authority authority, @Param("siteId") Long siteId);
 
     @Query(
         "select new com.wiam.lms.domain.dto.custom.ElementDto(userCustom.id, concat(userCustom.firstName, ' ', userCustom.lastName)) " +

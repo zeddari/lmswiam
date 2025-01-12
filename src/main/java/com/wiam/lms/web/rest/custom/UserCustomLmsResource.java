@@ -1,11 +1,13 @@
 package com.wiam.lms.web.rest.custom;
 
+import com.wiam.lms.domain.Authority;
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.dto.custom.ElementDto;
 import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.Sex;
+import com.wiam.lms.repository.AuthorityRepository;
 import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.custom.UserCustomLmsRepository;
 import com.wiam.lms.repository.search.UserCustomSearchRepository;
@@ -50,10 +52,16 @@ public class UserCustomLmsResource {
     private final UserCustomLmsRepository userCustomLmsRepository;
 
     private final UserCustomSearchRepository userCustomSearchRepository;
+    private final AuthorityRepository authorityRepository;
 
-    public UserCustomLmsResource(UserCustomLmsRepository userCustomLmsRepository, UserCustomSearchRepository userCustomSearchRepository) {
+    public UserCustomLmsResource(
+        UserCustomLmsRepository userCustomLmsRepository,
+        UserCustomSearchRepository userCustomSearchRepository,
+        AuthorityRepository authorityRepository
+    ) {
         this.userCustomLmsRepository = userCustomLmsRepository;
         this.userCustomSearchRepository = userCustomSearchRepository;
+        this.authorityRepository = authorityRepository;
     }
 
     @GetMapping("/{role}/role")
@@ -77,12 +85,55 @@ public class UserCustomLmsResource {
     }
 
     @GetMapping("/byRoleSite")
-    public List<UserCustom> getAllUserCustomsByUserTypeSite(@RequestParam Role role, @RequestParam Long siteId) {
-        return userCustomLmsRepository.findByRoleSite(role, siteId);
+    public List<ElementDto> getAllUserCustomsByUserTypeSite(@RequestParam Role role, @RequestParam Long siteId) {
+        // Convert Role to corresponding Authority
+        Authority authority = roleToAuthority(role);
+
+        // Use the Authority entity in your repository query
+        return userCustomLmsRepository.findByRoleSite(authority, siteId);
     }
 
-    @GetMapping("/byRoleAndSite")
+    // Map Role to corresponding Authority
+    Authority roleToAuthority(Role role) {
+        switch (role) {
+            case INSTRUCTOR:
+                return authorityRepository
+                    .findByName("ROLE_INSTRUCTOR")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_INSTRUCTOR"));
+            case STUDENT:
+                return authorityRepository
+                    .findByName("ROLE_STUDENT")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_STUDENT"));
+            case PARENT:
+                return authorityRepository
+                    .findByName("ROLE_PARENT")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_PARENT"));
+            case MANAGEMENT:
+                return authorityRepository
+                    .findByName("ROLE_MANAGEMENT")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_MANAGEMENT"));
+            case SUPERVISOR:
+                return authorityRepository
+                    .findByName("ROLE_SUPERVISOR")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_SUPERVISOR"));
+            case MANAGER:
+                return authorityRepository
+                    .findByName("ROLE_MANAGER")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_MANAGER"));
+            case SUPER_MANAGER:
+                return authorityRepository
+                    .findByName("ROLE_SUPER_MANAGER")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_SUPER_MANAGER"));
+            case SPONSOR:
+                return authorityRepository
+                    .findByName("ROLE_SPONSOR")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_SPONSOR"));
+            default:
+                throw new IllegalArgumentException("Unknown role: " + role);
+        }
+    }
+    /*@GetMapping("/byRoleAndSite")
     public List<ElementDto> getAllUserCustomsByUserRoleAndSite(@RequestParam Role role, @RequestParam Long siteId) {
         return userCustomLmsRepository.findByRoleAndSite(role, siteId);
-    }
+    }*/
 }

@@ -421,7 +421,7 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
     @JsonIgnoreProperties(value = { "departements", "userCustoms", "departement1" }, allowSetters = true)
     private Departement departement2;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "elements")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "elements")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(
@@ -454,8 +454,7 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
     )
     private Set<Session> sessions3s = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "user_custom_authority",
         joinColumns = { @JoinColumn(name = "user_custom_id", referencedColumnName = "id") },

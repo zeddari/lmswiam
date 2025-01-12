@@ -69,6 +69,33 @@ public interface SessionRepository extends SessionRepositoryWithBagRelationships
     );
 
     @Query(
+        "select session " +
+        "from Session session " +
+        "join session.site14 site " +
+        "left join session.professors professor " +
+        "left join session.employees employee " +
+        "left join session.groups group " +
+        "left join group.elements element " +
+        "where (:siteId is null or session.site14.id = :siteId) " +
+        "and (:sessionType is null or session.sessionType = :sessionType) " +
+        "and (:gender is null or session.targetedGender = :gender) " +
+        "and (:query is null or session.title like CONCAT('%', :query, '%')) " +
+        "and (" +
+        "(professor.id = :userId) or " +
+        "(employee.id = :userId) or " +
+        "(element.id = :userId)" + // Removed the extra comma here
+        ")"
+    )
+    Page<Session> findFilteredSessionsForUser(
+        @Param("userId") Long userId, // user ID to filter the sessions the user is involved with
+        @Param("siteId") Long siteId,
+        @Param("sessionType") SessionType sessionType,
+        @Param("gender") TargetedGender gender,
+        @Param("query") String query,
+        Pageable pageable
+    );
+
+    @Query(
         "select distinct session from Session session " +
         "join fetch session.site14 " +
         "left join fetch session.groups " +

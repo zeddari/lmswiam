@@ -11,9 +11,6 @@ import java.util.Objects;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-/**
- * An authority (a security role) used by Spring Security.
- */
 @Entity
 @Table(name = "jhi_authority")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -26,6 +23,15 @@ public class Authority implements Serializable {
     @Id
     @Column(length = 50)
     private String name;
+
+    public Authority() {
+        // Default constructor
+    }
+
+    // Constructor to allow creating from a string
+    public Authority(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;

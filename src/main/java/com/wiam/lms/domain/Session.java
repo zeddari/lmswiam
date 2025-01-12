@@ -39,6 +39,26 @@ public class Session implements Serializable {
         this.sessionType = sessionType;
     }
 
+    public Session(
+        Long id,
+        String title,
+        Site site14,
+        SessionType sessionType,
+        TargetedGender targetedGender,
+        Set<UserCustom> professors,
+        Set<UserCustom> employees,
+        Set<Group> groups
+    ) {
+        this.id = id;
+        this.title = title;
+        this.site14 = site14;
+        this.sessionType = sessionType;
+        this.targetedGender = targetedGender;
+        this.professors = professors != null ? professors : new HashSet<>();
+        this.employees = employees != null ? employees : new HashSet<>();
+        this.groups = groups != null ? groups : new HashSet<>();
+    }
+
     public Session() {}
 
     @Id

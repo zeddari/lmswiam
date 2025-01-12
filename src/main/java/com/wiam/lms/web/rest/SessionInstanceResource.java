@@ -21,6 +21,7 @@ import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.SessionInstanceSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -583,61 +584,90 @@ public class SessionInstanceResource {
     }
 
     @GetMapping("/multicriteria")
-    public ResponseEntity<List<SessionInstance>> getSessionInstanceByMulticreteria(
+    public ResponseEntity<List<SessionInstance>> getSessionInstanceByMulticriteria(
+        Pageable pageable,
         @RequestParam(required = false) Long siteId,
         @RequestParam(required = false, defaultValue = "") String gender,
         @RequestParam(required = false) String sessionDate,
         @RequestParam(required = false, defaultValue = "") String sessionType,
         @RequestParam(required = false) Long sessionId,
         @RequestParam(required = false) Long userId, // Added userId as an optional parameter
-        @RequestParam(required = false, defaultValue = "false") boolean isForAttendance // Added the isForAttendance parameter
+        @RequestParam(required = false, defaultValue = "false") boolean isForAttendance, // Added the isForAttendance parameter
+        Principal principal // Principal added to get authenticated user info
     ) {
-        // Convert gender string to enum if present
-        TargetedGender genderEnum = null;
-        if (gender != null && !gender.isEmpty()) {
-            try {
-                genderEnum = TargetedGender.valueOf(gender);
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().build();
-            }
+        // Validate principal
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        // Convert sessionType string to enum if present
-        SessionType sessionTypeEnum = null;
-        if (sessionType != null && !sessionType.isEmpty()) {
-            try {
-                sessionTypeEnum = SessionType.valueOf(sessionType);
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().build();
+        try {
+            // Fetch the authenticated user
+            UserCustom userCustom = userCustomRepository
+                .findUserCustomByLogin(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            // Check if user is an admin
+            boolean isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
+
+            // Convert gender string to enum if present
+            TargetedGender genderEnum = null;
+            if (gender != null && !gender.isEmpty()) {
+                try {
+                    genderEnum = TargetedGender.valueOf(gender);
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.badRequest().build();
+                }
             }
-        }
 
-        // Parse date if present
-        Integer year = null;
-        Integer month = null;
-        if (sessionDate != null && !sessionDate.isEmpty()) {
-            try {
-                LocalDate date = LocalDate.parse(sessionDate);
-                year = date.getYear();
-                month = date.getMonthValue();
-            } catch (DateTimeParseException e) {
-                return ResponseEntity.badRequest().build();
+            // Convert sessionType string to enum if present
+            SessionType sessionTypeEnum = null;
+            if (sessionType != null && !sessionType.isEmpty()) {
+                try {
+                    sessionTypeEnum = SessionType.valueOf(sessionType);
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.badRequest().build();
+                }
             }
+
+            // Parse date if present
+            Integer year = null;
+            Integer month = null;
+            if (sessionDate != null && !sessionDate.isEmpty()) {
+                try {
+                    LocalDate date = LocalDate.parse(sessionDate);
+                    year = date.getYear();
+                    month = date.getMonthValue();
+                } catch (DateTimeParseException e) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // If the user is not an admin, use the Principal's user ID
+            if (!isAdmin) {
+                userId = userCustom.getId(); // Use the authenticated user's ID
+                siteId = userCustom.getSite13().getId();
+            }
+
+            // Call the repository method, including the isForAttendance filter
+            List<SessionInstance> result = sessionInstanceRepository.findSessionInstanceMulticreteria(
+                siteId,
+                genderEnum,
+                year,
+                month,
+                sessionTypeEnum,
+                sessionId,
+                userId,
+                isForAttendance // Include the isForAttendance parameter in the repository query
+            );
+
+            return ResponseEntity.ok().body(result);
+        } catch (EntityNotFoundException e) {
+            log.error("User not found", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
-        // Call the repository method, including the isForAttendance filter
-        List<SessionInstance> result = sessionInstanceRepository.findSessionInstanceMulticreteria(
-            siteId,
-            genderEnum,
-            year,
-            month,
-            sessionTypeEnum,
-            sessionId,
-            userId,
-            isForAttendance // Include the isForAttendance parameter in the repository query
-        );
-
-        return ResponseEntity.ok().body(result);
     }
 
     /*@GetMapping("/unique-for-date-group-professor")

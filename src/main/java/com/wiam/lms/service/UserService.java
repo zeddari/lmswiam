@@ -8,6 +8,7 @@ import com.wiam.lms.domain.Language;
 import com.wiam.lms.domain.Nationality;
 import com.wiam.lms.domain.Site;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.Sex;
 import com.wiam.lms.repository.AuthorityRepository;
 import com.wiam.lms.repository.UserRepository;
@@ -159,12 +160,32 @@ public class UserService {
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        authorities.add(roleToAuthority(userDTO.getRole())); // Adding the Authority to the Set
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         //userSearchRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
+    }
+
+    Authority roleToAuthority(Role role) {
+        switch (role) {
+            case INSTRUCTOR:
+                return authorityRepository
+                    .findByName("ROLE_INSTRUCTOR")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_INSTRUCTOR"));
+            case STUDENT:
+                return authorityRepository
+                    .findByName("ROLE_STUDENT")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_STUDENT"));
+            case SPONSOR:
+                return authorityRepository
+                    .findByName("ROLE_SPONSOR")
+                    .orElseThrow(() -> new IllegalArgumentException("Authority not found for role: ROLE_SPONSOR"));
+            default:
+                throw new IllegalArgumentException("Unknown role: " + role);
+        }
     }
 
     private boolean removeNonActivatedUser(UserCustom existingUser) {

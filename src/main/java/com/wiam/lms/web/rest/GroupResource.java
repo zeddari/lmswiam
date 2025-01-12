@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
@@ -281,19 +282,79 @@ public class GroupResource {
         Pageable pageable,
         @RequestParam(required = false) Long siteId,
         @RequestParam(required = false) GroupType groupType,
-        @RequestParam(required = false) String query
+        @RequestParam(required = false) String query,
+        Principal principal
     ) {
+        // Validate principal
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         try {
-            // Fetch groups with pagination
-            Page<Group> groups = groupRepository.findAllByGroupTypeAndSiteAndNameAr(pageable, siteId, groupType, query);
+            // Find user with optional null check
+            UserCustom userCustom = userCustomRepository
+                .findUserCustomByLogin(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-            // Get content (list of groups)
-            List<Group> groupList = groups.getContent();
+            // Check if user is an admin
+            boolean isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
 
-            // Get total count of elements
-            long totalElements = groups.getTotalElements();
-            int totalPages = groups.getTotalPages();
-            int currentPage = groups.getNumber(); // current page number (0-indexed)
+            List<Group> groupList = new ArrayList<>();
+            long totalElements = 0;
+            int totalPages = 0;
+            int currentPage = 0;
+
+            if (isAdmin) {
+                // Admin logic: fetch groups with pagination and optional filters
+                Page<Group> groups = groupRepository.findAllByGroupTypeAndSiteAndNameAr(pageable, siteId, groupType, query);
+
+                // Get content (list of groups)
+                groupList = groups.getContent();
+
+                // Get total count of elements
+                totalElements = groups.getTotalElements();
+                totalPages = groups.getTotalPages();
+                currentPage = groups.getNumber(); // current page number (0-indexed)
+            } else {
+                // Non-admin logic: fetch user's groups and apply filters
+                Set<Group> allUserGroups = userCustom.getGroups(); // Fetch all groups for the user
+                List<Group> filteredGroups = new ArrayList<>(allUserGroups);
+
+                // Apply filters for non-admin users
+                if (siteId != null) {
+                    filteredGroups =
+                        filteredGroups
+                            .stream()
+                            .filter(group -> group.getSite11() != null && group.getSite11().getId().equals(siteId))
+                            .collect(Collectors.toList());
+                }
+
+                if (groupType != null) {
+                    filteredGroups =
+                        filteredGroups
+                            .stream()
+                            .filter(group -> group.getGroupType() != null && group.getGroupType().equals(groupType))
+                            .collect(Collectors.toList());
+                }
+
+                if (query != null && !query.isEmpty()) {
+                    filteredGroups =
+                        filteredGroups
+                            .stream()
+                            .filter(group -> group.getNameAr() != null && group.getNameAr().contains(query))
+                            .collect(Collectors.toList());
+                }
+
+                // Paginate the filtered groups
+                int start = Math.min((int) pageable.getOffset(), filteredGroups.size());
+                int end = Math.min((start + pageable.getPageSize()), filteredGroups.size());
+                groupList = filteredGroups.subList(start, end);
+
+                // Pagination info
+                totalElements = filteredGroups.size();
+                totalPages = (int) Math.ceil((double) totalElements / pageable.getPageSize());
+                currentPage = pageable.getPageNumber();
+            }
 
             // Create response headers for pagination
             HttpHeaders headers = new HttpHeaders();
@@ -304,8 +365,11 @@ public class GroupResource {
 
             // Return response with paginated group data
             return ResponseEntity.ok().headers(headers).body(groupList);
+        } catch (EntityNotFoundException e) {
+            log.error("User not found", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
-            log.error("Error fetching groups", e);
+            log.error("Unexpected error", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

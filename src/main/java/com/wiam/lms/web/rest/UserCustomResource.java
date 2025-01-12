@@ -265,6 +265,9 @@ public class UserCustomResource {
                 if (userCustom.getLogin() != null) {
                     existingUserCustom.setLogin(userCustom.getLogin());
                 }
+                if (userCustom.getAuthorities() != null) {
+                    existingUserCustom.setAuthorities(userCustom.getAuthorities());
+                }
 
                 existingUserCustom.setActivated(userCustom.isActivated());
 

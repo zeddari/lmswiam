@@ -12,6 +12,7 @@ import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.SessionSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -75,7 +76,7 @@ public class SessionResourceLms {
         return sessions;
     }
 
-    @GetMapping("/mySessions")
+    /*@GetMapping("/mySessions")
     public ResponseEntity<List<Session>> getSessions(
         Pageable pageable,
         @RequestParam(required = false) Long siteId,
@@ -89,6 +90,57 @@ public class SessionResourceLms {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", String.valueOf(sessionPage.getTotalElements()));
         return new ResponseEntity<>(sessionList, headers, HttpStatus.OK);
+    }*/
+
+    @GetMapping("/mySessions")
+    public ResponseEntity<List<Session>> getSessions(
+        Pageable pageable,
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false) SessionType sessionType,
+        @RequestParam(required = false) TargetedGender gender,
+        @RequestParam(required = false) String query,
+        Principal principal
+    ) {
+        // Validate principal
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        try {
+            // Find user with optional null check
+            UserCustom userCustom = userCustomRepository
+                .findUserCustomByLogin(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            // Check if user is an admin
+            boolean isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
+
+            // Fetch the sessions based on admin or user role
+            Page<Session> sessionPage;
+            if (isAdmin) {
+                // Admin logic: Fetch sessions with optional filters
+                sessionPage = sessionRepository.findFilteredSessions(siteId, sessionType, gender, query, pageable);
+            } else {
+                // Non-admin logic: Filter sessions based on user’s group or custom criteria (modify as needed)
+                sessionPage =
+                    sessionRepository.findFilteredSessionsForUser(userCustom.getId(), siteId, sessionType, gender, query, pageable);
+            }
+
+            List<Session> sessionList = sessionRepository.findBySessionsIn(sessionPage.getContent());
+
+            // Create response headers for pagination
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("X-Total-Count", String.valueOf(sessionPage.getTotalElements()));
+
+            // Return response with paginated session data
+            return ResponseEntity.ok().headers(headers).body(sessionList);
+        } catch (EntityNotFoundException e) {
+            log.error("User not found", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/activities/halaqa")
