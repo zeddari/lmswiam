@@ -1,14 +1,19 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.Certificate;
+import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.repository.CertificateRepository;
+import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.CertificateSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,6 +21,10 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +47,18 @@ public class CertificateResource {
     private String applicationName;
 
     private final CertificateRepository certificateRepository;
+    private final UserCustomRepository userCustomRepository;
 
     private final CertificateSearchRepository certificateSearchRepository;
 
-    public CertificateResource(CertificateRepository certificateRepository, CertificateSearchRepository certificateSearchRepository) {
+    public CertificateResource(
+        CertificateRepository certificateRepository,
+        CertificateSearchRepository certificateSearchRepository,
+        UserCustomRepository userCustomRepository
+    ) {
         this.certificateRepository = certificateRepository;
         this.certificateSearchRepository = certificateSearchRepository;
+        this.userCustomRepository = userCustomRepository;
     }
 
     /**
@@ -178,6 +193,86 @@ public class CertificateResource {
             return certificateRepository.findAllWithEagerRelationships();
         } else {
             return certificateRepository.findAll();
+        }
+    }
+
+    @GetMapping("/myCertificates")
+    public ResponseEntity<List<Certificate>> getMyCertificates(
+        Pageable pageable,
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
+        Principal principal
+    ) {
+        // Validate principal
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        try {
+            // Find user with optional null check
+            UserCustom userCustom = userCustomRepository
+                .findUserCustomByLogin(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            // Check if user is an admin
+            boolean isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
+
+            List<Certificate> certificateList = new ArrayList<>();
+            long totalElements = 0;
+            int totalPages = 0;
+            int currentPage = 0;
+
+            if (eagerload) {
+                if (isAdmin) {
+                    // Admin logic: fetch certificates with eager load and pagination
+                    Page<Certificate> certificates = certificateRepository.findAllWithEagerRelationships(pageable);
+
+                    // Get content (list of certificates)
+                    certificateList = certificates.getContent();
+
+                    // Get total count of elements
+                    totalElements = certificates.getTotalElements();
+                    totalPages = certificates.getTotalPages();
+                    currentPage = certificates.getNumber(); // current page number (0-indexed)
+                } else {
+                    // Non-admin logic: fetch certificates for the user with pagination
+                    Page<Certificate> certificates = certificateRepository.findAllByUserCustom(pageable, userCustom);
+
+                    // Get content (list of certificates)
+                    certificateList = certificates.getContent();
+
+                    // Get total count of elements
+                    totalElements = certificates.getTotalElements();
+                    totalPages = certificates.getTotalPages();
+                    currentPage = certificates.getNumber(); // current page number (0-indexed)
+                }
+            } else {
+                // Fallback: fetch certificates without eager load
+                Page<Certificate> certificates = certificateRepository.findAll(pageable);
+
+                // Get content (list of certificates)
+                certificateList = certificates.getContent();
+
+                // Get total count of elements
+                totalElements = certificates.getTotalElements();
+                totalPages = certificates.getTotalPages();
+                currentPage = certificates.getNumber(); // current page number (0-indexed)
+            }
+
+            // Create response headers for pagination
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("X-Total-Count", String.valueOf(totalElements));
+            headers.add("X-Total-Pages", String.valueOf(totalPages));
+            headers.add("X-Page", String.valueOf(currentPage + 1)); // to return 1-indexed page
+            headers.add("X-Page-Size", String.valueOf(pageable.getPageSize()));
+
+            // Return response with paginated certificate data
+            return ResponseEntity.ok().headers(headers).body(certificateList);
+        } catch (EntityNotFoundException e) {
+            log.error("User not found", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

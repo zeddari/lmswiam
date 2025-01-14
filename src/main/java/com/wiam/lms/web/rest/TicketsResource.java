@@ -12,6 +12,7 @@ import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.TicketsSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -33,6 +34,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -224,6 +227,63 @@ public class TicketsResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, tickets.getId().toString())
         );
+    }
+
+    @GetMapping("myTickets")
+    public ResponseEntity<List<Tickets>> getAllTickets(
+        @RequestParam(required = false) String subject,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateTicket,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateProcess,
+        @RequestParam(required = false) TicketStatus processed,
+        Pageable pageable,
+        Principal principal
+    ) {
+        // Validate principal
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        try {
+            // Find user with optional null check
+            UserCustom userCustom = userCustomRepository
+                .findUserCustomByLogin(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            // Check if user is an admin
+            boolean isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
+
+            // Call the repository method to get the filtered and paginated tickets
+            Page<Tickets> ticketsPage = ticketsRepository.findTicketsByFilters(
+                subject,
+                dateTicket,
+                dateProcess,
+                processed,
+                isAdmin ? null : userCustom, // Only filter by user if the user is not an admin
+                pageable
+            );
+
+            // Get content and pagination information
+            List<Tickets> ticketsList = ticketsPage.getContent();
+            long totalElements = ticketsPage.getTotalElements();
+            int totalPages = ticketsPage.getTotalPages();
+            int currentPage = ticketsPage.getNumber();
+
+            // Create response headers for pagination
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("X-Total-Count", String.valueOf(totalElements));
+            headers.add("X-Total-Pages", String.valueOf(totalPages));
+            headers.add("X-Page", String.valueOf(currentPage + 1)); // to return 1-indexed page
+            headers.add("X-Page-Size", String.valueOf(pageable.getPageSize()));
+
+            log.debug("REST request to get filtered Tickets");
+            return ResponseEntity.ok().headers(headers).body(ticketsList);
+        } catch (EntityNotFoundException e) {
+            log.error("User not found", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     /**

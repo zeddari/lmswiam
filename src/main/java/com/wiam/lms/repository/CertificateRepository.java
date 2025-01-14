@@ -1,6 +1,7 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Certificate;
+import com.wiam.lms.domain.UserCustom;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -41,4 +42,9 @@ public interface CertificateRepository extends JpaRepository<Certificate, Long> 
         "select certificate from Certificate certificate left join fetch certificate.site19 left join fetch certificate.userCustom6 left join fetch certificate.comitte left join fetch certificate.topic4 where certificate.id =:id"
     )
     Optional<Certificate> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query(
+        "select c from Certificate c left join fetch c.site19 left join fetch c.userCustom6 left join fetch c.comitte left join fetch c.topic4 where c.userCustom6 = :userCustom"
+    )
+    Page<Certificate> findAllByUserCustom(Pageable pageable, @Param("userCustom") UserCustom userCustom);
 }
