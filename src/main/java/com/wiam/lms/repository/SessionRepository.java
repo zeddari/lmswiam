@@ -4,8 +4,10 @@ import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.SessionDTO;
 import com.wiam.lms.domain.enumeration.SessionType;
 import com.wiam.lms.domain.enumeration.TargetedGender;
+import com.wiam.lms.domain.statistics.SessionTypeCountDTO;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -127,13 +129,13 @@ public interface SessionRepository extends SessionRepositoryWithBagRelationships
         " left join fetch session.groups" +
         " left join fetch session.professors" +
         " left join fetch session.employees" +
-        " where session.periodStartDate <= :sessionDate" +
-        " and session.periodeEndDate >= :sessionDate" +
-        " and session.site14.id=:siteId" +
-        " and session.sessionType=:sessionType" +
-        " and session.targetedGender=:gender"
+        " where (:sessionDate is null or session.periodStartDate <= :sessionDate) " +
+        " and (:sessionDate is null or session.periodeEndDate >= :sessionDate) " +
+        " and (:siteId is null or session.site14.id = :siteId) " +
+        " and (:sessionType is null or session.sessionType = :sessionType) " +
+        " and (:gender is null or session.targetedGender = :gender)"
     )
-    List<Session> findSessionInstanceMulticreteria(
+    List<Session> findSessionInstanceMulticriteria(
         @Param("siteId") Long siteId,
         @Param("gender") TargetedGender gender,
         @Param("sessionDate") LocalDate sessionDate,
@@ -148,4 +150,93 @@ public interface SessionRepository extends SessionRepositoryWithBagRelationships
 
     @Query("SELECT DISTINCT s FROM Session s JOIN s.professors e WHERE e = :userCustom")
     List<Session> findSessionsByProfessor(@Param("userCustom") UserCustom userCustom);
+
+    @Query(
+        "SELECT NEW com.wiam.lms.domain.statistics.SessionTypeCountDTO(s.sessionType, COUNT(s)) " +
+        "FROM Session s " +
+        "left join s.site14 site " +
+        "WHERE (:siteId is null or (site is not null and site14.id = :siteId)) " +
+        "GROUP BY s.sessionType"
+    )
+    List<SessionTypeCountDTO> countBySessionTypeAndSiteId(@Param("siteId") Long siteId);
+
+    @Query(
+        """
+            SELECT new com.wiam.lms.domain.dto.SessionDTO(
+                s.id,
+                COALESCE(s.title, ''),
+                s.site14.id,
+                COALESCE(s.site14.nameAr, ''),
+                COALESCE(s.site14.nameLat, ''),
+                s.sessionType,
+                s.targetedGender,
+                s.periodStartDate,
+                s.periodeEndDate,
+                COALESCE(s.sunday, false),
+                COALESCE(s.monday, false),
+                COALESCE(s.tuesday, false),
+                COALESCE(s.wednesday, false),
+                COALESCE(s.thursday, false),
+                COALESCE(s.friday, false),
+                COALESCE(s.saturday, false)
+            )
+            FROM Session s
+            LEFT JOIN s.site14 site
+            WHERE (:siteId IS NULL OR s.site14.id = :siteId)
+            AND (:sessionType IS NULL OR s.sessionType = :sessionType)
+            AND (:gender IS NULL OR s.targetedGender = :gender)
+            AND (:query IS NULL OR
+                 LOWER(COALESCE(s.title, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR
+                 LOWER(COALESCE(s.site14.nameAr, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR
+                 LOWER(COALESCE(s.site14.nameLat, '')) LIKE LOWER(CONCAT('%', :query, '%')))
+        """
+    )
+    Page<SessionDTO> findFilteredSessionsDTO(
+        @Param("siteId") Long siteId,
+        @Param("sessionType") SessionType sessionType,
+        @Param("gender") TargetedGender gender,
+        @Param("query") String query,
+        Pageable pageable
+    );
+
+    @Query(
+        """
+            SELECT new com.wiam.lms.domain.dto.SessionDTO(
+                s.id,
+                COALESCE(s.title, ''),
+                s.site14.id,
+                COALESCE(s.site14.nameAr, ''),
+                COALESCE(s.site14.nameLat, ''),
+                s.sessionType,
+                s.targetedGender,
+                s.periodStartDate,
+                s.periodeEndDate,
+                COALESCE(s.sunday, false),
+                COALESCE(s.monday, false),
+                COALESCE(s.tuesday, false),
+                COALESCE(s.wednesday, false),
+                COALESCE(s.thursday, false),
+                COALESCE(s.friday, false),
+                COALESCE(s.saturday, false)
+            )
+            FROM Session s
+            LEFT JOIN s.professors p
+            LEFT JOIN s.employees e
+            LEFT JOIN s.groups g
+            LEFT JOIN g.elements el
+            WHERE (:siteId IS NULL OR s.site14.id = :siteId)
+            AND (:sessionType IS NULL OR s.sessionType = :sessionType)
+            AND (:gender IS NULL OR s.targetedGender = :gender)
+            AND (:query IS NULL OR LOWER(COALESCE(s.title, '')) LIKE LOWER(CONCAT('%', :query, '%')))
+            AND (p.id = :userId OR e.id = :userId OR el.id = :userId)
+        """
+    )
+    Page<SessionDTO> findFilteredSessionsDTOForUser(
+        @Param("userId") Long userId,
+        @Param("siteId") Long siteId,
+        @Param("sessionType") SessionType sessionType,
+        @Param("gender") TargetedGender gender,
+        @Param("query") String query,
+        Pageable pageable
+    );
 }

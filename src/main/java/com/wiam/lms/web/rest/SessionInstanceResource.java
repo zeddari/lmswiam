@@ -1,18 +1,30 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.Authority;
+import com.wiam.lms.domain.Ayahs;
 import com.wiam.lms.domain.Group;
+import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.SessionInstance;
 import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.Surahs;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.AyahDto;
+import com.wiam.lms.domain.dto.InstanceProgressionDTO;
+import com.wiam.lms.domain.dto.ProgressionDetailsDTO;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
 import com.wiam.lms.domain.dto.SessionInstanceUniqueDto;
+import com.wiam.lms.domain.dto.SurahDto;
 import com.wiam.lms.domain.dto.custom.ChatMemberDto;
 import com.wiam.lms.domain.enumeration.Attendance;
+import com.wiam.lms.domain.enumeration.ExamType;
+import com.wiam.lms.domain.enumeration.Riwayats;
 import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.SessionType;
 import com.wiam.lms.domain.enumeration.TargetedGender;
+import com.wiam.lms.domain.enumeration.Tilawa;
+import com.wiam.lms.domain.statistics.AttendanceCounts;
+import com.wiam.lms.domain.statistics.StudentAttendanceDTO;
 import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.ProgressionRepository;
 import com.wiam.lms.repository.SessionInstanceRepository;
@@ -35,7 +47,10 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -74,6 +89,7 @@ public class SessionInstanceResource {
     private final SessionInstanceSearchRepository sessionInstanceSearchRepository;
     private final UserCustomRepository userCustomRepository;
     private final SessionRepository sessionRepository;
+    private final ProgressionRepository progressionRepository;
 
     public SessionInstanceResource(
         UserCustomRepository userCustomRepository,
@@ -86,7 +102,7 @@ public class SessionInstanceResource {
         this.sessionRepository = sessionRepository;
         this.userCustomRepository = userCustomRepository;
         this.groupRepository = groupRepository;
-
+        this.progressionRepository = progressionRepository;
         this.sessionInstanceRepository = sessionInstanceRepository;
         this.sessionInstanceSearchRepository = sessionInstanceSearchRepository;
     }
@@ -216,10 +232,8 @@ public class SessionInstanceResource {
             LocalDate endDate = session.get().getPeriodeEndDate();
             List<SessionInstance> createdInstances = new ArrayList<>();
 
-            // Iterate through all dates between start and end
             LocalDate currentDate = startDate;
             while (!currentDate.isAfter(endDate)) {
-                // Check if the session is programmed for the current day of the week
                 DayOfWeek currentDayOfWeek = currentDate.getDayOfWeek();
 
                 boolean isValidDay = false;
@@ -249,13 +263,12 @@ public class SessionInstanceResource {
                         break;
                 }
 
-                // If the session is programmed for the current day, create a session instance
                 if (isValidDay) {
                     SessionInstance si = new SessionInstance();
                     si.setSession1(session.get());
                     si.setGroup(group.get());
                     si.setProfessor(professor.get());
-                    si.setSessionDate(currentDate); // Assuming you have a date field in SessionInstance
+                    si.setSessionDate(currentDate);
                     si.setTitle(
                         group.get().getNameAr() +
                         '_' +
@@ -267,12 +280,11 @@ public class SessionInstanceResource {
                     );
                     si.setSite16(session.get().getSite14());
                     si.setDuration(0);
-                    si.attendance(Attendance.ABSENT);
+                    si.attendance(Attendance.PRESENT);
                     si.setStartTime(null);
-                    si.isActive(false);
+                    si.isActive(true);
                     si.startTime(ZonedDateTime.now());
 
-                    // Check if a session instance already exists for the given date, group, professor, and session
                     List<SessionInstance> sessionInstances = sessionInstanceRepository.findSessionInstanceByDateGroupProfessorSession(
                         currentDate,
                         session.get().getId(),
@@ -281,11 +293,14 @@ public class SessionInstanceResource {
                     );
                     if (sessionInstances.isEmpty()) {
                         SessionInstance savedInstance = sessionInstanceRepository.save(si);
+
+                        // Create progressions for the saved session instance
+                        createProgressionsForSessionInstance(savedInstance);
+
                         createdInstances.add(savedInstance);
                     }
                 }
 
-                // Move to the next day
                 currentDate = currentDate.plusDays(1);
             }
 
@@ -293,6 +308,35 @@ public class SessionInstanceResource {
         }
 
         return ResponseEntity.badRequest().build();
+    }
+
+    private void createProgressionsForSessionInstance(SessionInstance instance) {
+        if (instance.getGroup() != null) {
+            Group group = groupRepository.findById(instance.getGroup().getId()).get();
+            if (group.getElements() != null && !group.getElements().isEmpty()) {
+                for (UserCustom student : group.getElements()) {
+                    if (progressionRepository.isAlreadyExists(instance.getId(), student.getId()) == null) {
+                        Progression progression = new Progression();
+                        progression.setLateArrival(false);
+                        progression.setEarlyDeparture(false);
+                        progression.setIsForAttendance(true);
+                        progression.setTaskDone(true);
+                        progression.setHifdScore(1);
+                        progression.setTajweedScore(1);
+                        progression.setAdaeScore(1);
+                        progression.setAttendance(Attendance.NONE);
+                        progression.setExamType(ExamType.NONE);
+                        progression.setRiwaya(Riwayats.WARSHS_NARRATION_ON_THE_AUTHORITY_OF_NAFI_THROUGH_TAYYIBAH);
+                        progression.setTilawaType(Tilawa.TILAWA);
+                        progression.setSessionInstance(instance);
+                        progression.setStudent(student);
+                        progression.setSite17(instance.getSite16());
+
+                        progressionRepository.save(progression);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -583,6 +627,200 @@ public class SessionInstanceResource {
         return sessionInstanceRepository.findOneBySiteId(id, sessionDate);
     }
 
+    @GetMapping("/multicriteriaForProgressions")
+    public ResponseEntity<List<InstanceProgressionDTO>> getSessionInstanceByMulticriteriaForProgressions(
+        Pageable pageable,
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false, defaultValue = "") String gender,
+        @RequestParam(required = false) String sessionDate,
+        @RequestParam(required = false, defaultValue = "") String sessionType,
+        @RequestParam(required = false) Long sessionId,
+        @RequestParam(required = false) Long userId,
+        @RequestParam(required = false, defaultValue = "false") boolean isForAttendance,
+        Principal principal // Added Principal to access authenticated user info
+    ) {
+        // Validate principal
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // Find user with optional null check
+        UserCustom userCustom = userCustomRepository
+            .findUserCustomByLogin(principal.getName())
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        try {
+            // Check if the user is authenticated and retrieve their username
+            String authenticatedUserName = (principal != null) ? principal.getName() : null;
+
+            // Check if user is an admin - Assuming userCustom represents the authenticated user object
+            boolean isAdmin = false;
+            // Check if user is an admin
+            isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
+
+            if (authenticatedUserName != null) {
+                // Assuming a method isAdmin() exists in userCustom to check the user's role.
+                // If using Spring Security, you can fetch the authorities from the user object
+                isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
+            }
+
+            // If the user is not an admin and userId is not provided, use the authenticated user's ID
+            if (!isAdmin) {
+                userId = userCustom.getId();
+                siteId = userCustom.getSite13().getId();
+            }
+
+            // Convert gender string to enum if present
+            TargetedGender genderEnum = null;
+            if (gender != null && !gender.isEmpty()) {
+                try {
+                    genderEnum = TargetedGender.valueOf(gender);
+                } catch (IllegalArgumentException e) {
+                    log.error("Invalid gender value: {}", gender);
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Convert sessionType string to enum if present
+            SessionType sessionTypeEnum = null;
+            if (sessionType != null && !sessionType.isEmpty()) {
+                try {
+                    sessionTypeEnum = SessionType.valueOf(sessionType);
+                } catch (IllegalArgumentException e) {
+                    log.error("Invalid session type value: {}", sessionType);
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Parse date if present
+            Integer year = null;
+            Integer month = null;
+            if (sessionDate != null && !sessionDate.isEmpty()) {
+                try {
+                    LocalDate date = LocalDate.parse(sessionDate);
+                    year = date.getYear();
+                    month = date.getMonthValue();
+                } catch (DateTimeParseException e) {
+                    log.error("Invalid date format: {}", sessionDate);
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Call the repository method to fetch the session instances with progression details
+            List<Object[]> result = sessionInstanceRepository.findSessionInstancesForProgressions(
+                siteId,
+                genderEnum,
+                year,
+                month,
+                sessionTypeEnum,
+                sessionId,
+                userId,
+                isForAttendance
+            );
+
+            // Map to store progressions grouped by session instance id
+            Map<Long, InstanceProgressionDTO> sessionInstanceMap = new HashMap<>();
+
+            // Iterate over the result and group progressions by session instance ID
+            for (Object[] row : result) {
+                Long sessionInstanceId = (Long) row[0]; // sessionInstance ID
+                String title = (String) row[1]; // sessionInstance title
+                LocalDate sessionInstanceDate = (LocalDate) row[2]; // sessionInstance sessionDate (this is new)
+
+                Long progressionId = (Long) row[3]; // progression ID
+                Boolean isForAttendanceProgression = (Boolean) row[4]; // isForAttendance
+                Attendance attendance = (Attendance) row[5]; // attendance
+                Surahs fromSourate = (Surahs) row[6]; // fromSourate
+                Surahs toSourate = (Surahs) row[7]; // toSourate
+                Ayahs fromAyahs = (Ayahs) row[8]; // fromAyahs
+                Ayahs toAyahs = (Ayahs) row[9]; // toAyahs
+                Tilawa tilawaType = (Tilawa) row[10]; // tilawaType
+                Long rowSessionId = (Long) row[11];
+
+                // Perform null checks before accessing the properties
+                SurahDto fromSurahDto = null;
+                if (fromSourate != null) {
+                    fromSurahDto = new SurahDto(fromSourate.getId(), fromSourate.getNameAr(), fromSourate.getNameEn());
+                }
+
+                SurahDto toSurahDto = null;
+                if (toSourate != null) {
+                    toSurahDto = new SurahDto(toSourate.getId(), toSourate.getNameAr(), toSourate.getNameEn());
+                }
+
+                AyahDto fromAyahDto = null;
+                if (fromAyahs != null) {
+                    fromAyahDto = new AyahDto(fromAyahs.getId(), fromAyahs.getNumber());
+                }
+
+                AyahDto toAyahDto = null;
+                if (toAyahs != null) {
+                    toAyahDto = new AyahDto(toAyahs.getId(), toAyahs.getNumber());
+                }
+
+                // Create ProgressionDetailsDTO from the extracted data
+                ProgressionDetailsDTO progressionDetailsDTO = new ProgressionDetailsDTO(
+                    progressionId,
+                    isForAttendanceProgression,
+                    attendance,
+                    fromSurahDto,
+                    toSurahDto,
+                    fromAyahDto,
+                    toAyahDto,
+                    tilawaType
+                );
+
+                // Check if the sessionInstanceDTO already exists in the map
+                InstanceProgressionDTO instanceProgressionDTO = sessionInstanceMap.get(sessionInstanceId);
+                if (instanceProgressionDTO == null) {
+                    // If not, create a new InstanceProgressionDTO and add to the map
+                    instanceProgressionDTO =
+                        new InstanceProgressionDTO(
+                            sessionInstanceId,
+                            title,
+                            sessionInstanceDate, // Include sessionDate here
+                            new ArrayList<>(),
+                            rowSessionId
+                        );
+                    sessionInstanceMap.put(sessionInstanceId, instanceProgressionDTO);
+                }
+
+                // Add the progression details to the corresponding session instance
+                instanceProgressionDTO.getProgressions().add(progressionDetailsDTO);
+            }
+
+            // Convert the map values to a list and return
+            List<InstanceProgressionDTO> instanceProgressionDTOList = new ArrayList<>(sessionInstanceMap.values());
+
+            // Log the results
+            if (instanceProgressionDTOList.isEmpty()) {
+                log.info("No session instance progressions found.");
+            } else {
+                log.info(
+                    "Query results - Parameters: siteId={}, gender={}, year={}, month={}, sessionType={}, " +
+                    "sessionId={}, userId={}, isForAttendance={}, resultSize={}",
+                    siteId,
+                    genderEnum,
+                    year,
+                    month,
+                    sessionTypeEnum,
+                    sessionId,
+                    userId,
+                    isForAttendance,
+                    instanceProgressionDTOList.size()
+                );
+            }
+
+            return ResponseEntity.ok().body(instanceProgressionDTOList);
+        } catch (EntityNotFoundException e) {
+            log.error("Entity not found", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Unexpected error occurred while fetching session instances", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @GetMapping("/multicriteria")
     public ResponseEntity<List<SessionInstance>> getSessionInstanceByMulticriteria(
         Pageable pageable,
@@ -592,22 +830,13 @@ public class SessionInstanceResource {
         @RequestParam(required = false, defaultValue = "") String sessionType,
         @RequestParam(required = false) Long sessionId,
         @RequestParam(required = false) Long userId, // Added userId as an optional parameter
-        @RequestParam(required = false, defaultValue = "false") boolean isForAttendance, // Added the isForAttendance parameter
-        Principal principal // Principal added to get authenticated user info
+        @RequestParam(required = false, defaultValue = "false") boolean isForAttendance
+        // Added the isForAttendance parameter
+        // Principal principal // Principal added to get authenticated user info
     ) {
-        // Validate principal
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         try {
-            // Fetch the authenticated user
-            UserCustom userCustom = userCustomRepository
-                .findUserCustomByLogin(principal.getName())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
             // Check if user is an admin
-            boolean isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
+            //boolean isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
 
             // Convert gender string to enum if present
             TargetedGender genderEnum = null;
@@ -643,12 +872,9 @@ public class SessionInstanceResource {
             }
 
             // If the user is not an admin, use the Principal's user ID
-            if (!isAdmin) {
-                userId = userCustom.getId(); // Use the authenticated user's ID
-                siteId = userCustom.getSite13().getId();
-            }
 
             // Call the repository method, including the isForAttendance filter
+            // Assuming result is the list returned by the repository query
             List<SessionInstance> result = sessionInstanceRepository.findSessionInstanceMulticreteria(
                 siteId,
                 genderEnum,
@@ -659,6 +885,26 @@ public class SessionInstanceResource {
                 userId,
                 isForAttendance // Include the isForAttendance parameter in the repository query
             );
+
+            // Check if result is null and log accordingly
+            if (result == null) {
+                log.info("The result from findSessionInstanceMulticreteria is null.");
+            } else {
+                log.info(
+                    String.format(
+                        "Site ID: %d, Gender: %s, Year: %d, Month: %d, Session Type: %s, Session ID: %s, User ID: %s, For Attendance: %b, Size: %d",
+                        siteId,
+                        genderEnum,
+                        year,
+                        month,
+                        sessionTypeEnum,
+                        sessionId,
+                        userId,
+                        isForAttendance,
+                        result.size()
+                    )
+                );
+            }
 
             return ResponseEntity.ok().body(result);
         } catch (EntityNotFoundException e) {
@@ -755,6 +1001,201 @@ public class SessionInstanceResource {
             return StreamSupport.stream(sessionInstanceSearchRepository.search(query).spliterator(), false).toList();
         } catch (RuntimeException e) {
             throw ElasticsearchExceptionMapper.mapException(e);
+        }
+    }
+
+    private StudentAttendanceDTO convertToAttendanceDTO(SessionInstance session) {
+        log.debug("Session progressions: " + session.getProgressions()); // Check if progressions exist
+
+        // Find the attendance progression
+        Progression attendanceProgression = session
+            .getProgressions()
+            .stream()
+            .filter(Progression::getIsForAttendance)
+            .findFirst()
+            .orElse(null);
+
+        return new StudentAttendanceDTO(
+            session.getId(),
+            session.getSessionDate(),
+            session.getSession1() != null ? session.getSession1().getTitle() : "Unknown Title", // Null check
+            attendanceProgression != null ? attendanceProgression.getAttendance() : null,
+            attendanceProgression != null ? attendanceProgression.getLateArrival() : false,
+            attendanceProgression != null ? attendanceProgression.getEarlyDeparture() : false
+        );
+    }
+
+    @GetMapping("/student")
+    public ResponseEntity<List<StudentAttendanceDTO>> getStudentAttendance(
+        @RequestParam Long userId,
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false) String sessionDate,
+        @RequestParam(required = false, defaultValue = "") String gender,
+        @RequestParam(required = false, defaultValue = "") String sessionType,
+        @RequestParam(required = false) Long sessionId
+    ) {
+        try {
+            // Parse session type if provided
+            SessionType sessionTypeEnum = null;
+            if (!sessionType.isEmpty()) {
+                try {
+                    sessionTypeEnum = SessionType.valueOf(sessionType);
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Parse gender if provided
+            TargetedGender genderEnum = null;
+            if (!gender.isEmpty()) {
+                try {
+                    genderEnum = TargetedGender.valueOf(gender);
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Parse date if provided
+            Integer year = null;
+            Integer month = null;
+            if (sessionDate != null && !sessionDate.isEmpty()) {
+                try {
+                    LocalDate date = LocalDate.parse(sessionDate);
+                    year = date.getYear();
+                    month = date.getMonthValue();
+                } catch (DateTimeParseException e) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Get attendance records
+            List<SessionInstance> sessions = sessionInstanceRepository.findSessionInstanceMulticreteria(
+                siteId,
+                genderEnum,
+                year,
+                month,
+                sessionTypeEnum,
+                sessionId,
+                userId,
+                true // isForAttendance is always true for attendance records
+            );
+
+            // Convert to DTOs
+            List<StudentAttendanceDTO> attendanceRecords = sessions.stream().map(this::convertToAttendanceDTO).collect(Collectors.toList());
+
+            return ResponseEntity.ok(attendanceRecords);
+        } catch (Exception e) {
+            log.error("Error fetching attendance", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<AttendanceCounts> getStudentAttendanceCount(
+        @RequestParam(required = false) Long userId,
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false) String sessionDate,
+        @RequestParam(required = false, defaultValue = "") String gender,
+        @RequestParam(required = false, defaultValue = "") String sessionType,
+        @RequestParam(required = false) Long sessionId
+    ) {
+        try {
+            // Validate mandatory parameters
+
+            // Parse session type with robust handling
+            SessionType sessionTypeEnum = null;
+            if (sessionType != null && !sessionType.trim().isEmpty()) {
+                try {
+                    sessionTypeEnum = SessionType.valueOf(sessionType.trim());
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Parse gender with robust handling
+            TargetedGender genderEnum = null;
+            if (gender != null && !gender.trim().isEmpty()) {
+                try {
+                    genderEnum = TargetedGender.valueOf(gender.trim());
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Parse date with validation
+            Integer year = null;
+            Integer month = null;
+            if (sessionDate != null && !sessionDate.trim().isEmpty()) {
+                try {
+                    LocalDate date = LocalDate.parse(sessionDate.trim());
+                    year = date.getYear();
+                    month = date.getMonthValue();
+                } catch (DateTimeParseException e) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Fetch session instances with comprehensive error handling
+            List<Object[]> sessionData;
+            try {
+                sessionData =
+                    sessionInstanceRepository.findSessionInstancesForProgressions(
+                        siteId,
+                        genderEnum,
+                        year,
+                        month,
+                        sessionTypeEnum,
+                        sessionId,
+                        userId,
+                        true
+                    );
+            } catch (Exception e) {
+                log.error("Database query error", e);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+            // Create attendance counts object
+            AttendanceCounts attendanceCounts = new AttendanceCounts();
+            attendanceCounts.setUserId(userId);
+            attendanceCounts.setSiteId(siteId);
+            attendanceCounts.setSessionDate(sessionDate);
+            attendanceCounts.setGender(gender);
+            attendanceCounts.setSessionType(sessionType);
+            attendanceCounts.setSessionId(sessionId);
+
+            // Process session data with null checks
+            for (Object[] row : Optional.ofNullable(sessionData).orElse(Collections.emptyList())) {
+                if (row != null && row.length > 5) {
+                    Attendance attendance = (Attendance) row[5];
+
+                    if (attendance == Attendance.PRESENT) {
+                        attendanceCounts.incrementPresenceCount();
+                    }
+                    if (attendance == Attendance.ABSENT) {
+                        attendanceCounts.incrementAbsenceCount();
+                    }
+                    if (attendance == Attendance.LATE_ARRIVAL) {
+                        attendanceCounts.incrementLateArrivalCount();
+                    }
+
+                    if (attendance == Attendance.EARLY_DEPARTURE) {
+                        attendanceCounts.incrementEarlyDepartureCount();
+                    }
+
+                    if (attendance == Attendance.ABSENT_AUTHORIZED) {
+                        attendanceCounts.incrementAbsentAuthorizedCount();
+                    }
+
+                    if (attendance == Attendance.NONE) {
+                        attendanceCounts.incrementNoneCount();
+                    }
+                }
+            }
+
+            return ResponseEntity.ok(attendanceCounts);
+        } catch (Exception e) {
+            log.error("Unexpected error in attendance count", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

@@ -32,7 +32,10 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.elasticsearch.ResourceNotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -394,6 +397,63 @@ public class ProgressionResource {
             .body(result);
     }
 
+    @GetMapping("/{id}/updateAttendance/{status}")
+    public ResponseEntity<?> updateAttendance(@PathVariable Long id, @PathVariable Attendance status) {
+        log.debug("REST request to update attendance of the Progression : {}", id);
+
+        try {
+            // Validate ID exists
+            Progression progression = progressionRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Progression not found with id: " + id));
+
+            // Validate status is not null
+            if (status == null) {
+                return ResponseEntity.badRequest().body(new ErrorResponse("Invalid attendance status"));
+            }
+
+            // Update attendance
+            progression.setAttendance(status);
+            Progression result = progressionRepository.save(progression);
+
+            // Index for search if needed
+            progressionSearchRepository.index(result);
+
+            return ResponseEntity
+                .ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, progression.getId().toString()))
+                .body(result);
+        } catch (ResourceNotFoundException e) {
+            log.error("Progression not found", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
+        } catch (DataIntegrityViolationException e) {
+            log.error("Data integrity violation", e);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Unable to update attendance due to data conflicts"));
+        } catch (Exception e) {
+            log.error("Unexpected error updating attendance", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("An unexpected error occurred"));
+        }
+    }
+
+    // Error response helper class
+    public class ErrorResponse {
+
+        private String message;
+
+        public ErrorResponse(String message) {
+            this.message = message;
+        }
+
+        // Getters and setters
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
+
     @GetMapping("/{id}/forgroup")
     public ResponseEntity<SessionInstance> createProgressionsforGroup(@PathVariable Long id) {
         log.debug("REST request to create the progressions of the group elements given the sessionInstanceId : {}", id);
@@ -414,7 +474,7 @@ public class ProgressionResource {
                             progression.setHifdScore(1);
                             progression.setTajweedScore(1);
                             progression.setAdaeScore(1);
-                            progression.setAttendance(Attendance.PRESENT);
+                            progression.setAttendance(Attendance.NONE);
                             progression.setExamType(ExamType.NONE);
                             progression.setRiwaya(Riwayats.WARSHS_NARRATION_ON_THE_AUTHORITY_OF_NAFI_THROUGH_TAYYIBAH);
                             progression.setTilawaType(Tilawa.TILAWA);

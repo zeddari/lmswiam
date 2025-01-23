@@ -10,6 +10,7 @@ import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.GroupType;
 import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.Sex;
+import com.wiam.lms.domain.statistics.AuthorityCountDTO;
 import com.wiam.lms.repository.SessionRepository;
 import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.UserCustomSearchRepository;
@@ -647,5 +648,16 @@ public class UserCustomResource {
                 .getTotalElements()
         );
         return new ResponseEntity<>(users, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/count-by-authority")
+    public ResponseEntity<List<AuthorityCountDTO>> countUsersByAuthority(@RequestParam(value = "siteId", required = false) Long siteId) {
+        List<AuthorityCountDTO> counts = userCustomRepository
+            .countUsersByAuthorityAndSiteId(siteId)
+            .stream()
+            .filter(dto -> dto.getRole() != null) // Filter out any authorities that don't map to our Role enum
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(counts);
     }
 }

@@ -122,10 +122,10 @@ public class SessionInstance implements Serializable {
     private Session session1;
 
     // Linking with id professor
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserCustom professor;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private SessionLink sessionLink;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -250,7 +250,7 @@ public class SessionInstance implements Serializable {
         this.justifRef = justifRef;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Group group;
 
     public Group getGroup() {

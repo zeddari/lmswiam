@@ -3,6 +3,7 @@ package com.wiam.lms.web.rest.custom;
 import com.wiam.lms.domain.Authority;
 import com.wiam.lms.domain.Session;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.SessionDTO;
 import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.SessionType;
 import com.wiam.lms.domain.enumeration.Sex;
@@ -34,6 +35,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -75,22 +77,6 @@ public class SessionResourceLms {
         // sessions = sessionRepository.findFilteredSessions(siteId, sessionType, gender);
         return sessions;
     }
-
-    /*@GetMapping("/mySessions")
-    public ResponseEntity<List<Session>> getSessions(
-        Pageable pageable,
-        @RequestParam(required = false) Long siteId,
-        @RequestParam(required = false) SessionType sessionType,
-        @RequestParam(required = false) TargetedGender gender,
-        @RequestParam(required = false) String query
-    ) {
-        Page<Session> sessionPage = sessionRepository.findFilteredSessions(siteId, sessionType, gender, query, pageable);
-        List<Session> sessionList = sessionRepository.findBySessionsIn(sessionPage.getContent());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Total-Count", String.valueOf(sessionPage.getTotalElements()));
-        return new ResponseEntity<>(sessionList, headers, HttpStatus.OK);
-    }*/
 
     @GetMapping("/mySessions")
     public ResponseEntity<List<Session>> getSessions(
@@ -151,5 +137,74 @@ public class SessionResourceLms {
 
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(halaqaActivities, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/sessionsDto")
+    public ResponseEntity<List<SessionDTO>> getSessionsDto(
+        Pageable pageable,
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false) SessionType sessionType,
+        @RequestParam(required = false) TargetedGender gender,
+        @RequestParam(required = false) String query,
+        Principal principal
+    ) {
+        log.debug("REST request to get filtered Sessions");
+
+        if (principal == null) {
+            return ResponseEntity.status(401).build(); // Unauthorized if no principal is found
+        }
+
+        try {
+            UserCustom user = userCustomRepository
+                .findUserCustomByLogin(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            boolean isAdmin = user.getAuthorities().stream().anyMatch(auth -> "ROLE_ADMIN".equals(auth.getName()));
+
+            // Fetch data based on user role (admin or not)
+            Page<SessionDTO> page;
+            if (isAdmin) {
+                page = sessionRepository.findFilteredSessionsDTO(siteId, sessionType, gender, query, pageable);
+            } else {
+                page = sessionRepository.findFilteredSessionsDTOForUser(user.getId(), siteId, sessionType, gender, query, pageable);
+            }
+
+            // Option 1: Using UriComponentsBuilder for pagination headers
+            HttpHeaders headers = generatePaginationHeaders(page);
+
+            return ResponseEntity.ok().headers(headers).body(page.getContent());
+        } catch (EntityNotFoundException e) {
+            log.error("User not found", e);
+            return ResponseEntity.status(404).build(); // Not found if user is not found
+        } catch (Exception e) {
+            log.error("Error retrieving sessions", e);
+            return ResponseEntity.status(500).build(); // Internal server error
+        }
+    }
+
+    /**
+     * Generate pagination headers for a Spring Data Page object.
+     */
+    private HttpHeaders generatePaginationHeaders(Page<?> page) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", Long.toString(page.getTotalElements()));
+
+        String baseUrl = ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("page").replaceQueryParam("size").toUriString();
+
+        StringBuilder link = new StringBuilder();
+        if (page.hasNext()) {
+            link.append(String.format("<%s?page=%d&size=%d>; rel=\"next\"", baseUrl, page.getNumber() + 1, page.getSize()));
+        }
+        if (page.hasPrevious()) {
+            if (link.length() > 0) {
+                link.append(", ");
+            }
+            link.append(String.format("<%s?page=%d&size=%d>; rel=\"prev\"", baseUrl, page.getNumber() - 1, page.getSize()));
+        }
+        if (link.length() > 0) {
+            headers.add("Link", link.toString());
+        }
+
+        return headers;
     }
 }

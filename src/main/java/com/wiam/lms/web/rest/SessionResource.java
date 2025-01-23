@@ -9,6 +9,7 @@ import com.wiam.lms.domain.enumeration.GroupType;
 import com.wiam.lms.domain.enumeration.Periodicity;
 import com.wiam.lms.domain.enumeration.SessionType;
 import com.wiam.lms.domain.enumeration.TargetedGender;
+import com.wiam.lms.domain.statistics.SessionTypeCountDTO;
 import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.SessionRepository;
 import com.wiam.lms.repository.UserCustomRepository;
@@ -22,8 +23,10 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -259,13 +262,13 @@ public class SessionResource {
     }
 
     @GetMapping("/multicriteria")
-    public List<Session> getSessionsByMulticreteria(
-        @RequestParam("siteId") Long siteId,
-        @RequestParam("gender") TargetedGender gender,
-        @RequestParam("sessionDate") LocalDate sessionDate,
-        @RequestParam("sessionType") SessionType sessionType
+    public List<Session> getSessionsByMulticriteria(
+        @RequestParam(value = "siteId", required = false) Long siteId,
+        @RequestParam(value = "gender", required = false) TargetedGender gender,
+        @RequestParam(value = "sessionDate", required = false) LocalDate sessionDate,
+        @RequestParam(value = "sessionType", required = false) SessionType sessionType
     ) {
-        return sessionRepository.findSessionInstanceMulticreteria(siteId, gender, sessionDate, sessionType);
+        return sessionRepository.findSessionInstanceMulticriteria(siteId, gender, sessionDate, sessionType);
     }
 
     @GetMapping("/{id}/bysite")
@@ -376,5 +379,16 @@ public class SessionResource {
         } catch (RuntimeException e) {
             throw ElasticsearchExceptionMapper.mapException(e);
         }
+    }
+
+    @GetMapping("/count-by-sessionType")
+    public ResponseEntity<List<SessionTypeCountDTO>> countBySessionType(@RequestParam(value = "siteId", required = false) Long siteId) {
+        List<SessionTypeCountDTO> counts = sessionRepository
+            .countBySessionTypeAndSiteId(siteId)
+            .stream()
+            .filter(dto -> dto.getSessionType() != null) // Filter out any null session types
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(counts);
     }
 }

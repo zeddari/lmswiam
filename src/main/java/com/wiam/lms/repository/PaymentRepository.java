@@ -1,15 +1,14 @@
 package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Payment;
-
+import com.wiam.lms.domain.custom.projection.interfaces.FeesNonPaidData;
+import com.wiam.lms.domain.enumeration.PaymentSide;
+import com.wiam.lms.domain.enumeration.PaymentType;
+import com.wiam.lms.domain.statistics.PaymentTransactionDTO;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import com.wiam.lms.domain.custom.projection.interfaces.FeesNonPaidData;
-import com.wiam.lms.domain.enumeration.PaymentSide;
-import com.wiam.lms.domain.enumeration.PaymentType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -49,7 +48,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     )
     Optional<Payment> findOneWithToOneRelationships(@Param("id") Long id);
 
-
     @Query(
         "select payment from Payment payment left join fetch payment.site9 left join fetch payment.enrolment left join fetch payment.sponsoring left join fetch payment.session left join fetch payment.currency where payment.site9.id =:siteId and payment.side =:paymentSide and payment.type =:paymentType and payment.paidAt between :startDate and :endDate"
     )
@@ -72,4 +70,22 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
         nativeQuery = true
     )
     List<FeesNonPaidData> findNonPaidFees();
+
+    @Query(
+        "SELECT new com.wiam.lms.domain.statistics.PaymentTransactionDTO(" +
+        "p.side, " +
+        "COUNT(p), " +
+        "SUM(p.amount), " +
+        "p.currency.code) " +
+        "FROM Payment p " +
+        "WHERE (:siteId IS NULL OR p.site9.id = :siteId) " +
+        "AND (:startDate IS NULL OR p.paidAt >= :startDate) " +
+        "AND (:endDate IS NULL OR p.paidAt <= :endDate) " +
+        "GROUP BY p.side, p.currency.code"
+    )
+    List<PaymentTransactionDTO> getPaymentTransactions(
+        @Param("siteId") Long siteId,
+        @Param("startDate") ZonedDateTime startDate,
+        @Param("endDate") ZonedDateTime endDate
+    );
 }

@@ -5,6 +5,7 @@ import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.enumeration.AccountStatus;
 import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.Sex;
+import com.wiam.lms.domain.statistics.AuthorityCountDTO;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -95,4 +96,13 @@ public interface UserCustomRepository extends UserCustomRepositoryWithBagRelatio
 
     // Method to check if the email is unique
     boolean existsByEmail(String email);
+
+    @Query(
+        "SELECT NEW com.wiam.lms.domain.statistics.AuthorityCountDTO(a.name, COUNT(u)) " +
+        "FROM UserCustom u " +
+        "JOIN u.authorities a " +
+        "WHERE (:siteId IS NULL OR u.site13.id = :siteId) " +
+        "GROUP BY a.name"
+    )
+    List<AuthorityCountDTO> countUsersByAuthorityAndSiteId(@Param("siteId") Long siteId);
 }
