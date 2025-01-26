@@ -4,7 +4,10 @@ import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.UserCustom;
 import com.wiam.lms.domain.custom.projection.interfaces.Row3SeriesWithLabelData;
 import com.wiam.lms.domain.custom.projection.interfaces.RowSeriesWithLabelData;
+import com.wiam.lms.domain.dto.ProgressionDetailsDTO;
+import com.wiam.lms.domain.dto.ProgressionDto;
 import com.wiam.lms.domain.enumeration.ExamType;
+import com.wiam.lms.domain.enumeration.Tilawa;
 import com.wiam.lms.service.dto.FollowupAvgDTO;
 import com.wiam.lms.service.dto.FollowupListDTO;
 import java.time.LocalDate;
@@ -186,4 +189,45 @@ public interface ProgressionRepository extends JpaRepository<Progression, Long> 
         "select progression from Progression progression left join fetch progression.sessionInstance left join fetch progression.student left join fetch progression.site17 where progression.isForAttendance = true and progression.site17.id=:siteId and progression.sessionInstance.session1.id=:sessionId and progression.sessionInstance.group.id=:groupId and progression.sessionInstance.sessionDate=:sessionDate"
     )
     List<Progression> findAttendanceAllProgressions(Long siteId, Long sessionId, Long groupId, LocalDate sessionDate);
+
+    @Query(
+        "SELECT new com.wiam.lms.domain.dto.ProgressionDetailsDTO(" +
+        "p.id, " +
+        "p.isForAttendance, " +
+        "p.attendance, " +
+        "new com.wiam.lms.domain.dto.SurahDto(p.fromSourate.id, p.fromSourate.nameAr, p.fromSourate.nameEn, p.fromSourate.ayahsCount), " +
+        "new com.wiam.lms.domain.dto.SurahDto(p.toSourate.id, p.toSourate.nameAr, p.toSourate.nameEn, p.toSourate.ayahsCount), " +
+        "new com.wiam.lms.domain.dto.AyahDto(p.fromAyahs.id, p.fromAyahs.numberInSurah), " +
+        "new com.wiam.lms.domain.dto.AyahDto(p.toAyahs.id, p.toAyahs.numberInSurah), " +
+        "p.tilawaType, " +
+        "p.student.id, " +
+        "p.student.firstName, " +
+        "p.sessionInstance.id, " +
+        "p.site17.id, " +
+        "p.riwaya, " +
+        "p.examType) " +
+        "FROM Progression p " +
+        "LEFT JOIN p.fromSourate " +
+        "LEFT JOIN p.toSourate " +
+        "LEFT JOIN p.fromAyahs " +
+        "LEFT JOIN p.toAyahs " +
+        "WHERE (:siteId IS NULL OR p.site17.id = :siteId) " +
+        "AND (:userId IS NULL OR p.student.id = :userId) " +
+        "AND (:isForAttendance IS NULL OR p.isForAttendance = :isForAttendance) " +
+        "AND (:tilawaType IS NULL OR p.tilawaType = :tilawaType) " +
+        "AND (:examType IS NULL OR p.examType = :examType) " +
+        "AND (:fromSourate IS NULL OR p.fromSourate.id = :fromSourate) " +
+        "AND (:toSourate IS NULL OR p.toSourate.id = :toSourate) " +
+        "AND (:sessionInstanceId IS NULL OR p.sessionInstance.id = :sessionInstanceId)"
+    )
+    List<ProgressionDetailsDTO> findProgressions(
+        @Param("siteId") Long siteId,
+        @Param("userId") Long userId,
+        @Param("isForAttendance") Boolean isForAttendance,
+        @Param("tilawaType") Tilawa tilawaType,
+        @Param("examType") ExamType examType,
+        @Param("fromSourate") Long fromSourate,
+        @Param("toSourate") Long toSourate,
+        @Param("sessionInstanceId") Long sessionInstanceId
+    );
 }

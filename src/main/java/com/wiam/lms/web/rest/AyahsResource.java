@@ -190,6 +190,12 @@ public class AyahsResource {
         return ayahsRepository.findAll();
     }
 
+    @GetMapping("/{surahId}/bySurah")
+    public List<Ayahs> getAllAyahsBySurahsId(@PathVariable("surahId") Integer surahId) {
+        log.debug("REST request to get all Ayahs");
+        return ayahsRepository.findAllBySurahsId(surahId);
+    }
+
     @GetMapping("/bySurahAya")
     public ResponseEntity<Ayahs> getAyahs(@RequestParam("surahId") Integer surahId, @RequestParam("ayaId") Integer ayaId) {
         log.debug("REST request to get Ayahs : {}", surahId);

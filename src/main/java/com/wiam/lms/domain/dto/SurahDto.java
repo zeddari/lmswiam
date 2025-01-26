@@ -9,12 +9,18 @@ public class SurahDto implements Serializable {
     private Integer id;
     private String nameAr;
     private String nameEn;
+    private Integer ayahsCount;
+
+    public Integer getAyahsCount() {
+        return ayahsCount;
+    }
 
     // Constructor
-    public SurahDto(Integer id, String nameAr, String nameEn) {
+    public SurahDto(Integer id, String nameAr, String nameEn, Integer ayahsCount) {
         this.id = id;
         this.nameAr = nameAr;
         this.nameEn = nameEn;
+        this.ayahsCount = ayahsCount;
     }
 
     // Getters and Setters
@@ -45,5 +51,9 @@ public class SurahDto implements Serializable {
     @Override
     public String toString() {
         return "SurahDto{" + "id=" + id + ", nameAr='" + nameAr + "'" + ", nameEn='" + nameEn + "'" + '}';
+    }
+
+    public void setAyahsCount(Integer ayahsCount) {
+        this.ayahsCount = ayahsCount;
     }
 }

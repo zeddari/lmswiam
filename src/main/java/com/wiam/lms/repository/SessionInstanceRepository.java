@@ -119,7 +119,9 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
 
     @Query(
         "SELECT si.id, si.title, si.sessionDate, p.id, p.isForAttendance, p.attendance, " +
-        "p.fromSourate, p.toSourate, p.fromAyahs, p.toAyahs, p.tilawaType, session.id " +
+        "p.fromSourate, p.toSourate, p.fromAyahs, p.toAyahs, p.tilawaType, " +
+        "session.id, p.student.id, CONCAT(p.student.firstName, ' ', p.student.lastName) AS studentFullName, " +
+        "si.site16.id, p.riwaya, p.examType " + // Selecting riwaya and examType enums
         "FROM SessionInstance si " +
         "LEFT JOIN si.session1 session " +
         "LEFT JOIN si.progressions p " +
@@ -127,6 +129,7 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
         "LEFT JOIN p.toSourate " +
         "LEFT JOIN p.fromAyahs " +
         "LEFT JOIN p.toAyahs " +
+        "LEFT JOIN p.student " + // Ensure the student is properly joined
         "WHERE (:siteId IS NULL OR si.site16.id = :siteId) " +
         "AND (:gender IS NULL OR session.targetedGender = :gender) " +
         "AND (:year IS NULL OR EXTRACT(YEAR FROM si.sessionDate) = :year) " +
@@ -134,7 +137,8 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
         "AND (:sessionType IS NULL OR session.sessionType = :sessionType) " +
         "AND (:sessionId IS NULL OR session.id = :sessionId) " +
         "AND (:userId IS NULL OR si.professor.id = :userId OR p.student.id = :userId) " +
-        "AND (:isForAttendance IS NULL OR p.isForAttendance = :isForAttendance) "
+        "AND (:isForAttendance IS NULL OR p.isForAttendance = :isForAttendance) " +
+        "AND (:sessionInstanceId IS NULL OR si.id = :sessionInstanceId)"
     )
     List<Object[]> findSessionInstancesForProgressions(
         @Param("siteId") Long siteId,
@@ -144,7 +148,8 @@ public interface SessionInstanceRepository extends SessionInstanceRepositoryWith
         @Param("sessionType") SessionType sessionType,
         @Param("sessionId") Long sessionId,
         @Param("userId") Long userId,
-        @Param("isForAttendance") Boolean isForAttendance
+        @Param("isForAttendance") Boolean isForAttendance,
+        @Param("sessionInstanceId") Long sessionInstanceId // New parameter in query
     );
 
     List<SessionInstance> findByGroupId(Long id);

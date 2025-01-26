@@ -1,17 +1,25 @@
 package com.wiam.lms.web.rest;
 
 import com.wiam.lms.domain.Authority;
+import com.wiam.lms.domain.Ayahs;
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.Progression;
 import com.wiam.lms.domain.SessionInstance;
+import com.wiam.lms.domain.Surahs;
 import com.wiam.lms.domain.UserCustom;
+import com.wiam.lms.domain.dto.AyahDto;
 import com.wiam.lms.domain.dto.ExamDto;
+import com.wiam.lms.domain.dto.InstanceProgressionDTO;
+import com.wiam.lms.domain.dto.ProgressionDetailsDTO;
 import com.wiam.lms.domain.dto.ProgressionDto;
 import com.wiam.lms.domain.dto.RemoteSessionDto;
 import com.wiam.lms.domain.dto.SessionInstanceUniqueDto;
+import com.wiam.lms.domain.dto.SurahDto;
 import com.wiam.lms.domain.enumeration.Attendance;
 import com.wiam.lms.domain.enumeration.ExamType;
 import com.wiam.lms.domain.enumeration.Riwayats;
+import com.wiam.lms.domain.enumeration.SessionType;
+import com.wiam.lms.domain.enumeration.TargetedGender;
 import com.wiam.lms.domain.enumeration.Tilawa;
 import com.wiam.lms.repository.GroupRepository;
 import com.wiam.lms.repository.ProgressionRepository;
@@ -20,6 +28,7 @@ import com.wiam.lms.repository.UserCustomRepository;
 import com.wiam.lms.repository.search.ProgressionSearchRepository;
 import com.wiam.lms.web.rest.errors.BadRequestAlertException;
 import com.wiam.lms.web.rest.errors.ElasticsearchExceptionMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -27,12 +36,14 @@ import java.net.URISyntaxException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.ResourceNotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -568,6 +579,172 @@ public class ProgressionResource {
             return StreamSupport.stream(progressionSearchRepository.search(query).spliterator(), false).toList();
         } catch (RuntimeException e) {
             throw ElasticsearchExceptionMapper.mapException(e);
+        }
+    }
+
+    /*  @GetMapping("/multicriteriaForProgressions")
+    public ResponseEntity<List<ProgressionDetailsDTO>> getSessionInstanceByMulticriteriaForProgressions(
+        Pageable pageable,
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false, defaultValue = "") String gender,
+        @RequestParam(required = false) String sessionDate,
+        @RequestParam(required = false, defaultValue = "") String sessionType,
+        @RequestParam(required = false) Long sessionId,
+        @RequestParam(required = false) Long userId,
+        @RequestParam(required = false) Long sessionInstanceId,
+        @RequestParam(required = false) Boolean isForAttendance,
+        Principal principal
+    ) {
+        // Validate principal
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    
+        // Find user with optional null check
+        UserCustom userCustom = userCustomRepository
+            .findUserCustomByLogin(principal.getName())
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    
+        try {
+            // Check if user is an admin
+            boolean isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
+    
+            // If the user is not an admin and userId is not provided, use the authenticated user's ID
+            if (!isAdmin) {
+                userId = userCustom.getId();
+                siteId = userCustom.getSite13().getId();
+            }
+    
+            // Convert gender string to enum if present
+            TargetedGender genderEnum = gender != null && !gender.isEmpty() ? TargetedGender.valueOf(gender) : null;
+    
+            // Convert sessionType string to enum if present
+            SessionType sessionTypeEnum = sessionType != null && !sessionType.isEmpty() ? SessionType.valueOf(sessionType) : null;
+    
+            // Parse date if present
+            Integer year = null;
+            Integer month = null;
+            if (sessionDate != null && !sessionDate.isEmpty()) {
+                try {
+                    LocalDate date = LocalDate.parse(sessionDate);
+                    year = date.getYear();
+                    month = date.getMonthValue();
+                } catch (DateTimeParseException e) {
+                    log.error("Invalid date format: {}", sessionDate);
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+    
+            // Use the findProgressions method to get ProgressionDetailsDTO list directly
+            List<ProgressionDetailsDTO> result = progressionRepository.findProgressions(
+                siteId,
+                userId,
+                isForAttendance,
+                null, // tilawaType
+                null, // examType
+                null, // fromSourate
+                null, // toSourate
+                sessionInstanceId
+            );
+    
+            // Log the results
+            if (result.isEmpty()) {
+                log.info("No session instance progressions found.");
+            } else {
+                log.info(
+                    "Query results - Parameters: siteId={}, gender={}, year={}, month={}, sessionType={}, " +
+                    "sessionId={}, userId={}, isForAttendance={}, resultSize={} ",
+                    siteId,
+                    genderEnum,
+                    year,
+                    month,
+                    sessionTypeEnum,
+                    sessionId,
+                    userId,
+                    isForAttendance,
+                    result.size()
+                );
+            }
+    
+            return ResponseEntity.ok().body(result);
+        } catch (EntityNotFoundException e) {
+            log.error("Entity not found", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Unexpected error occurred while fetching session instances", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+*/
+
+    @GetMapping("/multicriteriaForProgressions")
+    public ResponseEntity<List<ProgressionDetailsDTO>> getSessionInstanceByMulticriteriaForProgressions(
+        Pageable pageable,
+        @RequestParam(required = false) Long siteId,
+        @RequestParam(required = false, defaultValue = "") String gender,
+        @RequestParam(required = false) String sessionDate,
+        @RequestParam(required = false, defaultValue = "") String sessionType,
+        @RequestParam(required = false) Long sessionId,
+        @RequestParam(required = false) Long userId,
+        @RequestParam(required = false) Long sessionInstanceId,
+        @RequestParam(required = false) Boolean isForAttendance
+    ) {
+        try {
+            // Convert gender string to enum if present
+            TargetedGender genderEnum = gender != null && !gender.isEmpty() ? TargetedGender.valueOf(gender) : null;
+
+            // Convert sessionType string to enum if present
+            SessionType sessionTypeEnum = sessionType != null && !sessionType.isEmpty() ? SessionType.valueOf(sessionType) : null;
+
+            // Parse date if present
+            Integer year = null;
+            Integer month = null;
+            if (sessionDate != null && !sessionDate.isEmpty()) {
+                try {
+                    LocalDate date = LocalDate.parse(sessionDate);
+                    year = date.getYear();
+                    month = date.getMonthValue();
+                } catch (DateTimeParseException e) {
+                    log.error("Invalid date format: {}", sessionDate);
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Use the findProgressions method to get ProgressionDetailsDTO list directly
+            List<ProgressionDetailsDTO> result = progressionRepository.findProgressions(
+                siteId,
+                userId,
+                isForAttendance,
+                null, // tilawaType
+                null, // examType
+                null, // fromSourate
+                null, // toSourate
+                sessionInstanceId
+            );
+
+            // Log the results
+            if (result.isEmpty()) {
+                log.info("No session instance progressions found.");
+            } else {
+                log.info(
+                    "Query results - Parameters: siteId={}, gender={}, year={}, month={}, sessionType={}, " +
+                    "sessionId={}, userId={}, isForAttendance={}, resultSize={} ",
+                    siteId,
+                    genderEnum,
+                    year,
+                    month,
+                    sessionTypeEnum,
+                    sessionId,
+                    userId,
+                    isForAttendance,
+                    result.size()
+                );
+            }
+
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            log.error("Unexpected error occurred while fetching session instances", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

@@ -636,7 +636,8 @@ public class SessionInstanceResource {
         @RequestParam(required = false, defaultValue = "") String sessionType,
         @RequestParam(required = false) Long sessionId,
         @RequestParam(required = false) Long userId,
-        @RequestParam(required = false, defaultValue = "false") boolean isForAttendance,
+        @RequestParam(required = false) Long sessionInstanceId, // New parameter
+        @RequestParam(required = false) Boolean isForAttendance, // Optional boolean parameter
         Principal principal // Added Principal to access authenticated user info
     ) {
         // Validate principal
@@ -653,16 +654,8 @@ public class SessionInstanceResource {
             // Check if the user is authenticated and retrieve their username
             String authenticatedUserName = (principal != null) ? principal.getName() : null;
 
-            // Check if user is an admin - Assuming userCustom represents the authenticated user object
-            boolean isAdmin = false;
             // Check if user is an admin
-            isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
-
-            if (authenticatedUserName != null) {
-                // Assuming a method isAdmin() exists in userCustom to check the user's role.
-                // If using Spring Security, you can fetch the authorities from the user object
-                isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
-            }
+            boolean isAdmin = userCustom.getAuthorities().stream().anyMatch(authority -> "ROLE_ADMIN".equals(authority.getName()));
 
             // If the user is not an admin and userId is not provided, use the authenticated user's ID
             if (!isAdmin) {
@@ -671,26 +664,10 @@ public class SessionInstanceResource {
             }
 
             // Convert gender string to enum if present
-            TargetedGender genderEnum = null;
-            if (gender != null && !gender.isEmpty()) {
-                try {
-                    genderEnum = TargetedGender.valueOf(gender);
-                } catch (IllegalArgumentException e) {
-                    log.error("Invalid gender value: {}", gender);
-                    return ResponseEntity.badRequest().build();
-                }
-            }
+            TargetedGender genderEnum = gender != null && !gender.isEmpty() ? TargetedGender.valueOf(gender) : null;
 
             // Convert sessionType string to enum if present
-            SessionType sessionTypeEnum = null;
-            if (sessionType != null && !sessionType.isEmpty()) {
-                try {
-                    sessionTypeEnum = SessionType.valueOf(sessionType);
-                } catch (IllegalArgumentException e) {
-                    log.error("Invalid session type value: {}", sessionType);
-                    return ResponseEntity.badRequest().build();
-                }
-            }
+            SessionType sessionTypeEnum = sessionType != null && !sessionType.isEmpty() ? SessionType.valueOf(sessionType) : null;
 
             // Parse date if present
             Integer year = null;
@@ -706,7 +683,7 @@ public class SessionInstanceResource {
                 }
             }
 
-            // Call the repository method to fetch the session instances with progression details
+            // Modify the query call to check if isForAttendance is null
             List<Object[]> result = sessionInstanceRepository.findSessionInstancesForProgressions(
                 siteId,
                 genderEnum,
@@ -715,7 +692,8 @@ public class SessionInstanceResource {
                 sessionTypeEnum,
                 sessionId,
                 userId,
-                isForAttendance
+                isForAttendance, // Filter by the value of isForAttendance or null
+                sessionInstanceId
             );
 
             // Map to store progressions grouped by session instance id
@@ -723,9 +701,9 @@ public class SessionInstanceResource {
 
             // Iterate over the result and group progressions by session instance ID
             for (Object[] row : result) {
-                Long sessionInstanceId = (Long) row[0]; // sessionInstance ID
+                Long sessionInstanceIdFromDb = (Long) row[0]; // sessionInstance ID
                 String title = (String) row[1]; // sessionInstance title
-                LocalDate sessionInstanceDate = (LocalDate) row[2]; // sessionInstance sessionDate (this is new)
+                LocalDate sessionInstanceDate = (LocalDate) row[2]; // sessionInstance sessionDate
 
                 Long progressionId = (Long) row[3]; // progression ID
                 Boolean isForAttendanceProgression = (Boolean) row[4]; // isForAttendance
@@ -735,30 +713,30 @@ public class SessionInstanceResource {
                 Ayahs fromAyahs = (Ayahs) row[8]; // fromAyahs
                 Ayahs toAyahs = (Ayahs) row[9]; // toAyahs
                 Tilawa tilawaType = (Tilawa) row[10]; // tilawaType
-                Long rowSessionId = (Long) row[11];
+                Long rowSessionId = (Long) row[11]; // session ID
 
-                // Perform null checks before accessing the properties
-                SurahDto fromSurahDto = null;
-                if (fromSourate != null) {
-                    fromSurahDto = new SurahDto(fromSourate.getId(), fromSourate.getNameAr(), fromSourate.getNameEn());
-                }
+                // Extract the student information
+                Long studentId = (Long) row[12]; // student ID
+                String studentFullName = (String) row[13]; // student full name
 
-                SurahDto toSurahDto = null;
-                if (toSourate != null) {
-                    toSurahDto = new SurahDto(toSourate.getId(), toSourate.getNameAr(), toSourate.getNameEn());
-                }
+                // Retrieve siteId
+                Long siteIdFromDb = (Long) row[14]; // siteId from the query
 
-                AyahDto fromAyahDto = null;
-                if (fromAyahs != null) {
-                    fromAyahDto = new AyahDto(fromAyahs.getId(), fromAyahs.getNumber());
-                }
+                // Retrieve the new parameters (riwaya, examType)
+                Riwayats riwaya = (Riwayats) row[15]; // riwaya
+                ExamType examType = (ExamType) row[16]; // examType
 
-                AyahDto toAyahDto = null;
-                if (toAyahs != null) {
-                    toAyahDto = new AyahDto(toAyahs.getId(), toAyahs.getNumber());
-                }
+                // Create DTOs directly using constructors
+                SurahDto fromSurahDto = (fromSourate != null)
+                    ? new SurahDto(fromSourate.getId(), fromSourate.getNameAr(), fromSourate.getNameEn(), fromSourate.getAyahsCount())
+                    : null;
+                SurahDto toSurahDto = (toSourate != null)
+                    ? new SurahDto(toSourate.getId(), toSourate.getNameAr(), toSourate.getNameEn(), toSourate.getAyahsCount())
+                    : null;
+                AyahDto fromAyahDto = (fromAyahs != null) ? new AyahDto(fromAyahs.getId(), fromAyahs.getNumberInSurah()) : null;
+                AyahDto toAyahDto = (toAyahs != null) ? new AyahDto(toAyahs.getId(), toAyahs.getNumberInSurah()) : null;
 
-                // Create ProgressionDetailsDTO from the extracted data
+                // Use constructor for ProgressionDetailsDTO
                 ProgressionDetailsDTO progressionDetailsDTO = new ProgressionDetailsDTO(
                     progressionId,
                     isForAttendanceProgression,
@@ -767,23 +745,27 @@ public class SessionInstanceResource {
                     toSurahDto,
                     fromAyahDto,
                     toAyahDto,
-                    tilawaType
+                    tilawaType,
+                    studentId, // pass studentId
+                    studentFullName, // pass studentFullName
+                    sessionInstanceIdFromDb, // sessionInstanceId
+                    siteIdFromDb, // siteId
+                    riwaya, // pass riwaya
+                    examType // pass examType
                 );
 
                 // Check if the sessionInstanceDTO already exists in the map
-                InstanceProgressionDTO instanceProgressionDTO = sessionInstanceMap.get(sessionInstanceId);
-                if (instanceProgressionDTO == null) {
-                    // If not, create a new InstanceProgressionDTO and add to the map
-                    instanceProgressionDTO =
+                InstanceProgressionDTO instanceProgressionDTO = sessionInstanceMap.computeIfAbsent(
+                    sessionInstanceIdFromDb,
+                    id ->
                         new InstanceProgressionDTO(
-                            sessionInstanceId,
+                            id,
                             title,
-                            sessionInstanceDate, // Include sessionDate here
-                            new ArrayList<>(),
+                            sessionInstanceDate,
+                            new ArrayList<>(), // Initialize the progressions list
                             rowSessionId
-                        );
-                    sessionInstanceMap.put(sessionInstanceId, instanceProgressionDTO);
-                }
+                        )
+                );
 
                 // Add the progression details to the corresponding session instance
                 instanceProgressionDTO.getProgressions().add(progressionDetailsDTO);
@@ -798,7 +780,7 @@ public class SessionInstanceResource {
             } else {
                 log.info(
                     "Query results - Parameters: siteId={}, gender={}, year={}, month={}, sessionType={}, " +
-                    "sessionId={}, userId={}, isForAttendance={}, resultSize={}",
+                    "sessionId={}, userId={}, isForAttendance={}, resultSize={} ",
                     siteId,
                     genderEnum,
                     year,
@@ -1147,7 +1129,8 @@ public class SessionInstanceResource {
                         sessionTypeEnum,
                         sessionId,
                         userId,
-                        true
+                        true,
+                        null
                     );
             } catch (Exception e) {
                 log.error("Database query error", e);

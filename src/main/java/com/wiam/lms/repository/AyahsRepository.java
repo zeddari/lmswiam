@@ -17,4 +17,7 @@ import org.springframework.stereotype.Repository;
 public interface AyahsRepository extends JpaRepository<Ayahs, Integer> {
     @Query("select ayahs from Ayahs ayahs where ayahs.numberInSurah=:ayahNumber and ayahs.surahId=:surahNumber")
     Optional<Ayahs> findByAyaSurah(@Param("ayahNumber") Integer ayahNumber, @Param("surahNumber") Integer surahNumber);
+
+    @Query("select ayahs from Ayahs ayahs where ayahs.surahId=:surahId")
+    List<Ayahs> findAllBySurahsId(@Param("surahId") Integer surahId);
 }
