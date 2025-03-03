@@ -44,9 +44,6 @@ public class AdminUserDTO implements Serializable {
     @Size(min = 5, max = 254)
     private String email;
 
-    @Size(max = 256)
-    private String imageUrl;
-
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
@@ -64,7 +61,8 @@ public class AdminUserDTO implements Serializable {
 
     private Role role;
     private String phoneNumber1;
-    private String phoneNumver2;
+    private String phoneNumber2;
+
     private Sex sex;
 
     private LocalDate birthdate;
@@ -108,7 +106,6 @@ public class AdminUserDTO implements Serializable {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.activated = user.isActivated();
-        this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
         this.createdBy = user.getCreatedBy();
         this.createdDate = user.getCreatedDate();
@@ -116,9 +113,8 @@ public class AdminUserDTO implements Serializable {
         this.lastModifiedDate = user.getLastModifiedDate();
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
 
-        this.role = user.getRole();
         this.phoneNumber1 = user.getPhoneNumber1();
-        this.phoneNumver2 = user.getPhoneNumver2();
+        this.phoneNumber2 = user.getphoneNumber2();
         this.sex = user.getSex();
         this.birthdate = user.getBirthdate();
         this.address = user.getAddress();
@@ -128,7 +124,6 @@ public class AdminUserDTO implements Serializable {
         this.nationality = user.getNationality();
         this.job = user.getJob();
         this.languages = user.getLanguages();
-        this.accountStatus = user.getAccountStatus();
         this.code = user.getCode();
         this.site13 = user.getSite13();
     }
@@ -141,8 +136,8 @@ public class AdminUserDTO implements Serializable {
         return phoneNumber1;
     }
 
-    public String getPhoneNumver2() {
-        return phoneNumver2;
+    public String getPhoneNumber2() {
+        return phoneNumber2;
     }
 
     public Sex getSex() {
@@ -185,8 +180,8 @@ public class AdminUserDTO implements Serializable {
         this.phoneNumber1 = phoneNumber1;
     }
 
-    public void setPhoneNumver2(String phoneNumver2) {
-        this.phoneNumver2 = phoneNumver2;
+    public void setPhoneNumber2(String phoneNumber2) {
+        this.phoneNumber2 = phoneNumber2;
     }
 
     public void setSex(Sex sex) {
@@ -265,14 +260,6 @@ public class AdminUserDTO implements Serializable {
         this.email = email;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public boolean isActivated() {
         return activated;
     }
@@ -337,7 +324,6 @@ public class AdminUserDTO implements Serializable {
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +
             ", createdBy=" + createdBy +

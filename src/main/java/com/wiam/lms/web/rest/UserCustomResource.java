@@ -193,17 +193,11 @@ public class UserCustomResource {
                     existingUserCustom.setCode(userCustom.getCode());
                 }
 
-                if (userCustom.getRole() != null) {
-                    existingUserCustom.setRole(userCustom.getRole());
-                }
-                if (userCustom.getAccountStatus() != null) {
-                    existingUserCustom.setAccountStatus(userCustom.getAccountStatus());
-                }
                 if (userCustom.getPhoneNumber1() != null) {
                     existingUserCustom.setPhoneNumber1(userCustom.getPhoneNumber1());
                 }
-                if (userCustom.getPhoneNumver2() != null) {
-                    existingUserCustom.setPhoneNumver2(userCustom.getPhoneNumver2());
+                if (userCustom.getphoneNumber2() != null) {
+                    existingUserCustom.setphoneNumber2(userCustom.getphoneNumber2());
                 }
                 if (userCustom.getSex() != null) {
                     existingUserCustom.setSex(userCustom.getSex());
@@ -415,7 +409,7 @@ public class UserCustomResource {
             Set<Session> uniqueUserSessions = new HashSet<>();
 
             // Determine user role and fetch relevant sessions
-            switch (userCustom.getRole()) {
+            /*switch (userCustom.getRole()) {
                 case INSTRUCTOR:
                     uniqueUserSessions.addAll(sessionRepository.findSessionsByProfessor(userCustom));
                     break;
@@ -443,7 +437,7 @@ public class UserCustomResource {
                     break;
                 default:
                     throw new IllegalArgumentException("Unsupported role: " + userCustom.getRole());
-            }
+            }*/
 
             // Fetch chatrooms grouped by group name
             chatRooms = getSessionChatRooms(new ArrayList<>(uniqueUserSessions), userCustom);
@@ -474,7 +468,6 @@ public class UserCustomResource {
                             chatMemberDto.setId(member.getId());
                             chatMemberDto.setFirstName(member.getFirstName());
                             chatMemberDto.setLastName(member.getLastName());
-                            chatMemberDto.setRole(member.getRole());
 
                             chatMemberDto.setFather(member.getFather());
                             chatMemberDto.setMother(member.getMother());
@@ -483,7 +476,7 @@ public class UserCustomResource {
                         }
                     }
 
-                    if (userCustom.getRole().equals(Role.PARENT)) {
+                    /*  if (userCustom.getRole().equals(Role.PARENT)) {
                         // Retrieve the parent's children
                         List<UserCustom> children = userCustomRepository.findChildrenList(userCustom);
 
@@ -493,7 +486,7 @@ public class UserCustomResource {
                         // Filter chat members to include only those that are the parent's children
                         chatMembers =
                             chatMembers.stream().filter(member -> childrenIds.contains(member.getId())).collect(Collectors.toList());
-                    }
+                    }*/
 
                     // Add employees to chat members
                     Set<UserCustom> employees = session.getEmployees();
@@ -503,7 +496,6 @@ public class UserCustomResource {
                             chatMemberDto.setId(employee.getId());
                             chatMemberDto.setFirstName(employee.getFirstName());
                             chatMemberDto.setLastName(employee.getLastName());
-                            chatMemberDto.setRole(Role.SUPERVISOR); // Assuming employees are supervisors
                             chatMembers.add(chatMemberDto);
                         }
                     }
@@ -516,7 +508,7 @@ public class UserCustomResource {
                             chatMemberDto.setId(professor.getId());
                             chatMemberDto.setFirstName(professor.getFirstName());
                             chatMemberDto.setLastName(professor.getLastName());
-                            chatMemberDto.setRole(Role.INSTRUCTOR);
+
                             chatMembers.add(chatMemberDto);
                         }
                     }
@@ -630,22 +622,19 @@ public class UserCustomResource {
         Pageable pageable,
         @RequestParam(value = "firstName", required = false) String firstName,
         @RequestParam(value = "lastName", required = false) String lastName,
-        @RequestParam(value = "role", required = false) Role role,
         @RequestParam(value = "siteId", required = false) Long siteId,
         @RequestParam(value = "accountStatus", required = false) boolean accountStatus,
         @RequestParam(value = "sex", required = false) Sex sex
     ) {
         log.debug("REST request to search UserCustoms for query {}");
         List<UserCustom> users = userCustomRepository
-            .searchUsersWithNullFields(pageable, firstName, lastName, role, siteId, accountStatus, sex)
+            .searchUsersWithNullFields(pageable, firstName, lastName, siteId, accountStatus, sex)
             .getContent();
         HttpHeaders headers = new HttpHeaders();
         headers.add(
             "X-Total-Count",
             "" +
-            userCustomRepository
-                .searchUsersWithNullFields(pageable, firstName, lastName, role, siteId, accountStatus, sex)
-                .getTotalElements()
+            userCustomRepository.searchUsersWithNullFields(pageable, firstName, lastName, siteId, accountStatus, sex).getTotalElements()
         );
         return new ResponseEntity<>(users, headers, HttpStatus.OK);
     }

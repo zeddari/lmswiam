@@ -15,7 +15,6 @@ public class ChatMemberDto implements Serializable {
     private String login;
     private String firstName;
     private String lastName;
-    private Role role;
 
     public String getLogin() {
         return login;
@@ -238,14 +237,6 @@ public class ChatMemberDto implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public void setLogin(String login) {

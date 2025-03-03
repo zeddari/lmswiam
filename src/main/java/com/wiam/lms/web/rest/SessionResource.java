@@ -338,7 +338,6 @@ public class SessionResource {
                         user.setFather(std.getFather());
                         user.setMother(std.getMother());
                         user.setWali(std.getWali());
-                        user.setRole(std.getRole());
                         students.add(user);
                     }
                 }

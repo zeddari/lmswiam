@@ -31,20 +31,11 @@ public interface UserCustomLmsRepository extends UserCustomRepositoryWithBagRela
         nativeQuery = true
     )*/
     @Query(
-        "select userCustom from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.role =:role and userCustom.sex =:sex and userCustom.accountStatus =:accountStatus and userCustom.site13.id =:siteId"
+        "select userCustom from UserCustom userCustom  left join fetch userCustom.site13 left join fetch userCustom.country left join fetch userCustom.nationality left join fetch userCustom.job left join fetch userCustom.departement2 where userCustom.sex =:sex and userCustom.site13.id =:siteId"
     )
-    Page<UserCustom> getUsers(
-        Pageable pageable,
-        @Param("role") Role role,
-        @Param("siteId") Long siteId,
-        @Param("accountStatus") AccountStatus accountStatus,
-        @Param("sex") Sex sex
-    );
+    Page<UserCustom> getUsers(Pageable pageable, @Param("siteId") Long siteId, @Param("sex") Sex sex);
 
     public UserCustom findByLogin(String login);
-
-    @Query("select userCustom from UserCustom userCustom where userCustom.role =:role")
-    public List<UserCustom> findByRole(@Param("role") Role role);
 
     @Query(
         "select new com.wiam.lms.domain.dto.custom.ElementDto(" +
@@ -55,10 +46,4 @@ public interface UserCustomLmsRepository extends UserCustomRepositoryWithBagRela
         "where authority = :authority and userCustom.site13.id = :siteId"
     )
     public List<ElementDto> findByRoleSite(@Param("authority") Authority authority, @Param("siteId") Long siteId);
-
-    @Query(
-        "select new com.wiam.lms.domain.dto.custom.ElementDto(userCustom.id, concat(userCustom.firstName, ' ', userCustom.lastName)) " +
-        "from UserCustom userCustom where userCustom.role = :role and userCustom.site13.id = :siteId"
-    )
-    public List<ElementDto> findByRoleAndSite(@Param("role") Role role, @Param("siteId") Long siteId);
 }

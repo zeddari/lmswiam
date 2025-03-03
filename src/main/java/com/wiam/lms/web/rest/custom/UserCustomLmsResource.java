@@ -67,21 +67,14 @@ public class UserCustomLmsResource {
     @GetMapping("/{role}/role")
     public ResponseEntity<List<UserCustom>> getAllUserCustomsByUserType(
         Pageable pageable,
-        @PathVariable Role role,
         @RequestParam Long siteId,
-        @RequestParam AccountStatus accountStatus,
         @RequestParam Sex sex
     ) {
         List<UserCustom> users = new ArrayList<UserCustom>();
-        users = userCustomLmsRepository.getUsers(pageable, role, siteId, accountStatus, sex).getContent();
+        users = userCustomLmsRepository.getUsers(pageable, siteId, sex).getContent();
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Total-Count", "" + userCustomLmsRepository.getUsers(pageable, role, siteId, accountStatus, sex).getTotalElements());
+        headers.add("X-Total-Count", "" + userCustomLmsRepository.getUsers(pageable, siteId, sex).getTotalElements());
         return new ResponseEntity<>(users, headers, HttpStatus.OK);
-    }
-
-    @GetMapping("/byRole")
-    public List<UserCustom> getAllUserCustomsByUserType(@RequestParam Role role) {
-        return userCustomLmsRepository.findByRole(role);
     }
 
     @GetMapping("/byRoleSite")

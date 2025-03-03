@@ -2,8 +2,6 @@ package com.wiam.lms.repository;
 
 import com.wiam.lms.domain.Group;
 import com.wiam.lms.domain.UserCustom;
-import com.wiam.lms.domain.enumeration.AccountStatus;
-import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.Sex;
 import com.wiam.lms.domain.statistics.AuthorityCountDTO;
 import java.util.List;
@@ -69,22 +67,21 @@ public interface UserCustomRepository extends UserCustomRepositoryWithBagRelatio
     Optional<UserCustom> findByIdforGroup(Long id);
 
     @Query(
-        "SELECT new UserCustom(u.id, u.firstName, u.lastName, u.role, u.site13, u.activated, u.sex) FROM UserCustom u " +
+        "SELECT new UserCustom(u.id, u.firstName, u.lastName, u.site13, u.activated, u.sex) " +
+        "FROM UserCustom u " +
         "WHERE (" +
-        " (:role IS NULL OR u.role = :role)" +
-        " AND (:firstName IS NULL OR u.firstName LIKE CONCAT('%', :firstName, '%'))" +
-        " AND (:lastName IS NULL OR u.lastName LIKE CONCAT('%', :lastName, '%'))" +
-        " AND (:siteId IS NULL OR u.site13.id = :siteId)" +
-        " AND (:accountStatus IS NULL OR u.activated = :accountStatus)" +
-        " AND (:sex IS NULL OR u.sex = :sex))"
+        "(:firstName IS NULL OR u.firstName LIKE CONCAT('%', :firstName, '%')) " +
+        "AND (:lastName IS NULL OR u.lastName LIKE CONCAT('%', :lastName, '%')) " +
+        "AND (:siteId IS NULL OR u.site13.id = :siteId) " +
+        "AND (:accountStatus IS NULL OR u.activated = :accountStatus) " +
+        "AND (:sex IS NULL OR u.sex = :sex))"
     )
     Page<UserCustom> searchUsersWithNullFields(
         Pageable pageable,
         @Param("firstName") String firstName,
         @Param("lastName") String lastName,
-        @Param("role") Role role,
         @Param("siteId") Long siteId,
-        @Param("accountStatus") boolean accountStatus,
+        @Param("accountStatus") Boolean accountStatus, // accountStatus should be Boolean for nullable comparison
         @Param("sex") Sex sex
     );
 

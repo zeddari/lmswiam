@@ -58,7 +58,7 @@ accountName String required maxlength (DEFAULT_MAX_LENGTH)
 role Role required
 accountStatus AccountStatus required
 phoneNumber1 String required maxlength(DEFAULT_MAX_LENGTH)
-phoneNumver2 String maxlength(DEFAULT_MAX_LENGTH)
+phoneNumber2 String maxlength(DEFAULT_MAX_LENGTH)
 sex Sex required
 birthdate LocalDate required
 photo ImageBlob maxbytes(IMAGE_MAX_SIZE)

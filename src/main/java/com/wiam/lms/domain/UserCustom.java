@@ -3,8 +3,6 @@ package com.wiam.lms.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wiam.lms.config.Constants;
-import com.wiam.lms.domain.enumeration.AccountStatus;
-import com.wiam.lms.domain.enumeration.Role;
 import com.wiam.lms.domain.enumeration.Sex;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -35,11 +33,10 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
 
     public UserCustom() {}
 
-    public UserCustom(Long id, String firstName, String lastName, Role role, Site site, boolean accountStatus, Sex sex) {
+    public UserCustom(Long id, String firstName, String lastName, Site site, boolean accountStatus, Sex sex) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
         this.site13 = site;
         this.activated = accountStatus;
         this.sex = sex;
@@ -75,10 +72,10 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
     private String code;
 
     //@NotNull
-    @Enumerated(EnumType.STRING)
+    /*@Enumerated(EnumType.STRING)
     @Column(name = "account_status", nullable = true)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
-    private AccountStatus accountStatus;
+    private AccountStatus accountStatus;*/
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
@@ -100,10 +97,9 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
             "email",
             "activated",
             "langKey",
-            "imageUrl",
             "resetDate",
             "phoneNumber1",
-            "phoneNumver2",
+            "phoneNumber2",
             "birthdate",
             "biography",
             "city",
@@ -154,10 +150,9 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
             "email",
             "activated",
             "langKey",
-            "imageUrl",
             "resetDate",
             "phoneNumber1",
-            "phoneNumver2",
+            "phoneNumber2",
             "birthdate",
             "biography",
             "city",
@@ -208,10 +203,9 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
             "email",
             "activated",
             "langKey",
-            "imageUrl",
             "resetDate",
             "phoneNumber1",
-            "phoneNumver2",
+            "phoneNumber2",
             "birthdate",
             "biography",
             "city",
@@ -302,10 +296,6 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
     @Size(min = 2, max = 10)
     @Column(name = "lang_key", length = 10)
     private String langKey;
-
-    @Size(max = 256)
-    @Column(name = "image_url", length = 256)
-    private String imageUrl;
 
     @Size(max = 20)
     @Column(name = "activation_key", length = 20)
@@ -465,21 +455,25 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
     private Set<Authority> authorities = new HashSet<>();
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
-    private Role role;
-
-    @NotNull
     @Size(max = 50)
     @Column(name = "phone_number_1", length = 50, nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String phoneNumber1;
 
     @Size(max = 50)
-    @Column(name = "phone_numver_2", length = 50)
+    @Column(name = "phone_number_2", length = 50, nullable = true)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
-    private String phoneNumver2;
+    private String phoneNumber2;
+
+    @Size(max = 50)
+    @Column(name = "phone_number_3", length = 50, nullable = true)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String phoneNumber3;
+
+    @Size(max = 50)
+    @Column(name = "phone_number_4", length = 50, nullable = true)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+    private String phoneNumber4;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -581,32 +575,6 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
         this.code = code;
     }
 
-    public Role getRole() {
-        return this.role;
-    }
-
-    public UserCustom role(Role role) {
-        this.setRole(role);
-        return this;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public AccountStatus getAccountStatus() {
-        return this.accountStatus;
-    }
-
-    public UserCustom accountStatus(AccountStatus accountStatus) {
-        this.setAccountStatus(accountStatus);
-        return this;
-    }
-
-    public void setAccountStatus(AccountStatus accountStatus) {
-        this.accountStatus = accountStatus;
-    }
-
     public String getPhoneNumber1() {
         return this.phoneNumber1;
     }
@@ -620,17 +588,17 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
         this.phoneNumber1 = phoneNumber1;
     }
 
-    public String getPhoneNumver2() {
-        return this.phoneNumver2;
+    public String getphoneNumber2() {
+        return this.phoneNumber2;
     }
 
-    public UserCustom phoneNumver2(String phoneNumver2) {
-        this.setPhoneNumver2(phoneNumver2);
+    public UserCustom phoneNumber2(String phoneNumber2) {
+        this.setphoneNumber2(phoneNumber2);
         return this;
     }
 
-    public void setPhoneNumver2(String phoneNumver2) {
-        this.phoneNumver2 = phoneNumver2;
+    public void setphoneNumber2(String phoneNumber2) {
+        this.phoneNumber2 = phoneNumber2;
     }
 
     public Sex getSex() {
@@ -1305,10 +1273,8 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
             ", lastName='" + getLastName() + "'" +
             ", code='" + getCode() + "'" +
 
-            //", role='" + getRole().toString() + "'" +
-            ", accountStatus='" + getAccountStatus() + "'" +
             ", phoneNumber1='" + getPhoneNumber1() + "'" +
-            ", phoneNumver2='" + getPhoneNumver2() + "'" +
+            ", phoneNumber2='" + getphoneNumber2() + "'" +
             ", sex='" + getSex() + "'" +
             ", birthdate='" + getBirthdate() + "'" +
             ", photo='" + getPhoto() + "'" +
@@ -1340,10 +1306,6 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
 
     public String getLangKey() {
         return langKey;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
     }
 
     public String getActivationKey() {
@@ -1386,10 +1348,6 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
         this.langKey = langKey;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public void setActivationKey(String activationKey) {
         this.activationKey = activationKey;
     }
@@ -1408,5 +1366,21 @@ public class UserCustom extends AbstractAuditingEntity<Long> implements Serializ
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public String getPhoneNumber3() {
+        return phoneNumber3;
+    }
+
+    public String getPhoneNumber4() {
+        return phoneNumber4;
+    }
+
+    public void setPhoneNumber3(String phoneNumber3) {
+        this.phoneNumber3 = phoneNumber3;
+    }
+
+    public void setPhoneNumber4(String phoneNumber4) {
+        this.phoneNumber4 = phoneNumber4;
     }
 }

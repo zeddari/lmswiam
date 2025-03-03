@@ -131,29 +131,24 @@ public class UserService {
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
-
         newUser.setSex(userDTO.getSex());
         UUID code = UUID.randomUUID();
         newUser.setCode(code.toString());
         newUser.setPhoneNumber1(userDTO.getPhoneNumber1());
-        newUser.setPhoneNumver2(userDTO.getPhoneNumver2());
-        newUser.setBiography(userDTO.getBiography());
         newUser.setAddress(userDTO.getAddress());
         newUser.setBirthdate(userDTO.getBirthdate());
-        newUser.setRole(userDTO.getRole());
         newUser.setCity(userDTO.getCity());
         newUser.setCountry(userDTO.getCountry());
         newUser.setNationality(userDTO.getNationality());
-        newUser.setJob(userDTO.getJob());
-        newUser.setLanguages(userDTO.getLanguages());
-        newUser.setAccountStatus(userDTO.getAccountStatus());
         newUser.setSite13(userDTO.getSite13());
-
         if (userDTO.getEmail() != null) {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
         }
-        newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
+        /*newUser.setphoneNumber2(userDTO.getPhoneNumber2());
+        newUser.setBiography(userDTO.getBiography());
+        newUser.setJob(userDTO.getJob());
+        newUser.setLanguages(userDTO.getLanguages());
+        newUser.setLangKey(userDTO.getLangKey());*/
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -206,7 +201,6 @@ public class UserService {
         if (userDTO.getEmail() != null) {
             user.setEmail(userDTO.getEmail().toLowerCase());
         }
-        user.setImageUrl(userDTO.getImageUrl());
         if (userDTO.getLangKey() == null) {
             user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         } else {
@@ -253,7 +247,6 @@ public class UserService {
                 if (userDTO.getEmail() != null) {
                     user.setEmail(userDTO.getEmail().toLowerCase());
                 }
-                user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
                 Set<Authority> managedAuthorities = user.getAuthorities();
@@ -292,9 +285,8 @@ public class UserService {
      * @param lastName  last name of user.
      * @param email     email id of user.
      * @param langKey   language key.
-     * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, Site site13) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, Site site13) {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -306,7 +298,6 @@ public class UserService {
                     user.setEmail(email.toLowerCase());
                 }
                 user.setLangKey(langKey);
-                user.setImageUrl(imageUrl);
                 userRepository.save(user);
                 // userSearchRepository.index(user);
                 this.clearUserCaches(user);
